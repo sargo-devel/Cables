@@ -1,0 +1,302 @@
+"""commands used in Cables workbench
+"""
+
+import os
+import FreeCAD
+from FreeCAD import Gui
+import Part
+import wireutils
+import archCable
+import archCableBox
+import archCableConnector
+import archCableLightPoint
+import wireFlex
+import cableProfile
+import cableMaterial
+import cableHelper
+
+_dir = os.path.dirname(__file__)
+iconPath = os.path.join(_dir, "Resources/icons")
+CMD_NEW_WIRE_ICON = os.path.join(iconPath, "cmdNewWire.svg")
+CMD_ADD_VERTEX_ICON = os.path.join(iconPath, "cmdAddVertex.svg")
+CMD_DEL_VERTEX_ICON = os.path.join(iconPath, "cmdDelVertex.svg")
+CMD_ATT_VERTEX_ICON = os.path.join(iconPath, "cmdAttVertex.svg")
+CMD_RM_ATT_VERTEX_ICON = os.path.join(iconPath, "cmdRmAttVertex.svg")
+CMD_CABLE_ICON = os.path.join(iconPath, "cmdNewCable.svg")
+CMD_CABLEBOX_ICON = os.path.join(iconPath, "cmdNewCableBox.svg")
+CMD_CABLECONNECTOR_ICON = os.path.join(iconPath, "cmdNewCableConnector.svg")
+CMD_CABLEPROFILE_ICON = os.path.join(iconPath, "cmdNewCableProfile.svg")
+CMD_CABLEMATERIAL_ICON = os.path.join(iconPath, "cmdNewCableMaterial.svg")
+CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
+CMD_HELPERPOINT_ICON = os.path.join(iconPath, "cmdNewHelperPoint.svg")
+CMD_HELPERLINE_ICON = os.path.join(iconPath, "cmdNewHelperLine.svg")
+
+
+class newWireFlexCommand:
+    """Creates a WireFlex based on selected vertexes or objects
+    """
+    def Activated(self):
+        sel = wireutils.processGuiSelection(False, Part.Vertex, None)
+        wireFlex.make_wireflex(sel)
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_NEW_WIRE_ICON,
+                'MenuText': "New Wire Flex",
+                'ToolTip': "It creates a new line based on selected " +
+                "vertexes/objects. At least two vertexes/objects have to be " +
+                "selected first"}
+
+
+class addVertexCommand:
+    """Creates a new vertex in the middle of selected WireFlex edge
+    """
+    def Activated(self):
+        sel = wireutils.processGuiSelection(True, Part.Edge, wireFlex.WireFlex)
+        wireutils.addPointToWire(sel)
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_ADD_VERTEX_ICON,
+                'MenuText': "Add Vertex",
+                'ToolTip': "It adds a new vertex to selected edge of " +
+                "Wire Flex"}
+
+
+class delVertexCommand:
+    """Deletes selected vertex from WireFlex
+    """
+    def Activated(self):
+        sel = wireutils.processGuiSelection(True, Part.Vertex,
+                                            wireFlex.WireFlex)
+        wireutils.delPointFromWire(sel)
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_DEL_VERTEX_ICON,
+                'MenuText': "Delete Vertex",
+                'ToolTip': "It deletes selected vertex from Wire Flex"}
+
+
+class assignAttachmentCommand:
+    """Makes an attachment of selected WireFlex vertex to external vertex
+    or object
+    """
+    def Activated(self):
+        sel = wireutils.processGuiSelection(False, Part.Vertex,
+                                            wireFlex.WireFlex)
+        wireutils.assignPointAttachment(sel)
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_ATT_VERTEX_ICON,
+                'MenuText': "Attach Vertex",
+                'ToolTip': "It attaches a Wire Flex vertex to external " +
+                "vertex or object. Select Wire Flex vertex first then " +
+                "ext. vertex (or entire object)"}
+
+
+class removeAttachmentCommand:
+    """Removes attachment from selected WireFlex vertex
+    """
+    def Activated(self):
+        sel = wireutils.processGuiSelection(True, Part.Vertex,
+                                            wireFlex.WireFlex)
+        wireutils.removePointAttachment(sel)
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_RM_ATT_VERTEX_ICON,
+                'MenuText': "Remove Vertex Attachment",
+                'ToolTip': "It removes an attachment of external " +
+                "vertex or object from selected Wire Flex vertex"}
+
+
+class newCableCommand:
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        if len(sel_obj) > 1:
+            archCable.makeCable(sel_obj[0], sel_obj[1])
+        else:
+            archCable.makeCable(sel_obj[0])
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLE_ICON,
+                'MenuText': "Add New Cable",
+                'ToolTip': "It adds a new cable object from Wire Flex and " +
+                "profile. Select Wire Flex object first then a profile"}
+
+
+class newCableBoxCommand:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        if len(sel_obj) > 0:
+            pos_vect = sel_obj[0].PickedPoints[0]
+            pl = FreeCAD.Placement()
+            pl.Base = pos_vect
+            archCableBox.makeCableBox(placement=pl)
+        else:
+            archCableBox.makeCableBox()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLEBOX_ICON,
+                'MenuText': "Add New Cable Box",
+                'ToolTip': "It adds a new cable box object. Select any " +
+                "point in 3D view first, then add box"}
+
+
+class newCableConnectorCommand:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        if len(sel_obj) > 0:
+            pos_vect = sel_obj[0].PickedPoints[0]
+            pl = FreeCAD.Placement()
+            pl.Base = pos_vect
+            archCableConnector.makeCableConnector(placement=pl)
+        else:
+            archCableConnector.makeCableConnector()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLECONNECTOR_ICON,
+                'MenuText': "Add New Cable Connector",
+                'ToolTip': "It adds a new cable connector object. Select" +
+                "any point in 3D view first, then add connector"}
+
+
+class newProfileCommand:
+    def Activated(self):
+        cableProfile.makeCableProfile()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLEPROFILE_ICON,
+                'MenuText': "Add New Cable Profile",
+                'ToolTip': "It adds a new cable profile"}
+
+
+class newMaterialCommand:
+    def Activated(self):
+        cableMaterial.makeCableMaterials()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLEMATERIAL_ICON,
+                'MenuText': "Add New Cable Materials",
+                'ToolTip': "It adds new multimaterials for cables"}
+
+
+class newCableLightPoint:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        if len(sel_obj) > 0:
+            pos_vect = sel_obj[0].PickedPoints[0]
+            pl = FreeCAD.Placement()
+            pl.Base = pos_vect
+            archCableLightPoint.makeCableLightPoint(placement=pl)
+        else:
+            archCableLightPoint.makeCableLightPoint()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLELIGHTPOINT_ICON,
+                'MenuText': "Add New Cable Light Point",
+                'ToolTip': "It adds a new light point for cable. Select" +
+                "any point in 3D view first, then add light point"}
+
+
+class newHelperPoint:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        if len(sel_obj) > 0:
+            pos_vect = sel_obj[0].PickedPoints[0]
+            pl = FreeCAD.Placement()
+            pl.Base = pos_vect
+            cableHelper.makeHelperPoint(placement=pl)
+        else:
+            cableHelper.makeHelperPoint()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_HELPERPOINT_ICON,
+                'MenuText': "Add New Helper Point",
+                'ToolTip': "It adds a new helper point to which a " +
+                "cable or other element can be attached"}
+
+
+class newHelperLine:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        if len(sel_obj) > 1:
+            p1 = sel_obj[0].PickedPoints[0]
+            p2 = sel_obj[1].PickedPoints[0]
+            cableHelper.makeHelperLine(p1, p2)
+        elif len(sel_obj) == 1:
+            p1 = sel_obj[0].PickedPoints[0]
+            cableHelper.makeHelperLine(p1)
+        else:
+            cableHelper.makeHelperLine()
+        FreeCAD.ActiveDocument.recompute()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_HELPERLINE_ICON,
+                'MenuText': "Add New Helper Line",
+                'ToolTip': "It adds a new helper line to which a " +
+                "cable or other element can be attached. Select at " +
+                "least one point first"}
+
+
+Gui.addCommand('Cables_NewWireFlex', newWireFlexCommand())
+Gui.addCommand('Cables_AddVertex', addVertexCommand())
+Gui.addCommand('Cables_DelVertex', delVertexCommand())
+Gui.addCommand('Cables_AttachVertex', assignAttachmentCommand())
+Gui.addCommand('Cables_RemoveVertex', removeAttachmentCommand())
+Gui.addCommand('Cables_NewCable', newCableCommand())
+Gui.addCommand('Cables_NewCableBox', newCableBoxCommand())
+Gui.addCommand('Cables_NewCableConnector', newCableConnectorCommand())
+Gui.addCommand('Cables_NewProfile', newProfileCommand())
+Gui.addCommand('Cables_NewMaterial', newMaterialCommand())
+Gui.addCommand('Cables_NewCableLightPoint', newCableLightPoint())
+Gui.addCommand('Cables_NewHelperPoint', newHelperPoint())
+Gui.addCommand('Cables_NewHelperLine', newHelperLine())

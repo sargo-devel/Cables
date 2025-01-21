@@ -36,7 +36,7 @@ Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. N
 
 ### References
 * Development repo: https://github.com/sargo-devel/Cables
-* FreeCAD Forum announcement/discussion [thread](https://forum.freecadweb.org/...) 
+* FreeCAD Forum announcement/discussion [thread](https://forum.freecad.org/viewtopic.php?t=94090)
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Release notes:

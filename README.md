@@ -20,7 +20,7 @@ All elements (cables, boxes, connectors etc.) in this workbench are  [Arch Compo
 
 ## Wiki
 This workbench does not have any FreeCAD Wiki page yet. This is planned soon.
-You can install the workbench and see [examples](https://github.com/sargo-devel/Cables/examples) to have a closer look into details. These files contain Info text with some additional hints.
+You can install the workbench and see [examples](https://github.com/sargo-devel/Cables/tree/master/examples) to have a closer look into details. These files contain Info text with some additional hints.
 
 ## Installation
 Currently the only method to install this workbench is to copy its entire `Cables/` folder to the FreeCAD local `Mod/` folder. Details: [Installing more workbenches](https://wiki.freecad.org/Installing_more_workbenches).
@@ -40,7 +40,7 @@ Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. N
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Release notes:
-* v0.1.01  21 Jan 2025:  Initial version
+* v0.1.0  21 Jan 2025:  Initial version
 
 ## License
 LGPLv3 (see [LICENSE](LICENSE))

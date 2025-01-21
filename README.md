@@ -3,7 +3,7 @@
 Electrical cables drawing tools workbench for [FreeCAD](https://freecad.org)
 
 ![Cable](doc/cable.png) ![Box](doc/box.png)
-![Installation](doc/installation.png)
+![ElectricInst](doc/electric_inst.png)
 
 ## The goal and idea
 The Cables Workbench has the following goals:

@@ -20,7 +20,8 @@
 # ***************************************************************************/
 
 import os
-
+from draftguitools import gui_grid
+from draftguitools import gui_selectplane
 
 class CablesWorkbench (Workbench):
 
@@ -47,17 +48,25 @@ class CablesWorkbench (Workbench):
                             "Cables_NewCableLightPoint",
                             "Cables_NewMaterial"]
         self.list_helpers = ["Cables_NewHelperPoint",
-                             "Cables_NewHelperLine"]
+                             "Cables_NewHelperLine"
+                            ]
+        self.list_draft = ["Draft_ToggleGrid",
+                           ]
+                           # "Draft_SelectPlane"]
         self.appendToolbar("Cable Wires", self.list_wires)
         self.appendToolbar("Cables", self.list_cables)
         self.appendToolbar("Cable Helpers", self.list_helpers)
+        self.appendToolbar("Draft Tools", self.list_draft)
         self.appendMenu("Cable Wires", self.list_wires)
         self.appendMenu("Cables", self.list_cables)
         self.appendMenu("Cable Helpers", self.list_helpers)
         # self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
 
+
     def Activated(self):
         """This function is executed whenever the workbench is activated"""
+        import WorkingPlane
+        WorkingPlane.get_working_plane()
         return
 
     def Deactivated(self):

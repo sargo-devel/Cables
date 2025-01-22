@@ -23,6 +23,7 @@ import os
 from draftguitools import gui_grid
 from draftguitools import gui_selectplane
 
+
 class CablesWorkbench (Workbench):
 
     MenuText = "Cables"
@@ -48,11 +49,10 @@ class CablesWorkbench (Workbench):
                             "Cables_NewCableLightPoint",
                             "Cables_NewMaterial"]
         self.list_helpers = ["Cables_NewHelperPoint",
-                             "Cables_NewHelperLine"
-                            ]
+                             "Cables_NewHelperLine"]
         self.list_draft = ["Draft_ToggleGrid",
-                           ]
                            # "Draft_SelectPlane"]
+                           ]
         self.appendToolbar("Cable Wires", self.list_wires)
         self.appendToolbar("Cables", self.list_cables)
         self.appendToolbar("Cable Helpers", self.list_helpers)

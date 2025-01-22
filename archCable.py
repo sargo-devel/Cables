@@ -124,11 +124,6 @@ class ArchCable(ArchPipe._ArchPipe):
             self.setSubLinesLabels(obj)
         if prop == "Shape":
             obj.Length = self.calculateCableLength(obj)
-            if self.getEndProfileAngleDiff(obj):
-                if self.getEndProfileAngleDiff(obj) > 0.001:
-                    obj.SubProfiles[1].AttachmentOffset = FreeCAD.Placement(
-                        FreeCAD.Vector(0, 0, 0), FreeCAD.Rotation(
-                            FreeCAD.Vector(0, 0, 1), 0))
         if prop == "BaseWireFilletRadius":
             obj.Base.FilletRadius = obj.BaseWireFilletRadius
         if prop == "SubWiresFilletRadius":
@@ -306,18 +301,20 @@ class ArchCable(ArchPipe._ArchPipe):
         if obj.SubProfiles:
             end_prof = obj.SubProfiles[1]
             if end_prof.Shape.Wires:
+                norm = DraftGeomUtils.get_shape_normal(end_prof.Shape)
                 v1_profile = end_prof.Shape.Wires[0].Vertexes[0].Point
                 v0 = end_prof.Shape.BoundBox.Center
                 v1_cable_end_diff = v1_cable_end - v0
                 v1_profile_diff = v1_profile - v0
                 angle = v1_cable_end_diff.getAngle(v1_profile_diff)
-        #FreeCAD.Console.PrintMessage(f"Rotate1: {angle}\n")
+                if v1_profile_diff.cross(v1_cable_end_diff).dot(norm) < 0:
+                    angle = -angle
         return angle
 
     def rotateEndProfile(self, obj):
         angle = self.getEndProfileAngleDiff(obj)
         prof = obj.SubProfiles[1]
-        if angle > 0.001:
+        if abs(angle) > 0.001:
             angle_deg = math.degrees(angle)
             old_angle_deg = math.degrees(prof.AttachmentOffset.Rotation.Angle)
             new_angle_deg = (old_angle_deg + angle_deg) % 360

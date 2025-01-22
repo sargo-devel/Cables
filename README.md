@@ -40,6 +40,7 @@ Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. N
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Release notes:
+* v0.1.1  21 Jan 2025:  Fixed cable rotation problem
 * v0.1.0  21 Jan 2025:  Initial version
 
 ## License

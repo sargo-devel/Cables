@@ -2,8 +2,27 @@
 """
 
 import FreeCAD
+import FreeCADGui
 import Part
 import Sketcher
+from commonutils import uiPath
+import os
+
+ui_profile = os.path.join(uiPath, "profile.ui")
+
+
+class TaskPanelProfile:
+    def __init__(self):
+        self.form = FreeCADGui.PySideUic.loadUi(ui_profile)
+        lista = ['ProfileYDYp3x1.5', 'item2', 'item3']
+        self.form.comboBox.addItems(lista)
+
+    def accept(self):
+        idx = self.form.comboBox.currentIndex()
+        if idx == 0:
+            makeCableProfile()
+        #length = self.form.BoxLength.value()
+        FreeCADGui.Control.closeDialog()
 
 
 def makeCableProfile():

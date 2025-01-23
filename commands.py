@@ -3,6 +3,7 @@
 
 import os
 import FreeCAD
+import FreeCADGui
 from FreeCAD import Gui
 import Part
 import wireutils
@@ -192,7 +193,9 @@ class newCableConnectorCommand:
 
 class newProfileCommand:
     def Activated(self):
-        cableProfile.makeCableProfile()
+        #cableProfile.makeCableProfile()
+        panel = cableProfile.TaskPanelProfile()
+        FreeCADGui.Control.showDialog(panel)
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):

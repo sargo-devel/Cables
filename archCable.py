@@ -539,11 +539,18 @@ def makeCable(baseobj=None, profileobj=None, diameter=0, length=0,
 
 def createSubColorsList(nr_of_wires):
     sub_colors = []
+    if nr_of_wires == 1:
+        sub_colors = ['J:0', 'L1:1', 'CU:-1']
     if nr_of_wires == 2:
         sub_colors = ['J:0', 'L1:1', 'N:2', 'CU:-1']
     if nr_of_wires == 3:
         sub_colors = ['J:0', 'L1:1', 'N:2', 'PE:3', 'CU:-1']
+    if nr_of_wires == 4:
+        sub_colors = ['J:0', 'L1:1', 'L2:2', 'L3:3', 'PE:4', 'CU:-1']
     if nr_of_wires == 5:
         sub_colors = ['J:0', 'L1:1', 'L2:2', 'L3:3', 'N:4', 'PE:5',
                       'CU:-1']
+    if nr_of_wires == 8:
+        sub_colors = ['J:0', 'P1A:1', 'P1B:2', 'P2A:3', 'P2B:4',
+                      'P3A:5', 'P3B:6', 'P4A:7', 'P4B:8', 'CU:-1']
     return sub_colors

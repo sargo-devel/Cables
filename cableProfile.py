@@ -12,8 +12,8 @@ import ProfileLib.RegularPolygon
 from commonutils import uiPath, presetsPath
 
 ui_profile = os.path.join(uiPath, "profile.ui")
-thickness_list = ['custom', '0.5', '0.75', '1', '1.5', '2.5', '4', '6', '10',
-                  '16', '25', '35', '50', '70', '95', '120']
+thickness_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
+                  '10', '16', '25', '35', '50', '70', '95', '120']
 
 # Presets in the form: Name, Profile class, Voltage Class, [profile data]
 # Search for profiles.csv in presets and in the user path

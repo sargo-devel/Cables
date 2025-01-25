@@ -22,3 +22,4 @@ YDYp,F,750V,1.45,0.7,0.1
 # Name,R,Voltage Class,jacket_thickness,single_insulation_thickness,insul_dist
 
 YDY,R,750V,1.45,0.7,0.1
+UTP5e,R,LAN,0.7,0.3,0.05

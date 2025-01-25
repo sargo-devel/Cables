@@ -8,6 +8,7 @@ import FreeCAD
 import FreeCADGui
 import Part
 import Sketcher
+import ProfileLib.RegularPolygon
 from commonutils import uiPath, presetsPath
 
 ui_profile = os.path.join(uiPath, "profile.ui")
@@ -38,7 +39,6 @@ class TaskPanelProfile:
                 self.form.comboWireThickness.currentText())
         except ValueError:
             wire_thickness_mm2 = self.form.customWireThickness.value()
-        #FreeCAD.Console.PrintMessage(f"profile, nr_of_wires, wire_thickness_mm2 ({profile},{nr_of_wires},{wire_thickness_mm2})\n")
         makeCableProfile(profile, nr_of_wires, wire_thickness_mm2)
         FreeCADGui.Control.closeDialog()
 
@@ -50,11 +50,15 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
              single_insulation_thickness,insul_dist]
     """
     label = f"{profile[1]}{nr_of_wires}x{wire_thickness_mm2}_{profile[3]}"
-    FreeCAD.Console.PrintMessage(f"Label: {label}\n")
+    # FreeCAD.Console.PrintMessage(f"Label: {label}\n")
+    if nr_of_wires < 1 or wire_thickness_mm2 == 0:
+        FreeCAD.Console.PrintError("Cable needs to have number of wires > 0 \
+            and nonzero wire thickness\n")
+        return None
     if profile[2] == 'F':
         makeCableProfileF(label, profile[4:], nr_of_wires, wire_thickness_mm2)
     if profile[2] == 'R':
-        FreeCAD.Console.PrintError("Round profile not implemented yet")
+        makeCableProfileR(label, profile[4:], nr_of_wires, wire_thickness_mm2)
 
 
 def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
@@ -96,11 +100,163 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     constraintList.append(Sketcher.Constraint('Equal', 1, 3))
     constraintList.append(Sketcher.Constraint('Symmetric', 3, 3, 1, 3, -1, 1))
     profile.addConstraint(constraintList)
+    # Create inner wires
+    norm = App.Vector(0, 0, 1)
+    wo, wi, p, nr = createProfileSubWires(profile, norm, nr_of_wires, 4)
 
+    # Calculate base dimensions
+    wire_diameter = math.sqrt(wire_thickness_mm2/math.pi)*2
+    # distance between centers of adjacent wires:
+    p_dist = wire_diameter + 2*insul[1] + insul[2]
+    # x position of 1st point:
+    p1_xpos = -(nr_of_wires-1)*p_dist/2
+    # single insulation diameter (outer ring):
+    wo_d = wire_diameter + 2*insul[1]
+    # wire diameter (inner ring):
+    wi_d = wire_diameter
+    # jacket arc diameter:
+    j_d = wo_d + 2*insul[0]
+    # FreeCAD.Console.PrintMessage(f"nr,wo,wi,p({nr},{wo},{wi},{p})\n")
+    constraintList = []
+    # 1st point placement:
+    constraintList.append(
+        Sketcher.Constraint('DistanceX', p, 1, -1, 1, -p1_xpos))
+    constraintList.append(Sketcher.Constraint('Diameter', 3, j_d))
+    constraintList.append(Sketcher.Constraint('Diameter', wo, wo_d))
+    constraintList.append(Sketcher.Constraint('Diameter', wi, wi_d))
+    for i in range(nr-1):
+        # nth point distance:
+        constraintList.append(
+            Sketcher.Constraint('DistanceX', p+i, 1, p+i+1, 1, p_dist))
+        # points on x axis (except 1st to avoid redundancy later):
+        constraintList.append(
+            Sketcher.Constraint('PointOnObject', p+i+1, 1, -1))
+        # insulations equality:
+        constraintList.append(Sketcher.Constraint('Equal', wo, wo+i+1))
+        # wires equality:
+        constraintList.append(Sketcher.Constraint('Equal', wi, wi+i+1))
+    for i in range(nr):
+        # insulation (outer ring) on point:
+        constraintList.append(
+            Sketcher.Constraint('Coincident', p+i, 1, wo+i, 3))
+        # wire (inner ring) on point:
+        constraintList.append(
+            Sketcher.Constraint('Coincident', p+i, 1, wi+i, 3))
+    # jacket on 1st point (1st point is not on x-axis to avoid redundancy):
+    constraintList.append(Sketcher.Constraint('Coincident', p, 1, 3, 3))
+    profile.addConstraint(constraintList)
+    return profile
+
+
+def makeCableProfileR(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
+                      wire_thickness_mm2=1.5):
+    """Profile for round cable
+    insul=[jacket_thickness,single_insulation_thickness,insul_dist]
+    """
+    if nr_of_wires < 1:
+        FreeCAD.Console.PrintError(
+            "Round cable needs to have at least 1 wire\n")
+        return None
+    profile = FreeCAD.activeDocument().addObject('Sketcher::SketchObject',
+                                                 'Sketch')
+    profile.Placement = FreeCAD.Placement(FreeCAD.Vector(0, 0, 0),
+                                          FreeCAD.Rotation(0, 0, 0, 1))
+    profile.MapMode = "Deactivated"
+    profile.Label = label
+    App = FreeCAD
+    # Create Wire0 (cable jacket)
+    norm = App.Vector(0, 0, 1)
+    geoList = []
+    geoList.append(Part.Circle(App.Vector(0, 0, 0), norm, 30))
+    profile.addGeometry(geoList, False)
+    constraintList = []
+    constraintList.append(Sketcher.Constraint('Coincident', 0, 3, -1, 1))
+    profile.addConstraint(constraintList)
+    # Create inner wires
+    wo, wi, p, nr = createProfileSubWires(profile, norm, nr_of_wires, 1)
+
+    # Calculate base dimensions
+    wire_diameter = math.sqrt(wire_thickness_mm2/math.pi)*2
+    # distance between centers of adjacent wires:
+    p_dist = wire_diameter + 2*insul[1] + insul[2]
+    # y position of 1st point (radius of construction circle):
+    if nr > 2:
+        p1_ypos = p_dist/(2*math.sin(math.pi/nr))
+    elif nr == 2:
+        p1_ypos = 0.5*wire_diameter + insul[1] + 0.5*insul[2]
+    elif nr == 1:
+        p1_ypos = 0
+    # single insulation diameter (outer ring):
+    wo_d = wire_diameter + 2*insul[1]
+    # wire diameter (inner ring):
+    wi_d = wire_diameter
+    # jacket ring diameter:
+    j_d = 2*p1_ypos + wo_d + 2*insul[0]
+
+    # Create construction polygon
+    cl = p + nr     # number of 1st polygon line
+    cc = cl + nr    # number of polygon circle
+    if nr > 2:
+        ProfileLib.RegularPolygon.makeRegularPolygon(
+            profile, nr, App.Vector(0, 0, 0), App.Vector(0, p1_ypos, 0), True)
+    elif nr == 2:
+        geoList = []
+        v1 = App.Vector(0, p1_ypos, 0)
+        v2 = App.Vector(0, -p1_ypos, 0)
+        v0 = App.Vector(0, 0, 0)
+        geoList.append(Part.LineSegment(v1, v0))
+        geoList.append(Part.LineSegment(v2, v0))
+        profile.addGeometry(geoList, True)
+    elif nr == 1:
+        geoList = []
+        geoList.append(Part.Point(App.Vector(0, 0, 0)))
+        profile.addGeometry(geoList, True)
+
+    constraintList = []
+    if nr > 2:
+        constraintList.append(Sketcher.Constraint('Coincident', -1, 1, cc, 3))
+    elif nr == 2:
+        constraintList.append(
+            Sketcher.Constraint('PointOnObject', cl+1, 1, -2))
+        constraintList.append(
+            Sketcher.Constraint('DistanceY', cl+1, 1, -1, 1, p1_ypos))
+        constraintList.append(
+            Sketcher.Constraint('Coincident', -1, 1, cl, 2))
+        constraintList.append(
+            Sketcher.Constraint('Coincident', -1, 1, cl+1, 2))
+    elif nr == 1:
+        constraintList.append(Sketcher.Constraint('Coincident', -1, 1, cl, 1))
+    constraintList.append(Sketcher.Constraint('Diameter', 0, j_d))
+    constraintList.append(Sketcher.Constraint('Diameter', wo, wo_d))
+    constraintList.append(Sketcher.Constraint('Diameter', wi, wi_d))
+    if nr > 1:
+        constraintList.append(
+            Sketcher.Constraint('DistanceY', -1, 1, cl, 1, p1_ypos))
+        constraintList.append(Sketcher.Constraint('PointOnObject', cl, 1, -2))
+    for i in range(nr-1):
+        # insulations equality:
+        constraintList.append(Sketcher.Constraint('Equal', wo, wo+i+1))
+        # wires equality:
+        constraintList.append(Sketcher.Constraint('Equal', wi, wi+i+1))
+    for i in range(nr):
+        # insulation (outer ring) on point:
+        constraintList.append(
+            Sketcher.Constraint('Coincident', p+i, 1, wo+i, 3))
+        # wire (inner ring) on point:
+        constraintList.append(
+            Sketcher.Constraint('Coincident', p+i, 1, wi+i, 3))
+        # point on construction vertex:
+        constraintList.append(
+            Sketcher.Constraint('Coincident', cl+i, 1, p+i, 1))
+    profile.addConstraint(constraintList)
+    return profile
+
+
+def createProfileSubWires(profile, norm, nr_of_wires, wo_nr):
+    App = FreeCAD
     # Create Wire1, Wire2, Wire3, ... WireNr (single insulations)
     nr = nr_of_wires
-    norm = App.Vector(0, 0, 1)
-    wo = 4  # number of 1st single wire insulation (outer ring)
+    wo = wo_nr  # number of 1st single wire insulation (outer ring)
     geoList = []
     for i in range(nr):
         geoList.append(Part.Circle(App.Vector(i, 0, 0), norm, 2))
@@ -119,49 +275,7 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     for i in range(nr):
         geoList.append(Part.Point(App.Vector(i, 0, 0)))
     profile.addGeometry(geoList, False)
-
-    # Calculate base dimensions
-    wire_diameter = math.sqrt(wire_thickness_mm2/math.pi)*2
-    # distance between centers of adjacent wires:
-    p_dist = wire_diameter + 2*insul[1] + insul[2]
-    # x position of 1st point:
-    p1_xpos = -(nr_of_wires-1)*p_dist/2
-    # single insulation diamenter (outer ring):
-    wo_d = wire_diameter + 2*insul[1]
-    # wire diameter (inner ring):
-    wi_d = wire_diameter
-    # jacket arc diameter:
-    j_d = wo_d + 2*insul[0]
-    # FreeCAD.Console.PrintMessage(f"nr,wo,wi,p({nr},{wo},{wi},{p})\n")
-    constraintList = []
-    # 1st point placement:
-    constraintList.append(Sketcher.Constraint('DistanceX', p, 1, -1, 1,
-                                              -p1_xpos))
-    constraintList.append(Sketcher.Constraint('Diameter', 3, j_d))
-    constraintList.append(Sketcher.Constraint('Diameter', wo, wo_d))
-    constraintList.append(Sketcher.Constraint('Diameter', wi, wi_d))
-    for i in range(nr-1):
-        # nth point distance:
-        constraintList.append(Sketcher.Constraint('DistanceX', p+i, 1, p+i+1,
-                                                  1, p_dist))
-        # points on x axis (except 1st to avoid redundancy later):
-        constraintList.append(Sketcher.Constraint('PointOnObject', p+i+1, 1,
-                                                  -1))
-        # insulations equality:
-        constraintList.append(Sketcher.Constraint('Equal', wo, wo+i+1))
-        # wires equality:
-        constraintList.append(Sketcher.Constraint('Equal', wi, wi+i+1))
-    for i in range(nr):
-        # insulation (outer ring) on point:
-        constraintList.append(Sketcher.Constraint('Coincident', p+i, 1, wo+i,
-                                                  3))
-        # wire (inner ring) on point:
-        constraintList.append(Sketcher.Constraint('Coincident', p+i, 1, wi+i,
-                                                  3))
-    # jacket on 1st point (1st point is not on x-axis to avoid redundancy):
-    constraintList.append(Sketcher.Constraint('Coincident', p, 1, 3, 3))
-    profile.addConstraint(constraintList)
-    return profile
+    return wo, wi, p, nr
 
 
 # function copied from archProfile.py

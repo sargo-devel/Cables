@@ -1,0 +1,24 @@
+# Data structure:
+
+# Name, Profile class, Voltage Class, geometric data...
+
+# All measures must be in millimeters
+
+# Possible profile classes are:
+
+# R=  Round cable
+# F=  Flat cable
+
+# Additional profile types must be implemented in cableProfile.py first
+
+###########################################
+
+# F-profile
+# Name,F,Voltage Class,jacket_thickness,single_insulation_thickness,insul_dist
+
+YDYp,F,750V,1.45,0.7,0.1
+
+# R-profile
+# Name,R,Voltage Class,jacket_thickness,single_insulation_thickness,insul_dist
+
+YDY,R,750V,1.45,0.7,0.1

@@ -81,7 +81,7 @@ class ArchCable(ArchPipe._ArchPipe):
                             "its insulation")
         if "AutoLabelSubLines" not in pl:
             obj.addProperty("App::PropertyBool", "AutoLabelSubLines",
-                            "Cable", "Aumatically change labels of all " +
+                            "Cable", "Automatically change labels of all " +
                             "sub lines: base wire, sub profiles, sub wires")
         if "BaseWireFilletRadius" not in pl:
             obj.addProperty("App::PropertyLength", "BaseWireFilletRadius",

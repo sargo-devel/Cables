@@ -40,7 +40,7 @@ class ArchCableConnector(ArchComponent.Component):
                             "The height of this connector")
         if "NumberOfHoles" not in pl:
             obj.addProperty("App::PropertyInteger", "NumberOfHoles",
-                            "CableConnector", "The nomber of holes for cables")
+                            "CableConnector", "The number of holes for cables")
         self.Type = "CableConnector"
 
     def onChanged(self, obj, prop):

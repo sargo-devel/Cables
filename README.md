@@ -34,6 +34,9 @@ Some properties of models can change in the future and break models created with
 ### Compatibility
 Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. No compatibility checks with previuos versions were made.
 
+### Contributions
+Any code contributions are welcome. Please add all of your pull requests to the dev branch.
+
 ### References
 * Development repo: https://github.com/sargo-devel/Cables
 * FreeCAD Forum announcement/discussion [thread](https://forum.freecad.org/viewtopic.php?t=94090)

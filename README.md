@@ -14,7 +14,7 @@ The Cables Workbench has the following goals:
 4. To be compatible with [BIM Workbench](https://wiki.freecad.org/BIM_Workbench)
 
 The main idea of modeling cables (which are flexible in nature) as a static 3D elements is based on Wire Flex objects.
-These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) objects with additional features like the possibility of attaching any Wire Flex vertices to external objects. This allows to automatically change the cable shape and length while changing the placement of external elements like boxes, switches, ligth points, walls, ceilings etc.
+These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) objects with additional features like the possibility of attaching any Wire Flex vertices to external objects. This allows to automatically change the cable shape and length while changing the placement of external elements like boxes, switches, light points, walls, ceilings etc.
 
 All elements (cables, boxes, connectors etc.) in this workbench are  [Arch Component](https://wiki.freecad.org/Arch_Component) elements. The cable element is based on [Arch Pipe](https://wiki.freecad.org/Arch_Pipe) class.
 

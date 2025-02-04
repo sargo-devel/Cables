@@ -60,7 +60,7 @@ class WireFlex(Draft.Wire):
         obj.Label = 'WireFlex'
 
     def get_vlist(self, obj):
-        """It gets vector list of all atached wire points
+        """It gets vector list of all attached wire points
         """
         vstart = wireutils.getVector(obj, "Vrtx_start", "Vertex")
         vend = wireutils.getVector(obj, "Vrtx_end", "Vertex")

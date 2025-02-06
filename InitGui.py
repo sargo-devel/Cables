@@ -55,8 +55,8 @@ class CablesWorkbench (Workbench):
                             "Cables_NewCableConnector",
                             "Cables_NewCableLightPoint",
                             "Cables_NewMaterial"]
-        self.list_helpers = ["Cables_NewHelperPoint",
-                             "Cables_NewHelperLine"]
+        self.list_support = ["Cables_NewSupportPoint",
+                             "Cables_NewSupportLine"]
         self.list_draft = ["Draft_ToggleGrid",
                            # "Draft_SelectPlane"]
                            ]
@@ -64,16 +64,16 @@ class CablesWorkbench (Workbench):
                            self.list_wires)
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cables"),
                            self.list_cables)
-        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
-                           self.list_helpers)
+        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cable Support"),
+                           self.list_support)
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Draft Tools"),
                            self.list_draft)
         self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),
                         self.list_wires)
         self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cables"),
                         self.list_cables)
-        self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
-                        self.list_helpers)
+        self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Support"),
+                        self.list_support)
         # self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
 
     def Activated(self):
@@ -95,8 +95,8 @@ class CablesWorkbench (Workbench):
                                self.list_wires)
         self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cables"),
                                self.list_cables)
-        self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
-                               self.list_helpers)
+        self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Support"),
+                               self.list_support)
 
     def GetClassName(self):
         # This function is mandatory if this is a full Python workbench

@@ -61,14 +61,14 @@ class ArchCableConnector(ArchComponent.Component):
     def execute(self, obj):
         pl = obj.Placement
         shapes = []
-        shapes.append(self.makeHelperLines(obj))
+        shapes.append(self.makeSupportPoints(obj))
         shapes.append(self.makeBox(obj))
         sh = Part.makeCompound(shapes)
         obj.Shape = self.processSubShapes(obj, sh, pl)
         obj.Placement = pl
         # FreeCAD.Console.PrintMessage("ArchCableConnector.execute: end\n")
 
-    def makeHelperLines(self, obj):
+    def makeSupportPoints(self, obj):
         ln = obj.NumberOfHoles * \
             (obj.HoleDiameter.Value + obj.Thickness.Value) + \
             obj.Thickness.Value

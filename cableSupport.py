@@ -1,4 +1,4 @@
-"""cableHelper
+"""cableSupport
 """
 
 import FreeCAD
@@ -8,8 +8,8 @@ import Draft
 translate = FreeCAD.Qt.translate
 
 
-def makeHelperPoint(placement=None, name=None):
-    """creates a helper point
+def makeSupportPoint(placement=None, name=None):
+    """creates a support point
     """
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError(translate(
@@ -19,7 +19,7 @@ def makeHelperPoint(placement=None, name=None):
         point = Draft.make_point(placement.Base)
     else:
         point = Draft.make_point(0.0, 0.0, 0.0)
-    point.Label = name if name else translate("Cables", "HelperPoint")
+    point.Label = name if name else translate("Cables", "SupportPoint")
     point.ViewObject.PointSize = 8
     point.ViewObject.PointColor = (255, 85, 0)
     Draft.autogroup(point)
@@ -27,8 +27,8 @@ def makeHelperPoint(placement=None, name=None):
     return point
 
 
-def makeHelperLine(p1=None, p2=None, name=None):
-    """creates a helper line
+def makeSupportLine(p1=None, p2=None, name=None):
+    """creates a support line
     """
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError(translate(
@@ -49,7 +49,7 @@ def makeHelperLine(p1=None, p2=None, name=None):
         pl.Base = (p1+p2)/2
     line = Draft.make_wire([p1, p2], placement=pl, closed=False,
                            face=False, support=None)
-    line.Label = name if name else translate("Cables", "HelperLine")
+    line.Label = name if name else translate("Cables", "SupportLine")
     #line.addExtension('Part::AttachExtensionPython')
     line.Subdivisions = 1
     line.ViewObject.PointSize = 8

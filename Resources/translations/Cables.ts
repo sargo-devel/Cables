@@ -133,8 +133,8 @@
     <name>Cables</name>
     <message>
         <location filename="../../archCableConnector.py" line="125"/>
-        <location filename="../../cableHelper.py" line="16"/>
-        <location filename="../../cableHelper.py" line="35"/>
+        <location filename="../../cableSupport.py" line="16"/>
+        <location filename="../../cableSupport.py" line="35"/>
         <location filename="../../archCableLightPoint.py" line="102"/>
         <location filename="../../archCable.py" line="514"/>
         <location filename="../../archCableBox.py" line="198"/>
@@ -147,13 +147,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableHelper.py" line="23"/>
-        <source>HelperPoint</source>
+        <location filename="../../cableSupport.py" line="23"/>
+        <source>SupportPoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableHelper.py" line="54"/>
-        <source>HelperLine</source>
+        <location filename="../../cableSupport.py" line="54"/>
+        <source>SupportLine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -355,32 +355,6 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewHelperLine</name>
-    <message>
-        <location filename="../../commands.py" line="320"/>
-        <source>Add New Helper Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="327"/>
-        <source>It adds a new helper line to which a cable or other element can be attached. Select at least one point first</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_NewHelperPoint</name>
-    <message>
-        <location filename="../../commands.py" line="294"/>
-        <source>Add New Helper Point</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="300"/>
-        <source>It adds a new helper point to which a cable or other element can be attached</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Cables_NewMaterial</name>
     <message>
         <location filename="../../commands.py" line="245"/>
@@ -403,6 +377,32 @@
     <message>
         <location filename="../../commands.py" line="234"/>
         <source>It adds a new cable profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_NewSupportLine</name>
+    <message>
+        <location filename="../../commands.py" line="320"/>
+        <source>Add New Support Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="327"/>
+        <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_NewSupportPoint</name>
+    <message>
+        <location filename="../../commands.py" line="294"/>
+        <source>Add New Support Point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="300"/>
+        <source>It adds a new support point to which a cable or other element can be attached</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -485,7 +485,7 @@
         <location filename="../../InitGui.py" line="67"/>
         <location filename="../../InitGui.py" line="75"/>
         <location filename="../../InitGui.py" line="98"/>
-        <source>Cable Helpers</source>
+        <source>Cable Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

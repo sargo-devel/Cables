@@ -14,7 +14,7 @@ import archCableLightPoint
 import wireFlex
 import cableProfile
 import cableMaterial
-import cableHelper
+import cableSupport
 from commonutils import QT_TRANSLATE_NOOP
 
 
@@ -31,8 +31,8 @@ CMD_CABLECONNECTOR_ICON = os.path.join(iconPath, "cmdNewCableConnector.svg")
 CMD_CABLEPROFILE_ICON = os.path.join(iconPath, "cmdNewCableProfile.svg")
 CMD_CABLEMATERIAL_ICON = os.path.join(iconPath, "cmdNewCableMaterial.svg")
 CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
-CMD_HELPERPOINT_ICON = os.path.join(iconPath, "cmdNewHelperPoint.svg")
-CMD_HELPERLINE_ICON = os.path.join(iconPath, "cmdNewHelperLine.svg")
+CMD_SUPPORTPOINT_ICON = os.path.join(iconPath, "cmdNewSupportPoint.svg")
+CMD_SUPPORTLINE_ICON = os.path.join(iconPath, "cmdNewSupportLine.svg")
 
 
 class newWireFlexCommand:
@@ -273,53 +273,53 @@ class newCableLightPoint:
                     "the light point")}
 
 
-class newHelperPoint:
+class newSupportPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
             pl = FreeCAD.Placement()
             pl.Base = pos_vect
-            cableHelper.makeHelperPoint(placement=pl)
+            cableSupport.makeSupportPoint(placement=pl)
         else:
-            cableHelper.makeHelperPoint()
+            cableSupport.makeSupportPoint()
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
 
     def GetResources(self):
-        return {'Pixmap': CMD_HELPERPOINT_ICON,
-                'MenuText': QT_TRANSLATE_NOOP("Cables_NewHelperPoint",
-                                              "Add New Helper Point"),
+        return {'Pixmap': CMD_SUPPORTPOINT_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewSupportPoint",
+                                              "Add New Support Point"),
                 'ToolTip': QT_TRANSLATE_NOOP(
-                    "Cables_NewHelperPoint", "It adds a new helper point to " +
-                    "which a cable or other element can be attached")}
+                    "Cables_NewSupportPoint", "It adds a new support point " +
+                    "to which a cable or other element can be attached")}
 
 
-class newHelperLine:
+class newSupportLine:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
         if len(sel_obj) > 1:
             p1 = sel_obj[0].PickedPoints[0]
             p2 = sel_obj[1].PickedPoints[0]
-            cableHelper.makeHelperLine(p1, p2)
+            cableSupport.makeSupportLine(p1, p2)
         elif len(sel_obj) == 1:
             p1 = sel_obj[0].PickedPoints[0]
-            cableHelper.makeHelperLine(p1)
+            cableSupport.makeSupportLine(p1)
         else:
-            cableHelper.makeHelperLine()
+            cableSupport.makeSupportLine()
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
 
     def GetResources(self):
-        return {'Pixmap': CMD_HELPERLINE_ICON,
-                'MenuText': QT_TRANSLATE_NOOP("Cables_NewHelperLine",
-                                              "Add New Helper Line"),
+        return {'Pixmap': CMD_SUPPORTLINE_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewSupportLine",
+                                              "Add New Support Line"),
                 'ToolTip': QT_TRANSLATE_NOOP(
-                    "Cables_NewHelperLine", "It adds a new helper line to " +
+                    "Cables_NewSupportLine", "It adds a new support line to " +
                     "which a cable or other element can be attached. Select " +
                     "at least one point first")}
 
@@ -335,5 +335,5 @@ Gui.addCommand('Cables_NewCableConnector', newCableConnectorCommand())
 Gui.addCommand('Cables_NewProfile', newProfileCommand())
 Gui.addCommand('Cables_NewMaterial', newMaterialCommand())
 Gui.addCommand('Cables_NewCableLightPoint', newCableLightPoint())
-Gui.addCommand('Cables_NewHelperPoint', newHelperPoint())
-Gui.addCommand('Cables_NewHelperLine', newHelperLine())
+Gui.addCommand('Cables_NewSupportPoint', newSupportPoint())
+Gui.addCommand('Cables_NewSupportLine', newSupportLine())

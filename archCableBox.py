@@ -89,7 +89,7 @@ class ArchCableBox(ArchComponent.Component):
         # FreeCAD.Console.PrintMessage("ArchBox.execute: start\n")
         pl = obj.Placement
         shapes = []
-        shapes.append(self.makeHelperLines(obj))
+        shapes.append(self.makeSupportLines(obj))
         if not obj.HelperRingsHidden:
             shapes.append(self.makeHelperRings(obj))
         if not obj.BoxBodyHidden:
@@ -99,8 +99,8 @@ class ArchCableBox(ArchComponent.Component):
         obj.Placement = pl
         # FreeCAD.Console.PrintMessage("ArchBox.execute: end\n")
 
-    def makeHelperLines(self, obj):
-        # helper crosses
+    def makeSupportLines(self, obj):
+        # support crosses
         x0 = obj.Diameter.Value/2
         x = 6
         y0 = obj.Diameter.Value/2

@@ -6,6 +6,9 @@ import wireFlex
 import Part
 
 
+translate = FreeCAD.Qt.translate
+
+
 def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):
     """ Gets single vector or vector list from a given property.
 
@@ -53,8 +56,9 @@ def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):
                 else:
                     return None
             else:
-                FreeCAD.Console.PrintError("Cables.wireutils.getVertex: " +
-                                           "wrong property type.\n")
+                FreeCAD.Console.PrintError(translate(
+                    "Cables", "Cables.wireutils.getVector: wrong property " +
+                    "type.") + "\n")
                 return None
         elif type(obj) is tuple:
             try:
@@ -65,12 +69,12 @@ def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):
             except (AttributeError, IndexError):
                 return obj[0].Placement.Base
         else:
-            FreeCAD.Console.PrintError("Cables.wireutils.getVertex: " +
-                                       "wrong object.\n")
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Cables.wireutils.getVector: wrong object.") + "\n")
             return None
     else:
-        FreeCAD.Console.PrintError("Cables.wireutils.getVertex: wrong " +
-                                   "shape type.\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Cables.wireutils.getVector: wrong shape type.") + "\n")
         return None
 
 
@@ -98,8 +102,9 @@ def getFlatLinkSubList(obj, prop):
                 flat_sub_list.append((element[0], (sub_element,)))
         return flat_sub_list
     else:
-        FreeCAD.Console.PrintError("Wrong property type: "
-                                   + f"{obj.getTypeIdOfProperty(prop)}\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Cables.wireutils.getFlatLinkSubList: wrong property " +
+            "type.") + f"{obj.getTypeIdOfProperty(prop)}\n")
     return None
 
 
@@ -134,17 +139,20 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
         slist = FreeCAD.Gui.Selection.getCompleteSelection()
     retlist = None
     if not slist and single:
-        FreeCAD.Console.PrintError("Wrong selection. Please select only one " +
-                                   f"{subshape_class}\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Wrong selection. Please select only one") +
+            f" {subshape_class}\n")
         return None
     if not slist:
-        FreeCAD.Console.PrintError("Nothing selected!\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Nothing selected!") + "\n")
         return None
     if obj_proxy_class:
         obj = slist[0].Object
         if not isinstance(obj.Proxy, obj_proxy_class):
-            FreeCAD.Console.PrintError("Wrong selection. Please select " +
-                                       f"object of {obj_proxy_class} type\n")
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Wrong selection. Please select") +
+                f" object of {obj_proxy_class} type\n")
             return None
         if isinstance(obj.Proxy, wireFlex.WireFlex):
             if obj.ChamferSize > 0 or obj.FilletRadius > 0 \
@@ -152,6 +160,11 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
                 FreeCAD.Console.PrintError(
                     f"Not possible to modify {str(obj.Label)} due to " +
                     "non zero Chamfer or Fillet or Subdivision\n")
+                FreeCAD.Console.PrintError(
+                    translate("Cables", "Not possible to modify") +
+                    f" {str(obj.Label)} " +
+                    translate("Cables", "due to non zero Chamfer or Fillet " +
+                              "or Subdivision") + "\n")
                 return None
     retlist = []
     # FreeCAD.Console.PrintMessage(f"slist= {slist}\n")
@@ -191,7 +204,8 @@ def addPointToWire(plist=None):
         name = plist[0][1]
         nr = int(name.split('Edge')[1])
     except (ValueError, IndexError, AttributeError, TypeError):
-        FreeCAD.Console.PrintError("Selection is not an edge\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selection is not an edge") + "\n")
         return None    # not an edge
     vlist = obj.Proxy.get_vlist(obj)
     pts = obj.Points
@@ -223,7 +237,8 @@ def delPointFromWire(plist=None):
         name = plist[0][1]
         nr = int(name.split('Vertex')[1])
     except (ValueError, IndexError, AttributeError, TypeError):
-        FreeCAD.Console.PrintError("Selection is not a Vertex\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selection is not a Vertex") + "\n")
         return None    # not a Vertex
     vlist = obj.Proxy.get_vlist(obj)
     pts = obj.Points
@@ -252,9 +267,11 @@ def assignPointAttachment(plist=None):
     if not plist:
         return None
     if len(plist) < 2:
-        FreeCAD.Console.PrintError(
-            "Wrong selection. Please select two vertexes. First vertex " +
-            "has to belong to WireFlex, second to external object")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Wrong selection. Please select two vertexes. First " +
+            "vertex has to belong to WireFlex, second to an external object") +
+            "\n")
+        
         return None
     try:
         obj = plist[0][0]
@@ -262,7 +279,8 @@ def assignPointAttachment(plist=None):
         nr = int(name.split('Vertex')[1])
         sel_ext = plist[1]
     except (ValueError, IndexError, AttributeError, TypeError):
-        FreeCAD.Console.PrintError("First selection is not a Vertex\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "First selection is not a Vertex") + "\n")
         return None    # not a Vertex
     if 1 < nr < len(obj.Shape.Vertexes):
         vrtxs_mid = getFlatLinkSubList(obj, 'Vrtxs_mid')
@@ -317,7 +335,8 @@ def removePointAttachment(plist=None):
         name = plist[0][1]
         nr = int(name.split('Vertex')[1])
     except (ValueError, IndexError, AttributeError, TypeError):
-        FreeCAD.Console.PrintError("Selection is not a Vertex\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selection is not a Vertex") + "\n")
         return None    # not an vertex
     vrtxs_mid = getFlatLinkSubList(obj, 'Vrtxs_mid')
     vrtxs_mid_idx = obj.Vrtxs_mid_idx

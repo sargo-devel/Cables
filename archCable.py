@@ -35,10 +35,11 @@ import DraftGeomUtils
 import math
 import wireFlex
 import wireutils
-
 import Part
+from commonutils import QT_TRANSLATE_NOOP
 
 
+translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLE_ICON = os.path.join(iconPath, "classArchCable.svg")
@@ -62,39 +63,56 @@ class ArchCable(ArchPipe._ArchPipe):
         pl = obj.PropertiesList
         if "SubProfiles" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubProfiles", "Cable",
-                            "List of Sub Profiles on both ends od cable")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "List of Sub Profiles on " +
+                                "both ends od cable"))
         if "SubWires" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubWires", "Cable",
-                            "List of Sub Wires on both ends od cable")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "List of Sub Wires on both " +
+                                "ends od cable"))
         if "SubColors" not in pl:
             obj.addProperty("App::PropertyStringList", "SubColors", "Cable",
-                            "List of Sub Cable Colors on both ends of " +
-                            "cable. Example: ['J:0', 'L1:1', 'N:2', " +
-                            "'PE:3', 'CU:-1']")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "List of Sub Cable Colors " +
+                                "on both ends of cable. Example: ['J:0', " +
+                                "'L1:1', 'N:2', 'PE:3', 'CU:-1']"))
         if "ShowSubLines" not in pl:
             obj.addProperty("App::PropertyBool", "ShowSubLines", "Cable",
-                            "Shows/hides all sub lines: base wire, " +
-                            "sub profiles, sub wires")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Shows/hides all sub " +
+                                "lines: base wire, sub profiles, sub wires"))
         if "StrippedWireLength" not in pl:
             obj.addProperty("App::PropertyLength", "StrippedWireLength",
-                            "Cable", "Offset from the bare subwire end to " +
-                            "its insulation")
+                            "Cable",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Offset from the " +
+                                "bare subwire end to its insulation"))
         if "AutoLabelSubLines" not in pl:
-            obj.addProperty("App::PropertyBool", "AutoLabelSubLines",
-                            "Cable", "Automatically change labels of all " +
-                            "sub lines: base wire, sub profiles, sub wires")
+            obj.addProperty("App::PropertyBool", "AutoLabelSubLines", "Cable",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Automatically " +
+                                "change labels of all sub lines: base wire, " +
+                                "sub profiles, sub wires"))
         if "BaseWireFilletRadius" not in pl:
             obj.addProperty("App::PropertyLength", "BaseWireFilletRadius",
-                            "Cable", "Changes fillet radius of base object " +
-                            "which finally changes fillet radius of a cable")
+                            "Cable",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Changes fillet " +
+                                "radius of base object which finally " +
+                                "changes fillet radius of a cable"))
         if "SubWiresFilletRadius" not in pl:
             obj.addProperty("App::PropertyLength", "SubWiresFilletRadius",
-                            "Cable", "Changes fillet radius of all sub wires" +
-                            "objects")
+                            "Cable",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Changes fillet " +
+                                "radius of all sub wires objects"))
         if "CableRotation" not in pl:
-            obj.addProperty("App::PropertyAngle", "CableRotation",
-                            "Cable", "Changes rotation of a cable by " +
-                            "changing cable profile attachment offset angle")
+            obj.addProperty("App::PropertyAngle", "CableRotation", "Cable",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Changes rotation " +
+                                "of a cable by changing cable profile " +
+                                "attachment offset angle"))
         proplist = ["Diameter", "OffsetStart", "OffsetEnd", "ProfileType",
                     "WallThickness"]
         for prop in proplist:
@@ -492,10 +510,11 @@ def makeCable(baseobj=None, profileobj=None, diameter=0, length=0,
               placement=None, name=None):
     "Creates a cable object from the given base object"
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "Cable")
-    obj.Label = name if name else "Cable"
+    obj.Label = name if name else translate("Cables", "Cable")
     ArchCable(obj)
     if FreeCAD.GuiUp:
         ViewProviderCable(obj.ViewObject)

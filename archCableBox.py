@@ -7,8 +7,10 @@ import os
 import Part
 from math import pi
 import DraftVecUtils
+from commonutils import QT_TRANSLATE_NOOP
 
 
+translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLEBOX_ICON = os.path.join(iconPath, "classArchCableBox.svg")
@@ -32,35 +34,52 @@ class ArchCableBox(ArchComponent.Component):
         pl = obj.PropertiesList
         if "Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Diameter", "CableBox",
-                            "The diameter of this box")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The diameter of this box"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness", "CableBox",
-                            "The wall thickness of this box")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The wall thickness of " +
+                                "this box"))
         if "Height" not in pl:
             obj.addProperty("App::PropertyLength", "Height", "CableBox",
-                            "The height of this box")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The height of this box"))
         if "BoxBodyHidden" not in pl:
             obj.addProperty("App::PropertyBool", "BoxBodyHidden", "CableBox",
-                            "Hide the box body to have better access " +
-                            "to helpers")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Hide the box body to have " +
+                                "better access to helpers"))
         if "HelperRingsHidden" not in pl:
             obj.addProperty("App::PropertyBool", "HelperRingsHidden",
-                            "CableBoxHelpers", "Hide the helper rings " +
-                            "if they are not needed")
+                            "CableBoxHelpers",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Hide the helper rings if " +
+                                "they are not needed"))
         if "Ring1Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Ring1Diameter",
-                            "CableBoxHelpers", "The diameter of helper ring 1")
+                            "CableBoxHelpers",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The diameter of helper " +
+                                "ring 1"))
         if "Ring1Height" not in pl:
             obj.addProperty("App::PropertyLength", "Ring1Height",
-                            "CableBoxHelpers", "The height below lid of " +
-                            "helper ring 1")
+                            "CableBoxHelpers",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The height below lid of " +
+                                "helper ring 1"))
         if "Ring2Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Ring2Diameter",
-                            "CableBoxHelpers", "The diameter of helper ring 2")
+                            "CableBoxHelpers",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The diameter of helper " +
+                                "ring 2"))
         if "Ring2Height" not in pl:
             obj.addProperty("App::PropertyLength", "Ring2Height",
-                            "CableBoxHelpers", "The height below lid of " +
-                            "helper ring 2")
+                            "CableBoxHelpers",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The height below lid of " +
+                                "helper ring 2"))
         self.Type = "CableBox"
 
     def onChanged(self, obj, prop):
@@ -175,10 +194,11 @@ def makeCableBox(baseobj=None, diameter=0, height=0, placement=None,
     """Creates a cable box object from the given base object
     """
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "CableBox")
-    obj.Label = name if name else "CableBox"
+    obj.Label = name if name else translate("Cables", "CableBox")
     ArchCableBox(obj)
     if FreeCAD.GuiUp:
         ViewProviderCableBox(obj.ViewObject)

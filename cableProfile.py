@@ -11,6 +11,8 @@ import Sketcher
 import ProfileLib.RegularPolygon
 from commonutils import uiPath, presetsPath
 
+
+translate = FreeCAD.Qt.translate
 ui_profile = os.path.join(uiPath, "profile.ui")
 thickness_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
                   '10', '16', '25', '35', '50', '70', '95', '120']
@@ -52,8 +54,9 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
     label = f"{profile[1]}{nr_of_wires}x{wire_thickness_mm2}_{profile[3]}"
     # FreeCAD.Console.PrintMessage(f"Label: {label}\n")
     if nr_of_wires < 1 or wire_thickness_mm2 == 0:
-        FreeCAD.Console.PrintError("Cable needs to have number of wires > 0 \
-            and nonzero wire thickness\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Cable needs to have number of wires > 0 and nonzero" +
+            "wire thickness") + "\n")
         return None
     if profile[2] == 'F':
         makeCableProfileF(label, profile[4:], nr_of_wires, wire_thickness_mm2)
@@ -67,8 +70,9 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
     """
     if nr_of_wires < 2:
-        FreeCAD.Console.PrintError(
-            "Flat cable needs to have at least 2 wires\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Flat cable needs to have at least 2 wires")
+            + "\n")
         return None
     profile = FreeCAD.activeDocument().addObject('Sketcher::SketchObject',
                                                  'Sketch')
@@ -154,8 +158,9 @@ def makeCableProfileR(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
     """
     if nr_of_wires < 1:
-        FreeCAD.Console.PrintError(
-            "Round cable needs to have at least 1 wire\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Round cable needs to have at least 1 wire")
+            + "\n")
         return None
     profile = FreeCAD.activeDocument().addObject('Sketcher::SketchObject',
                                                  'Sketch')
@@ -298,8 +303,10 @@ def readCablePresets(pfiles=profilefiles):
                                 Presets.append(r)
                             bid = bid + 1
                         except ValueError:
-                            FreeCAD.Console.PrintError("Skipping bad \
-                                line: " + str(row))
+                            FreeCAD.Console.PrintError(translate(
+                                "Cables", "Skipping bad line:")
+                                + " " + str(row) + "\n")
             except IOError:
-                FreeCAD.Console.PrintError("Could not open ", profilefile)
+                FreeCAD.Console.PrintError(translate(
+                    "Cables", "Could not open"), profilefile, "\n")
     return Presets

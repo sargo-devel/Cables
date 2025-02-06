@@ -5,8 +5,10 @@ import FreeCAD
 import ArchComponent
 import os
 import Part
+from commonutils import QT_TRANSLATE_NOOP
 
 
+translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLELIGHTPOINT_ICON = os.path.join(iconPath,
@@ -31,15 +33,21 @@ class ArchCableLightPoint(ArchComponent.Component):
         pl = obj.PropertiesList
         if "Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Diameter",
-                            "CableLightPoint", "The diameter light point" +
-                            "fitting")
+                            "CableLightPoint",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The diameter of the light " +
+                                "point fitting"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness",
-                            "CableLightPoint", "The diameter light point" +
-                            "fitting")
+                            "CableLightPoint",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The wall thickness of the " +
+                                "light point fitting"))
         if "Height" not in pl:
             obj.addProperty("App::PropertyLength", "Height", "CableLightPoint",
-                            "The height of light point fitting")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The height of the light " +
+                                "point fitting"))
         self.Type = "LightPoint"
 
     def onChanged(self, obj, prop):
@@ -90,11 +98,12 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
     """creates a cable light point object from the given base object
     or from scratch"""
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableLightPoint")
-    obj.Label = name if name else "CableLightPoint"
+    obj.Label = name if name else translate("Cables", "CableLightPoint")
     ArchCableLightPoint(obj)
     if FreeCAD.GuiUp:
         ViewProviderCableLightPoint(obj.ViewObject)

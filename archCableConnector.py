@@ -5,8 +5,10 @@ import FreeCAD
 import ArchComponent
 import os
 import Part
+from commonutils import QT_TRANSLATE_NOOP
 
 
+translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLECONNECTOR_ICON = os.path.join(iconPath,
@@ -31,16 +33,26 @@ class ArchCableConnector(ArchComponent.Component):
         pl = obj.PropertiesList
         if "HoleDiameter" not in pl:
             obj.addProperty("App::PropertyLength", "HoleDiameter",
-                            "CableConnector", "The diameter of single hole")
+                            "CableConnector",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The diameter of single " +
+                                "hole"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness",
-                            "CableConnector", "The wall thickness")
+                            "CableConnector",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The wall thickness"))
         if "Height" not in pl:
             obj.addProperty("App::PropertyLength", "Height", "CableConnector",
-                            "The height of this connector")
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The height of this " +
+                                "connector"))
         if "NumberOfHoles" not in pl:
             obj.addProperty("App::PropertyInteger", "NumberOfHoles",
-                            "CableConnector", "The number of holes for cables")
+                            "CableConnector",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The number of holes for " +
+                                "cables"))
         self.Type = "CableConnector"
 
     def onChanged(self, obj, prop):
@@ -54,7 +66,7 @@ class ArchCableConnector(ArchComponent.Component):
         sh = Part.makeCompound(shapes)
         obj.Shape = self.processSubShapes(obj, sh, pl)
         obj.Placement = pl
-        FreeCAD.Console.PrintMessage("ArchBox.execute: end\n")
+        # FreeCAD.Console.PrintMessage("ArchCableConnector.execute: end\n")
 
     def makeHelperLines(self, obj):
         ln = obj.NumberOfHoles * \
@@ -109,11 +121,13 @@ def makeCableConnector(baseobj=None, nrofholes=0, holediameter=0, thickness=0,
     creates a cable connector object from the given base object
     or from scratch"""
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
+        return
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableConnector")
-    obj.Label = name if name else "CableConnector"
+    obj.Label = name if name else translate("Cables", "CableConnector")
     ArchCableConnector(obj)
     if FreeCAD.GuiUp:
         ViewProviderCableConnector(obj.ViewObject)

@@ -15,6 +15,8 @@ import wireFlex
 import cableProfile
 import cableMaterial
 import cableHelper
+from commonutils import QT_TRANSLATE_NOOP
+
 
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
@@ -46,10 +48,12 @@ class newWireFlexCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_NEW_WIRE_ICON,
-                'MenuText': "New Wire Flex",
-                'ToolTip': "It creates a new line based on selected " +
-                "vertexes/objects. At least two vertexes/objects have to be " +
-                "selected first"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewWireFlex",
+                                              "New Wire Flex"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewWireFlex", "It creates a new line based on " +
+                    "selected vertexes/objects. At least two vertexes" +
+                    "/objects have to be selected first")}
 
 
 class addVertexCommand:
@@ -65,9 +69,11 @@ class addVertexCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_ADD_VERTEX_ICON,
-                'MenuText': "Add Vertex",
-                'ToolTip': "It adds a new vertex to selected edge of " +
-                "Wire Flex"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_AddVertex",
+                                              "Add Vertex"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_AddVertex", "It adds a new vertex to selected " +
+                    "edge of Wire Flex")}
 
 
 class delVertexCommand:
@@ -84,8 +90,11 @@ class delVertexCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_DEL_VERTEX_ICON,
-                'MenuText': "Delete Vertex",
-                'ToolTip': "It deletes selected vertex from Wire Flex"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_DelVertex",
+                                              "Delete Vertex"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_DelVertex", "It deletes selected vertex from " +
+                    "Wire Flex")}
 
 
 class assignAttachmentCommand:
@@ -103,10 +112,12 @@ class assignAttachmentCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_ATT_VERTEX_ICON,
-                'MenuText': "Attach Vertex",
-                'ToolTip': "It attaches a Wire Flex vertex to external " +
-                "vertex or object. Select Wire Flex vertex first then " +
-                "ext. vertex (or entire object)"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_AttachVertex",
+                                              "Attach Vertex"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_AttachVertex", "It attaches a Wire Flex vertex " +
+                    "to external vertex or object. Select Wire Flex vertex " +
+                    "first then ext. vertex (or entire object)")}
 
 
 class removeAttachmentCommand:
@@ -123,9 +134,12 @@ class removeAttachmentCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_RM_ATT_VERTEX_ICON,
-                'MenuText': "Remove Vertex Attachment",
-                'ToolTip': "It removes an attachment of external " +
-                "vertex or object from selected Wire Flex vertex"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_RemoveVertex",
+                                              "Remove Vertex Attachment"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_RemoveVertex", "It removes an attachment of " +
+                    "external vertex or object from selected Wire Flex " +
+                    "vertex")}
 
 
 class newCableCommand:
@@ -142,9 +156,12 @@ class newCableCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLE_ICON,
-                'MenuText': "Add New Cable",
-                'ToolTip': "It adds a new cable object from Wire Flex and " +
-                "profile. Select Wire Flex object first then a profile"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewCable",
+                                              "Add New Cable"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewCable", "It adds a new cable object from " +
+                    "Wire Flex and profile. Select Wire Flex object first " +
+                    "then a profile")}
 
 
 class newCableBoxCommand:
@@ -164,9 +181,11 @@ class newCableBoxCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLEBOX_ICON,
-                'MenuText': "Add New Cable Box",
-                'ToolTip': "It adds a new cable box object. Select any " +
-                "point in 3D view first, then add box"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewCableBox",
+                                              "Add New Cable Box"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewCableBox", "It adds a new cable box object. " +
+                    "Select any point in 3D view first, then add the box")}
 
 
 class newCableConnectorCommand:
@@ -186,9 +205,12 @@ class newCableConnectorCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLECONNECTOR_ICON,
-                'MenuText': "Add New Cable Connector",
-                'ToolTip': "It adds a new cable connector object. Select" +
-                "any point in 3D view first, then add connector"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewCableConnector",
+                                              "Add New Cable Connector"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewCableConnector", "It adds a new cable " +
+                    "connector object. Select any point in 3D view first, " +
+                    "then add the connector")}
 
 
 class newProfileCommand:
@@ -203,8 +225,10 @@ class newProfileCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLEPROFILE_ICON,
-                'MenuText': "Add New Cable Profile",
-                'ToolTip': "It adds a new cable profile"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewProfile",
+                                              "Add New Cable Profile"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewProfile", "It adds a new cable profile")}
 
 
 class newMaterialCommand:
@@ -217,8 +241,11 @@ class newMaterialCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLEMATERIAL_ICON,
-                'MenuText': "Add New Cable Materials",
-                'ToolTip': "It adds new multimaterials for cables"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewMaterial",
+                                              "Add New Cable Materials"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewMaterial", "It adds new multimaterials for " +
+                    "cables")}
 
 
 class newCableLightPoint:
@@ -238,9 +265,12 @@ class newCableLightPoint:
 
     def GetResources(self):
         return {'Pixmap': CMD_CABLELIGHTPOINT_ICON,
-                'MenuText': "Add New Cable Light Point",
-                'ToolTip': "It adds a new light point for cable. Select" +
-                "any point in 3D view first, then add light point"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewCableLightPoint",
+                                              "Add New Cable Light Point"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewCableLightPoint", "It adds a new light point " +
+                    "for cable. Select any point in 3D view first, then add " +
+                    "the light point")}
 
 
 class newHelperPoint:
@@ -260,9 +290,11 @@ class newHelperPoint:
 
     def GetResources(self):
         return {'Pixmap': CMD_HELPERPOINT_ICON,
-                'MenuText': "Add New Helper Point",
-                'ToolTip': "It adds a new helper point to which a " +
-                "cable or other element can be attached"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewHelperPoint",
+                                              "Add New Helper Point"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewHelperPoint", "It adds a new helper point to " +
+                    "which a cable or other element can be attached")}
 
 
 class newHelperLine:
@@ -284,10 +316,12 @@ class newHelperLine:
 
     def GetResources(self):
         return {'Pixmap': CMD_HELPERLINE_ICON,
-                'MenuText': "Add New Helper Line",
-                'ToolTip': "It adds a new helper line to which a " +
-                "cable or other element can be attached. Select at " +
-                "least one point first"}
+                'MenuText': QT_TRANSLATE_NOOP("Cables_NewHelperLine",
+                                              "Add New Helper Line"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_NewHelperLine", "It adds a new helper line to " +
+                    "which a cable or other element can be attached. Select " +
+                    "at least one point first")}
 
 
 Gui.addCommand('Cables_NewWireFlex', newWireFlexCommand())

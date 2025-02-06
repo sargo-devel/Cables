@@ -5,17 +5,21 @@ import FreeCAD
 import Draft
 
 
+translate = FreeCAD.Qt.translate
+
+
 def makeHelperPoint(placement=None, name=None):
     """creates a helper point
     """
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
         return
     if placement:
         point = Draft.make_point(placement.Base)
     else:
         point = Draft.make_point(0.0, 0.0, 0.0)
-    point.Label = name if name else "HelperPoint"
+    point.Label = name if name else translate("Cables", "HelperPoint")
     point.ViewObject.PointSize = 8
     point.ViewObject.PointColor = (255, 85, 0)
     Draft.autogroup(point)
@@ -27,7 +31,8 @@ def makeHelperLine(p1=None, p2=None, name=None):
     """creates a helper line
     """
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError("No active document. Aborting\n")
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
         return
     pl = FreeCAD.Placement()
     dist = 30.0
@@ -44,7 +49,7 @@ def makeHelperLine(p1=None, p2=None, name=None):
         pl.Base = (p1+p2)/2
     line = Draft.make_wire([p1, p2], placement=pl, closed=False,
                            face=False, support=None)
-    line.Label = name if name else "HelperLine"
+    line.Label = name if name else translate("Cables", "HelperLine")
     #line.addExtension('Part::AttachExtensionPython')
     line.Subdivisions = 1
     line.ViewObject.PointSize = 8

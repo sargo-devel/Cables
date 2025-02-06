@@ -23,6 +23,12 @@ import os
 from draftguitools import gui_grid
 from draftguitools import gui_selectplane
 
+# Add translations path
+import FreeCADGui
+from commonutils import languagePath
+FreeCADGui.addLanguagePath(languagePath)
+FreeCADGui.updateLocale()
+
 
 class CablesWorkbench (Workbench):
 
@@ -37,6 +43,7 @@ class CablesWorkbench (Workbench):
         function.
         """
         import commands
+        from commonutils import QT_TRANSLATE_NOOP
         self.list_wires = ["Cables_NewWireFlex",
                            "Cables_AddVertex",
                            "Cables_DelVertex",
@@ -53,15 +60,21 @@ class CablesWorkbench (Workbench):
         self.list_draft = ["Draft_ToggleGrid",
                            # "Draft_SelectPlane"]
                            ]
-        self.appendToolbar("Cable Wires", self.list_wires)
-        self.appendToolbar("Cables", self.list_cables)
-        self.appendToolbar("Cable Helpers", self.list_helpers)
-        self.appendToolbar("Draft Tools", self.list_draft)
-        self.appendMenu("Cable Wires", self.list_wires)
-        self.appendMenu("Cables", self.list_cables)
-        self.appendMenu("Cable Helpers", self.list_helpers)
+        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),
+                           self.list_wires)
+        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cables"),
+                           self.list_cables)
+        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
+                           self.list_helpers)
+        self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Draft Tools"),
+                           self.list_draft)
+        self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),
+                        self.list_wires)
+        self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cables"),
+                        self.list_cables)
+        self.appendMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
+                        self.list_helpers)
         # self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
-
 
     def Activated(self):
         """This function is executed whenever the workbench is activated"""
@@ -77,9 +90,13 @@ class CablesWorkbench (Workbench):
         """This function is executed whenever the user right-clicks on screen
         """
         # "recipient" will be either "view" or "tree"
-        self.appendContextMenu("Cable Wires", self.list_wires)
-        self.appendContextMenu("Cables", self.list_cables)
-        self.appendContextMenu("Cable Helpers", self.list_helpers)
+        from commonutils import QT_TRANSLATE_NOOP
+        self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),
+                               self.list_wires)
+        self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cables"),
+                               self.list_cables)
+        self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Helpers"),
+                               self.list_helpers)
 
     def GetClassName(self):
         # This function is mandatory if this is a full Python workbench

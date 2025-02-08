@@ -134,12 +134,12 @@ class removeAttachmentCommand:
 
     def GetResources(self):
         return {'Pixmap': CMD_RM_ATT_VERTEX_ICON,
-                'MenuText': QT_TRANSLATE_NOOP("Cables_RemoveVertex",
+                'MenuText': QT_TRANSLATE_NOOP("Cables_RemoveVertexAttachment",
                                               "Remove Vertex Attachment"),
                 'ToolTip': QT_TRANSLATE_NOOP(
-                    "Cables_RemoveVertex", "It removes an attachment of " +
-                    "external vertex or object from selected Wire Flex " +
-                    "vertex")}
+                    "Cables_RemoveVertexAttachment", "It removes an " +
+                    "attachment of external vertex or object from selected " +
+                    "Wire Flex vertex")}
 
 
 class newCableCommand:
@@ -328,7 +328,7 @@ Gui.addCommand('Cables_NewWireFlex', newWireFlexCommand())
 Gui.addCommand('Cables_AddVertex', addVertexCommand())
 Gui.addCommand('Cables_DelVertex', delVertexCommand())
 Gui.addCommand('Cables_AttachVertex', assignAttachmentCommand())
-Gui.addCommand('Cables_RemoveVertex', removeAttachmentCommand())
+Gui.addCommand('Cables_RemoveVertexAttachment', removeAttachmentCommand())
 Gui.addCommand('Cables_NewCable', newCableCommand())
 Gui.addCommand('Cables_NewCableBox', newCableBoxCommand())
 Gui.addCommand('Cables_NewCableConnector', newCableConnectorCommand())

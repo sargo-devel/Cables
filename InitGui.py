@@ -48,7 +48,7 @@ class CablesWorkbench (Workbench):
                            "Cables_AddVertex",
                            "Cables_DelVertex",
                            "Cables_AttachVertex",
-                           "Cables_RemoveVertex"]
+                           "Cables_RemoveVertexAttachment"]
         self.list_cables = ["Cables_NewProfile",
                             "Cables_NewCable",
                             "Cables_NewCableBox",

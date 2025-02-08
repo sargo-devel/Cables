@@ -44,19 +44,19 @@ class CablesWorkbench (Workbench):
         """
         import commands
         from commonutils import QT_TRANSLATE_NOOP
-        self.list_wires = ["Cables_NewWireFlex",
+        self.list_wires = ["Cables_WireFlex",
                            "Cables_AddVertex",
                            "Cables_DelVertex",
                            "Cables_AttachVertex",
                            "Cables_RemoveVertexAttachment"]
-        self.list_cables = ["Cables_NewProfile",
-                            "Cables_NewCable",
-                            "Cables_NewCableBox",
-                            "Cables_NewCableConnector",
-                            "Cables_NewCableLightPoint",
-                            "Cables_NewMaterial"]
-        self.list_support = ["Cables_NewSupportPoint",
-                             "Cables_NewSupportLine"]
+        self.list_cables = ["Cables_Profile",
+                            "Cables_Cable",
+                            "Cables_CableBox",
+                            "Cables_CableConnector",
+                            "Cables_CableLightPoint",
+                            "Cables_Material"]
+        self.list_support = ["Cables_SupportPoint",
+                             "Cables_SupportLine"]
         self.list_draft = ["Draft_ToggleGrid",
                            # "Draft_SelectPlane"]
                            ]

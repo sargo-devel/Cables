@@ -33,7 +33,7 @@ This workbench is currently at the alpha stage. You can expect some bugs which c
 Some properties of models can change in the future and break models created with current version.
 
 ### Compatibility
-Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. No compatibility checks with previuos versions were made.
+Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. No compatibility checks with previous versions were made.
 
 ### Contributions
 Any code contributions are welcome. Please add all of your pull requests to the dev branch.

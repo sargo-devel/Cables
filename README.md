@@ -19,8 +19,9 @@ These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) ob
 All elements (cables, boxes, connectors etc.) in this workbench are  [Arch Component](https://wiki.freecad.org/Arch_Component) elements. The cable element is based on [Arch Pipe](https://wiki.freecad.org/Arch_Pipe) class.
 
 ## Wiki
-This workbench does not have any FreeCAD Wiki page yet. This is planned soon.
-You can install the workbench and see [examples](https://github.com/sargo-devel/Cables/tree/master/examples) to have a closer look into details. These files contain Info text with some additional hints.
+This workbench has a documentation which is a part of FreeCAD Wiki: [Cables Workbench Wiki](https://wiki.freecad.org/Cables_Workbench).
+
+You can also install the workbench and see [examples](https://github.com/sargo-devel/Cables/tree/master/examples) to have a closer look into details. These files contain Info text with some additional hints.
 
 ## Installation
 Currently the only method to install this workbench is to copy its entire `Cables/` folder to the FreeCAD local `Mod/` folder. Details: [Installing more workbenches](https://wiki.freecad.org/Installing_more_workbenches).

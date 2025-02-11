@@ -236,6 +236,10 @@ def delPointFromWire(plist=None):
         obj = plist[0][0]
         name = plist[0][1]
         nr = int(name.split('Vertex')[1])
+        if not 1 < nr < len(obj.Points):
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Selection is not a mid Vertex") + "\n")
+            return None
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Selection is not a Vertex") + "\n")

@@ -25,12 +25,12 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Standard wire thickness [mm2]</string>
+           <string>Standard wire gauge [mm2]</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboWireThickness"/>
+         <widget class="QComboBox" name="comboWireGauge"/>
         </item>
        </layout>
       </item>
@@ -63,12 +63,12 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Custom wire thickness [mm2]</string>
+           <string>Custom wire gauge [mm2]</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="customWireThickness">
+         <widget class="QDoubleSpinBox" name="customWireGauge">
           <property name="maximum">
            <double>2.000000000000000</double>
           </property>

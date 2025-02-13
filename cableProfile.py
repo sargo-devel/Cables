@@ -14,7 +14,7 @@ from commonutils import uiPath, presetsPath
 
 translate = FreeCAD.Qt.translate
 ui_profile = os.path.join(uiPath, "profile.ui")
-thickness_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
+gauge_mm2_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
                   '10', '16', '25', '35', '50', '70', '95', '120']
 
 # Presets in the form: Name, Profile class, Voltage Class, [profile data]
@@ -25,47 +25,47 @@ profilefiles = [os.path.join(presetsPath, "profiles.csv"),
 
 
 class TaskPanelProfile:
-    def __init__(self, thickness_list=thickness_list):
+    def __init__(self, gauge_list=gauge_mm2_list):
         self.form = FreeCADGui.PySideUic.loadUi(ui_profile)
         self.presets = readCablePresets()
         profile_list = [i[1]+'_'+i[3] for i in self.presets]
         self.form.comboProfile.addItems(profile_list)
-        self.form.comboWireThickness.addItems(thickness_list)
+        self.form.comboWireGauge.addItems(gauge_list)
 
     def accept(self):
         idx = self.form.comboProfile.currentIndex()
         profile = self.presets[idx]
         nr_of_wires = self.form.NumberOfWires.value()
         try:
-            wire_thickness_mm2 = float(
-                self.form.comboWireThickness.currentText())
+            wire_gauge_mm2 = float(
+                self.form.comboWireGauge.currentText())
         except ValueError:
-            wire_thickness_mm2 = self.form.customWireThickness.value()
-        makeCableProfile(profile, nr_of_wires, wire_thickness_mm2)
+            wire_gauge_mm2 = self.form.customWireGauge.value()
+        makeCableProfile(profile, nr_of_wires, wire_gauge_mm2)
         FreeCADGui.Control.closeDialog()
 
 
 def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
-                     nr_of_wires=3, wire_thickness_mm2=1.5):
+                     nr_of_wires=3, wire_gauge_mm2=1.5):
     """Makes cable profile
     profile=[idx,name,profile_class,voltage_class,jacket_thickness,
              single_insulation_thickness,insul_dist]
     """
-    label = f"{profile[1]}{nr_of_wires}x{wire_thickness_mm2}_{profile[3]}"
+    label = f"{profile[1]}{nr_of_wires}x{wire_gauge_mm2}_{profile[3]}"
     # FreeCAD.Console.PrintMessage(f"Label: {label}\n")
-    if nr_of_wires < 1 or wire_thickness_mm2 == 0:
+    if nr_of_wires < 1 or wire_gauge_mm2 == 0:
         FreeCAD.Console.PrintError(translate(
             "Cables", "Cable needs to have number of wires > 0 and nonzero" +
-            "wire thickness") + "\n")
+            "wire gauge") + "\n")
         return None
     if profile[2] == 'F':
-        makeCableProfileF(label, profile[4:], nr_of_wires, wire_thickness_mm2)
+        makeCableProfileF(label, profile[4:], nr_of_wires, wire_gauge_mm2)
     if profile[2] == 'R':
-        makeCableProfileR(label, profile[4:], nr_of_wires, wire_thickness_mm2)
+        makeCableProfileR(label, profile[4:], nr_of_wires, wire_gauge_mm2)
 
 
 def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
-                      wire_thickness_mm2=1.5):
+                      wire_gauge_mm2=1.5):
     """Profile for flat cable
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
     """
@@ -109,7 +109,7 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     wo, wi, p, nr = createProfileSubWires(profile, norm, nr_of_wires, 4)
 
     # Calculate base dimensions
-    wire_diameter = math.sqrt(wire_thickness_mm2/math.pi)*2
+    wire_diameter = math.sqrt(wire_gauge_mm2/math.pi)*2
     # distance between centers of adjacent wires:
     p_dist = wire_diameter + 2*insul[1] + insul[2]
     # x position of 1st point:
@@ -153,7 +153,7 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
 
 
 def makeCableProfileR(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
-                      wire_thickness_mm2=1.5):
+                      wire_gauge_mm2=1.5):
     """Profile for round cable
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
     """
@@ -181,7 +181,7 @@ def makeCableProfileR(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     wo, wi, p, nr = createProfileSubWires(profile, norm, nr_of_wires, 1)
 
     # Calculate base dimensions
-    wire_diameter = math.sqrt(wire_thickness_mm2/math.pi)*2
+    wire_diameter = math.sqrt(wire_gauge_mm2/math.pi)*2
     # distance between centers of adjacent wires:
     p_dist = wire_diameter + 2*insul[1] + insul[2]
     # y position of 1st point (radius of construction circle):

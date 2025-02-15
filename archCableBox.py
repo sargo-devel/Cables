@@ -35,7 +35,8 @@ class ArchCableBox(ArchComponent.Component):
         if "Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Diameter", "CableBox",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The diameter of this box"))
+                                "App::Property", "The inner diameter of " +
+                                "this box"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness", "CableBox",
                             QT_TRANSLATE_NOOP(
@@ -44,7 +45,8 @@ class ArchCableBox(ArchComponent.Component):
         if "Height" not in pl:
             obj.addProperty("App::PropertyLength", "Height", "CableBox",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The height of this box"))
+                                "App::Property", "The inner height of this " +
+                                "box"))
         if "BoxBodyHidden" not in pl:
             obj.addProperty("App::PropertyBool", "BoxBodyHidden", "CableBox",
                             QT_TRANSLATE_NOOP(
@@ -163,15 +165,17 @@ class ArchCableBox(ArchComponent.Component):
     def makeBox(self, obj):
         vc = FreeCAD.Vector(0, 0, 0)
         vn = FreeCAD.Vector(0, 0, -1)
-        box = Part.makeCylinder(obj.Diameter/2, obj.Height, vc, vn)
-        inner_box = Part.makeCylinder(obj.Diameter/2-obj.Thickness,
-                                      obj.Height-obj.Thickness, vc, vn)
+        ext_diameter = obj.Diameter.Value + 2*obj.Thickness.Value
+        ext_height = obj.Height.Value + obj.Thickness.Value
+        box = Part.makeCylinder(ext_diameter/2, ext_height, vc, vn)
+        inner_box = Part.makeCylinder(ext_diameter/2-obj.Thickness.Value,
+                                      ext_height-obj.Thickness.Value, vc, vn)
         box = box.cut(inner_box)
         vn_list = [FreeCAD.Vector(1, 0, 0), FreeCAD.Vector(-1, 0, 0),
                    FreeCAD.Vector(0, 1, 0), FreeCAD.Vector(0, -1, 0)]
-        vc = FreeCAD.Vector(0, 0, -2*obj.Height/3)
+        vc = FreeCAD.Vector(0, 0, -2*obj.Height.Value/3)
         hole_radius = 10
-        hole_hight = obj.Diameter/2
+        hole_hight = ext_diameter/2
         for vn in vn_list:
             hole = Part.makeCylinder(hole_radius, hole_hight, vc, vn)
             box = box.cut(hole)
@@ -207,9 +211,9 @@ def makeCableBox(baseobj=None, diameter=0, height=0, placement=None,
     if baseobj:
         obj.Base = baseobj
     else:
-        obj.Diameter = diameter if diameter else 63
-        obj.Height = height if height else 63
-        obj.Thickness = 3
+        obj.Thickness = 2
+        obj.Diameter = diameter if diameter else 60
+        obj.Height = height if height else 62
         # obj.Width = obj.Diameter
     obj.Ring1Diameter = 45
     obj.Ring1Height = 40

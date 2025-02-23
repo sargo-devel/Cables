@@ -1,6 +1,7 @@
 """ArchCableConnector
 """
 
+import math
 import FreeCAD
 import ArchComponent
 import os
@@ -31,12 +32,12 @@ class ArchCableConnector(ArchComponent.Component):
 
     def setProperties(self, obj):
         pl = obj.PropertiesList
-        if "HoleDiameter" not in pl:
-            obj.addProperty("App::PropertyLength", "HoleDiameter",
+        if "HoleSize" not in pl:
+            obj.addProperty("App::PropertyFloat", "HoleSize",
                             "CableConnector",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The diameter of single " +
-                                "hole"))
+                                "App::Property", "The size of single " +
+                                "hole in [mm2]"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness",
                             "CableConnector",
@@ -69,37 +70,39 @@ class ArchCableConnector(ArchComponent.Component):
         # FreeCAD.Console.PrintMessage("ArchCableConnector.execute: end\n")
 
     def makeSupportPoints(self, obj):
+        hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
         ln = obj.NumberOfHoles * \
-            (obj.HoleDiameter.Value + obj.Thickness.Value) + \
+            (hole_diameter + obj.Thickness.Value) + \
             obj.Thickness.Value
         z = 2
         y = 0
         vertexes1 = []
         vertexes2 = []
         for i in range(obj.NumberOfHoles):
-            x = -ln/2 + obj.Thickness.Value + obj.HoleDiameter.Value/2 + \
-                i*(obj.HoleDiameter.Value + obj.Thickness.Value)
+            x = -ln/2 + obj.Thickness.Value + hole_diameter/2 + \
+                i*(hole_diameter + obj.Thickness.Value)
             vertexes1.append(Part.Vertex(x, y, z))
             vertexes2.append(Part.Vertex(x, y, -obj.Height.Value-z))
         s = Part.Shape(vertexes1 + vertexes2)
         return s
 
     def makeBox(self, obj):
+        hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
         vc = FreeCAD.Vector(0, 0, 0)
         vn = FreeCAD.Vector(0, 0, -1)
         ln = obj.NumberOfHoles * \
-            (obj.HoleDiameter.Value + obj.Thickness.Value) + \
+            (hole_diameter + obj.Thickness.Value) + \
             obj.Thickness.Value
-        w = obj.HoleDiameter.Value + 2*obj.Thickness.Value
+        w = hole_diameter + 2*obj.Thickness.Value
         h = obj.Height
         vb = vc + FreeCAD.Vector(ln/2, -w/2, 0)
         box = Part.makeBox(ln, w, h, vb, vn)
         for i in range(obj.NumberOfHoles):
-            x = -ln/2 + obj.Thickness.Value + obj.HoleDiameter.Value/2 + \
-                i*(obj.HoleDiameter.Value + obj.Thickness.Value)
+            x = -ln/2 + obj.Thickness.Value + hole_diameter/2 + \
+                i*(hole_diameter + obj.Thickness.Value)
             hc = vc + FreeCAD.Vector(x, 0, 0)
             hn = vn
-            hole = Part.makeCylinder(obj.HoleDiameter/2, obj.Height, hc, hn)
+            hole = Part.makeCylinder(hole_diameter/2, obj.Height, hc, hn)
             box = box.cut(hole)
         return box
 
@@ -114,9 +117,9 @@ class ViewProviderCableConnector(ArchComponent.ViewProviderComponent):
         return CLASS_CABLECONNECTOR_ICON
 
 
-def makeCableConnector(baseobj=None, nrofholes=0, holediameter=0, thickness=0,
+def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
                        height=0, placement=None, name=None):
-    """makeCableConnector([baseobj],[nrofholes],[holediameter],[thickness],
+    """makeCableConnector([baseobj],[nrofholes],[holesize],[thickness],
     [height],[placement],[name]):
     creates a cable connector object from the given base object
     or from scratch"""
@@ -137,9 +140,9 @@ def makeCableConnector(baseobj=None, nrofholes=0, holediameter=0, thickness=0,
         obj.Base = baseobj
     else:
         obj.NumberOfHoles = nrofholes if nrofholes else 3
-        obj.HoleDiameter = holediameter if holediameter else 2
-        obj.Thickness = thickness if thickness else 1
-        obj.Height = height if height else 5
+        obj.HoleSize = holesize if holesize else 2.0
+        obj.Thickness = thickness if thickness else 1.0
+        obj.Height = height if height else 5.0
     if placement:
         obj.Placement = placement
     return obj

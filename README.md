@@ -44,6 +44,7 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Release notes:
+* v0.1.3  27 Feb 2025:  Minor fixes and corrections, code prepared for translation
 * v0.1.2  25 Jan 2025:  Added profile selection
 * v0.1.1  21 Jan 2025:  Fixed cable rotation problem
 * v0.1.0  21 Jan 2025:  Initial version

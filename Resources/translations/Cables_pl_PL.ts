@@ -4,22 +4,22 @@
 <context>
     <name>App::Property</name>
     <message>
-        <location filename="../../archCableConnector.py" line="39"/>
-        <source>The diameter of single hole</source>
-        <translation>Średnica pojedynczego otworu</translation>
+        <location filename="../../archCableConnector.py" line="40"/>
+        <source>The size of single hole in [mm2]</source>
+        <translation>Rozmiar pojedynczego otworu w [mm2]</translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="44"/>
+        <location filename="../../archCableConnector.py" line="45"/>
         <source>The wall thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="49"/>
+        <location filename="../../archCableConnector.py" line="50"/>
         <source>The height of this connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="55"/>
+        <location filename="../../archCableConnector.py" line="56"/>
         <source>The number of holes for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -84,47 +84,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="38"/>
-        <source>The diameter of this box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archCableBox.py" line="43"/>
+        <location filename="../../archCableBox.py" line="44"/>
         <source>The wall thickness of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="47"/>
-        <source>The height of this box</source>
+        <location filename="../../archCableBox.py" line="39"/>
+        <source>The inner diameter of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="52"/>
+        <location filename="../../archCableBox.py" line="49"/>
+        <source>The inner height of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBox.py" line="54"/>
         <source>Hide the box body to have better access to helpers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="58"/>
+        <location filename="../../archCableBox.py" line="60"/>
         <source>Hide the helper rings if they are not needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="64"/>
+        <location filename="../../archCableBox.py" line="66"/>
         <source>The diameter of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="70"/>
+        <location filename="../../archCableBox.py" line="72"/>
         <source>The height below lid of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="76"/>
+        <location filename="../../archCableBox.py" line="78"/>
         <source>The diameter of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="82"/>
+        <location filename="../../archCableBox.py" line="84"/>
         <source>The height below lid of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -132,17 +132,17 @@
 <context>
     <name>Cables</name>
     <message>
-        <location filename="../../archCableConnector.py" line="125"/>
+        <location filename="../../archCableConnector.py" line="128"/>
         <location filename="../../cableSupport.py" line="16"/>
         <location filename="../../cableSupport.py" line="35"/>
         <location filename="../../archCableLightPoint.py" line="102"/>
         <location filename="../../archCable.py" line="514"/>
-        <location filename="../../archCableBox.py" line="198"/>
+        <location filename="../../archCableBox.py" line="202"/>
         <source>No active document. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="131"/>
+        <location filename="../../archCableConnector.py" line="134"/>
         <source>CableConnector</source>
         <translation>KonektorKablowy</translation>
     </message>
@@ -168,7 +168,7 @@
     </message>
     <message>
         <location filename="../../cableProfile.py" line="59"/>
-        <source>Cable needs to have number of wires &gt; 0 and nonzerowire thickness</source>
+        <source>Cable needs to have number of wires &gt; 0 and nonzero wire gauge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -243,22 +243,27 @@
     </message>
     <message>
         <location filename="../../wireutils.py" line="241"/>
-        <location filename="../../wireutils.py" line="339"/>
+        <source>Selection is not a mid Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="245"/>
+        <location filename="../../wireutils.py" line="343"/>
         <source>Selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="273"/>
+        <location filename="../../wireutils.py" line="277"/>
         <source>Wrong selection. Please select two vertexes. First vertex has to belong to WireFlex, second to an external object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="283"/>
+        <location filename="../../wireutils.py" line="287"/>
         <source>First selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="202"/>
+        <location filename="../../archCableBox.py" line="206"/>
         <source>CableBox</source>
         <translation type="unfinished"></translation>
     </message>
@@ -290,6 +295,58 @@
     </message>
 </context>
 <context>
+    <name>Cables_Cable</name>
+    <message>
+        <location filename="../../commands.py" line="160"/>
+        <source>Cable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="167"/>
+        <source>It adds a new cable object from WireFlex and profile. Select WireFlex object first then a profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_CableBox</name>
+    <message>
+        <location filename="../../commands.py" line="185"/>
+        <source>Cable Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="191"/>
+        <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_CableConnector</name>
+    <message>
+        <location filename="../../commands.py" line="209"/>
+        <source>Cable Connector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="216"/>
+        <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
+        <translation>Dodaje nowy obiekt konektora. Wybierz najpierw punkt w widoku 3D, potem dodaj konektor</translation>
+    </message>
+</context>
+<context>
+    <name>Cables_CableLightPoint</name>
+    <message>
+        <location filename="../../commands.py" line="269"/>
+        <source>Cable Light Point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="276"/>
+        <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Cables_DelVertex</name>
     <message>
         <location filename="../../commands.py" line="94"/>
@@ -303,62 +360,10 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewCable</name>
-    <message>
-        <location filename="../../commands.py" line="160"/>
-        <source>Add New Cable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="167"/>
-        <source>It adds a new cable object from Wire Flex and profile. Select Wire Flex object first then a profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_NewCableBox</name>
-    <message>
-        <location filename="../../commands.py" line="185"/>
-        <source>Add New Cable Box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="191"/>
-        <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_NewCableConnector</name>
-    <message>
-        <location filename="../../commands.py" line="209"/>
-        <source>Add New Cable Connector</source>
-        <translation>Dodaj nowy konektor</translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="216"/>
-        <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
-        <translation>Dodaje nowy obiekt konektora. Wybierz najpierw punkt w widoku 3D, potem dodaj konektor</translation>
-    </message>
-</context>
-<context>
-    <name>Cables_NewCableLightPoint</name>
-    <message>
-        <location filename="../../commands.py" line="269"/>
-        <source>Add New Cable Light Point</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="276"/>
-        <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_NewMaterial</name>
+    <name>Cables_Material</name>
     <message>
         <location filename="../../commands.py" line="245"/>
-        <source>Add New Cable Materials</source>
+        <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -368,10 +373,10 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewProfile</name>
+    <name>Cables_Profile</name>
     <message>
         <location filename="../../commands.py" line="229"/>
-        <source>Add New Cable Profile</source>
+        <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -381,10 +386,23 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewSupportLine</name>
+    <name>Cables_RemoveVertexAttachment</name>
+    <message>
+        <location filename="../../commands.py" line="138"/>
+        <source>Remove Vertex Attachment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../commands.py" line="145"/>
+        <source>It removes an attachment of external vertex or object from selected Wire Flex vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_SupportLine</name>
     <message>
         <location filename="../../commands.py" line="320"/>
-        <source>Add New Support Line</source>
+        <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -394,10 +412,10 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewSupportPoint</name>
+    <name>Cables_SupportPoint</name>
     <message>
         <location filename="../../commands.py" line="294"/>
-        <source>Add New Support Point</source>
+        <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -407,28 +425,15 @@
     </message>
 </context>
 <context>
-    <name>Cables_NewWireFlex</name>
+    <name>Cables_WireFlex</name>
     <message>
         <location filename="../../commands.py" line="52"/>
-        <source>New Wire Flex</source>
+        <source>WireFlex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../commands.py" line="59"/>
         <source>It creates a new line based on selected vertexes/objects. At least two vertexes/objects have to be selected first</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_RemoveVertex</name>
-    <message>
-        <location filename="../../commands.py" line="138"/>
-        <source>Remove Vertex Attachment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../commands.py" line="145"/>
-        <source>It removes an attachment of external vertex or object from selected Wire Flex vertex</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -446,7 +451,12 @@
     </message>
     <message>
         <location filename="../ui/profile.ui" line="28"/>
-        <source>Standard wire thickness [mm2]</source>
+        <source>Standard wire gauge [mm2]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="66"/>
+        <source>Custom wire gauge [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -457,11 +467,6 @@
     <message>
         <location filename="../ui/profile.ui" line="57"/>
         <source>Profile type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/profile.ui" line="66"/>
-        <source>Custom wire thickness [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

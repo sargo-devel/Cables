@@ -55,7 +55,7 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
     # FreeCAD.Console.PrintMessage(f"Label: {label}\n")
     if nr_of_wires < 1 or wire_gauge_mm2 == 0:
         FreeCAD.Console.PrintError(translate(
-            "Cables", "Cable needs to have number of wires > 0 and nonzero" +
+            "Cables", "Cable needs to have number of wires > 0 and nonzero " +
             "wire gauge") + "\n")
         return None
     if profile[2] == 'F':

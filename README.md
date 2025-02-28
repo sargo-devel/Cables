@@ -24,9 +24,9 @@ This workbench has a documentation which is a part of FreeCAD Wiki: [Cables Work
 You can also install the workbench and see [examples](https://github.com/sargo-devel/Cables/tree/master/examples) to have a closer look into details. These files contain Info text with some additional hints.
 
 ## Installation
-Currently the only method to install this workbench is to copy its entire `Cables/` folder to the FreeCAD local `Mod/` folder. Details: [Installing more workbenches](https://wiki.freecad.org/Installing_more_workbenches).
+This workbench can be installed via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-addons) (for details see [Addon Manager Wiki](https://wiki.freecad.org/Std_AddonMgr)).
 
-It is also planned to make it possible to install this workbench via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-addons) (from Tools menu).
+It can also be installed manually by copying its entire `Cables/` folder to the FreeCAD local `Mod/` folder. Details: [Installing more workbenches](https://wiki.freecad.org/Installing_more_workbenches).
 
 ### Note
 This workbench is currently at the alpha stage. You can expect some bugs which can make your model broken.

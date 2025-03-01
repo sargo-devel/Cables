@@ -65,17 +65,17 @@ class ArchCable(ArchPipe._ArchPipe):
             obj.addProperty("App::PropertyLinkList", "SubProfiles", "Cable",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "List of Sub Profiles on " +
-                                "both ends od cable"))
+                                "both ends of the cable"))
         if "SubWires" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubWires", "Cable",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "List of Sub Wires on both " +
-                                "ends od cable"))
+                                "ends of the cable"))
         if "SubColors" not in pl:
             obj.addProperty("App::PropertyStringList", "SubColors", "Cable",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "List of Sub Cable Colors " +
-                                "on both ends of cable. Example: ['J:0', " +
+                                "on both ends of the cable. Example: ['J:0', " +
                                 "'L1:1', 'N:2', 'PE:3', 'CU:-1']"))
         if "ShowSubLines" not in pl:
             obj.addProperty("App::PropertyBool", "ShowSubLines", "Cable",

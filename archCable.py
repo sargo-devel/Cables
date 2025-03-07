@@ -354,8 +354,9 @@ class ArchCable(ArchPipe._ArchPipe):
         if base_end_changed:
             end_prof.AttachmentSupport = [(obj.Base, 'Vertex'+str(v_last)),
                                           (obj.Base, 'Edge'+str(e_last))]
-            end_prof.MapMode = "NormalToEdge"
             end_prof.MapReversed = False
+        if end_prof.MapMode != "NormalToEdge":
+            end_prof.MapMode = "NormalToEdge"
 
     def getEndProfileAngleDiff(self, obj):
         # End face of cable main body (jacket):

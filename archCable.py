@@ -75,8 +75,8 @@ class ArchCable(ArchPipe._ArchPipe):
             obj.addProperty("App::PropertyStringList", "SubColors", "Cable",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "List of Sub Cable Colors " +
-                                "on both ends of the cable. Example: ['J:0', " +
-                                "'L1:1', 'N:2', 'PE:3', 'CU:-1']"))
+                                "on both ends of the cable. Example: " +
+                                "['J:0', 'L1:1', 'N:2', 'PE:3', 'CU:-1']"))
         if "ShowSubLines" not in pl:
             obj.addProperty("App::PropertyBool", "ShowSubLines", "Cable",
                             QT_TRANSLATE_NOOP(
@@ -113,6 +113,18 @@ class ArchCable(ArchPipe._ArchPipe):
                                 "App::Property", "Changes rotation " +
                                 "of a cable by changing cable profile " +
                                 "attachment offset angle"))
+        if "ConductorGauge" not in pl:
+            obj.addProperty("App::PropertyFloat", "ConductorGauge",
+                            "CableDimensions",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Gauge [mm^2] of conductor " +
+                                "wire if profile not used"))
+        if "InsulationThickness" not in pl:
+            obj.addProperty("App::PropertyLength", "InsulationThickness",
+                            "CableDimensions",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Thickness of single " +
+                                "insulation if profile not used"))
         proplist = ["Diameter", "OffsetStart", "OffsetEnd", "ProfileType",
                     "WallThickness"]
         for prop in proplist:
@@ -152,29 +164,63 @@ class ArchCable(ArchPipe._ArchPipe):
         if prop == "CableRotation":
             obj.Profile.AttachmentOffset.Rotation.Angle = \
                 math.radians(obj.CableRotation)
+        if prop == "ConductorGauge" or prop == "InsulationThickness":
+            obj.Diameter = math.sqrt(obj.ConductorGauge/math.pi)*2 + \
+                obj.InsulationThickness.Value*2
+        if prop == "StrippedWireLength":
+            obj.OffsetStart = obj.StrippedWireLength
+            obj.OffsetEnd = obj.StrippedWireLength
 
     def onBeforeChange(self, obj, prop):
         # FreeCAD.Console.PrintMessage(f"WireFlex.onBeforeChange: {prop} \n")
         super().onBeforeChange(obj, prop)
-        if prop == "BaseWireFilletRadius":
+        if prop == "BaseWireFilletRadius" and obj.SubProfiles:
             obj.SubProfiles[1].MapMode = "Deactivated"
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage("ArchCable.execute: start\n")
-        #ArchPipe._ArchPipe.execute(self, obj)
-        pl = obj.Placement
-        main_shape = self.makeMainShape(obj)
-        shapes = []
-        shapes.append(main_shape)
-        #shapes.append(obj.Shape)
-        if obj.SubProfiles and obj.SubWires:
-            shapes += self.buildSubCables(obj)
-        sh = Part.makeCompound(shapes)
-        obj.Shape = self.processSubShapes(obj, sh, pl)
-        self.readjustEndProfile(obj)
-        self.rotateEndProfile(obj)
-        self.readjustSubWires(obj)
+        if not obj.SubProfiles:
+            ArchPipe._ArchPipe.execute(self, obj)
+            pl = obj.Placement
+            main_shape = obj.Shape
+            shapes = []
+            shapes.append(main_shape)
+            shapes += self.buildStrips(obj)
+            sh = Part.makeCompound(shapes)
+            obj.Shape = self.processSubShapes(obj, sh, pl)
+        else:
+            pl = obj.Placement
+            main_shape = self.makeMainShape(obj)
+            shapes = []
+            shapes.append(main_shape)
+            #shapes.append(obj.Shape)
+            if obj.SubProfiles and obj.SubWires:
+                shapes += self.buildSubCables(obj)
+            sh = Part.makeCompound(shapes)
+            obj.Shape = self.processSubShapes(obj, sh, pl)
+            self.readjustEndProfile(obj)
+            self.rotateEndProfile(obj)
+            self.readjustSubWires(obj)
         # FreeCAD.Console.PrintMessage("ArchCable.execute: end\n")
+
+    def buildStrips(self, obj):
+        radius = math.sqrt(obj.ConductorGauge/math.pi)
+        shapes = []
+        for i in [-2, -1]:
+            prof = obj.Shape.Wires[i]
+            norm = DraftGeomUtils.get_shape_normal(prof)
+            v1 = prof.CenterOfMass
+            if i == -2:
+                v2 = obj.Base.Shape.Vertexes[0].Point
+            else:
+                v2 = obj.Base.Shape.Vertexes[i].Point
+            edge = Part.LineSegment(v1, v2).toShape()
+            circle = Part.Circle(v1, norm, radius)
+            cprof = Part.Wire([Part.Edge(circle)])
+            wire = Part.Wire([edge])
+            shape = wire.makePipeShell([cprof], True, False, 2)
+            shapes.append(shape)
+        return shapes
 
     def calculateCableLength(self, obj):
         if obj.SubWires:
@@ -474,6 +520,9 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
                 idx_norm = idx - 2*nr_of_wires
             else:
                 idx_norm = idx
+        else:
+            # single wire
+            idx_norm = 1 if idx > 1 else idx
         if hasattr(obj, "SubColors"):
             for elm in obj.SubColors:
                 pair = elm.split(':')
@@ -506,7 +555,7 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
         return color
 
 
-def makeCable(baseobj=None, profileobj=None, diameter=0, length=0,
+def makeCable(baseobj=None, profileobj=None, gauge=0, length=0,
               placement=None, name=None):
     "Creates a cable object from the given base object"
     if not FreeCAD.ActiveDocument:
@@ -532,16 +581,19 @@ def makeCable(baseobj=None, profileobj=None, diameter=0, length=0,
     if profileobj:
         obj.Profile = profileobj
     else:
-        if diameter:
-            obj.Diameter = diameter
+        if gauge:
+            obj.ConductorGauge = gauge
         else:
-            obj.Diameter = 10
+            obj.ConductorGauge = 2.0
+        obj.StrippedWireLength = 8
+        obj.InsulationThickness.Value = 0.7
         obj.Width = obj.Diameter
         obj.Height = obj.Diameter
+        obj.SubColors = createSubColorsList(0)
     if placement:
         obj.Placement = placement
     # SubProfiles
-    if not obj.SubProfiles:
+    if obj.Profile and not obj.SubProfiles:
         obj.Proxy.makeSubProfiles(obj)
         FreeCAD.ActiveDocument.recompute()
         obj.SubColors = createSubColorsList(
@@ -558,6 +610,8 @@ def makeCable(baseobj=None, profileobj=None, diameter=0, length=0,
 
 def createSubColorsList(nr_of_wires):
     sub_colors = []
+    if nr_of_wires == 0:
+        sub_colors = ['L1:0', 'CU:-1']
     if nr_of_wires == 1:
         sub_colors = ['J:0', 'L1:1', 'CU:-1']
     if nr_of_wires == 2:

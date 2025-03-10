@@ -57,6 +57,7 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             # IFC2x3 does not know a Cable Segment
             obj.IfcType = "Building Element Proxy"
+        self.tol = 1e-6     # tolerance for isEqual() comparision
 
     def setProperties(self, obj):
         ArchPipe._ArchPipe.setProperties(self, obj)
@@ -139,13 +140,15 @@ class ArchCable(ArchPipe._ArchPipe):
         ArchPipe._ArchPipe.onChanged(self, obj, prop)
         if prop == "ShowSubLines" and hasattr(obj, "SubProfiles") \
            and hasattr(obj, "SubWires"):
-            if obj.SubProfiles and obj.SubWires:
+            if obj.SubProfiles:
                 for p in obj.SubProfiles:
                     p.ViewObject.show() if obj.ShowSubLines \
                         else p.ViewObject.hide()
+            if obj.SubWires:
                 for w in obj.SubWires:
                     w.ViewObject.show() if obj.ShowSubLines \
                         else w.ViewObject.hide()
+            if obj.Base:
                 obj.Base.ViewObject.show() if obj.ShowSubLines \
                     else obj.Base.ViewObject.hide()
         if prop == "AutoLabelSubLines" and obj.AutoLabelSubLines:
@@ -155,7 +158,11 @@ class ArchCable(ArchPipe._ArchPipe):
         if prop == "Shape":
             obj.Length = self.calculateCableLength(obj)
         if prop == "BaseWireFilletRadius":
-            obj.Base.FilletRadius = obj.BaseWireFilletRadius
+            if hasattr(obj.Base, 'Links') and len(obj.Base.Shape.Wires) > 1:
+                obj.Base.Links[0].FilletRadius = obj.BaseWireFilletRadius
+                obj.Base.Links[-1].FilletRadius = obj.BaseWireFilletRadius
+            else:
+                obj.Base.FilletRadius = obj.BaseWireFilletRadius
         if prop == "SubWiresFilletRadius":
             if obj.SubWires:
                 for subw in obj.SubWires:
@@ -183,6 +190,8 @@ class ArchCable(ArchPipe._ArchPipe):
             ArchPipe._ArchPipe.execute(self, obj)
             pl = obj.Placement
             main_shape = obj.Shape
+            if not obj.Shape.Wires:
+                return
             shapes = []
             shapes.append(main_shape)
             shapes += self.buildStrips(obj)
@@ -191,9 +200,10 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             pl = obj.Placement
             main_shape = self.makeMainShape(obj)
+            if not main_shape:
+                return
             shapes = []
             shapes.append(main_shape)
-            #shapes.append(obj.Shape)
             if obj.SubProfiles and obj.SubWires:
                 shapes += self.buildSubCables(obj)
             sh = Part.makeCompound(shapes)
@@ -202,6 +212,62 @@ class ArchCable(ArchPipe._ArchPipe):
             self.rotateEndProfile(obj)
             self.readjustSubWires(obj)
         # FreeCAD.Console.PrintMessage("ArchCable.execute: end\n")
+
+    def getWire(self, obj):
+        if hasattr(obj.Base, 'Shape') and len(obj.Base.Shape.Wires) > 1:
+            if self.isBasePathContinuous(obj):
+                edges = []
+                last_vertex = None
+                for wire in obj.Base.Shape.Wires:
+                    if last_vertex:
+                        if last_vertex.Point.isEqual(
+                                wire.Vertexes[0].Point, self.tol):
+                            edges.extend(wire.Edges)
+                            last_vertex = wire.Vertexes[-1]
+                        else:
+                            rev_edges = wire.Edges
+                            rev_edges.reverse()
+                            edges.extend(rev_edges)
+                            last_vertex = wire.Vertexes[0]
+                    else:
+                        edges.extend(wire.Edges)
+                        last_vertex = wire.Vertexes[-1]
+                w = Part.Wire(edges)
+            else:
+                return None
+        else:
+            w = ArchPipe._ArchPipe.getWire(self, obj)
+        return w
+
+    def isBasePathContinuous(self, obj):
+        '''Checks if base path (compound of many wires) is properly constructed
+        It checks if:
+        1. the path is continous
+        2. the first vertex of first wire is at the begining of path
+        3. the last vertex of last wire is at the end of path
+        '''
+        last_vertex = None
+        for wire in obj.Base.Shape.Wires:
+            if last_vertex:
+                if last_vertex.Point.isEqual(wire.Vertexes[0].Point, self.tol):
+                    last_vertex = wire.Vertexes[-1]
+                elif last_vertex.Point.isEqual(
+                        wire.Vertexes[-1].Point, self.tol):
+                    last_vertex = wire.Vertexes[0]
+                else:
+                    FreeCAD.Console.PrintError(translate(
+                        "Cables", "Base compound object not continous or " +
+                        "wrong direction of first wire in compound")
+                        + "\n")
+                    return False
+            else:
+                last_vertex = wire.Vertexes[-1]
+        if last_vertex.Point.isEqual(wire.Vertexes[0].Point, self.tol):
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Base compound has wrong direction of last wire")
+                + "\n")
+            return False
+        return True
 
     def buildStrips(self, obj):
         radius = math.sqrt(obj.ConductorGauge/math.pi)
@@ -232,13 +298,28 @@ class ArchCable(ArchPipe._ArchPipe):
                 elist.append(obj.SubWires[nr_subw+i].Length)
             slen = max(slist)
             elen = max(elist)
-            length = obj.Base.Length + slen + elen
+            if len(obj.Base.Shape.Wires) > 1:
+                length = 0.0
+                for w in obj.Base.Shape.Wires:
+                    length += w.Length
+                length = length + slen.Value + elen.Value
+            else:
+                length = obj.Base.Length.Value + slen.Value + elen.Value
         else:
-            length = obj.Base.Length
+            if len(obj.Base.Shape.Wires) > 1:
+                length = 0.0
+                for w in obj.Base.Shape.Wires:
+                    length += w.Length
+            else:
+                length = obj.Base.Length.Value
         return length
 
     def makeMainShape(self, obj):
-        w = obj.Base.Shape.Wires[0]
+        w = self.getWire(obj)
+        if not w:
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Unable to build the base path")+"\n")
+            return None
         p = obj.SubProfiles[0].Shape.Wires[0]
         sh = w.makePipeShell([p], True, False, 2)
         return sh
@@ -407,6 +488,8 @@ class ArchCable(ArchPipe._ArchPipe):
         prefix = obj.Label
         tieA = '_A_'
         tieB = '_B_'
+        suffixA = '_A'
+        suffixB = '_B'
         prof = 'Profile'
         base = '_Base'
         nr = int(len(obj.SubWires)/2)
@@ -416,7 +499,11 @@ class ArchCable(ArchPipe._ArchPipe):
             obj.SubWires[i+nr].Label = prefix + tieB + suffix
         obj.SubProfiles[0].Label = prefix + tieA + prof
         obj.SubProfiles[1].Label = prefix + tieB + prof
-        obj.Base.Label = prefix + base
+        if obj.Base:
+            obj.Base.Label = prefix + base
+            if hasattr(obj.Base, 'Links') and len(obj.Base.Shape.Wires) > 1:
+                obj.Base.Links[0].Label = obj.Base.Label + suffixA
+                obj.Base.Links[-1].Label = obj.Base.Label + suffixB
 
 
 class ViewProviderCable(ArchComponent.ViewProviderComponent):

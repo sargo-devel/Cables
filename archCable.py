@@ -126,6 +126,16 @@ class ArchCable(ArchPipe._ArchPipe):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Thickness of single " +
                                 "insulation if profile not used"))
+        if "Profile" in pl and obj.getGroupOfProperty("Profile") == "Pipe":
+            obj.setGroupOfProperty("Profile", "Cable")
+            obj.setDocumentationOfProperty("Profile", QT_TRANSLATE_NOOP(
+                "App::Property", "An optional closed profile to base this " +
+                "cable on"))
+        if "Length" in pl and obj.getGroupOfProperty("Length") == "Pipe":
+            obj.setGroupOfProperty("Length", "CableDimensions")
+            obj.setDocumentationOfProperty("Length", QT_TRANSLATE_NOOP(
+                "App::Property", "The length of this cable"))
+
         proplist = ["Diameter", "OffsetStart", "OffsetEnd", "ProfileType",
                     "WallThickness"]
         for prop in proplist:
@@ -177,6 +187,13 @@ class ArchCable(ArchPipe._ArchPipe):
         if prop == "StrippedWireLength":
             obj.OffsetStart = obj.StrippedWireLength
             obj.OffsetEnd = obj.StrippedWireLength
+        if prop == "Profile":
+            if obj.Profile:
+                obj.setPropertyStatus("ConductorGauge", "Hidden")
+                obj.setPropertyStatus("InsulationThickness", "Hidden")
+            else:
+                obj.setPropertyStatus("ConductorGauge", "-Hidden")
+                obj.setPropertyStatus("InsulationThickness", "-Hidden")
 
     def onBeforeChange(self, obj, prop):
         # FreeCAD.Console.PrintMessage(f"WireFlex.onBeforeChange: {prop} \n")

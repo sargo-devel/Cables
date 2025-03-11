@@ -43,6 +43,7 @@ translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLE_ICON = os.path.join(iconPath, "classArchCable.svg")
+tol = 1e-6     # tolerance for isEqual() comparision
 
 
 class ArchCable(ArchPipe._ArchPipe):
@@ -57,7 +58,6 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             # IFC2x3 does not know a Cable Segment
             obj.IfcType = "Building Element Proxy"
-        self.tol = 1e-6     # tolerance for isEqual() comparision
 
     def setProperties(self, obj):
         ArchPipe._ArchPipe.setProperties(self, obj)
@@ -238,7 +238,7 @@ class ArchCable(ArchPipe._ArchPipe):
                 for wire in obj.Base.Shape.Wires:
                     if last_vertex:
                         if last_vertex.Point.isEqual(
-                                wire.Vertexes[0].Point, self.tol):
+                                wire.Vertexes[0].Point, tol):
                             edges.extend(wire.Edges)
                             last_vertex = wire.Vertexes[-1]
                         else:
@@ -266,10 +266,10 @@ class ArchCable(ArchPipe._ArchPipe):
         last_vertex = None
         for wire in obj.Base.Shape.Wires:
             if last_vertex:
-                if last_vertex.Point.isEqual(wire.Vertexes[0].Point, self.tol):
+                if last_vertex.Point.isEqual(wire.Vertexes[0].Point, tol):
                     last_vertex = wire.Vertexes[-1]
                 elif last_vertex.Point.isEqual(
-                        wire.Vertexes[-1].Point, self.tol):
+                        wire.Vertexes[-1].Point, tol):
                     last_vertex = wire.Vertexes[0]
                 else:
                     FreeCAD.Console.PrintError(translate(
@@ -279,7 +279,7 @@ class ArchCable(ArchPipe._ArchPipe):
                     return False
             else:
                 last_vertex = wire.Vertexes[-1]
-        if last_vertex.Point.isEqual(wire.Vertexes[0].Point, self.tol):
+        if last_vertex.Point.isEqual(wire.Vertexes[0].Point, tol):
             FreeCAD.Console.PrintError(translate(
                 "Cables", "Base compound has wrong direction of last wire")
                 + "\n")

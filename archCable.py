@@ -514,8 +514,9 @@ class ArchCable(ArchPipe._ArchPipe):
             suffix = obj.ViewObject.Proxy.getSolidName(obj, i+1)
             obj.SubWires[i].Label = prefix + tieA + suffix
             obj.SubWires[i+nr].Label = prefix + tieB + suffix
-        obj.SubProfiles[0].Label = prefix + tieA + prof
-        obj.SubProfiles[1].Label = prefix + tieB + prof
+        if len(obj.SubProfiles) == 2:
+            obj.SubProfiles[0].Label = prefix + tieA + prof
+            obj.SubProfiles[1].Label = prefix + tieB + prof
         if obj.Base:
             obj.Base.Label = prefix + base
             if hasattr(obj.Base, 'Links') and len(obj.Base.Shape.Wires) > 1:

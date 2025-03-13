@@ -275,7 +275,6 @@ def assignPointAttachment(plist=None):
             "Cables", "Wrong selection. Please select two vertexes. First " +
             "vertex has to belong to WireFlex, second to an external object") +
             "\n")
-        
         return None
     try:
         obj = plist[0][0]
@@ -356,4 +355,74 @@ def removePointAttachment(plist=None):
         obj.MapMode = 'Deactivated'
     elif nr == len(obj.Shape.Vertexes):
         obj.Vrtx_end = None
+    return None
+
+
+def modifyWireEdge(plist=None, cmd=None):
+    """
+    Modifies an edge of WireFlex
+
+    Parameters
+    ----------
+    plist : list
+        List of type [(obj, subelement_name), ...]
+        If None, processGuiSelection function is used internally to create
+        plist
+        If edge selected: second vertex of the edge is moved
+        If edge and vertex selected: given vertex of the edge is moved
+    cmd : str
+        Command to execute
+        'vertical' - set edge vertical
+        'horizontal' - set edge vertical
+    """
+    if not plist:
+        plist = processGuiSelection(single=False, subshape_class=Part.Edge,
+                                    obj_proxy_class=wireFlex.WireFlex)
+    plist2 = None
+    if len(plist) > 1:
+        plist2 = processGuiSelection(single=False, subshape_class=Part.Vertex,
+                                     obj_proxy_class=wireFlex.WireFlex)
+    try:
+        obj = plist[0][0]
+        name = plist[0][1]
+        nr = int(name.split('Edge')[1])
+    except (ValueError, IndexError, AttributeError, TypeError):
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "First selection is not an edge") + "\n")
+        return None    # not an edge
+    if plist2:
+        try:
+            obj2 = plist2[1][0]
+            name2 = plist2[1][1]
+            vnr = int(name2.split('Vertex')[1])
+        except (ValueError, IndexError, AttributeError, TypeError):
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Second selection is not a vertex") + "\n")
+            return None    # not a vertex
+        if not ((obj2 == obj) or (0 <= vnr-nr <= 1)):
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Selected vertex does not belong to selected edge") +
+                "\n")
+            return None    # wrong vertex
+    else:
+        vnr = nr + 1    # second vertex of selected edge
+    vlist = obj.Proxy.get_vlist(obj)
+    if vlist[vnr-1]:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Vertex") + f" {vnr} " + translate(
+            "Cables", "is attached and can't be moved") + "\n")
+        return None
+    pts = obj.Points
+    if cmd == 'vertical':
+        z = pts[nr-1].z+10 if pts[nr].z == pts[nr-1].z else pts[vnr-1].z
+        vect = FreeCAD.Vector(pts[2*nr-vnr].x, pts[2*nr-vnr].y, z)
+        pts[vnr-1] = vect
+        obj.Points = pts
+    if cmd == 'horizontal':
+        if (pts[nr-1].x == pts[nr].x) and (pts[nr-1].y == pts[nr].y):
+            vect = FreeCAD.Vector(pts[nr].x+10, pts[nr].y, pts[2*nr-vnr].z)
+        else:
+            vect = FreeCAD.Vector(pts[vnr-1].x, pts[vnr-1].y, pts[2*nr-vnr].z)
+        pts[vnr-1] = vect
+        obj.Points = pts
     return None

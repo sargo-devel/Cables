@@ -39,48 +39,68 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="68"/>
-        <source>List of Sub Profiles on both ends od cable</source>
+        <location filename="../../archCable.py" line="69"/>
+        <source>List of Sub Profiles on both ends of the cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="73"/>
-        <source>List of Sub Wires on both ends od cable</source>
+        <location filename="../../archCable.py" line="74"/>
+        <source>List of Sub Wires on both ends of the cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="79"/>
-        <source>List of Sub Cable Colors on both ends of cable. Example: [&apos;J:0&apos;, &apos;L1:1&apos;, &apos;N:2&apos;, &apos;PE:3&apos;, &apos;CU:-1&apos;]</source>
+        <location filename="../../archCable.py" line="80"/>
+        <source>List of Sub Cable Colors on both ends of the cable. Example: [&apos;J:0&apos;, &apos;L1:1&apos;, &apos;N:2&apos;, &apos;PE:3&apos;, &apos;CU:-1&apos;]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="84"/>
+        <location filename="../../archCable.py" line="85"/>
         <source>Shows/hides all sub lines: base wire, sub profiles, sub wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="90"/>
+        <location filename="../../archCable.py" line="91"/>
         <source>Offset from the bare subwire end to its insulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="96"/>
+        <location filename="../../archCable.py" line="97"/>
         <source>Automatically change labels of all sub lines: base wire, sub profiles, sub wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="103"/>
+        <location filename="../../archCable.py" line="104"/>
         <source>Changes fillet radius of base object which finally changes fillet radius of a cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="109"/>
+        <location filename="../../archCable.py" line="110"/>
         <source>Changes fillet radius of all sub wires objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="115"/>
+        <location filename="../../archCable.py" line="116"/>
         <source>Changes rotation of a cable by changing cable profile attachment offset angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="122"/>
+        <source>Gauge [mm^2] of conductor wire if profile not used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="128"/>
+        <source>Thickness of single insulation if profile not used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="133"/>
+        <source>An optional closed profile to base this cable on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="137"/>
+        <source>The length of this cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -136,7 +156,7 @@
         <location filename="../../cableSupport.py" line="16"/>
         <location filename="../../cableSupport.py" line="35"/>
         <location filename="../../archCableLightPoint.py" line="102"/>
-        <location filename="../../archCable.py" line="514"/>
+        <location filename="../../archCable.py" line="669"/>
         <location filename="../../archCableBox.py" line="202"/>
         <source>No active document. Aborting</source>
         <translation type="unfinished"></translation>
@@ -162,7 +182,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="518"/>
+        <location filename="../../archCable.py" line="278"/>
+        <source>Base compound object not continous or wrong direction of first wire in compound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="285"/>
+        <source>Base compound has wrong direction of last wire</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="338"/>
+        <source>Unable to build the base path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="673"/>
         <source>Cable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,7 +283,7 @@
     </message>
     <message>
         <location filename="../../wireutils.py" line="245"/>
-        <location filename="../../wireutils.py" line="343"/>
+        <location filename="../../wireutils.py" line="342"/>
         <source>Selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -258,8 +293,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="287"/>
+        <location filename="../../wireutils.py" line="286"/>
         <source>First selection is not a Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="391"/>
+        <source>First selection is not an edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="400"/>
+        <source>Second selection is not a vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="405"/>
+        <source>Selected vertex does not belong to selected edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="412"/>
+        <source>Vertex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="413"/>
+        <source>is attached and can&apos;t be moved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

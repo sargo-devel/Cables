@@ -57,6 +57,8 @@ import io
 import tempfile
 import shutil
 import zipfile
+from pathlib import Path
+
 
 ### CONFIGURATION
 
@@ -77,6 +79,10 @@ TRANSLATIONSPATH = "Resources/translations"
 # the list of languages to install
 # LANGUAGES = None to use all found in the zip file
 LANGUAGES = "af ar ca cs de el es-ES eu fi fil fr gl hr hu id it ja kab ko lt nl no pl pt-BR pt-PT ro ru sk sl sr sv-SE tr uk val-ES vi zh-CN zh-TW"
+
+# List of supported languages FreeCADGui.supportedLocales().values()
+LANG = ['en', 'af', 'ar', 'eu', 'be', 'bg', 'ca', 'zh-CN', 'zh-TW', 'hr', 'cs', 'da', 'nl', 'fil', 'fi', 'fr', 'gl', 'ka', 'de', 'el', 'hu', 'id', 'it', 'ja', 'kab', 'ko', 'lt', 'no', 'pl', 'pt-PT', 'pt-BR', 'ro', 'ru', 'sr', 'sr-CS', 'sk', 'sl', 'es-ES', 'es-AR', 'sv-SE', 'tr', 'uk', 'val-ES', 'vi']
+
 
 # pylupdate util to use (pylupdae5, pyside2-lupdate,...)
 ##PYLUPDATE = "pyside2-lupdate -verbose"
@@ -127,8 +133,15 @@ def doLanguage(tempfolder, translationsfolder, lncode):
     if lncode == "en":
         # never treat "english" translation... For now :)
         return
-
-    tsfilepath = os.path.join(tempfolder, lncode, MODULENAME + ".ts")
+    p = Path(tempfolder)
+    ts_list = list(p.glob('*.ts'))
+    tsfilepath = None
+    for f in ts_list:
+        if lncode in f.stem.split('_')[1]:
+            tsfilepath = f.as_posix()
+            break
+    if not tsfilepath:
+        return
     newtspath = os.path.join(translationsfolder, MODULENAME + "_" + lncode + ".ts")
     newqmpath = os.path.join(translationsfolder, MODULENAME + "_" + lncode + ".qm")
     # print(tsfilepath)
@@ -138,6 +151,10 @@ def doLanguage(tempfolder, translationsfolder, lncode):
     if not os.path.exists(newqmpath):
         print("ERROR: unable to create", newqmpath, ", aborting")
         sys.exit()
+    if os.stat(newqmpath).st_size < 50:
+        print(f"{newqmpath} not translated, deleting...")
+        os.remove(newtspath)
+        os.remove(newqmpath)
 
 
 if __name__ == "__main__":
@@ -233,14 +250,14 @@ if __name__ == "__main__":
         print("extracting zip...")
         zfile.extractall()
         os.chdir(transpath)
-        if not LANGUAGES:
-            LANGUAGES = " ".join([n[:-1] for n in zfile.namelist() if n.endswith("/")])
-        for ln in LANGUAGES.split(" "):
-            path = os.path.join(tempfolder, ln)
-            if not os.path.exists(path):
+        # if not LANGUAGES:
+        #    LANGUAGES = " ".join([n[:-1] for n in zfile.namelist() if n.endswith("/")])
+        for ln in LANG:
+            tpath = os.path.join(tempfolder, MODULENAME)
+            if not os.path.exists(tpath):
                 print("ERROR: language path", path, "not found!")
             else:
-                doLanguage(tempfolder, transpath, ln)
+                doLanguage(tpath, transpath, ln)
 
     else:
         print(__doc__)

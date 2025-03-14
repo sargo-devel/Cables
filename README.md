@@ -53,7 +53,7 @@ Available translations:
 * Polish
   * translators: @mgr_wojtal, @Piter
 * Spanish
-  * translator: [@hasecilu](https://github.com/maxwxyz)
+  * translator: [@hasecilu](https://github.com/hasecilu)
 
 Big thanks to the translators for their work!
 

@@ -43,6 +43,20 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 * FreeCAD Forum announcement/discussion [thread](https://forum.freecad.org/viewtopic.php?t=94090)
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
+### Translations
+It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/Resources/translations/README.md) for details.
+
+Available translations:
+
+* German
+  * translator: [@maxwxyz](https://github.com/maxwxyz)
+* Polish
+  * translators: @mgr_wojtal, @Piter
+* Spanish
+  * translator: [@hasecilu](https://github.com/maxwxyz)
+
+Big thanks to the translators for their work!
+
 ### Release notes:
 * v0.1.3  27 Feb 2025:  Minor fixes and corrections, code prepared for translation
 * v0.1.2  25 Jan 2025:  Added profile selection

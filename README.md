@@ -51,7 +51,7 @@ Available translations:
 * German
   * translator: [@maxwxyz](https://github.com/maxwxyz)
 * Polish
-  * translators: @mgr_wojtal, @Piter
+  * translators: @kaktus, @mgr_wojtal, @Piter
 * Spanish
   * translator: [@hasecilu](https://github.com/hasecilu)
 

@@ -1,0 +1,5 @@
+# old module
+from freecad.cables import archCableLightPoint
+
+ArchCableLightPoint = archCableLightPoint.ArchCableLightPoint
+ViewProviderCableLightPoint = archCableLightPoint.ViewProviderCableLightPoint

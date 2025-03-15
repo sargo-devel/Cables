@@ -44,7 +44,7 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 * Authors: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Translations
-It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/Resources/translations/README.md) for details.
+It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations/README.md) for details.
 
 Available translations:
 

@@ -11,7 +11,7 @@ from commonutils import QT_TRANSLATE_NOOP
 
 translate = FreeCAD.Qt.translate
 _dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "Resources/icons")
+iconPath = os.path.join(_dir, "resources/icons")
 CLASS_CABLECONNECTOR_ICON = os.path.join(iconPath,
                                          "classArchCableConnector.svg")
 

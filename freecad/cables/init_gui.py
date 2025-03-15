@@ -24,13 +24,13 @@ from draftguitools import gui_grid
 from draftguitools import gui_selectplane
 
 # Add translations path
-import FreeCADGui
+import FreeCADGui as Gui
 from commonutils import languagePath
-FreeCADGui.addLanguagePath(languagePath)
-FreeCADGui.updateLocale()
+Gui.addLanguagePath(languagePath)
+Gui.updateLocale()
 
 
-class CablesWorkbench (Workbench):
+class CablesWorkbench (Gui.Workbench):
 
     MenuText = "Cables"
     ToolTip = "Create cable connections"

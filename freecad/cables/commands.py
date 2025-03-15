@@ -19,7 +19,7 @@ from commonutils import QT_TRANSLATE_NOOP
 
 
 _dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "Resources/icons")
+iconPath = os.path.join(_dir, "resources/icons")
 CMD_NEW_WIRE_ICON = os.path.join(iconPath, "cmdNewWire.svg")
 CMD_ADD_VERTEX_ICON = os.path.join(iconPath, "cmdAddVertex.svg")
 CMD_DEL_VERTEX_ICON = os.path.join(iconPath, "cmdDelVertex.svg")

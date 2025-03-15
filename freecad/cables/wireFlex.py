@@ -30,7 +30,7 @@ import Part
 import wireutils
 
 _dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "Resources/icons")
+iconPath = os.path.join(_dir, "resources/icons")
 CLASS_WIREFLEX_ICON = os.path.join(iconPath, "classWireFlex.svg")
 
 

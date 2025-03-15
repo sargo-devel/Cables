@@ -74,7 +74,7 @@ USERNAME = "SargoDevel"
 BASEPATH = "../.."
 
 # the path to the translations files location, inside your module folder
-TRANSLATIONSPATH = "Resources/translations"
+TRANSLATIONSPATH = "resources/translations"
 
 # the list of languages to install
 # LANGUAGES = None to use all found in the zip file

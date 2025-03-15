@@ -53,6 +53,7 @@ class CablesWorkbench (Gui.Workbench):
                            "Cables_RemoveVertexAttachment"]
         self.list_cables = ["Cables_Profile",
                             "Cables_Cable",
+                            "Cables_CableConduit",
                             "Cables_CableBox",
                             "Cables_CableConnector",
                             "Cables_CableLightPoint",

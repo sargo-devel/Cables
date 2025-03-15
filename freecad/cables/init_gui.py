@@ -25,7 +25,7 @@ from draftguitools import gui_selectplane
 
 # Add translations path
 import FreeCADGui as Gui
-from commonutils import languagePath
+from freecad.cables.commonutils import languagePath
 Gui.addLanguagePath(languagePath)
 Gui.updateLocale()
 
@@ -34,7 +34,7 @@ class CablesWorkbench (Gui.Workbench):
 
     MenuText = "Cables"
     ToolTip = "Create cable connections"
-    from commonutils import iconPath
+    from freecad.cables.commonutils import iconPath
     Icon = os.path.join(iconPath, "CablesLogo.svg")
 
     def Initialize(self):
@@ -42,8 +42,8 @@ class CablesWorkbench (Gui.Workbench):
         It is executed once in a FreeCAD sessionfollowed by the Activated
         function.
         """
-        import commands
-        from commonutils import QT_TRANSLATE_NOOP
+        from freecad.cables import cablesCommands
+        from freecad.cables.commonutils import QT_TRANSLATE_NOOP
         self.list_wires = ["Cables_WireFlex",
                            "Cables_AddVertex",
                            "Cables_DelVertex",
@@ -90,7 +90,7 @@ class CablesWorkbench (Gui.Workbench):
         """This function is executed whenever the user right-clicks on screen
         """
         # "recipient" will be either "view" or "tree"
-        from commonutils import QT_TRANSLATE_NOOP
+        from freecad.cables.commonutils import QT_TRANSLATE_NOOP
         self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),
                                self.list_wires)
         self.appendContextMenu(QT_TRANSLATE_NOOP("Workbench", "Cables"),

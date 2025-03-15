@@ -27,7 +27,7 @@ import os
 import FreeCAD
 import Draft
 import Part
-import wireutils
+from freecad.cables import wireutils
 
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "resources/icons")

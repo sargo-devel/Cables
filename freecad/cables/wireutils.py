@@ -2,8 +2,8 @@
 """
 
 import FreeCAD
-import wireFlex
 import Part
+from freecad.cables import wireFlex
 
 
 translate = FreeCAD.Qt.translate

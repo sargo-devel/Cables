@@ -25,18 +25,18 @@ Some parts of code are taken from there
 # ***************************************************************************/
 
 
+import os
+import math
 import FreeCAD
 import ArchComponent
 import Arch
 import ArchPipe
-import os
 import Draft
 import DraftGeomUtils
-import math
-import wireFlex
-import wireutils
 import Part
-from commonutils import QT_TRANSLATE_NOOP
+from freecad.cables import wireFlex
+from freecad.cables import wireutils
+from freecad.cables.commonutils import QT_TRANSLATE_NOOP
 
 
 translate = FreeCAD.Qt.translate

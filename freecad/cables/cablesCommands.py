@@ -6,16 +6,16 @@ import FreeCAD
 import FreeCADGui
 from FreeCAD import Gui
 import Part
-import wireutils
-import archCable
-import archCableBox
-import archCableConnector
-import archCableLightPoint
-import wireFlex
-import cableProfile
-import cableMaterial
-import cableSupport
-from commonutils import QT_TRANSLATE_NOOP
+from freecad.cables import wireutils
+from freecad.cables import archCable
+from freecad.cables import archCableBox
+from freecad.cables import archCableConnector
+from freecad.cables import archCableLightPoint
+from freecad.cables import wireFlex
+from freecad.cables import cableProfile
+from freecad.cables import cableMaterial
+from freecad.cables import cableSupport
+from freecad.cables.commonutils import QT_TRANSLATE_NOOP
 
 
 _dir = os.path.dirname(__file__)

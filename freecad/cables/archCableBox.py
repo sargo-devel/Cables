@@ -1,13 +1,13 @@
 """ArchCableBox
 """
 
+import os
+from math import pi
 import FreeCAD
 import ArchComponent
-import os
 import Part
-from math import pi
 import DraftVecUtils
-from commonutils import QT_TRANSLATE_NOOP
+from freecad.cables.commonutils import QT_TRANSLATE_NOOP
 
 
 translate = FreeCAD.Qt.translate

@@ -1,11 +1,11 @@
 """ArchCableLightPoint
 """
 
+import os
 import FreeCAD
 import ArchComponent
-import os
 import Part
-from commonutils import QT_TRANSLATE_NOOP
+from freecad.cables.commonutils import QT_TRANSLATE_NOOP
 
 
 translate = FreeCAD.Qt.translate

@@ -1,17 +1,16 @@
 """ArchCableConnector
 """
 
+import os
 import math
 import FreeCAD
 import ArchComponent
-import os
 import Part
-from commonutils import QT_TRANSLATE_NOOP
+from freecad.cables import iconPath
+from freecad.cables import translate
+from freecad.cables import QT_TRANSLATE_NOOP
 
 
-translate = FreeCAD.Qt.translate
-_dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "Resources/icons")
 CLASS_CABLECONNECTOR_ICON = os.path.join(iconPath,
                                          "classArchCableConnector.svg")
 

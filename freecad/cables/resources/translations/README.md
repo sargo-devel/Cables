@@ -9,7 +9,7 @@ then find your language, look for the **Cables** project and do the translation.
 ## Maintainers:
 
 > [!NOTE]
-> All commands **must** be run in `./Resources/translations` directory.
+> All commands **must** be run in `./resources/translations` directory.
 
 ### Updating translations template file
 

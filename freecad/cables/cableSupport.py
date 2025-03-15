@@ -3,9 +3,7 @@
 
 import FreeCAD
 import Draft
-
-
-translate = FreeCAD.Qt.translate
+from freecad.cables import translate
 
 
 def makeSupportPoint(placement=None, name=None):

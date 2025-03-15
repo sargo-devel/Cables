@@ -15,7 +15,7 @@ from freecad.cables import wireFlex
 from freecad.cables import cableProfile
 from freecad.cables import cableMaterial
 from freecad.cables import cableSupport
-from freecad.cables.commonutils import QT_TRANSLATE_NOOP
+from freecad.cables import QT_TRANSLATE_NOOP
 
 
 _dir = os.path.dirname(__file__)

@@ -7,12 +7,11 @@ import FreeCAD
 import ArchComponent
 import Part
 import DraftVecUtils
-from freecad.cables.commonutils import QT_TRANSLATE_NOOP
+from freecad.cables import iconPath
+from freecad.cables import translate
+from freecad.cables import QT_TRANSLATE_NOOP
 
 
-translate = FreeCAD.Qt.translate
-_dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "resources/icons")
 CLASS_CABLEBOX_ICON = os.path.join(iconPath, "classArchCableBox.svg")
 
 

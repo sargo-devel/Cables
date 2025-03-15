@@ -4,9 +4,7 @@
 import FreeCAD
 import Part
 from freecad.cables import wireFlex
-
-
-translate = FreeCAD.Qt.translate
+from freecad.cables import translate
 
 
 def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):

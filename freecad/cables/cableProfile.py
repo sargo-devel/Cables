@@ -9,7 +9,7 @@ import FreeCADGui
 import Part
 import Sketcher
 import ProfileLib.RegularPolygon
-from freecad.cables.commonutils import uiPath, presetsPath
+from freecad.cables import uiPath, presetsPath
 
 
 translate = FreeCAD.Qt.translate

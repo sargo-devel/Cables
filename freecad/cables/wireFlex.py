@@ -28,9 +28,10 @@ import FreeCAD
 import Draft
 import Part
 from freecad.cables import wireutils
+from freecad.cables import iconPath
+from freecad.cables import QT_TRANSLATE_NOOP
 
-_dir = os.path.dirname(__file__)
-iconPath = os.path.join(_dir, "resources/icons")
+
 CLASS_WIREFLEX_ICON = os.path.join(iconPath, "classWireFlex.svg")
 
 
@@ -40,14 +41,17 @@ class WireFlex(Draft.Wire):
     def __init__(self, obj):
         """Add the properties"""
         obj.addProperty("App::PropertyLinkSub", "Vrtx_start", "WireFlex",
-                        "First Vertex")
+                        QT_TRANSLATE_NOOP("App::Property", "First Vertex"))
         obj.addProperty("App::PropertyLinkSub", "Vrtx_end", "WireFlex",
-                        "Last Vertex")
+                        QT_TRANSLATE_NOOP("App::Property", "Last Vertex"))
         obj.addProperty("App::PropertyLinkSubList", "Vrtxs_mid", "WireFlex",
-                        "List of middle vertices")
-        obj.addProperty("App::PropertyIntegerList",
-                        "Vrtxs_mid_idx", "WireFlex",
-                        "Point indexes for list of middle vertices")
+                        QT_TRANSLATE_NOOP(
+                            "App::Property", "List of middle vertexes"))
+        obj.addProperty("App::PropertyIntegerList", "Vrtxs_mid_idx",
+                        "WireFlex",
+                        QT_TRANSLATE_NOOP(
+                            "App::Property", "Point indexes for list of " +
+                            "middle vertexes"))
         pl = obj.PropertiesList
         proplist = ["Start", "End", "MakeFace", "ChamferSize", "Closed",
                     "Subdivisions", "FilletRadius"]

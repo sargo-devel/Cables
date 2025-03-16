@@ -58,10 +58,19 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes:
-* v0.1.3  27 Feb 2025:  Minor fixes and corrections, code prepared for translation
-* v0.1.2  25 Jan 2025:  Added profile selection
-* v0.1.1  21 Jan 2025:  Fixed cable rotation problem
-* v0.1.0  21 Jan 2025:  Initial version
+* v0.1.4  15 Mar 2025
+  * Added translations: German, Polish, Spanish
+  * ArchCable class: added option to create cable without profile (single wire cable)
+  * Workbench files structure has been migrated to "namespaced workbench" new style
+  * Some minor fixes and corrections
+* v0.1.3  27 Feb 2025
+  * Minor fixes and corrections, code prepared for translation
+* v0.1.2  25 Jan 2025
+  * Added profile selection
+* v0.1.1  21 Jan 2025
+  * Fixed cable rotation problem
+* v0.1.0  21 Jan 2025
+  * Initial version
 
 ## License
 LGPLv3 (see [LICENSE](LICENSE))

@@ -151,7 +151,7 @@ def doLanguage(tempfolder, translationsfolder, lncode):
     if not os.path.exists(newqmpath):
         print("ERROR: unable to create", newqmpath, ", aborting")
         sys.exit()
-    if os.stat(newqmpath).st_size < 50:
+    if os.stat(newqmpath).st_size < 100:
         print(f"{newqmpath} not translated, deleting...")
         os.remove(newtspath)
         os.remove(newqmpath)

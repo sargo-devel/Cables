@@ -83,8 +83,12 @@ class ArchCableBox(ArchComponent.Component):
                                 "helper ring 2"))
         self.Type = "CableBox"
 
+    def onDocumentRestored(self, obj):
+        ArchComponent.Component.onDocumentRestored(self, obj)
+        self.setProperties(obj)
+
     def onChanged(self, obj, prop):
-        pass
+        ArchComponent.Component.onChanged(self, obj, prop)
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage("ArchBox.execute: start\n")

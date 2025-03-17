@@ -49,8 +49,12 @@ class ArchCableLightPoint(ArchComponent.Component):
                                 "point fitting"))
         self.Type = "LightPoint"
 
+    def onDocumentRestored(self, obj):
+        ArchComponent.Component.onDocumentRestored(self, obj)
+        self.setProperties(obj)
+
     def onChanged(self, obj, prop):
-        pass
+        ArchComponent.Component.onChanged(self, obj, prop)
 
     def execute(self, obj):
         pl = obj.Placement

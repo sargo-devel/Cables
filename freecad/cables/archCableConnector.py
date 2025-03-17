@@ -55,8 +55,12 @@ class ArchCableConnector(ArchComponent.Component):
                                 "cables"))
         self.Type = "CableConnector"
 
+    def onDocumentRestored(self, obj):
+        ArchComponent.Component.onDocumentRestored(self, obj)
+        self.setProperties(obj)
+
     def onChanged(self, obj, prop):
-        pass
+        ArchComponent.Component.onChanged(self, obj, prop)
 
     def execute(self, obj):
         pl = obj.Placement

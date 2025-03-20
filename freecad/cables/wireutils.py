@@ -181,6 +181,36 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
     return retlist
 
 
+def reprintSelection(prefix, slist):
+    """Converts selection list to string.
+    Selection list produced by processGuiSelection is converted to its string
+    representation. Equivalent of repr()
+
+    Parameters
+    ----------
+    prefix : str
+        Prefix representing current document,
+        examples: "doc", "FreeCAD.ActiveDocument"
+    slist : list
+        Supported list types:
+            [(obj, subelement_name), ...]
+            [obj, ...]
+
+    Returns
+    -------
+    str
+    """
+    if not slist:
+        return None
+    s = '['
+    for i in slist:
+        if type(i) == tuple:
+            s += f"({prefix}.{i[0].Name}, {repr(i[1])}), "
+        else:
+            s += f"{prefix}.{i.Name}, "
+    return s[:-2] + ']'
+
+
 def addPointToWire(plist=None):
     """
     Adds a new point to WireFlex

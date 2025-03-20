@@ -41,7 +41,14 @@ class TaskPanelProfile:
                 self.form.comboWireGauge.currentText())
         except ValueError:
             wire_gauge_mm2 = self.form.customWireGauge.value()
-        makeCableProfile(profile, nr_of_wires, wire_gauge_mm2)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Profile"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand(f"{c}.cableProfile.makeCableProfile(" +
+                             f"{profile}, {nr_of_wires}, {wire_gauge_mm2})")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
         FreeCADGui.Control.closeDialog()
 
 

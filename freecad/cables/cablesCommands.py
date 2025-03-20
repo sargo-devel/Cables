@@ -16,6 +16,7 @@ from freecad.cables import wireFlex
 from freecad.cables import cableProfile
 from freecad.cables import cableMaterial
 from freecad.cables import cableSupport
+from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
 
@@ -42,8 +43,15 @@ class newWireFlexCommand:
     """
     def Activated(self):
         sel = wireutils.processGuiSelection(False, Part.Vertex, None)
-        wireFlex.make_wireflex(sel)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "WireFlex"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.wireFlex.make_wireflex({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -63,8 +71,15 @@ class addVertexCommand:
     """
     def Activated(self):
         sel = wireutils.processGuiSelection(True, Part.Edge, wireFlex.WireFlex)
-        wireutils.addPointToWire(sel)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Add Vertex"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.wireutils.addPointToWire({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -84,8 +99,15 @@ class delVertexCommand:
     def Activated(self):
         sel = wireutils.processGuiSelection(True, Part.Vertex,
                                             wireFlex.WireFlex)
-        wireutils.delPointFromWire(sel)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Delete Vertex"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.wireutils.delPointFromWire({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -106,8 +128,15 @@ class assignAttachmentCommand:
     def Activated(self):
         sel = wireutils.processGuiSelection(False, Part.Vertex,
                                             wireFlex.WireFlex)
-        wireutils.assignPointAttachment(sel)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Attach Vertex"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.wireutils.assignPointAttachment({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -128,8 +157,15 @@ class removeAttachmentCommand:
     def Activated(self):
         sel = wireutils.processGuiSelection(True, Part.Vertex,
                                             wireFlex.WireFlex)
-        wireutils.removePointAttachment(sel)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Remove Vertex Attachment"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.wireutils.removePointAttachment({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -147,11 +183,15 @@ class removeAttachmentCommand:
 class newCableCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
-        if len(sel_obj) > 1:
-            archCable.makeCable(sel_obj[0], sel_obj[1])
-        else:
-            archCable.makeCable(sel_obj[0])
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.archCable.makeCable(selectlist={s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -169,8 +209,16 @@ class newCableCommand:
 class newCableConduitCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
-        archCableConduit.makeCableConduit(selectlist=sel_obj)
-        FreeCAD.ActiveDocument.recompute()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "CableConduit"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.archCableConduit.makeCableConduit(" +
+                             f"selectlist={s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -191,14 +239,20 @@ class newCableConduitCommand:
 class newCableBoxCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Box"))
+        FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
-            pl = FreeCAD.Placement()
-            pl.Base = pos_vect
-            archCableBox.makeCableBox(placement=pl)
+            FreeCADGui.doCommand("pl = FreeCAD.Placement()")
+            FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
+            FreeCADGui.doCommand(f"{c}.archCableBox.makeCableBox(" +
+                                 "placement=pl)")
         else:
-            archCableBox.makeCableBox()
-        FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.doCommand(f"{c}.archCableBox.makeCableBox()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -215,14 +269,21 @@ class newCableBoxCommand:
 class newCableConnectorCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Connector"))
+        FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
-            pl = FreeCAD.Placement()
-            pl.Base = pos_vect
-            archCableConnector.makeCableConnector(placement=pl)
+            FreeCADGui.doCommand("pl = FreeCAD.Placement()")
+            FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
+            FreeCADGui.doCommand(
+                f"{c}.archCableConnector.makeCableConnector(placement=pl)")
         else:
-            archCableConnector.makeCableConnector()
-        FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.doCommand(
+                f"{c}.archCableConnector.makeCableConnector()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -239,7 +300,6 @@ class newCableConnectorCommand:
 
 class newProfileCommand:
     def Activated(self):
-        #cableProfile.makeCableProfile()
         panel = cableProfile.TaskPanelProfile()
         FreeCADGui.Control.showDialog(panel)
         FreeCAD.ActiveDocument.recompute()
@@ -257,8 +317,13 @@ class newProfileCommand:
 
 class newMaterialCommand:
     def Activated(self):
-        cableMaterial.makeCableMaterials()
-        FreeCAD.ActiveDocument.recompute()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Materials"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand(f"{c}.cableMaterial.makeCableMaterials()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -275,14 +340,21 @@ class newMaterialCommand:
 class newCableLightPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Light Point"))
+        FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
-            pl = FreeCAD.Placement()
-            pl.Base = pos_vect
-            archCableLightPoint.makeCableLightPoint(placement=pl)
+            FreeCADGui.doCommand("pl = FreeCAD.Placement()")
+            FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
+            FreeCADGui.doCommand(
+                f"{c}.archCableLightPoint.makeCableLightPoint(placement=pl)")
         else:
-            archCableLightPoint.makeCableLightPoint()
-        FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.doCommand(
+                f"{c}.archCableLightPoint.makeCableLightPoint()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -300,14 +372,20 @@ class newCableLightPoint:
 class newSupportPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Support Point"))
+        FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
-            pl = FreeCAD.Placement()
-            pl.Base = pos_vect
-            cableSupport.makeSupportPoint(placement=pl)
+            FreeCADGui.doCommand("pl = FreeCAD.Placement()")
+            FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
+            FreeCADGui.doCommand(
+                f"{c}.cableSupport.makeSupportPoint(placement=pl)")
         else:
-            cableSupport.makeSupportPoint()
-        FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportPoint()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None
@@ -324,16 +402,23 @@ class newSupportPoint:
 class newSupportLine:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Support Line"))
+        FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 1:
             p1 = sel_obj[0].PickedPoints[0]
             p2 = sel_obj[1].PickedPoints[0]
-            cableSupport.makeSupportLine(p1, p2)
+            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportLine(" +
+                                 f"FreeCAD.{p1}, FreeCAD.{p2})")
         elif len(sel_obj) == 1:
             p1 = sel_obj[0].PickedPoints[0]
-            cableSupport.makeSupportLine(p1)
+            FreeCADGui.doCommand(
+                f"{c}.cableSupport.makeSupportLine(FreeCAD.{p1})")
         else:
-            cableSupport.makeSupportLine()
-        FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportLine()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None

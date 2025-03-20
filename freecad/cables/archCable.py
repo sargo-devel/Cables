@@ -728,7 +728,6 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
     obj.Label = name if name else translate("Cables", "Cable")
     ArchCable(obj)
 
-    #FreeCAD.Console.PrintMessage(f"base={baseobj.Name}, prof={profileobj.Name}\n")
     if FreeCAD.GuiUp:
         ViewProviderCable(obj.ViewObject)
         baseobj.ViewObject.hide()

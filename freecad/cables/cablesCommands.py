@@ -37,6 +37,19 @@ CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
 CMD_SUPPORTPOINT_ICON = os.path.join(iconPath, "cmdNewSupportPoint.svg")
 CMD_SUPPORTLINE_ICON = os.path.join(iconPath, "cmdNewSupportLine.svg")
 
+keyShorts = {'WireFlex': 'W, F',
+             'AddVertex': 'W, A',
+             'DelVertex': 'W, D',
+             'AttachVertex': 'W, T',
+             'RemoveVertexAttachment': 'W, R',
+             'Cable': 'C, B',
+             'CableConduit': 'C, D',
+             'CableBox': 'C, X',
+             'CableConnector': 'C, N',
+             'CableLightPoint': 'C, L',
+             'SupportPoint': 'X, P',
+             'SupportLine': 'X, L',
+             }
 
 class newWireFlexCommand:
     """Creates a WireFlex based on selected vertexes or objects
@@ -60,6 +73,7 @@ class newWireFlexCommand:
         return {'Pixmap': CMD_NEW_WIRE_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_WireFlex",
                                               "WireFlex"),
+                "Accel": keyShorts['WireFlex'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_WireFlex", "It creates a new line based on " +
                     "selected vertexes/objects. At least two vertexes" +
@@ -88,6 +102,7 @@ class addVertexCommand:
         return {'Pixmap': CMD_ADD_VERTEX_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_AddVertex",
                                               "Add Vertex"),
+                "Accel": keyShorts['AddVertex'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_AddVertex", "It adds a new vertex to selected " +
                     "edge of Wire Flex")}
@@ -116,6 +131,7 @@ class delVertexCommand:
         return {'Pixmap': CMD_DEL_VERTEX_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_DelVertex",
                                               "Delete Vertex"),
+                "Accel": keyShorts['DelVertex'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_DelVertex", "It deletes selected vertex from " +
                     "Wire Flex")}
@@ -145,6 +161,7 @@ class assignAttachmentCommand:
         return {'Pixmap': CMD_ATT_VERTEX_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_AttachVertex",
                                               "Attach Vertex"),
+                "Accel": keyShorts['AttachVertex'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_AttachVertex", "It attaches a Wire Flex vertex " +
                     "to external vertex or object. Select Wire Flex vertex " +
@@ -174,6 +191,7 @@ class removeAttachmentCommand:
         return {'Pixmap': CMD_RM_ATT_VERTEX_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_RemoveVertexAttachment",
                                               "Remove Vertex Attachment"),
+                "Accel": keyShorts['RemoveVertexAttachment'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_RemoveVertexAttachment", "It removes an " +
                     "attachment of external vertex or object from selected " +
@@ -200,6 +218,7 @@ class newCableCommand:
         return {'Pixmap': CMD_CABLE_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_Cable",
                                               "Cable"),
+                "Accel": keyShorts['Cable'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_Cable", "It adds a new cable object from " +
                     "WireFlex and profile. Select WireFlex object first " +
@@ -227,6 +246,7 @@ class newCableConduitCommand:
         return {'Pixmap': CMD_CABLECONDUIT_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_CableConduit",
                                               "CableConduit"),
+                "Accel": keyShorts['CableConduit'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_CableConduit", "It adds a new cable conduit " +
                     "object from single WireFlex or sequence of wires " +
@@ -261,6 +281,7 @@ class newCableBoxCommand:
         return {'Pixmap': CMD_CABLEBOX_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_CableBox",
                                               "Cable Box"),
+                "Accel": keyShorts['CableBox'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_CableBox", "It adds a new cable box object. " +
                     "Select any point in 3D view first, then add the box")}
@@ -292,6 +313,7 @@ class newCableConnectorCommand:
         return {'Pixmap': CMD_CABLECONNECTOR_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_CableConnector",
                                               "Cable Connector"),
+                "Accel": keyShorts['CableConnector'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_CableConnector", "It adds a new cable " +
                     "connector object. Select any point in 3D view first, " +
@@ -363,6 +385,7 @@ class newCableLightPoint:
         return {'Pixmap': CMD_CABLELIGHTPOINT_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_CableLightPoint",
                                               "Cable Light Point"),
+                "Accel": keyShorts['CableLightPoint'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_CableLightPoint", "It adds a new light point " +
                     "for cable. Select any point in 3D view first, then add " +
@@ -394,6 +417,7 @@ class newSupportPoint:
         return {'Pixmap': CMD_SUPPORTPOINT_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_SupportPoint",
                                               "Support Point"),
+                "Accel": keyShorts['SupportPoint'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_SupportPoint", "It adds a new support point " +
                     "to which a cable or other element can be attached")}
@@ -427,6 +451,7 @@ class newSupportLine:
         return {'Pixmap': CMD_SUPPORTLINE_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_SupportLine",
                                               "Support Line"),
+                "Accel": keyShorts['SupportLine'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_SupportLine", "It adds a new support line to " +
                     "which a cable or other element can be attached. Select " +

@@ -193,9 +193,11 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             if last_wire:
                 if last_wire.Vertexes[-1].Point.isEqual(
                         wire.Vertexes[0].Point, tol) or \
+                        last_wire.Vertexes[-1].Point.isEqual(
+                        wire.Vertexes[-1].Point, tol) or \
                         last_wire.Vertexes[0].Point.isEqual(
                         wire.Vertexes[0].Point, tol) or \
-                        last_wire.Vertexes[-1].Point.isEqual(
+                        last_wire.Vertexes[0].Point.isEqual(
                         wire.Vertexes[-1].Point, tol):
                     last_wire = wire
                 else:

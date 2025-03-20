@@ -334,7 +334,7 @@ class ArchCable(ArchPipe._ArchPipe):
         w = self.getWire(obj)
         if not w:
             FreeCAD.Console.PrintError(translate(
-                "Cables", "Unable to build the base path")+"\n")
+                "Cables", "Unable to build the cable base path")+"\n")
             return None
         p = obj.SubProfiles[0].Shape.Wires[0]
         sh = w.makePipeShell([p], True, False, 2)
@@ -660,29 +660,80 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
         return color
 
 
-def makeCable(baseobj=None, profileobj=None, gauge=0, length=0,
-              placement=None, name=None):
-    "Creates a cable object from the given base object"
+def getObjectsForCable(selectlist):
+    """Gets selection list, preferably made by Gui.Selection.getSelection().
+    It checks preconditions, groups objects, creates base compound if needed,
+    and returns selected objects if preconditions are met
+
+    Parameters
+    ----------
+    selectlist : selected objects list
+        List of objects
+
+    Returns
+    -------
+    tuple (baseobj, profileobj)
+    """
+    baseobj = None
+    profileobj = None
+
+    # detect profileobj
+    if (len(selectlist) > 1) and hasattr(selectlist[-1], 'TypeId'):
+        if selectlist[-1].TypeId in ['Part::Part2DObjectPython',
+                                     'Sketcher::SketchObject']:
+            try:
+                if selectlist[-1].Shape.Wires[0].isClosed():
+                    profileobj = selectlist.pop()
+            except (AttributeError, IndexError):
+                pass
+
+    # detect baseobj
+    baselist = []
+    for sel in selectlist:
+        if sel.TypeId == 'Part::Part2DObjectPython':
+            if sel.Proxy.Type == 'Wire':
+                baselist.append(sel)
+        elif sel.TypeId == 'Part::Compound':
+            for sub_el in sel.Links:
+                if sub_el.TypeId == 'Part::Part2DObjectPython':
+                    if sub_el.Proxy.Type == 'Wire':
+                        baselist.append(sub_el)
+    if len(baselist) > 1:
+        baseobj = FreeCAD.ActiveDocument.addObject("Part::Compound",
+                                                   "Compound")
+        baseobj.Links = baselist
+        FreeCAD.ActiveDocument.recompute()
+    elif len(baselist) == 1:
+        baseobj = baselist[0]
+
+    return baseobj, profileobj
+
+
+def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
+              length=0, placement=None, name=None):
+    """Creates a cable object from the given base object.
+    If selectlist is not None it takes precedence over baseobj and profileobj
+    """
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError(translate(
             "Cables", "No active document. Aborting") + "\n")
         return
+    if selectlist:
+        baseobj, profileobj = getObjectsForCable(selectlist)
+    if not baseobj:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No base object for cable. Aborting") + "\n")
+        return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "Cable")
     obj.Label = name if name else translate("Cables", "Cable")
     ArchCable(obj)
+
     if FreeCAD.GuiUp:
         ViewProviderCable(obj.ViewObject)
-        if baseobj:
-            baseobj.ViewObject.hide()
+        baseobj.ViewObject.hide()
         if profileobj:
             profileobj.ViewObject.hide()
-    if baseobj:
-        obj.Base = baseobj
-    else:
-        if length:
-            obj.Length = length
-        else:
-            obj.Length = 1000
+    obj.Base = baseobj
     if profileobj:
         obj.Profile = profileobj
     else:

@@ -3,8 +3,11 @@
 
 import FreeCAD
 import Part
+import draftgeoutils
 from freecad.cables import wireFlex
 from freecad.cables import translate
+
+tol = 1e-4      # tolerance for isEqual() comparision
 
 
 def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):
@@ -152,18 +155,6 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
                 "Cables", "Wrong selection. Please select") +
                 f" object of {obj_proxy_class} type\n")
             return None
-        if isinstance(obj.Proxy, wireFlex.WireFlex):
-            if obj.ChamferSize > 0 or obj.FilletRadius > 0 \
-                    or obj.Subdivisions > 0:
-                FreeCAD.Console.PrintError(
-                    f"Not possible to modify {str(obj.Label)} due to " +
-                    "non zero Chamfer or Fillet or Subdivision\n")
-                FreeCAD.Console.PrintError(
-                    translate("Cables", "Not possible to modify") +
-                    f" {str(obj.Label)} " +
-                    translate("Cables", "due to non zero Chamfer or Fillet " +
-                              "or Subdivision") + "\n")
-                return None
     retlist = []
     # FreeCAD.Console.PrintMessage(f"slist= {slist}\n")
     for sel in slist:
@@ -211,7 +202,145 @@ def reprintSelection(prefix, slist):
     return s[:-2] + ']'
 
 
-def addPointToWire(plist=None):
+def getCurveParameter(curve, point):
+    """It returns curve parameter for point
+    For bslines: the nearest point parameter is returned
+    For other curves: point has to lie on curve, otherwise it returns None
+    """
+    par = curve.parameter(point)
+    v = curve.value(par)
+    if curve.TypeId == 'Part::GeomBSplineCurve':
+        return par
+    elif v.isEqual(point, tol):
+        return par
+    else:
+        return None
+
+
+def getIndexForNewPoint(obj, edgename, vector):
+    """It calculates a new index in obj.Points for a given vector.
+    The fuction is designed to work with obj wires with Fillets or bsplines.
+    The vector should belong to object edge.
+    The obj should have Points property.
+    Function does not modify any obj property, it just returns index
+    which should be assigned if vector was added to obj.Points.
+    Index counts from 0.
+
+    Parameters
+    ----------
+    obj : object
+        Any object having Points property
+    edgename : str
+        edge name on which the vertex lies
+    vector : Vector
+        The vector to check
+
+    Returns
+    -------
+    int
+    New vector index for obj.Points.
+    it can be used e.g. as: points.insert(idx, vector)
+    Returns None if no index found
+    """
+    try:
+        points = obj.Points
+        nr = int(edgename.split('Edge')[1])
+        edge = obj.Shape.Edges[nr-1]
+    except (ValueError, IndexError, AttributeError, TypeError):
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selection is not an edge or obj has no Points "
+            "property") + "\n")
+        return None
+    if edge.Curve.TypeId == 'Part::GeomLine' or \
+            edge.Curve.TypeId == 'Part::GeomBSplineCurve':
+        p = getCurveParameter(edge.Curve, vector)
+        if p is None:
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "The new point is not lying on edge") + "\n")
+        min_diff = None
+        min_idx = None
+        for i, pt in enumerate(points):
+            pe = getCurveParameter(edge.Curve, pt+obj.Placement.Base)
+            if pe is None:
+                continue
+            if (p-pe > 0) and not min_diff:
+                min_diff = p - pe
+                min_idx = i
+            elif (p-pe > 0) and (p-pe < min_diff):
+                min_diff = p - pe
+                min_idx = i
+        return min_idx+1
+    else:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selected edge is not supported:") +
+            f" {edge.Curve.TypeId}\n")
+    return None
+
+
+def getIndexForPointToEdit(obj, vector):
+    """It calculates an index of corresponding point in obj.Points
+    for a given vector.
+    The fuction is designed to work with obj wires with Fillets.
+    The vector should belong to one of object edges.
+    The obj should have Points property.
+    Function does not modify any obj property, it just returns index
+    which should be used to delete o modify one of obj.Points.
+    Index counts from 0.
+
+    Parameters
+    ----------
+    obj : object
+        Any object having Points property
+    vector : Vector
+        The vector to check
+
+    Returns
+    -------
+    int
+    index of point to delete or modify in obj.Points.
+    it can be used e.g. as: points.pop(idx)
+    Returns None if no index found
+    """
+    try:
+        points = obj.Points
+        for i, pt in enumerate(points):
+            pt = pt + obj.Placement.Base
+            if pt.isEqual(vector, tol):
+                return i
+        edges = []
+        for e in obj.Shape.Edges:
+            for v in e.Vertexes:
+                if v.Point.isEqual(vector, tol):
+                    if e.Curve.TypeId == 'Part::GeomLine':
+                        edges.append(e)
+
+    except (ValueError, IndexError, AttributeError, TypeError):
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Wrong selection or obj has no Points property") + "\n")
+        return None
+    if not edges:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "The given vector does not belong to obj") + "\n")
+    for e in edges:
+        p = getCurveParameter(e.Curve, vector)
+        if p is not None:       # vector lies on edge
+            pts_on_edge = []
+            for i, pt in enumerate(points):
+                pt = pt + obj.Placement.Base
+                pe = getCurveParameter(e.Curve, pt)
+                if pe is not None:
+                    pts_on_edge.append(i)
+            p = p - obj.Placement.Base
+            if pts_on_edge:
+                p1_idx = draftgeoutils.general.findClosest(
+                    p, [points[n] for n in pts_on_edge])
+                return pts_on_edge[p1_idx]
+    FreeCAD.Console.PrintError(translate(
+         "Cables", "Proper point not found" + "\n"))
+    return None
+
+
+def addPointToWire(plist=None, point=None):
     """
     Adds a new point to WireFlex
 
@@ -221,6 +350,8 @@ def addPointToWire(plist=None):
         List of type [(obj, subelement_name), ...]
         If None, processGuiSelection function is used internally to create
         plist
+    point : Vector
+        Optional point to add instead of half the edge
     """
     if not plist:
         plist = processGuiSelection(single=True, subshape_class=Part.Edge,
@@ -229,22 +360,33 @@ def addPointToWire(plist=None):
         return None
     try:
         obj = plist[0][0]
-        name = plist[0][1]
-        nr = int(name.split('Edge')[1])
+        edge_name = plist[0][1]
+        nr = int(edge_name.split('Edge')[1])
+        edge = obj.Shape.Edges[nr-1]
+        if edge.Curve.TypeId == 'Part::GeomCircle':
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Wrong edge type selected") + "\n")
+            return None    # wrong edge
+        v2 = edge.Vertexes[1].Point
+        midparam = edge.Curve.parameter(v2)/2
+        newVector = point or edge.Curve.value(midparam)
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Selection is not an edge") + "\n")
         return None    # not an edge
+    idx = getIndexForNewPoint(obj, edge_name, newVector)
+    if not idx:
+        return None
     vlist = obj.Proxy.get_vlist(obj)
     pts = obj.Points
-    pts.insert(nr, (pts[nr]+pts[nr-1])/2)
-    vlist.insert(nr, None)
+    pts.insert(idx, newVector-obj.Placement.Base)
+    vlist.insert(idx, None)
     obj.Points = pts
     obj.Proxy.update_vrtxs_mid(obj, vlist)
     return None
 
 
-def delPointFromWire(plist=None):
+def delPointFromWire(plist=None, point_idx=None):
     """
     Deletes a point from WireFlex
 
@@ -254,6 +396,8 @@ def delPointFromWire(plist=None):
         List of type [(obj, subelement_name), ...]
         If None, processGuiSelection function is used internally to create
         plist
+    point_idx: int
+        Optional point idx to delete (counted from 0)
     """
     if not plist:
         plist = processGuiSelection(single=True, subshape_class=Part.Vertex,
@@ -262,8 +406,13 @@ def delPointFromWire(plist=None):
         return None
     try:
         obj = plist[0][0]
-        name = plist[0][1]
-        nr = int(name.split('Vertex')[1])
+        if point_idx is not None:
+            nr = point_idx + 1
+        else:
+            name = plist[0][1]
+            nr = int(name.split('Vertex')[1])
+            idx = getIndexForPointToEdit(obj, obj.Shape.Vertexes[nr-1].Point)
+            nr = idx+1 if idx is not None else 0
         if not 1 < nr < len(obj.Points):
             FreeCAD.Console.PrintError(translate(
                 "Cables", "Selection is not a mid Vertex") + "\n")
@@ -281,7 +430,7 @@ def delPointFromWire(plist=None):
     return None
 
 
-def assignPointAttachment(plist=None):
+def assignPointAttachment(plist=None, point_idx=None, obj=None):
     """
     Attaches one selected point of WireFlex to external vertex or object's Base
 
@@ -292,28 +441,44 @@ def assignPointAttachment(plist=None):
         If None, processGuiSelection function is used internally to create
         plist
         If subelement_name in plist is '' then obj.Placement.Base is taken
+    point_idx: int
+        Optional point idx to attach (counted from 0)
+    obj: object
+        Optional direct object instead of plist, then second object is taken
+        internally from GuiSelection
     """
     if not plist:
-        plist = processGuiSelection(single=False, subshape_class=Part.Vertex,
-                                    obj_proxy_class=wireFlex.WireFlex)
+        if obj and (point_idx is not None):
+            plist = processGuiSelection(single=False,
+                                        subshape_class=Part.Vertex)
+        else:
+            plist = processGuiSelection(single=False,
+                                        subshape_class=Part.Vertex,
+                                        obj_proxy_class=wireFlex.WireFlex)
     if not plist:
         return None
-    if len(plist) < 2:
+    if (len(plist) < 2) and (point_idx is None) and (obj is None):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Wrong selection. Please select two vertexes. First " +
             "vertex has to belong to WireFlex, second to an external object") +
             "\n")
         return None
     try:
-        obj = plist[0][0]
-        name = plist[0][1]
-        nr = int(name.split('Vertex')[1])
-        sel_ext = plist[1]
+        if point_idx is not None and obj is not None:
+            nr = point_idx + 1
+            sel_ext = plist[0]
+        else:
+            obj = plist[0][0]
+            name = plist[0][1]
+            nr = int(name.split('Vertex')[1])
+            idx = getIndexForPointToEdit(obj, obj.Shape.Vertexes[nr-1].Point)
+            nr = idx+1 if idx is not None else 0
+            sel_ext = plist[1]
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "First selection is not a Vertex") + "\n")
         return None    # not a Vertex
-    if 1 < nr < len(obj.Shape.Vertexes):
+    if 1 < nr < len(obj.Points):
         vrtxs_mid = getFlatLinkSubList(obj, 'Vrtxs_mid')
         vrtxs_mid_idx = obj.Vrtxs_mid_idx
         if vrtxs_mid_idx.count(nr):         # replace assignment
@@ -340,12 +505,15 @@ def assignPointAttachment(plist=None):
             obj.Vrtx_start = p
             obj.AttachmentSupport = [p]
             obj.MapMode = 'Translate'
-        elif nr == len(obj.Shape.Vertexes):
+        elif nr == len(obj.Points):
             obj.Vrtx_end = p
+        else:
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Point attachment not assigned") + "\n")
     return None
 
 
-def removePointAttachment(plist=None):
+def removePointAttachment(plist=None, point_idx=None, obj=None):
     """
     It removes external attachment from selected point of WireFlex
 
@@ -355,16 +523,28 @@ def removePointAttachment(plist=None):
         List of type [(obj, subelement_name), ...]
         If None, processGuiSelection function is used internally to create
         plist
+    point_idx: int
+        Optional point idx to detach (counted from 0)
+    obj: object
+        Optional direct object instead of plist, then second object is taken
+        internally from GuiSelection
     """
-    if not plist:
-        plist = processGuiSelection(single=True, subshape_class=Part.Vertex,
-                                    obj_proxy_class=wireFlex.WireFlex)
-    if not plist:
-        return None
+    if point_idx is None and obj is None:
+        if not plist:
+            plist = processGuiSelection(single=True,
+                                        subshape_class=Part.Vertex,
+                                        obj_proxy_class=wireFlex.WireFlex)
+        if not plist:
+            return None
     try:
-        obj = plist[0][0]
-        name = plist[0][1]
-        nr = int(name.split('Vertex')[1])
+        if point_idx is not None and obj is not None:
+            nr = point_idx + 1
+        else:
+            obj = plist[0][0]
+            name = plist[0][1]
+            nr = int(name.split('Vertex')[1])
+            idx = getIndexForPointToEdit(obj, obj.Shape.Vertexes[nr-1].Point)
+            nr = idx+1 if idx is not None else 0
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Selection is not a Vertex") + "\n")
@@ -381,12 +561,44 @@ def removePointAttachment(plist=None):
         obj.Vrtx_start = None
         obj.AttachmentSupport = None
         obj.MapMode = 'Deactivated'
-    elif nr == len(obj.Shape.Vertexes):
+    elif nr == len(obj.Points):
         obj.Vrtx_end = None
     return None
 
 
-def modifyWireEdge(plist=None, cmd=None):
+def reverseWire(obj):
+    """
+    It reverses direction of WireFlex
+
+    Parameters
+    ----------
+    obj : object
+        WireFlex object
+    """
+    old_map_mode = obj.MapMode
+    obj.MapMode = 'Deactivated'
+    max = len(obj.Points)
+    new_points = obj.Points
+    new_points.reverse()
+    obj.Points = new_points
+
+    new_Vrtxs_mid = obj.Vrtxs_mid
+    new_Vrtxs_mid.reverse()
+    obj.Vrtxs_mid = new_Vrtxs_mid
+
+    new_Vrtxs_mid_idx = []
+    for idx in obj.Vrtxs_mid_idx:
+        new_Vrtxs_mid_idx.append(max-idx+1)
+    new_Vrtxs_mid_idx.sort()
+    obj.Vrtxs_mid_idx = new_Vrtxs_mid_idx
+    start = obj.Vrtx_start
+    obj.Vrtx_start = obj.Vrtx_end
+    obj.Vrtx_end = start
+    # obj.AttachmentSupport = obj.Vrtx_start
+    obj.MapMode = old_map_mode
+
+
+def modifyWireEdge(plist=None, point=None, cmd=None):
     """
     Modifies an edge of WireFlex
 
@@ -398,6 +610,8 @@ def modifyWireEdge(plist=None, cmd=None):
         plist
         If edge selected: second vertex of the edge is moved
         If edge and vertex selected: given vertex of the edge is moved
+    point : Vector
+        Optional point selecting which vertex of edge should be moved
     cmd : str
         Command to execute
         'vertical' - set edge vertical
@@ -412,20 +626,38 @@ def modifyWireEdge(plist=None, cmd=None):
                                      obj_proxy_class=wireFlex.WireFlex)
     try:
         obj = plist[0][0]
-        name = plist[0][1]
-        nr = int(name.split('Edge')[1])
+        edge_name = plist[0][1]
+        idx = int(edge_name.split('Edge')[1])
+        edge = obj.Shape.Edges[idx-1]
+        if edge.Curve.TypeId == 'Part::GeomCircle':
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Wrong edge type selected") + "\n")
+            return None    # wrong edge
+        v2 = edge.Vertexes[1].Point
+        midparam = edge.Curve.parameter(v2)/2
+        newVector = point or edge.Curve.value(midparam)
+        nr = getIndexForNewPoint(obj, edge_name, newVector)
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "First selection is not an edge") + "\n")
         return None    # not an edge
-    if plist2:
+    if plist2 or point:
         try:
-            obj2 = plist2[1][0]
-            name2 = plist2[1][1]
-            vnr = int(name2.split('Vertex')[1])
+            if plist2:
+                obj2 = plist2[1][0]
+                name2 = plist2[1][1]
+                idx = int(name2.split('Vertex')[1])
+                vnr = getIndexForPointToEdit(obj, obj.Shape.Vertexes[idx-1])
+            else:
+                vnr = getIndexForNewPoint(obj, edge_name, point)
+                if edge.Curve.parameter(point) > midparam:
+                    vnr += 1
+                obj2 = obj
+            if vnr is None:
+                raise IndexError
         except (ValueError, IndexError, AttributeError, TypeError):
             FreeCAD.Console.PrintError(translate(
-                "Cables", "Second selection is not a vertex") + "\n")
+                "Cables", "Second selection is not a proper vertex") + "\n")
             return None    # not a vertex
         if not ((obj2 == obj) or (0 <= vnr-nr <= 1)):
             FreeCAD.Console.PrintError(translate(

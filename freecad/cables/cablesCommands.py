@@ -7,14 +7,8 @@ import FreeCADGui
 from FreeCAD import Gui
 import Part
 from freecad.cables import wireutils
-from freecad.cables import archCable
-from freecad.cables import archCableBox
-from freecad.cables import archCableConnector
-from freecad.cables import archCableLightPoint
 from freecad.cables import wireFlex
 from freecad.cables import cableProfile
-from freecad.cables import cableMaterial
-from freecad.cables import cableSupport
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -26,7 +20,9 @@ CMD_ADD_VERTEX_ICON = os.path.join(iconPath, "cmdAddVertex.svg")
 CMD_DEL_VERTEX_ICON = os.path.join(iconPath, "cmdDelVertex.svg")
 CMD_ATT_VERTEX_ICON = os.path.join(iconPath, "cmdAttVertex.svg")
 CMD_RM_ATT_VERTEX_ICON = os.path.join(iconPath, "cmdRmAttVertex.svg")
+CMD_COMPOUNDPATH_ICON = os.path.join(iconPath, "cmdNewCompoundPath.svg")
 CMD_CABLE_ICON = os.path.join(iconPath, "cmdNewCable.svg")
+CMD_CABLECONDUIT_ICON = os.path.join(iconPath, "cmdNewCableConduit.svg")
 CMD_CABLEBOX_ICON = os.path.join(iconPath, "cmdNewCableBox.svg")
 CMD_CABLECONNECTOR_ICON = os.path.join(iconPath, "cmdNewCableConnector.svg")
 CMD_CABLEPROFILE_ICON = os.path.join(iconPath, "cmdNewCableProfile.svg")
@@ -40,6 +36,7 @@ keyShorts = {'WireFlex': 'W, F',
              'DelVertex': 'W, D',
              'AttachVertex': 'W, T',
              'RemoveVertexAttachment': 'W, R',
+             'CompoundPath': 'C, P',
              'Cable': 'C, B',
              'CableConduit': 'C, D',
              'CableBox': 'C, X',
@@ -48,6 +45,7 @@ keyShorts = {'WireFlex': 'W, F',
              'SupportPoint': 'X, P',
              'SupportLine': 'X, L',
              }
+
 
 class newWireFlexCommand:
     """Creates a WireFlex based on selected vertexes or objects
@@ -196,6 +194,35 @@ class removeAttachmentCommand:
                     "Wire Flex vertex")}
 
 
+class newCompoundPathCommand:
+    """Creates a CompoundPath based on selected objects
+    """
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "CompoundPath"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.compoundPath.make_compoundpath({s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_COMPOUNDPATH_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_CompoundPath",
+                                              "CompoundPath"),
+                "Accel": keyShorts['CompoundPath'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_CompoundPath", "It creates a new compound path " +
+                    "based on selected objects. At least two objects have " +
+                    "to be selected first")}
+
+
 class newCableCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
@@ -221,6 +248,36 @@ class newCableCommand:
                     "Cables_Cable", "It adds a new cable object from " +
                     "WireFlex and profile. Select WireFlex object first " +
                     "then a profile")}
+
+
+class newCableConduitCommand:
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "CableConduit"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.archCableConduit.makeCableConduit(" +
+                             f"selectlist={s})")
+        FreeCADGui.doCommand("doc.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_CABLECONDUIT_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_CableConduit",
+                                              "CableConduit"),
+                "Accel": keyShorts['CableConduit'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_CableConduit", "It adds a new cable conduit " +
+                    "object from single WireFlex or sequence of wires " +
+                    "(and optionally profile). Select single " +
+                    "WireFlex object (or sequence of wires, cables or " +
+                    "conduits) then optionally a profile at the end")}
 
 
 class newCableBoxCommand:
@@ -430,7 +487,9 @@ Gui.addCommand('Cables_AddVertex', addVertexCommand())
 Gui.addCommand('Cables_DelVertex', delVertexCommand())
 Gui.addCommand('Cables_AttachVertex', assignAttachmentCommand())
 Gui.addCommand('Cables_RemoveVertexAttachment', removeAttachmentCommand())
+Gui.addCommand('Cables_CompoundPath', newCompoundPathCommand())
 Gui.addCommand('Cables_Cable', newCableCommand())
+Gui.addCommand('Cables_CableConduit', newCableConduitCommand())
 Gui.addCommand('Cables_CableBox', newCableBoxCommand())
 Gui.addCommand('Cables_CableConnector', newCableConnectorCommand())
 Gui.addCommand('Cables_Profile', newProfileCommand())

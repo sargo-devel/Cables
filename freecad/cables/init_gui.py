@@ -52,9 +52,11 @@ class CablesWorkbench (Gui.Workbench):
                            "Cables_DelVertex",
                            "Cables_AttachVertex",
                            "Cables_RemoveVertexAttachment",
+                           "Cables_CompoundPath",
                            "Cables_Edit"]
         self.list_cables = ["Cables_Profile",
                             "Cables_Cable",
+                            "Cables_CableConduit",
                             "Cables_CableBox",
                             "Cables_CableConnector",
                             "Cables_CableLightPoint",

@@ -1,6 +1,7 @@
 """utilities for Wire WireFlex
 """
 
+import math
 import FreeCAD
 import Part
 import DraftGeomUtils
@@ -323,7 +324,6 @@ def getIndexForPointToEdit(obj, vector):
                 if v.Point.isEqual(vector, tol):
                     if e.Curve.TypeId == 'Part::GeomLine':
                         edges.append(e)
-
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Wrong selection or obj has no Points property") + "\n")
@@ -696,3 +696,406 @@ def modifyWireEdge(plist=None, point=None, cmd=None):
         pts[vnr-1] = vect
         obj.Points = pts
     return None
+
+
+def getAttachedPointsCoordList(obj):
+    """
+    Returns coordinates list of wire attached points
+
+    Parameters
+    ----------
+    obj : obj
+        WireFlex object
+
+    Returns
+    -------
+    tuple
+    Tuple of coordinate tuples: ((x1,y1,z1), (x2,y2,z2), ...)
+    """
+    coords = []
+    for v in obj.Proxy.get_vlist(obj):
+        if v:
+            vect = v - obj.Placement.Base
+            coords.append((vect.x, vect.y, vect.z))
+    return tuple(coords)
+
+
+def getBoundarySegCoordList(obj):
+    """
+    Returns coordinates list of boundary segment points
+    (for BoundarySegmentStart, BoundarySegmentEnd)
+
+    Parameters
+    ----------
+    obj : obj
+        WireFlex object
+
+    Returns
+    -------
+    tuple
+    Tuple of coordinate tuples: ((x1,y1,z1), (x2,y2,z2))
+    """
+    coords = []
+    for i in [(obj.BoundarySegmentStart.Value, 0, 1),
+              (obj.BoundarySegmentEnd.Value, -1, -2)]:
+        i1 = i[1]
+        i2 = i[2]
+        if i[0] > 0 and obj.PathType != 'Wire':
+            vrtxs = obj.Shape.Vertexes
+            if abs((vrtxs[i1].Point-vrtxs[i2].Point).Length - i[0]) < tol:
+                vect = vrtxs[i2].Point - obj.Placement.Base
+            else:
+                v0 = obj.Points[i1]
+                v1 = obj.Points[i2]
+                vect = v0 + (v1-v0).normalize()*i[0]
+            coords.append((vect.x, vect.y, vect.z))
+    return tuple(coords)
+
+
+def makeConnectionWith2Fillets(edge1, edge2, ctype="Arc", radius=None, deg=3,
+                               ratio=1.6):
+    """
+    It creates a new wire with 2 fillets or one Bezier curve between two edges.
+    The edge direction is important. Wire will be created between vertex2
+    of edge1 and vertex1 of edge2. Wire ends are tangent to edges and fillet
+    radius or Bezier curve is calculatad automatically.
+    If radius is given, it is compared to calculated one and longer is taken.
+
+    Parameters
+    ----------
+    edge1, edge2 : edge objects
+    ctype : type of output connection (supported types: 'Arc', 'Bez')
+    radius : float
+    deg: int
+        Bezier curve degree
+    ratio: float
+        The proportions of the segments in the added base curve.
+        Should be between 1 and 2.
+
+    Returns
+    -------
+    Wire object
+        The wire gets 5 edges
+    """
+    defaultradius = 5.0     # if radius == None the defaultradius is taken
+
+    def _getCrossPointVectors():
+        vstart = edge1.Vertexes[1].Point
+        vend = edge2.Vertexes[0].Point
+        v1norm = edge1.tangentAt(edge1.LastParameter)
+        v2norm = edge2.tangentAt(edge2.FirstParameter)
+        ang = v1norm.getAngle(v2norm)
+        coef = 1 if ang < math.pi/12.0 else 2.0
+
+        v1e_tmp = v1norm * dist * coef
+        # temporary edge tangent to edge1:
+        e1_tmp = Part.Edge(Part.LineSegment(vstart, vstart+v1e_tmp))
+
+        v2e_tmp = v2norm * dist * coef
+        # temporary edge tangent to edge2:
+        e2_tmp = Part.Edge(Part.LineSegment(vend, vend-v2e_tmp))
+
+        # shortest distance between tmp edges (in the "cross point"):
+        dist_tmp = e1_tmp.distToShape(e2_tmp)
+        # new edges e1, e2 to "cross point"
+        if dist_tmp[0] < tol and v1norm.isEqual(v2norm, tol):
+            # edge1 and edge2 form single line
+            v1e = v2e = (vstart+vend)/2
+        else:
+            v1e = dist_tmp[1][0][0]
+            v2e = dist_tmp[1][0][1]
+            if vstart.isEqual(v1e, tol) or vend.isEqual(v2e, tol):
+                v1e = e1_tmp.CenterOfMass
+                v2e = e2_tmp.CenterOfMass
+        return vstart, v1e, v2e, vend
+
+    def _getNewFilletWire(edge):
+        c_tmp = e_tmp.Curve
+        # get 1/4 edge to perpendicular cross point
+        # TODO: find better algorithm for crosspoint
+        endpar = c_tmp.parameter(vend)
+        startpar = c_tmp.parameter(vstart)
+        if edge.isSame(edge2):
+            x = c_tmp.value((startpar+endpar)/4.0)
+        else:
+            x = c_tmp.value((startpar+endpar)*3.0/4.0)
+        e1 = Part.Edge(Part.LineSegment(vstart, x))
+        e2 = Part.Edge(Part.LineSegment(x, vend))
+        # get temp wire
+        if edge.isSame(edge2):
+            wire = Part.Wire([e1, e2, edge2])
+        else:
+            wire = Part.Wire([edge1, e1, e2])
+        r = getMaximumRadius(wire)
+        r = radius if radius and radius > r else r
+        wire = Part.Wire([e1, e2])
+        wire = DraftGeomUtils.filletWire(wire, r)
+        wire = _cleanWire(wire)
+        return wire
+
+    def _cleanWire(wire):
+        edges = wire.Edges
+        for i, e in enumerate(edges):
+            if e.Closed:
+                # drop very short edge with one vertex
+                edges.pop(i)
+        return Part.Wire(edges)
+
+    dist = edge1.distToShape(edge2)[0]
+
+    # edge1 and edge2 have common vertex:
+    if edge1.Vertexes[-1].Point.isEqual(edge2.Vertexes[0].Point, tol):
+        if edge1.Curve.TypeId == edge2.Curve.TypeId == 'Part::GeomLine':
+            # FreeCAD.Console.PrintMessage("[conn2fil] line+line\n")
+            wire = Part.Wire([edge1, edge2])
+            r_max = getMaximumRadius(wire)
+            r_min = radius if not None else defaultradius
+            r = r_min if r_min < r_max else r_max
+            wire = DraftGeomUtils.filletWire(wire, r)
+            wire = _cleanWire(wire)
+            return wire
+        elif edge1.Curve.TypeId == 'Part::GeomBSplineCurve' and \
+                edge2.Curve.TypeId == 'Part::GeomLine':
+            # FreeCAD.Console.PrintMessage("[conn2fil] spline+line\n")
+            dist = edge2.Length
+            vstart = edge1.Vertexes[1].Point
+            vend = edge2.Vertexes[1].Point
+            v1norm = edge1.tangentAt(edge1.LastParameter)
+            v1e_tmp = v1norm * dist
+            # temporary edge tangent to edge1:
+            e_tmp = Part.Edge(Part.LineSegment(vstart, vstart+v1e_tmp))
+            wire = _getNewFilletWire(edge2)
+            wire = Part.Wire([edge1]+wire.Edges)
+            return wire
+        elif edge1.Curve.TypeId == 'Part::GeomLine' and \
+                edge2.Curve.TypeId == 'Part::GeomBSplineCurve':
+            # FreeCAD.Console.PrintMessage("[conn2fil] line+spline\n")
+            dist = edge1.Length
+            vstart = edge1.Vertexes[0].Point
+            vend = edge2.Vertexes[0].Point
+            v1norm = edge2.tangentAt(edge2.FirstParameter)
+            v1e_tmp = v1norm * dist
+            # temporary edge tangent to edge2:
+            e_tmp = Part.Edge(Part.LineSegment(vend-v1e_tmp, vend))
+            wire = _getNewFilletWire(edge1)
+            wire = Part.Wire(wire.Edges + [edge2])
+            return wire
+        else:
+            FreeCAD.Console.PrintMessage("[conn2fil] other:\n")
+            FreeCAD.Console.PrintMessage(f"{edge1.Curve.TypeId}, " +
+                                         f"{edge2.Curve.TypeId}\n")
+
+    # continue without common vertex
+    vstart, v1e, v2e, vend = _getCrossPointVectors()
+    # FreeCAD.Console.PrintMessage("[conn2fil] No common vertex\n")
+    e1 = Part.Edge(Part.LineSegment(vstart, v1e))
+    # e2 is reversed
+    e2 = Part.Edge(Part.LineSegment(vend, v2e))
+
+    if v1e.isEqual(v2e, tol):
+        # no need to make 2 fillets (v1e is equal v2e)
+        # FreeCAD.Console.PrintMessage("[conn2fil] v1e is equal v2e\n")
+        e2 = Part.Edge(Part.LineSegment(v1e, vend))
+        wire = Part.Wire([e1, e2])
+        r_max = getMaximumRadius(wire)
+        r_min = radius if not None else defaultradius
+        r = r_max if r_max > r_min else r_min
+        wire = DraftGeomUtils.filletWire(wire, r)
+        wire = Part.Wire([edge1]+wire.Edges+[edge2])
+        wire = _cleanWire(wire)
+        return wire
+    else:
+        ex = Part.Edge(Part.LineSegment(v1e, v2e))
+
+    # get x = a*b/(n*a+b) for edge dividing point (works for 2d space)
+    '''
+    a - len of shortest arm (e1 or e2)
+    b - dist between e1, e2
+    x - dividing point of a arm
+    n*x - dist e1,e2 at x
+
+    b/a = n*x/(a-x)
+    x = a*b/(n*a+b)
+    '''
+    # TODO: find algorithm to determine n (1<n<2)
+    n = ratio
+    a = min(e1.Length, e2.Length)
+    b = (vstart-vend).Length
+    xnorm = (a*b/(n*a+b))/a
+
+    # get dividing points vx_e1 and vx_e2 based on x
+    ps = e1.Curve.parameter(vstart)
+    pe = e1.Curve.parameter(v1e)
+    xe = (pe-ps)*xnorm + ps
+    vx_e1 = e1.Curve.value(xe)
+    ps = e2.Curve.parameter(vend)
+    pe = e2.Curve.parameter(v2e)
+    xe = (pe-ps)*xnorm + ps
+    vx_e2 = e2.Curve.value(xe)
+
+    # new edges based on dividing points
+    e1 = Part.Edge(Part.LineSegment(vstart, vx_e1))
+    ex = Part.Edge(Part.LineSegment(vx_e1, vx_e2))
+    e2 = Part.Edge(Part.LineSegment(vx_e2, vend))
+
+    # create final wire with fillets
+    wire = Part.Wire([e1, ex, e2])
+    if ctype == "Arc":
+        r_max = getMaximumRadius(wire)
+        r_min = radius if not None else defaultradius
+        r = r_max if r_max > r_min else r_min
+        wire = DraftGeomUtils.filletWire(wire, r)
+    else:
+        wire = getBezCurve(wire, deg)
+    wire = Part.Wire([edge1]+wire.Edges+[edge2])
+    wire = _cleanWire(wire)
+    return wire
+
+
+def getBezCurve(wire, deg):
+    """
+    It returns Bezier Curve created from input wire points.
+    For the simplicity it is assumed that input wire has 4 points and 3 edges.
+
+    Parameters
+    ----------
+    wire : Wire object
+    deg : int
+        curve degree. Restricted to range: 1 to 3
+
+    Returns
+    -------
+    curve : Curve objecy (Bezier Curve)
+    """
+    deg = 1 if deg < 1 else deg
+    deg = 3 if deg > 3 else deg
+    points = [v.Point for v in wire.Vertexes]
+    poles = points[1:]
+    segpoles_lst = [poles[x:x+deg] for x in range(0, len(poles), deg)]
+    startpoint = points[0]
+    edges = []
+    for segpoles in segpoles_lst:
+        c = Part.BezierCurve()
+        c.increase(len(segpoles))
+        c.setPoles([startpoint]+segpoles)
+        edges.append(Part.Edge(c))
+        startpoint = segpoles[-1]
+    wire = Part.Wire(edges)
+    return wire
+
+
+def getMinimumRadius(wire):
+    """
+    It calculates minimum radius which appears in a wire
+
+    Parameters
+    ----------
+    wire : Wire object
+
+    Returns
+    -------
+    (float, int)
+        The tuple: The minimum radius in a wire, the edge number
+        Edge is counted from 1
+        The edge number indicates an edge with the minimum radius
+        or if the radius is 0, an edge before the minimum radius
+    """
+    bspline_t = 'Part::GeomBSplineCurve'
+    circle_t = 'Part::GeomCircle'
+    bezier_t = 'Part::GeomBezierCurve'
+    bspline_approx_tol = 0.5
+    i_max = len(wire.Edges)-1
+    rlist = []
+    idxlist = []
+    for i, e in enumerate(wire.Edges):
+        e_nxt = wire.Edges[i+1] if i < i_max else None
+        etype = e.Curve.TypeId
+        # check tangency between two edges
+        t1 = e.tangentAt(e.parameterAt(e.Vertexes[1]))
+        t2 = e_nxt.tangentAt(e_nxt.parameterAt(e_nxt.Vertexes[0])) \
+            if e_nxt else None
+        if t2 and not t1.isEqual(t2, tol):
+            return 0.0, i+1
+        # get minimum radius from bspline or bezier curve
+        if etype == bspline_t:
+            arcslist = e.Curve.toBiArcs(bspline_approx_tol)
+            rmin = min([a.Radius for a in arcslist])
+            rlist.append(rmin)
+            idxlist.append(i+1)
+        if etype == bezier_t:
+            c = e.Curve.toBSpline()
+            arcslist = c.toBiArcs(bspline_approx_tol)
+            rmin = min([a.Radius for a in arcslist])
+            rlist.append(rmin)
+            idxlist.append(i+1)
+        # get radius from arc
+        if etype == circle_t:
+            rlist.append(e.Curve.Radius)
+            idxlist.append(i+1)
+    if rlist:
+        min_radius = min(rlist)
+        idx = idxlist[rlist.index(min_radius)]
+    else:
+        min_radius, idx = 1e10, 0   # straight line, radius=infinity
+    return min_radius, idx
+
+
+def getMaximumRadius(wire):
+    """
+    It calculates possible maximum radius which can be applied as FilletRadius
+    in a wire. Wire has to be a polyline. Wire must not have fillet radius.
+    Wire has to have at least 2 edges.
+    Warning: After applying calculated radius to wire some edges can have very
+    short length and only one vertex.
+
+    Parameters
+    ----------
+    wire : Wire object (minimum 2 edges, no fillets)
+
+    Returns
+    -------
+    float: The maximum possible fillet radius in a wire
+        Returns 0 if wire contains only 1 edge or fillet detected
+        or very long radius calculated
+    """
+    # get shortest edge
+    very_long_r = 1e10      # very long radius to drop
+
+    def _max_radius_for_3edges(e1, e2, e3):
+        e1tan = e1.tangentAt(0)
+        e2tan = e2.tangentAt(0)
+        angle_a = (math.pi-e1tan.getAngle(e2tan))/2.0
+        if e3 is None:
+            dist_min = min(e1.Length, e2.Length)
+            rx = math.tan(angle_a)*dist_min
+            r3 = very_long_r
+        else:
+            e3tan = e3.tangentAt(0)
+            angle_b = (math.pi-e2tan.getAngle(e3tan))/2.0
+            x = e2.Length*math.tan(angle_b)/(math.tan(angle_a) +
+                                             math.tan(angle_b))
+            rx = math.tan(angle_a)*x
+            r3 = math.tan(angle_b)*e3.Length
+        r1 = math.tan(angle_a)*e1.Length
+        r_max = min(r1, rx, r3)
+        r_max = r_max - r_max*1e-12         # rounding correction
+        return r_max
+
+    # detect nr of edges
+    if len(wire.Edges) < 2:
+        return 0
+    # detect type of edges
+    for e in wire.Edges:
+        if e.Curve.TypeId != 'Part::GeomLine':
+            return 0
+
+    max_cnt = len(wire.Edges)-2 if len(wire.Edges) > 2 else 1
+    rlist = []
+    for i in range(max_cnt):
+        e1 = wire.Edges[i]
+        e2 = wire.Edges[i+1]
+        e3 = wire.Edges[i+2] if len(wire.Edges) > 2 else None
+        r_max = _max_radius_for_3edges(e1, e2, e3)
+        rlist.append(r_max)
+    r = min(rlist)
+    return r if r < very_long_r else 0

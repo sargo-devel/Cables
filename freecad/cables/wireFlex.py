@@ -24,6 +24,7 @@
 
 
 import os
+import pivy.coin as coin
 import FreeCAD
 import Draft
 import Part
@@ -46,9 +47,18 @@ class WireFlex(Draft.Wire):
     def __init__(self, obj):
         """Add the properties"""
         self.setProperties(obj)
+        self.setDefaultShapeParameters(obj)
         obj.Proxy = self
         self.Type = 'Wire'
         obj.Label = 'WireFlex'
+
+    def setDefaultShapeParameters(self, obj):
+        FreeCAD.Console.PrintMessage("Default parameters")
+        obj.BoundarySegmentStart = 10.0
+        obj.BoundarySegmentEnd = 10.0
+        obj.Parameterization = 1.0
+        obj.BoundaryTangents = True
+        obj.PathType = 'Wire'
 
     def setProperties(self, obj):
         pl = obj.PropertiesList
@@ -92,6 +102,13 @@ class WireFlex(Draft.Wire):
                             "WireFlexShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Parameterization factor"))
+        if "BoundaryTangents" not in pl:
+            obj.addProperty("App::PropertyBool", "BoundaryTangents",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Enables/disables start " +
+                                "and end tangents on boundary BSpline " +
+                                "vertexes"))
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -114,22 +131,29 @@ class WireFlex(Draft.Wire):
         # FreeCAD.Console.PrintMessage(f"Changed property: {prop} \n")
         super().onChanged(obj, prop)
         if prop == 'PathType':
-            FreeCAD.Console.PrintMessage(f"pt={prop},{obj.PathType}\n")
             if obj.PathType == 'Wire':
                 hide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
-                             'Parameterization']
+                             'Parameterization', 'BoundaryTangents']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
-                hide_list = ['FilletRadius', 'Parameterization']
+                hide_list = ['FilletRadius', 'Parameterization',
+                             'BoundaryTangents']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd']
             if obj.PathType == 'BSpline_K':
                 hide_list = ['FilletRadius']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
-                               'Parameterization']
+                               'Parameterization', 'BoundaryTangents']
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
                 obj.setPropertyStatus(element, "-Hidden")
+        if prop in ['Points', 'BoundarySegmentStart', 'BoundarySegmentEnd']:
+            start_len = (obj.Points[1]-obj.Points[0]).Length
+            end_len = (obj.Points[-1]-obj.Points[-2]).Length
+            if abs(start_len-obj.BoundarySegmentStart.Value) < tol:
+                obj.BoundarySegmentStart = start_len + 1
+            if abs(end_len-obj.BoundarySegmentEnd.Value) < tol:
+                obj.BoundarySegmentEnd = end_len + 1
 
     def get_vlist(self, obj):
         """It gets vector list of all attached wire points
@@ -219,8 +243,11 @@ class WireFlex(Draft.Wire):
         vfinal = (points[-1] - points[-2]).normalize()
         knotSeq = self.parameterization(points[idxs:idxe],
                                         obj.Parameterization, False)
-        spline.interpolate(points[idxs:idxe], Parameters=knotSeq,
-                           InitialTangent=vinit, FinalTangent=vfinal)
+        if obj.BoundaryTangents:
+            spline.interpolate(points[idxs:idxe], Parameters=knotSeq,
+                               InitialTangent=vinit, FinalTangent=vfinal)
+        else:
+            spline.interpolate(points[idxs:idxe], Parameters=knotSeq)
         edges.insert(idxs or 0, spline.toShape())
         try:
             shape = Part.Wire(edges)
@@ -281,18 +308,141 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
         vobj.PointSize = 8
         vobj.LineColor = (176, 176, 176)
         vobj.LineWidth = 2
+        vobj.PointColorIfAttached = (0, 170, 255)
+        vobj.PointColorIfBoundary = (130, 200, 0)
+        self.createSpecialPoints(vobj)
 
     def getIcon(self):
         return CLASS_WIREFLEX_ICON
 
+    def _set_properties(self, vobj):
+        """Set the properties of objects if they don't exist."""
+        super()._set_properties(vobj)
+        pl = vobj.PropertiesList
+        if not hasattr(vobj, "EndArrow"):
+            _tip = "Displays a Dimension symbol at the end of the wire."
+            vobj.addProperty("App::PropertyBool",
+                             "EndArrow",
+                             "Draft",
+                             QT_TRANSLATE_NOOP("App::Property", _tip))
+            vobj.EndArrow = False
+        if "PointColorIfAttached" not in pl:
+            vobj.addProperty("App::PropertyColor", "PointColorIfAttached",
+                             "Object Style",
+                             QT_TRANSLATE_NOOP(
+                                "App::Property", "Set attached point color"))
+        if "PointColorIfBoundary" not in pl:
+            vobj.addProperty("App::PropertyColor", "PointColorIfBoundary",
+                             "Object Style",
+                             QT_TRANSLATE_NOOP(
+                                "App::Property", "Set boundary segment " +
+                                "point color"))
+
+    def createPointMarkers(self, vobj):
+        # create markers data
+        coord = coin.SoCoordinate3()
+        color = coin.SoBaseColor()
+        style = coin.SoDrawStyle()
+        points = coin.SoPointSet()
+        # Alternative:
+        # points = coin.SoMarkerSet()
+        # points.markerIndex = coin.SoMarkerSet.CIRCLE_FILLED_9_9
+        # other values: 102-107(plus),
+        # 120-125 (circle line), 126-131 (circle filled)
+        color.rgb = (0, 0.7, 1)
+        style.pointSize = vobj.PointSize + 2
+        # add data to separator
+        sep = coin.SoSeparator()
+        sep.addChild(coord)
+        sep.addChild(color)
+        sep.addChild(style)
+        sep.addChild(points)
+        coord.setName("coord")
+        color.setName("color")
+        style.setName("style")
+        points.setName("points")
+        return sep
+
+    def createSpecialPoints(self, vobj):
+        if not hasattr(self, 'pts_attached'):
+            self.pts_attached = self.createPointMarkers(vobj)
+            self.pts_attached.getByName("coord").point.values = \
+                wireutils.getAttachedPointsCoordList(vobj.Object)
+            self.pts_attached.getByName("color").rgb = \
+                vobj.PointColorIfAttached[:-1]
+        if not hasattr(self, 'pts_boundary'):
+            self.pts_boundary = self.createPointMarkers(vobj)
+            self.pts_boundary.getByName("coord").point.values = \
+                wireutils.getBoundarySegCoordList(vobj.Object)
+            self.pts_boundary.getByName("color").rgb = \
+                vobj.PointColorIfBoundary[:-1]
+        self.onChanged(vobj, "Visibility")
+
+    def displaySpecialPoints(self, vobj):
+        if vobj.Visibility:
+            if hasattr(self, 'pts_attached'):
+                if vobj.RootNode.findChild(self.pts_attached) == -1:
+                    vobj.RootNode.addChild(self.pts_attached)
+            if hasattr(self, 'pts_boundary'):
+                if vobj.RootNode.findChild(self.pts_boundary) == -1:
+                    vobj.RootNode.addChild(self.pts_boundary)
+        else:
+            if hasattr(self, 'pts_attached'):
+                if vobj.RootNode.findChild(self.pts_attached) != -1:
+                    vobj.RootNode.removeChild(self.pts_attached)
+            if hasattr(self, 'pts_boundary'):
+                if vobj.RootNode.findChild(self.pts_boundary) != -1:
+                    vobj.RootNode.removeChild(self.pts_boundary)
+
+    def setSpecialPointsSize(self, vobj, size):
+        if hasattr(self, 'pts_attached'):
+            self.pts_attached.getByName("style").pointSize = size
+        if hasattr(self, 'pts_boundary'):
+            self.pts_boundary.getByName("style").pointSize = size
+
     def attach(self, vobj):
+        # Function called on document restored
+        # FreeCAD.Console.PrintMessage("Wireflex ViewProvider attach\n")
         super().attach(vobj)
+        self._set_properties(vobj)
+        self.createSpecialPoints(vobj)
+
+        # update point colors in objects created in Cables ver <=1.4
+        # this will be removed in the future
+        if hasattr(vobj, "PointColorIfAttached") and \
+                hasattr(vobj, "PointColorIfBoundary"):
+            black = (0.0, 0.0, 0.0, 0.0)
+            if vobj.PointColorIfAttached == vobj.PointColorIfBoundary == black:
+                vobj.PointColorIfAttached = (0, 170, 255)
+                vobj.PointColorIfBoundary = (130, 200, 0)
 
     def updateData(self, obj, prop):
         super().updateData(obj, prop)
+        if prop in ['Vrtxs_mid_idx', 'Vrtx_start', 'Vrtx_end', 'Vrtxs_mid',
+                    'Placement', 'Points']:
+            if hasattr(self, "pts_attached"):
+                self.pts_attached.getByName("coord").point.values = \
+                    wireutils.getAttachedPointsCoordList(obj)
+        if prop in ['BoundarySegmentStart', 'BoundarySegmentEnd', 'Placement',
+                    'Points', 'Shape']:
+            if hasattr(self, "pts_boundary"):
+                self.pts_boundary.getByName("coord").point.values = \
+                    wireutils.getBoundarySegCoordList(obj)
 
     def onChanged(self, vobj, prop):
         super().onChanged(vobj, prop)
+        if prop == 'Visibility':
+            self.displaySpecialPoints(vobj)
+        if prop == 'PointColorIfAttached':
+            if hasattr(self, 'pts_attached'):
+                self.pts_attached.getByName("color").rgb = \
+                    vobj.PointColorIfAttached[:-1]
+        if prop == 'PointColorIfBoundary':
+            if hasattr(self, 'pts_boundary'):
+                self.pts_boundary.getByName("color").rgb = \
+                    vobj.PointColorIfBoundary[:-1]
+        if prop == 'PointSize':
+            self.setSpecialPointsSize(vobj, vobj.PointSize + 2)
 
     def setEdit(self, vobj, mode=0):
         if mode == 1 or mode == 2:
@@ -306,10 +456,15 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
                 self.wb_before_edit = Gui.activeWorkbench()
                 Gui.activateWorkbench("CablesWorkbench")
                 Gui.activateWorkbench("DraftWorkbench")
+            self.setSpecialPointsSize(vobj, 11)
             Gui.runCommand("Cables_Edit")
             return True
 
         return None
+
+    def unsetEdit(self, vobj, mode):
+        super().unsetEdit(vobj, mode)
+        self.setSpecialPointsSize(vobj, vobj.PointSize + 2)
 
 
 def make_wireflex(plist=None):
@@ -332,8 +487,24 @@ def make_wireflex(plist=None):
     pl.Rotation.Q = (0.0, 0.0, 0.0, 1.0)
     pl.Base = wireutils.getVector(plist[0])
     vpoints = []
-    for plink in plist:
-        vpoints.append(wireutils.getVector(plink))
+    if len(plist) == 1:
+        pobj = plist[0][0]
+        if hasattr(pobj, "Points"):
+            vpoints = [p+pobj.Placement.Base for p in pobj.Points]
+        elif hasattr(pobj, "Shape") and pobj.Shape.Vertexes > 1:
+            vpoints = [pobj.Shape.Vertexes[0].Point,
+                       pobj.Shape.vertexes[-1].Point]
+        else:
+            FreeCAD.Console.PrintError("make_wireflex", translate(
+                "Cables", "wrong object selected") + "\n")
+            return None
+        base_wire = make_wireflex_from_vectors(vpoints)
+        base_wire.PathType = 'Wire'
+        return base_wire
+    else:
+        for plink in plist:
+            vpoints.append(wireutils.getVector(plink))
+    FreeCAD.Console.PrintMessage(f"plist={plist}, vpoints={vpoints}\n")
     base_wire = Draft.make_wire(vpoints, placement=pl, closed=False,
                                 face=False, support=None)
     if plist[0][1]:

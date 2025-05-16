@@ -26,7 +26,7 @@ class CablesEdit(gui_edit.Edit):
         self.gui_tools_repository.add('Wire', DraftWireFlexGuiTools())
 
     def Activated(self):
-        FreeCAD.Console.PrintMessage("This is CablesEdit\n")
+        # FreeCAD.Console.PrintMessage("This is CablesEdit\n")
         if not hasattr(FreeCAD, 'activeDraftCommand'):
             wb_before_edit = Gui.activeWorkbench()
             Gui.activateWorkbench("DraftWorkbench")

@@ -3,7 +3,7 @@
 
 import FreeCAD
 import Part
-import draftgeoutils
+import DraftGeomUtils
 from freecad.cables import wireFlex
 from freecad.cables import translate
 
@@ -204,13 +204,22 @@ def reprintSelection(prefix, slist):
 
 def getCurveParameter(curve, point):
     """It returns curve parameter for point
-    For bslines: the nearest point parameter is returned
+    For bsplines: the nearest point parameter is returned or None
     For other curves: point has to lie on curve, otherwise it returns None
     """
     par = curve.parameter(point)
     v = curve.value(par)
+    tol_b = 1e-1    # increased tolerance for BSplines
     if curve.TypeId == 'Part::GeomBSplineCurve':
-        return par
+        if v.isEqual(point, tol_b):
+            return par
+        elif par in curve.getKnots() and par != 0:
+            # this is true for obj.Points in BSpline_K (point -> Knot)
+            return par
+        elif par in [curve.parameter(i) for i in curve.getPoles()] and \
+                par != 0:
+            # this is true for obj.Points in BSpline_P (point -> Pole)
+            return par
     elif v.isEqual(point, tol):
         return par
     else:
@@ -257,8 +266,9 @@ def getIndexForNewPoint(obj, edgename, vector):
         if p is None:
             FreeCAD.Console.PrintError(translate(
                 "Cables", "The new point is not lying on edge") + "\n")
+            return None
         min_diff = None
-        min_idx = None
+        min_idx = 0
         for i, pt in enumerate(points):
             pe = getCurveParameter(edge.Curve, pt+obj.Placement.Base)
             if pe is None:
@@ -330,10 +340,10 @@ def getIndexForPointToEdit(obj, vector):
                 pe = getCurveParameter(e.Curve, pt)
                 if pe is not None:
                     pts_on_edge.append(i)
-            p = p - obj.Placement.Base
+            v = vector - obj.Placement.Base
             if pts_on_edge:
-                p1_idx = draftgeoutils.general.findClosest(
-                    p, [points[n] for n in pts_on_edge])
+                p1_idx = DraftGeomUtils.findClosest(
+                    v, [points[n] for n in pts_on_edge])
                 return pts_on_edge[p1_idx]
     FreeCAD.Console.PrintError(translate(
          "Cables", "Proper point not found" + "\n"))

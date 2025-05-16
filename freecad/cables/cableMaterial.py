@@ -8,7 +8,10 @@ import Arch
 
 multi_names3 = {'J': 0, 'L1': 2, 'N': 4, 'PE': 5, 'CU': 6}
 multi_names5 = {'J': 0, 'L1': 1, 'L2': 2, 'L3': 3, 'N': 4, 'PE': 5, 'CU': 6}
-multi_list = {'cableMultiMat3w': multi_names3, 'cableMultiMat5w': multi_names5}
+multi_names8 = {'J': 0, 'P1A': 9, 'P1B': 10, 'P2A': 1, 'P2B': 7, 'P3A': 11,
+                'P3B': 12, 'P4A': 4, 'P4B': 8, 'CU': 6}
+multi_list = {'cableMultiMat3w': multi_names3, 'cableMultiMat5w': multi_names5,
+              'cableMultiMat8w': multi_names8}
 mat_table = [
     {'name': 'InsulJacket',
      'mat_name': 'PVC-Generic',
@@ -37,6 +40,30 @@ mat_table = [
     {'name': 'Cu',
      'mat_name': 'Copper-Generic',
      'color': (184, 115, 51)
+     },
+    {'name': 'InsulLightBrown',
+     'mat_name': 'PVC-Generic',
+     'color': (136, 97, 58)
+     },
+    {'name': 'InsulLightBlue',
+     'mat_name': 'PVC-Generic',
+     'color': (135, 197, 255)
+     },
+    {'name': 'InsulOrange',
+     'mat_name': 'PVC-Generic',
+     'color': (243, 112, 66)
+     },
+    {'name': 'InsulLightOrange',
+     'mat_name': 'PVC-Generic',
+     'color': (254, 216, 177)
+     },
+    {'name': 'InsulGreen',
+     'mat_name': 'PVC-Generic',
+     'color': (47, 205, 102)
+     },
+    {'name': 'InsulLightGreen',
+     'mat_name': 'PVC-Generic',
+     'color': (167, 243, 190)
      }
     ]
 

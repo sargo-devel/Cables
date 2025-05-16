@@ -29,13 +29,13 @@ import os
 import math
 import FreeCAD
 import ArchComponent
-import Arch
 import ArchPipe
 import Draft
 import DraftGeomUtils
 import Part
 from freecad.cables import wireFlex
 from freecad.cables import wireutils
+from freecad.cables import compoundPath
 from freecad.cables import iconPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
@@ -57,6 +57,13 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             # IFC2x3 does not know a Cable Segment
             obj.IfcType = "Building Element Proxy"
+        # self.setDefaultShapeParameters(obj)
+
+    def setDefaultShapeParameters(self, obj):
+        obj.StrippedWireLength = 8
+        obj.SubWiresBoundarySegmentStart = 2.0
+        obj.SubWiresBoundarySegmentEnd = 10.0
+        obj.SubWiresPathType = 'Wire'
 
     def setProperties(self, obj):
         ArchPipe._ArchPipe.setProperties(self, obj)
@@ -84,7 +91,7 @@ class ArchCable(ArchPipe._ArchPipe):
                                 "lines: base wire, sub profiles, sub wires"))
         if "StrippedWireLength" not in pl:
             obj.addProperty("App::PropertyLength", "StrippedWireLength",
-                            "Cable",
+                            "CableShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Offset from the " +
                                 "bare subwire end to its insulation"))
@@ -96,14 +103,14 @@ class ArchCable(ArchPipe._ArchPipe):
                                 "sub profiles, sub wires"))
         if "BaseWireFilletRadius" not in pl:
             obj.addProperty("App::PropertyLength", "BaseWireFilletRadius",
-                            "Cable",
+                            "CableShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Changes fillet " +
                                 "radius of base object which finally " +
                                 "changes fillet radius of a cable"))
         if "SubWiresFilletRadius" not in pl:
             obj.addProperty("App::PropertyLength", "SubWiresFilletRadius",
-                            "Cable",
+                            "CableShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Changes fillet " +
                                 "radius of all sub wires objects"))
@@ -115,13 +122,13 @@ class ArchCable(ArchPipe._ArchPipe):
                                 "attachment offset angle"))
         if "ConductorGauge" not in pl:
             obj.addProperty("App::PropertyFloat", "ConductorGauge",
-                            "CableDimensions",
+                            "CableShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Gauge [mm^2] of conductor " +
                                 "wire if profile not used"))
         if "InsulationThickness" not in pl:
             obj.addProperty("App::PropertyLength", "InsulationThickness",
-                            "CableDimensions",
+                            "CableShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Thickness of single " +
                                 "insulation if profile not used"))
@@ -131,9 +138,35 @@ class ArchCable(ArchPipe._ArchPipe):
                 "App::Property", "An optional closed profile to base this " +
                 "cable on"))
         if "Length" in pl and obj.getGroupOfProperty("Length") == "Pipe":
-            obj.setGroupOfProperty("Length", "CableDimensions")
+            obj.setGroupOfProperty("Length", "CableShape")
             obj.setDocumentationOfProperty("Length", QT_TRANSLATE_NOOP(
                 "App::Property", "The length of this cable"))
+        if "BaseWirePathType" not in pl:
+            obj.addProperty("App::PropertyEnumeration", "BaseWirePathType",
+                            "CableShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Type of base wire shape"))
+            obj.BaseWirePathType = ['Wire', 'BSpline_P', 'BSpline_K',
+                                    'Customized']
+        if "SubWiresPathType" not in pl:
+            obj.addProperty("App::PropertyEnumeration", "SubWiresPathType",
+                            "CableShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Type of all sub wires " +
+                                "shape"))
+            obj.SubWiresPathType = ['Wire', 'BSpline_P', 'BSpline_K']
+        if "SubWiresBoundarySegmentStart" not in pl:
+            obj.addProperty("App::PropertyLength",
+                            "SubWiresBoundarySegmentStart", "CableShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Length of boundary " +
+                                "segment at the start of each sub wire"))
+        if "SubWiresBoundarySegmentEnd" not in pl:
+            obj.addProperty("App::PropertyLength",
+                            "SubWiresBoundarySegmentEnd", "CableShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Length of boundary " +
+                                "segment at the end of each sub wire"))
 
         proplist = ["Diameter", "OffsetStart", "OffsetEnd", "ProfileType",
                     "WallThickness"]
@@ -144,8 +177,13 @@ class ArchCable(ArchPipe._ArchPipe):
 
         self.Type = "Pipe"
 
+    def onDocumentRestored(self, obj):
+        ArchPipe._ArchPipe.onDocumentRestored(self, obj)
+        # self.setProperties(obj)
+        # obj.Proxy = self
+
     def onChanged(self, obj, prop):
-        # FreeCAD.Console.PrintMessage(f"ArchCable.onChanged(start): {prop}\n")
+        # FreeCAD.Console.PrintMessage(f"{obj.Label}", f"onChanged(start): {prop}\n")
         ArchPipe._ArchPipe.onChanged(self, obj, prop)
         if prop == "ShowSubLines" and hasattr(obj, "SubProfiles") \
            and hasattr(obj, "SubWires"):
@@ -172,11 +210,43 @@ class ArchCable(ArchPipe._ArchPipe):
                 obj.Base.Links[-1].FilletRadius = obj.BaseWireFilletRadius
             else:
                 obj.Base.FilletRadius = obj.BaseWireFilletRadius
+        if prop == "BaseWirePathType":
+            if not obj.BaseWirePathType == 'Customized':
+                if hasattr(obj.Base, 'Links') and \
+                        len(obj.Base.Shape.Wires) > 1:
+                    if hasattr(obj.Base.Links[0], 'PathType'):
+                        obj.Base.Links[0].PathType = obj.BaseWirePathType
+                    if hasattr(obj.Base.Links[-1], 'PathType'):
+                        obj.Base.Links[-1].PathType = obj.BaseWirePathType
+                elif hasattr(obj.Base, 'PathType'):
+                    obj.Base.PathType = obj.BaseWirePathType
+                if obj.BaseWirePathType == 'Wire':
+                    obj.setPropertyStatus('BaseWireFilletRadius', "-Hidden")
+                if obj.BaseWirePathType == 'BSpline_P' or \
+                        obj.BaseWirePathType == 'BSpline_K':
+                    obj.setPropertyStatus('BaseWireFilletRadius', "Hidden")
         if prop == "SubWiresFilletRadius":
             if obj.SubWires:
                 for subw in obj.SubWires:
                     if hasattr(subw, "FilletRadius"):
                         subw.FilletRadius = obj.SubWiresFilletRadius
+        if prop == "SubWiresPathType":
+            if obj.SubWires:
+                for subw in obj.SubWires:
+                    if hasattr(subw, "PathType"):
+                        subw.PathType = obj.SubWiresPathType
+        if prop == "SubWiresBoundarySegmentStart":
+            if obj.SubWires:
+                for subw in obj.SubWires:
+                    if hasattr(subw, "BoundarySegmentStart"):
+                        subw.BoundarySegmentStart = \
+                            obj.SubWiresBoundarySegmentStart
+        if prop == "SubWiresBoundarySegmentEnd":
+            if obj.SubWires:
+                for subw in obj.SubWires:
+                    if hasattr(subw, "BoundarySegmentEnd"):
+                        subw.BoundarySegmentEnd = \
+                            obj.SubWiresBoundarySegmentEnd
         if prop == "CableRotation":
             obj.Profile.AttachmentOffset.Rotation.Angle = \
                 math.radians(obj.CableRotation)
@@ -184,8 +254,7 @@ class ArchCable(ArchPipe._ArchPipe):
             obj.Diameter = math.sqrt(obj.ConductorGauge/math.pi)*2 + \
                 obj.InsulationThickness.Value*2
         if prop == "StrippedWireLength":
-            obj.OffsetStart = obj.StrippedWireLength
-            obj.OffsetEnd = obj.StrippedWireLength
+            self.updateStartEndOffsets(obj)
         if prop == "Profile":
             if obj.Profile:
                 obj.setPropertyStatus("ConductorGauge", "Hidden")
@@ -193,16 +262,40 @@ class ArchCable(ArchPipe._ArchPipe):
             else:
                 obj.setPropertyStatus("ConductorGauge", "-Hidden")
                 obj.setPropertyStatus("InsulationThickness", "-Hidden")
+        if prop == 'SubWiresPathType' and obj.Profile:
+            if obj.SubWiresPathType == 'Wire':
+                hide_list = ['SubWiresBoundarySegmentStart',
+                             'SubWiresBoundarySegmentEnd']
+                unhide_list = ['SubWiresFilletRadius']
+            if obj.SubWiresPathType == 'BSpline_P':
+                hide_list = ['SubWiresFilletRadius']
+                unhide_list = ['SubWiresBoundarySegmentStart',
+                               'SubWiresBoundarySegmentEnd']
+            if obj.SubWiresPathType == 'BSpline_K':
+                hide_list = ['SubWiresFilletRadius']
+                unhide_list = ['SubWiresBoundarySegmentStart',
+                               'SubWiresBoundarySegmentEnd']
+            for element in hide_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, "Hidden")
+            for element in unhide_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, "-Hidden")
 
     def onBeforeChange(self, obj, prop):
-        # FreeCAD.Console.PrintMessage(f"WireFlex.onBeforeChange: {prop} \n")
+        # FreeCAD.Console.PrintMessage(f"{obj.Label}", f"onBeforeChange(start): {prop}\n")
         super().onBeforeChange(obj, prop)
-        if prop == "BaseWireFilletRadius" and obj.SubProfiles:
-            obj.SubProfiles[1].MapMode = "Deactivated"
+        if hasattr(obj, 'SubProfiles') and len(obj.SubProfiles) > 1:
+            self.readjustEndProfile(obj)
+            if prop == "BaseWireFilletRadius":
+                obj.SubProfiles[1].MapMode = "Deactivated"
+            if prop == "BaseWirePathType":
+                obj.SubProfiles[1].MapMode = "Deactivated"
 
     def execute(self, obj):
-        # FreeCAD.Console.PrintMessage("ArchCable.execute: start\n")
+        # FreeCAD.Console.PrintMessage(f"{obj.Label}", "execute start\n")
         if not obj.SubProfiles:
+            self.updateStartEndOffsets(obj)
             ArchPipe._ArchPipe.execute(self, obj)
             pl = obj.Placement
             main_shape = obj.Shape
@@ -210,10 +303,15 @@ class ArchCable(ArchPipe._ArchPipe):
                 return
             shapes = []
             shapes.append(main_shape)
-            shapes += self.buildStrips(obj)
+            if obj.OffsetStart > 0 and obj.OffsetEnd > 0:
+                shapes.extend(self.buildStrips(obj))
             sh = Part.makeCompound(shapes)
             obj.Shape = self.processSubShapes(obj, sh, pl)
         else:
+            # check if subprofiles need recompute
+            for s in obj.SubProfiles:
+                if not s.isValid:
+                    s.MapMode = "Deactivated"
             pl = obj.Placement
             main_shape = self.makeMainShape(obj)
             if not main_shape:
@@ -227,7 +325,7 @@ class ArchCable(ArchPipe._ArchPipe):
             self.readjustEndProfile(obj)
             self.rotateEndProfile(obj)
             self.readjustSubWires(obj)
-        # FreeCAD.Console.PrintMessage("ArchCable.execute: end\n")
+        # FreeCAD.Console.PrintMessage(f"{obj.Label}", "execute end\n")
 
     def getWire(self, obj):
         if hasattr(obj.Base, 'Shape') and len(obj.Base.Shape.Wires) > 1:
@@ -258,7 +356,7 @@ class ArchCable(ArchPipe._ArchPipe):
     def isBasePathContinuous(self, obj):
         '''Checks if base path (compound of many wires) is properly constructed
         It checks if:
-        1. the path is continous
+        1. the path is continuous
         2. the first vertex of first wire is at the begining of path
         3. the last vertex of last wire is at the end of path
         '''
@@ -271,15 +369,15 @@ class ArchCable(ArchPipe._ArchPipe):
                         wire.Vertexes[-1].Point, tol):
                     last_vertex = wire.Vertexes[0]
                 else:
-                    FreeCAD.Console.PrintError(translate(
-                        "Cables", "Base compound object not continous or " +
+                    FreeCAD.Console.PrintError(f"{obj.Label}", translate(
+                        "Cables", "Base compound object not continuous or " +
                         "wrong direction of first wire in compound")
                         + "\n")
                     return False
             else:
                 last_vertex = wire.Vertexes[-1]
         if last_vertex.Point.isEqual(wire.Vertexes[0].Point, tol):
-            FreeCAD.Console.PrintError(translate(
+            FreeCAD.Console.PrintError(f"{obj.Label}", translate(
                 "Cables", "Base compound has wrong direction of last wire")
                 + "\n")
             return False
@@ -296,13 +394,28 @@ class ArchCable(ArchPipe._ArchPipe):
                 v2 = obj.Base.Shape.Vertexes[0].Point
             else:
                 v2 = obj.Base.Shape.Vertexes[i].Point
-            edge = Part.LineSegment(v1, v2).toShape()
-            circle = Part.Circle(v1, norm, radius)
-            cprof = Part.Wire([Part.Edge(circle)])
-            wire = Part.Wire([edge])
-            shape = wire.makePipeShell([cprof], True, False, 2)
-            shapes.append(shape)
+            if not v1.isEqual(v2, tol):
+                edge = Part.LineSegment(v1, v2).toShape()
+                circle = Part.Circle(v1, norm, radius)
+                cprof = Part.Wire([Part.Edge(circle)])
+                wire = Part.Wire([edge])
+                shape = wire.makePipeShell([cprof], True, False, 2)
+                shapes.append(shape)
         return shapes
+
+    def updateStartEndOffsets(self, obj):
+        if hasattr(obj.Base, "Shape") and len(obj.Base.Shape.Wires) > 0:
+            w = obj.Base.Shape.Wires[0]
+            max_start_offset = (
+                w.Vertexes[0].Point-w.Vertexes[1].Point).Length - 1.0
+            max_end_offset = (
+                w.Vertexes[-1].Point-w.Vertexes[-2].Point).Length - 1.0
+            offset_start = min(obj.StrippedWireLength, max_start_offset)
+            offset_end = min(obj.StrippedWireLength, max_end_offset)
+            if obj.OffsetStart != offset_start:
+                obj.OffsetStart = offset_start
+            if obj.OffsetEnd != offset_end:
+                obj.OffsetEnd = offset_end
 
     def calculateCableLength(self, obj):
         if obj.SubWires:
@@ -361,7 +474,6 @@ class ArchCable(ArchPipe._ArchPipe):
             cl.MapReversed = False
             cl.AttachmentOffset = pl
             profiles.append(cl)
-            Arch.addComponents(profiles, obj)
             obj.SubProfiles = profiles
             obj.Profile = obj.SubProfiles[0]
         return profiles
@@ -383,7 +495,6 @@ class ArchCable(ArchPipe._ArchPipe):
                 w.MapMode = 'Translate'
                 w.Vrtx_start = (profile, 'Vertex'+str(i+1))
                 wires.append(w)
-        Arch.addComponents(wires, obj)
         obj.SubWires = wires
         return wires
 
@@ -406,13 +517,21 @@ class ArchCable(ArchPipe._ArchPipe):
         return shapes
 
     def buildSingleSubShape(self, obj, profile_out, profile_in, wire):
-        if profile_in:
-            wire = self.addOffsetToWire(obj, wire)
-            shape = wire.makePipeShell([profile_out], True, False, 2)
-            shape_in = wire.makePipeShell([profile_in], True, False, 2)
-            shape = shape.cut(shape_in)
-        else:
-            shape = wire.makePipeShell([profile_out], True, False, 2)
+        shape = None
+        try:
+            if profile_in:
+                wire = self.addOffsetToWire(obj, wire)
+                shape = wire.makePipeShell([profile_out], True, False, 2)
+                shape_in = wire.makePipeShell([profile_in], True, False, 2)
+                shape = shape.cut(shape_in)
+            else:
+                shape = wire.makePipeShell([profile_out], True, False, 2)
+        except Part.OCCError:
+            FreeCAD.Console.PrintError(
+                f"buildSingleSubShape(Label={obj.Label}): Part.OCCError, " +
+                translate("Cables", "unable to build subshape") + "\n")
+            wx = Part.Wire(wire.Edges[0])
+            shape = wx.makePipeShell([profile_out], True, False, 2)
         return shape
 
     def addOffsetToWire(self, obj, w):
@@ -435,19 +554,28 @@ class ArchCable(ArchPipe._ArchPipe):
         return w
 
     def readjustEndProfile(self, obj):
+        if not hasattr(obj, 'SubProfiles') or len(obj.SubProfiles) < 2:
+            return
         end_prof = obj.SubProfiles[1]
+        if not end_prof.AttachmentSupport or not obj.Base:
+            return
         old_pair = end_prof.AttachmentSupport[0][1]
         # e.g. old_pair = ('Vertex4','Edge3')
         v_last = len(obj.Base.Shape.Vertexes)
         e_last = len(obj.Base.Shape.Edges)
+        if v_last == 0 or e_last == 0:
+            return
         base_end_changed = False
-        for i, name in enumerate(old_pair):
-            if 'Vertex' in name:
-                if int(name.split('Vertex')[1]) != v_last:
-                    base_end_changed = True
-            if 'Edge' in name:
-                if int(name.split('Edge')[1]) != e_last:
-                    base_end_changed = True
+        try:
+            for i, name in enumerate(old_pair):
+                if 'Vertex' in name:
+                    if int(name.split('Vertex')[1]) != v_last:
+                        base_end_changed = True
+                if 'Edge' in name:
+                    if int(name.split('Edge')[1]) != e_last:
+                        base_end_changed = True
+        except ValueError:
+            base_end_changed = True
         if base_end_changed:
             end_prof.AttachmentSupport = [(obj.Base, 'Vertex'+str(v_last)),
                                           (obj.Base, 'Edge'+str(e_last))]
@@ -488,6 +616,7 @@ class ArchCable(ArchPipe._ArchPipe):
         """It keeps the first edge of subwire normal to cable start/end face
         Additionally it sets this edge length to 5mm
         """
+        first_edge_len = 5
         nr_subw = int(len(obj.SubWires)/2)
         for i, subw in enumerate(obj.SubWires):
             subp = obj.SubProfiles[0] if i < nr_subw else obj.SubProfiles[1]
@@ -495,9 +624,10 @@ class ArchCable(ArchPipe._ArchPipe):
             if i >= nr_subw:
                 norm = norm.negative()
             pts = subw.Points
-            pts[1] = pts[0] + norm*5
+            pts[1] = pts[0] + norm*first_edge_len
             if (subw.Points[1] != pts[1]) or (2 in subw.Vrtxs_mid_idx):
-                wireutils.removePointAttachment([(subw, 'Vertex2')])
+                wireutils.removePointAttachment(plist=None, point_idx=1,
+                                                obj=subw)
                 subw.Points = pts
 
     def setSubLinesLabels(self, obj):
@@ -518,9 +648,13 @@ class ArchCable(ArchPipe._ArchPipe):
             obj.SubProfiles[1].Label = prefix + tieB + prof
         if obj.Base:
             obj.Base.Label = prefix + base
-            if hasattr(obj.Base, 'Links') and len(obj.Base.Shape.Wires) > 1:
-                obj.Base.Links[0].Label = obj.Base.Label + suffixA
-                obj.Base.Links[-1].Label = obj.Base.Label + suffixB
+            if hasattr(obj.Base, 'Links') and len(obj.Base.Links) > 2:
+                if Draft.getType(obj.Base.Links[0]) == 'Wire' and \
+                        not hasattr(obj.Base.Links[0], 'Links'):
+                    obj.Base.Links[0].Label = obj.Base.Label + suffixA
+                if Draft.getType(obj.Base.Links[-1]) == 'Wire' and \
+                        not hasattr(obj.Base.Links[-1], 'Links'):
+                    obj.Base.Links[-1].Label = obj.Base.Label + suffixB
 
 
 class ViewProviderCable(ArchComponent.ViewProviderComponent):
@@ -547,6 +681,26 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
         if prop == "UseMaterialColor" and vobj.UseMaterialColor:
             self.colorize(vobj.Object)
         ArchComponent.ViewProviderComponent.onChanged(self, vobj, prop)
+
+    def claimChildren(self):
+        children = ArchComponent.ViewProviderComponent.claimChildren(self)
+        self.removeDuplicateSubElementsFromAdditions(self.Object)
+        if hasattr(self, "Object"):
+            if hasattr(self.Object, "SubProfiles"):
+                children.extend(self.Object.SubProfiles)
+            if hasattr(self.Object, "SubWires"):
+                children.extend(self.Object.SubWires)
+        return children
+
+    def removeDuplicateSubElementsFromAdditions(self, obj):
+        # Removes duplicates of children created in cables ver<=1.4
+        # Function will be removed in the future
+        addition_list = obj.Additions.copy()
+        for a in addition_list:
+            if a in obj.SubProfiles or a in obj.SubWires:
+                addition_list.remove(a)
+        if len(addition_list) != len(obj.Additions):
+            obj.Additions = addition_list
 
     def colorize(self, obj):
 
@@ -693,16 +847,17 @@ def getObjectsForCable(selectlist):
         if sel.TypeId == 'Part::Part2DObjectPython':
             if sel.Proxy.Type == 'Wire':
                 baselist.append(sel)
+        elif sel.TypeId == 'Part::FeaturePython':
+            if sel.Proxy.Type in ['Wire', 'Compound']:
+                baselist.append(sel)
+            if sel.Proxy.Type == 'Pipe' and sel.Base:
+                baselist.append(sel.Base)
         elif sel.TypeId == 'Part::Compound':
-            for sub_el in sel.Links:
-                if sub_el.TypeId == 'Part::Part2DObjectPython':
-                    if sub_el.Proxy.Type == 'Wire':
-                        baselist.append(sub_el)
+            baselist = [sel]
+            break
     if len(baselist) > 1:
-        baseobj = FreeCAD.ActiveDocument.addObject("Part::Compound",
-                                                   "Compound")
-        baseobj.Links = baselist
-        FreeCAD.ActiveDocument.recompute()
+        baseobj = compoundPath.make_compoundpath(baselist)
+        baseobj.recompute()
     elif len(baselist) == 1:
         baseobj = baselist[0]
 
@@ -734,6 +889,14 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         if profileobj:
             profileobj.ViewObject.hide()
     obj.Base = baseobj
+    if hasattr(obj.Base, "PathType"):
+        if obj.Base.PathType in obj.getEnumerationsOfProperty(
+                'BaseWirePathType'):
+            obj.BaseWirePathType = obj.Base.PathType
+        else:
+            obj.BaseWirePathType = 'Customized'
+    if hasattr(obj.Base, "FilletRadius"):
+        obj.BaseWireFilletRadius = obj.Base.FilletRadius
     if profileobj:
         obj.Profile = profileobj
     else:
@@ -746,6 +909,11 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         obj.Width = obj.Diameter
         obj.Height = obj.Diameter
         obj.SubColors = createSubColorsList(0)
+        obj.AutoLabelSubLines = True
+        hide_list = ['SubWiresPathType', 'SubWiresBoundarySegmentStart',
+                     'SubWiresBoundarySegmentEnd', 'SubWiresFilletRadius']
+        for element in hide_list:
+            obj.setPropertyStatus(element, "Hidden")
     if placement:
         obj.Placement = placement
     # SubProfiles
@@ -756,10 +924,10 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
             int(len(obj.Profile.Shape.Wires)-1)/2)
         # Subwires
         obj.Proxy.makeSubWires(obj)
+        obj.Proxy.setDefaultShapeParameters(obj)
         obj.ShowSubLines = True
         if obj.SubColors:
             obj.AutoLabelSubLines = True
-        obj.StrippedWireLength = 8
         # FreeCAD.ActiveDocument.recompute()
     return obj
 

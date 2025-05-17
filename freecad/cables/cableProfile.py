@@ -65,10 +65,12 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
             "Cables", "Cable needs to have number of wires > 0 and nonzero " +
             "wire gauge") + "\n")
         return None
+    p = None
     if profile[2] == 'F':
-        makeCableProfileF(label, profile[4:], nr_of_wires, wire_gauge_mm2)
+        p = makeCableProfileF(label, profile[4:], nr_of_wires, wire_gauge_mm2)
     if profile[2] == 'R':
-        makeCableProfileR(label, profile[4:], nr_of_wires, wire_gauge_mm2)
+        p = makeCableProfileR(label, profile[4:], nr_of_wires, wire_gauge_mm2)
+    return p
 
 
 def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,

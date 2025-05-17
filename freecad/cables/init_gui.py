@@ -45,12 +45,15 @@ class CablesWorkbench (Gui.Workbench):
         function.
         """
         from freecad.cables import cablesCommands
+        from freecad.cables import cablesEdit
 
         self.list_wires = ["Cables_WireFlex",
                            "Cables_AddVertex",
                            "Cables_DelVertex",
                            "Cables_AttachVertex",
-                           "Cables_RemoveVertexAttachment"]
+                           "Cables_RemoveVertexAttachment",
+                           "Cables_CompoundPath",
+                           "Cables_Edit"]
         self.list_cables = ["Cables_Profile",
                             "Cables_Cable",
                             "Cables_CableConduit",

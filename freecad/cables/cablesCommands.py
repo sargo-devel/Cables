@@ -7,8 +7,14 @@ import FreeCADGui
 from FreeCAD import Gui
 import Part
 from freecad.cables import wireutils
+from freecad.cables import archCable
+from freecad.cables import archCableBox
+from freecad.cables import archCableConnector
+from freecad.cables import archCableLightPoint
 from freecad.cables import wireFlex
 from freecad.cables import cableProfile
+from freecad.cables import cableMaterial
+from freecad.cables import cableSupport
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 

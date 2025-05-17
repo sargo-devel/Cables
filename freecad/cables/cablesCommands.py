@@ -79,7 +79,8 @@ class newWireFlexCommand:
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_WireFlex", "It creates a new line based on " +
                     "selected vertexes/objects. At least two vertexes" +
-                    "/objects have to be selected first")}
+                    "/objects have to be selected first. If only one object " +
+                    "is selected, a copy of it will be created.")}
 
 
 class addVertexCommand:
@@ -252,8 +253,9 @@ class newCableCommand:
                 "Accel": keyShorts['Cable'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_Cable", "It adds a new cable object from " +
-                    "WireFlex and profile. Select WireFlex object first " +
-                    "then a profile")}
+                    "WireFlex and a profile. Select WireFlex object first " +
+                    "(or sequence of wires, cables or conduits) then " +
+                    "optionally a profile at the end")}
 
 
 class newCableConduitCommand:

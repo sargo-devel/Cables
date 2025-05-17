@@ -39,8 +39,9 @@ class CablesEdit(gui_edit.Edit):
                 'MenuText': QT_TRANSLATE_NOOP("Cables_Edit", "Edit"),
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_Edit", "Edits the active object.\nPress E or "
-                    "ALT + Left Click to display context menu\non supported " +
-                    "nodes and on supported objects.")
+                    "ALT + Left Click or ALT + Left DubleClick\nto display " +
+                    "context menu on supported nodes\nand on supported " +
+                    "objects.")
                 }
 
 

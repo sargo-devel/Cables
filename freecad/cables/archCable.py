@@ -61,8 +61,10 @@ class ArchCable(ArchPipe._ArchPipe):
 
     def setDefaultShapeParameters(self, obj):
         obj.StrippedWireLength = 8
-        obj.SubWiresBoundarySegmentStart = 2.0
-        obj.SubWiresBoundarySegmentEnd = 10.0
+        if hasattr(obj, "SubWires") and obj.SubWires:
+            for w in obj.SubWires:
+                w.BoundarySegmentStart = 2.0
+                w.BoundarySegmentEnd = 10.0
         obj.SubWiresPathType = 'Wire'
 
     def setProperties(self, obj):
@@ -154,19 +156,8 @@ class ArchCable(ArchPipe._ArchPipe):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Type of all sub wires " +
                                 "shape"))
-            obj.SubWiresPathType = ['Wire', 'BSpline_P', 'BSpline_K']
-        if "SubWiresBoundarySegmentStart" not in pl:
-            obj.addProperty("App::PropertyLength",
-                            "SubWiresBoundarySegmentStart", "CableShape",
-                            QT_TRANSLATE_NOOP(
-                                "App::Property", "Length of boundary " +
-                                "segment at the start of each sub wire"))
-        if "SubWiresBoundarySegmentEnd" not in pl:
-            obj.addProperty("App::PropertyLength",
-                            "SubWiresBoundarySegmentEnd", "CableShape",
-                            QT_TRANSLATE_NOOP(
-                                "App::Property", "Length of boundary " +
-                                "segment at the end of each sub wire"))
+            obj.SubWiresPathType = ['Wire', 'BSpline_P', 'BSpline_K',
+                                    'Customized']
 
         proplist = ["Diameter", "OffsetStart", "OffsetEnd", "ProfileType",
                     "WallThickness"]
@@ -203,50 +194,47 @@ class ArchCable(ArchPipe._ArchPipe):
         if prop == "Label" and obj.AutoLabelSubLines:
             self.setSubLinesLabels(obj)
         if prop == "Shape":
-            obj.Length = self.calculateCableLength(obj)
+            length = self.calculateCableLength(obj)
+            if length != obj.Length:
+                obj.Length = length
+            self.updatePropsWireTypesAndRadius(obj)
         if prop == "BaseWireFilletRadius":
-            if hasattr(obj.Base, 'Links') and len(obj.Base.Shape.Wires) > 1:
-                obj.Base.Links[0].FilletRadius = obj.BaseWireFilletRadius
-                obj.Base.Links[-1].FilletRadius = obj.BaseWireFilletRadius
-            else:
-                obj.Base.FilletRadius = obj.BaseWireFilletRadius
+            if hasattr(obj.Base, 'FilletRadius'):
+                if obj.Base.FilletRadius != obj.BaseWireFilletRadius:
+                    obj.Base.FilletRadius = obj.BaseWireFilletRadius
+            if hasattr(obj.Base, 'MinimumFilletRadius'):
+                if obj.Base.MinimumFilletRadius != obj.BaseWireFilletRadius:
+                    obj.Base.MinimumFilletRadius = obj.BaseWireFilletRadius
         if prop == "BaseWirePathType":
             if not obj.BaseWirePathType == 'Customized':
                 if hasattr(obj.Base, 'Links') and \
                         len(obj.Base.Shape.Wires) > 1:
                     if hasattr(obj.Base.Links[0], 'PathType'):
-                        obj.Base.Links[0].PathType = obj.BaseWirePathType
+                        if obj.Base.Links[0].PathType != obj.BaseWirePathType:
+                            obj.Base.Links[0].PathType = obj.BaseWirePathType
                     if hasattr(obj.Base.Links[-1], 'PathType'):
-                        obj.Base.Links[-1].PathType = obj.BaseWirePathType
-                elif hasattr(obj.Base, 'PathType'):
-                    obj.Base.PathType = obj.BaseWirePathType
+                        if obj.Base.Links[-1].PathType != obj.BaseWirePathType:
+                            obj.Base.Links[-1].PathType = obj.BaseWirePathType
+                elif hasattr(obj.Base, 'PathType') and obj.BaseWirePathType \
+                        in obj.Base.getEnumerationsOfProperty('PathType'):
+                    if obj.Base.PathType != obj.BaseWirePathType:
+                        obj.Base.PathType = obj.BaseWirePathType
                 if obj.BaseWirePathType == 'Wire':
                     obj.setPropertyStatus('BaseWireFilletRadius', "-Hidden")
-                if obj.BaseWirePathType == 'BSpline_P' or \
-                        obj.BaseWirePathType == 'BSpline_K':
+                if obj.BaseWirePathType in ['BSpline_P', 'BSpline_K']:
                     obj.setPropertyStatus('BaseWireFilletRadius', "Hidden")
         if prop == "SubWiresFilletRadius":
             if obj.SubWires:
                 for subw in obj.SubWires:
                     if hasattr(subw, "FilletRadius"):
-                        subw.FilletRadius = obj.SubWiresFilletRadius
+                        if subw.FilletRadius != obj.SubWiresFilletRadius:
+                            subw.FilletRadius = obj.SubWiresFilletRadius
         if prop == "SubWiresPathType":
-            if obj.SubWires:
+            if not obj.SubWiresPathType == 'Customized' and obj.SubWires:
                 for subw in obj.SubWires:
                     if hasattr(subw, "PathType"):
-                        subw.PathType = obj.SubWiresPathType
-        if prop == "SubWiresBoundarySegmentStart":
-            if obj.SubWires:
-                for subw in obj.SubWires:
-                    if hasattr(subw, "BoundarySegmentStart"):
-                        subw.BoundarySegmentStart = \
-                            obj.SubWiresBoundarySegmentStart
-        if prop == "SubWiresBoundarySegmentEnd":
-            if obj.SubWires:
-                for subw in obj.SubWires:
-                    if hasattr(subw, "BoundarySegmentEnd"):
-                        subw.BoundarySegmentEnd = \
-                            obj.SubWiresBoundarySegmentEnd
+                        if subw.PathType != obj.SubWiresPathType:
+                            subw.PathType = obj.SubWiresPathType
         if prop == "CableRotation":
             obj.Profile.AttachmentOffset.Rotation.Angle = \
                 math.radians(obj.CableRotation)
@@ -264,17 +252,17 @@ class ArchCable(ArchPipe._ArchPipe):
                 obj.setPropertyStatus("InsulationThickness", "-Hidden")
         if prop == 'SubWiresPathType' and obj.Profile:
             if obj.SubWiresPathType == 'Wire':
-                hide_list = ['SubWiresBoundarySegmentStart',
-                             'SubWiresBoundarySegmentEnd']
+                hide_list = []
                 unhide_list = ['SubWiresFilletRadius']
             if obj.SubWiresPathType == 'BSpline_P':
                 hide_list = ['SubWiresFilletRadius']
-                unhide_list = ['SubWiresBoundarySegmentStart',
-                               'SubWiresBoundarySegmentEnd']
+                unhide_list = []
             if obj.SubWiresPathType == 'BSpline_K':
                 hide_list = ['SubWiresFilletRadius']
-                unhide_list = ['SubWiresBoundarySegmentStart',
-                               'SubWiresBoundarySegmentEnd']
+                unhide_list = []
+            if obj.SubWiresPathType == 'Customized':
+                hide_list = []
+                unhide_list = ['SubWiresFilletRadius']
             for element in hide_list:
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "Hidden")
@@ -656,6 +644,53 @@ class ArchCable(ArchPipe._ArchPipe):
                         not hasattr(obj.Base.Links[-1], 'Links'):
                     obj.Base.Links[-1].Label = obj.Base.Label + suffixB
 
+    def updatePropsWireTypesAndRadius(self, obj):
+        # update BaseWirePathType property
+        pathtypes = []
+        if hasattr(obj.Base, 'Links') and \
+                len(obj.Base.Shape.Wires) > 1:
+            if hasattr(obj.Base.Links[0], 'PathType'):
+                pathtypes.append(obj.Base.Links[0].PathType)
+            if hasattr(obj.Base.Links[-1], 'PathType'):
+                pathtypes.append(obj.Base.Links[-1].PathType)
+        elif hasattr(obj.Base, 'PathType'):
+            pathtypes.append(obj.Base.PathType)
+        s = set(pathtypes)
+        pathtype = s.pop() if len(s) == 1 else "Customized"
+        if pathtype in obj.getEnumerationsOfProperty('BaseWirePathType'):
+            if obj.BaseWirePathType != pathtype:
+                obj.BaseWirePathType = pathtype
+        else:
+            if obj.BaseWirePathType != "Customized":
+                obj.BaseWirePathType = "Customized"
+        # update SubWiresPathType property
+        pathtypes = []
+        for w in obj.SubWires:
+            if hasattr(w, 'PathType'):
+                pathtypes.append(w.PathType)
+        s = set(pathtypes)
+        pathtype = s.pop() if len(s) == 1 else "Customized"
+        if obj.SubWiresPathType != pathtype and \
+                pathtype in obj.getEnumerationsOfProperty('SubWiresPathType'):
+            obj.SubWiresPathType = pathtype
+        # update BaseWire radius
+        if hasattr(obj.Base, 'FilletRadius'):
+            if obj.BaseWireFilletRadius != obj.Base.FilletRadius:
+                obj.BaseWireFilletRadius = obj.Base.FilletRadius
+        elif hasattr(obj.Base, 'MinimumFilletRadius'):
+            if obj.BaseWireFilletRadius != obj.Base.MinimumFilletRadius:
+                obj.BaseWireFilletRadius = obj.Base.MinimumFilletRadius
+        # update SubWires fillet radius
+        radiuslist = []
+        for w in obj.SubWires:
+            if hasattr(w, 'FilletRadius'):
+                radiuslist.append(w.FilletRadius.Value)
+        s = set(radiuslist)
+        if len(s) == 1:
+            radius = s.pop()
+            if obj.SubWiresFilletRadius.Value != radius:
+                obj.SubWiresFilletRadius.Value = radius
+
 
 class ViewProviderCable(ArchComponent.ViewProviderComponent):
     """A View Provider for the ArchCable object
@@ -910,8 +945,7 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         obj.Height = obj.Diameter
         obj.SubColors = createSubColorsList(0)
         obj.AutoLabelSubLines = True
-        hide_list = ['SubWiresPathType', 'SubWiresBoundarySegmentStart',
-                     'SubWiresBoundarySegmentEnd', 'SubWiresFilletRadius']
+        hide_list = ['SubWiresPathType', 'SubWiresFilletRadius']
         for element in hide_list:
             obj.setPropertyStatus(element, "Hidden")
     if placement:

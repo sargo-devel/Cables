@@ -7,7 +7,9 @@ import FreeCADGui
 from FreeCAD import Gui
 import Part
 from freecad.cables import wireutils
+from freecad.cables import compoundPath
 from freecad.cables import archCable
+from freecad.cables import archCableConduit
 from freecad.cables import archCableBox
 from freecad.cables import archCableConnector
 from freecad.cables import archCableLightPoint
@@ -59,12 +61,12 @@ class newWireFlexCommand:
     def Activated(self):
         sel = wireutils.processGuiSelection(False, Part.Vertex, None)
         s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables"
+        c = "freecad.cables.wireFlex"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "WireFlex"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.wireFlex.make_wireflex({s})")
+        FreeCADGui.doCommand(f"{c}.make_wireflex({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -89,12 +91,12 @@ class addVertexCommand:
     def Activated(self):
         sel = wireutils.processGuiSelection(True, Part.Edge, wireFlex.WireFlex)
         s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables"
+        c = "freecad.cables.wireutils"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Add Vertex"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.wireutils.addPointToWire({s})")
+        FreeCADGui.doCommand(f"{c}.addPointToWire({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -118,12 +120,12 @@ class delVertexCommand:
         sel = wireutils.processGuiSelection(True, Part.Vertex,
                                             wireFlex.WireFlex)
         s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables"
+        c = "freecad.cables.wireutils"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Delete Vertex"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.wireutils.delPointFromWire({s})")
+        FreeCADGui.doCommand(f"{c}.delPointFromWire({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -148,12 +150,12 @@ class assignAttachmentCommand:
         sel = wireutils.processGuiSelection(False, Part.Vertex,
                                             wireFlex.WireFlex)
         s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables"
+        c = "freecad.cables.wireutils"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Attach Vertex"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.wireutils.assignPointAttachment({s})")
+        FreeCADGui.doCommand(f"{c}.assignPointAttachment({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -178,12 +180,12 @@ class removeAttachmentCommand:
         sel = wireutils.processGuiSelection(True, Part.Vertex,
                                             wireFlex.WireFlex)
         s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables"
+        c = "freecad.cables.wireutils"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Remove Vertex Attachment"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.wireutils.removePointAttachment({s})")
+        FreeCADGui.doCommand(f"{c}.removePointAttachment({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -207,12 +209,12 @@ class newCompoundPathCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
         s = wireutils.reprintSelection("doc", sel_obj)
-        c = "freecad.cables"
+        c = "freecad.cables.compoundPath"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "CompoundPath"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.compoundPath.make_compoundpath({s})")
+        FreeCADGui.doCommand(f"{c}.make_compoundpath({s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -234,12 +236,12 @@ class newCableCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
         s = wireutils.reprintSelection("doc", sel_obj)
-        c = "freecad.cables"
+        c = "freecad.cables.archCable"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.archCable.makeCable(selectlist={s})")
+        FreeCADGui.doCommand(f"{c}.makeCable(selectlist={s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -262,13 +264,12 @@ class newCableConduitCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getSelection()
         s = wireutils.reprintSelection("doc", sel_obj)
-        c = "freecad.cables"
+        c = "freecad.cables.archCableConduit"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "CableConduit"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.archCableConduit.makeCableConduit(" +
-                             f"selectlist={s})")
+        FreeCADGui.doCommand(f"{c}.makeCableConduit(selectlist={s})")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -291,7 +292,7 @@ class newCableConduitCommand:
 class newCableBoxCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
-        c = "freecad.cables"
+        c = "freecad.cables.archCableBox"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Box"))
         FreeCADGui.addModule(f"{c}")
@@ -299,10 +300,9 @@ class newCableBoxCommand:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(f"{c}.archCableBox.makeCableBox(" +
-                                 "placement=pl)")
+            FreeCADGui.doCommand(f"{c}.makeCableBox(placement=pl)")
         else:
-            FreeCADGui.doCommand(f"{c}.archCableBox.makeCableBox()")
+            FreeCADGui.doCommand(f"{c}.makeCableBox()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 
@@ -322,7 +322,7 @@ class newCableBoxCommand:
 class newCableConnectorCommand:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
-        c = "freecad.cables"
+        c = "freecad.cables.archCableConnector"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Connector"))
         FreeCADGui.addModule(f"{c}")
@@ -330,11 +330,10 @@ class newCableConnectorCommand:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(
-                f"{c}.archCableConnector.makeCableConnector(placement=pl)")
+            FreeCADGui.doCommand(f"{c}.makeCableConnector(placement=pl)")
         else:
             FreeCADGui.doCommand(
-                f"{c}.archCableConnector.makeCableConnector()")
+                f"{c}.makeCableConnector()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 
@@ -371,11 +370,11 @@ class newProfileCommand:
 
 class newMaterialCommand:
     def Activated(self):
-        c = "freecad.cables"
+        c = "freecad.cables.cableMaterial"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Materials"))
         FreeCADGui.addModule(f"{c}")
-        FreeCADGui.doCommand(f"{c}.cableMaterial.makeCableMaterials()")
+        FreeCADGui.doCommand(f"{c}.makeCableMaterials()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 
@@ -394,7 +393,7 @@ class newMaterialCommand:
 class newCableLightPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
-        c = "freecad.cables"
+        c = "freecad.cables.archCableLightPoint"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Light Point"))
         FreeCADGui.addModule(f"{c}")
@@ -402,11 +401,9 @@ class newCableLightPoint:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(
-                f"{c}.archCableLightPoint.makeCableLightPoint(placement=pl)")
+            FreeCADGui.doCommand(f"{c}.makeCableLightPoint(placement=pl)")
         else:
-            FreeCADGui.doCommand(
-                f"{c}.archCableLightPoint.makeCableLightPoint()")
+            FreeCADGui.doCommand(f"{c}.makeCableLightPoint()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 
@@ -427,7 +424,7 @@ class newCableLightPoint:
 class newSupportPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
-        c = "freecad.cables"
+        c = "freecad.cables.cableSupport"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Support Point"))
         FreeCADGui.addModule(f"{c}")
@@ -435,10 +432,9 @@ class newSupportPoint:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(
-                f"{c}.cableSupport.makeSupportPoint(placement=pl)")
+            FreeCADGui.doCommand(f"{c}.makeSupportPoint(placement=pl)")
         else:
-            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportPoint()")
+            FreeCADGui.doCommand(f"{c}.makeSupportPoint()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 
@@ -458,21 +454,21 @@ class newSupportPoint:
 class newSupportLine:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
-        c = "freecad.cables"
+        c = "freecad.cables.cableSupport"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Support Line"))
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 1:
             p1 = sel_obj[0].PickedPoints[0]
             p2 = sel_obj[1].PickedPoints[0]
-            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportLine(" +
+            FreeCADGui.doCommand(f"{c}.makeSupportLine(" +
                                  f"FreeCAD.{p1}, FreeCAD.{p2})")
         elif len(sel_obj) == 1:
             p1 = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand(
-                f"{c}.cableSupport.makeSupportLine(FreeCAD.{p1})")
+                f"{c}.makeSupportLine(FreeCAD.{p1})")
         else:
-            FreeCADGui.doCommand(f"{c}.cableSupport.makeSupportLine()")
+            FreeCADGui.doCommand(f"{c}.makeSupportLine()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
 

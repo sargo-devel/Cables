@@ -53,7 +53,6 @@ class WireFlex(Draft.Wire):
         obj.Label = 'WireFlex'
 
     def setDefaultShapeParameters(self, obj):
-        FreeCAD.Console.PrintMessage("Default parameters")
         obj.BoundarySegmentStart = 10.0
         obj.BoundarySegmentEnd = 10.0
         obj.Parameterization = 1.0
@@ -504,7 +503,6 @@ def make_wireflex(plist=None):
     else:
         for plink in plist:
             vpoints.append(wireutils.getVector(plink))
-    FreeCAD.Console.PrintMessage(f"plist={plist}, vpoints={vpoints}\n")
     base_wire = Draft.make_wire(vpoints, placement=pl, closed=False,
                                 face=False, support=None)
     if plist[0][1]:

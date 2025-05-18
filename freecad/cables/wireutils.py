@@ -1099,3 +1099,31 @@ def getMaximumRadius(wire):
         rlist.append(r_max)
     r = min(rlist)
     return r if r < very_long_r else 0
+
+
+def isBaseWire(obj):
+    """
+    It checks if obj is a base wire of a 'Pipe' object.
+    'Pipe' object includes: ArchPipe, ArchCable, ArchCableConduit.
+    If true it also returns the parent object of a base wire.
+
+    Parameters
+    ----------
+    obj : object
+
+    Returns
+    -------
+    list of tuples:
+        [(True, parentobj), ...] if obj is a base wire of parentobj,
+        otherwise [(False, None)]
+    """
+    plist = []
+    for p in obj.InList:
+        if hasattr(p, "TypeId") and p.TypeId == "Part::FeaturePython" and \
+                hasattr(p, "Proxy") and hasattr(p.Proxy, "Type") and \
+                p.Proxy.Type == "Pipe":
+            if hasattr(p, "Base") and p.Base == obj:
+                plist.append((True, p))
+    if not plist:
+        plist = [(False, None)]
+    return plist

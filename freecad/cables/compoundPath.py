@@ -184,6 +184,8 @@ class CompoundPath:
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(f"Execute started({obj.Label})" + "\n")
+        edg_cnt_old = len(obj.Shape.Edges) if hasattr(obj, "Shape") else 0
+
         shapes = []
         if obj.PathType == 'Simple':
             for element in obj.Links:
@@ -206,8 +208,20 @@ class CompoundPath:
             shapes.append(sh)
             obj.Points = points
         shape = Part.makeCompound(shapes)
+
+        edg_cnt_new = len(shape.Edges)
+        if edg_cnt_new < edg_cnt_old:
+            # fix potential attachment problem with parent's subprofile 2
+            # due to non existent attachment edge:
+            # "PositionBySupport: AttachEngine3D: subshape not found"
+            for exists, parent in wireutils.isBaseWire(obj):
+                if exists and hasattr(parent, "SubProfiles") and \
+                        len(parent.SubProfiles) == 2:
+                    # check if parent subprofiles need recompute
+                    parent.SubProfiles[1].MapMode = "Deactivated"
+
         obj.Shape = shape
-        # PrintMessage(f"Execute ended({obj.Label})" + "\n")
+        # FreeCAD.Console.PrintMessage(f"Execute ended({obj.Label})" + "\n")
 
     def getPointsList(self, obj, groups=False):
         '''Returns list of points properly ordered.

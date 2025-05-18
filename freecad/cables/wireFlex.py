@@ -200,6 +200,8 @@ class WireFlex(Draft.Wire):
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(f"Execute started({obj.Label})" + "\n")
+        edg_cnt_old = len(obj.Shape.Edges) if hasattr(obj, "Shape") else 0
+
         obj.positionBySupport()
         self.recalculate_points(obj)
         if obj.PathType == 'Wire':
@@ -208,6 +210,19 @@ class WireFlex(Draft.Wire):
             self.execute_bspline_p(obj)
         elif obj.PathType == 'BSpline_K':
             self.execute_bspline_k(obj)
+
+        edg_cnt_new = len(obj.Shape.Edges) if hasattr(obj, "Shape") else 0
+        if edg_cnt_new < edg_cnt_old:
+            # fix potential attachment problem with parent's subprofile 2
+            # due to non existent attachment edge:
+            # "PositionBySupport: AttachEngine3D: subshape not found"
+            for exists, parent in wireutils.isBaseWire(obj):
+                if exists and hasattr(parent, "SubProfiles") and \
+                        len(parent.SubProfiles) == 2:
+                    # check if parent subprofiles need recompute
+                    parent.SubProfiles[1].MapMode = "Deactivated"
+
+        # FreeCAD.Console.PrintMessage(f"Execute ended({obj.Label})" + "\n")
 
     def execute_bspline_p(self, obj):
         points = obj.Points

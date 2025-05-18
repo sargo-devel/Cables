@@ -298,7 +298,7 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             # check if subprofiles need recompute
             for s in obj.SubProfiles:
-                if not s.isValid:
+                if not s.isValid():
                     s.MapMode = "Deactivated"
             pl = obj.Placement
             main_shape = self.makeMainShape(obj)

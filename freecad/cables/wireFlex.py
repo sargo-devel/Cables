@@ -56,7 +56,9 @@ class WireFlex(Draft.Wire):
         obj.BoundarySegmentStart = 10.0
         obj.BoundarySegmentEnd = 10.0
         obj.Parameterization = 1.0
+        obj.TangencyCoefficient = 0.5
         obj.BoundaryTangents = True
+        obj.InnerTangents = True
         obj.PathType = 'Wire'
 
     def setProperties(self, obj):
@@ -101,6 +103,12 @@ class WireFlex(Draft.Wire):
                             "WireFlexShape",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Parameterization factor"))
+        if "TangencyCoefficient" not in pl:
+            obj.addProperty("App::PropertyFloat", "TangencyCoefficient",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Tangency coefficient for " +
+                                "inner tangents. Values in range [0,1]"))
         if "BoundaryTangents" not in pl:
             obj.addProperty("App::PropertyBool", "BoundaryTangents",
                             "WireFlexShape",
@@ -108,6 +116,12 @@ class WireFlex(Draft.Wire):
                                 "App::Property", "Enables/disables start " +
                                 "and end tangents on boundary BSpline " +
                                 "vertexes"))
+        if "InnerTangents" not in pl:
+            obj.addProperty("App::PropertyBool", "InnerTangents",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Enables/disables tangents " +
+                                "on inner BSpline knots"))
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -132,16 +146,19 @@ class WireFlex(Draft.Wire):
         if prop == 'PathType':
             if obj.PathType == 'Wire':
                 hide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
-                             'Parameterization', 'BoundaryTangents']
+                             'Parameterization', 'BoundaryTangents',
+                             'InnerTangents', 'TangencyCoefficient']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
                 hide_list = ['FilletRadius', 'Parameterization',
-                             'BoundaryTangents']
+                             'BoundaryTangents', 'InnerTangents',
+                             'TangencyCoefficient']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd']
             if obj.PathType == 'BSpline_K':
                 hide_list = ['FilletRadius']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
-                               'Parameterization', 'BoundaryTangents']
+                               'Parameterization', 'BoundaryTangents',
+                               'InnerTangents', 'TangencyCoefficient']
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
@@ -153,6 +170,16 @@ class WireFlex(Draft.Wire):
                 obj.BoundarySegmentStart = start_len + 1
             if abs(end_len-obj.BoundarySegmentEnd.Value) < tol:
                 obj.BoundarySegmentEnd = end_len + 1
+        if prop == "Parameterization":
+            if obj.Parameterization < 0.0:
+                obj.Parameterization = 0.0
+            if obj.Parameterization > 3.0:
+                obj.Parameterization = 3.0
+        if prop == "TangencyCoefficient":
+            if obj.TangencyCoefficient < 0.0:
+                obj.TangencyCoefficient = 0.0
+            if obj.TangencyCoefficient > 1.0:
+                obj.TangencyCoefficient = 1.0
 
     def get_vlist(self, obj):
         """It gets vector list of all attached wire points
@@ -222,6 +249,8 @@ class WireFlex(Draft.Wire):
                     # check if parent subprofiles need recompute
                     parent.SubProfiles[1].MapMode = "Deactivated"
 
+        if hasattr(obj, "Length"):
+            obj.Length = obj.Shape.Length
         # FreeCAD.Console.PrintMessage(f"Execute ended({obj.Label})" + "\n")
 
     def execute_bspline_p(self, obj):
@@ -233,6 +262,7 @@ class WireFlex(Draft.Wire):
         if obj.BoundarySegmentEnd > 0:
             edges.append(Part.LineSegment(points[-2], points[-1]).toShape())
         spline = Part.BSplineCurve()
+        # spline.buildFromPoles(points[idxs:idxe], False, 3, True)
         spline.buildFromPoles(points[idxs:idxe])
         edges.insert(idxs or 0, spline.toShape())
         try:
@@ -255,13 +285,17 @@ class WireFlex(Draft.Wire):
         spline = Part.BSplineCurve()
         vinit = (points[1] - points[0]).normalize()
         vfinal = (points[-1] - points[-2]).normalize()
+        vlist = self.getTangents(points[idxs:idxe], obj.TangencyCoefficient)
+        vlist = [vinit, *vlist, vfinal]
+        flags = [False]*len(points[idxs:idxe])
         knotSeq = self.parameterization(points[idxs:idxe],
                                         obj.Parameterization, False)
         if obj.BoundaryTangents:
-            spline.interpolate(points[idxs:idxe], Parameters=knotSeq,
-                               InitialTangent=vinit, FinalTangent=vfinal)
-        else:
-            spline.interpolate(points[idxs:idxe], Parameters=knotSeq)
+            flags[0] = flags[-1] = True
+        if obj.InnerTangents:
+            flags[1:-1] = [True]*(len(flags)-2)
+        spline.interpolate(points[idxs:idxe], Parameters=knotSeq,
+                           Tangents=vlist, TangentFlags=flags)
         edges.insert(idxs or 0, spline.toShape())
         try:
             shape = Part.Wire(edges)
@@ -311,6 +345,22 @@ class WireFlex(Draft.Wire):
             pl = pow(p.Length, a)
             params.append(params[-1] + pl)
         return params
+
+    def getTangents(self, points, fac=0.5):
+        """Computes a list of tangents vectors from a set of points.
+        fac (0-1) : tangent factor
+        returns list of vectors
+        """
+        tlist = []
+        for i in range(1, len(points)-1):
+            v1 = points[i] - points[i-1]
+            v2 = points[i+1] - points[i]
+            v1.normalize()
+            v2.normalize()
+            vt = v1*(1-fac) + v2*fac
+            vt.normalize()
+            tlist.append(vt)
+        return tlist
 
 
 class ViewProviderWireFlex(Draft.ViewProviderWire):

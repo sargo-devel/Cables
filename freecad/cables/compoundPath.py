@@ -244,12 +244,12 @@ class CompoundPath:
                     pts = link.Points
                     if reverse_link:
                         pts.reverse()
-                    pts_global = [v + link.Placement.Base for v in pts]
+                    pts_global = [link.Placement.multVec(v) for v in pts]
                     points.append(pts_global)
                 pts = next_link.Points
                 if reverse_next_link:
                     pts.reverse()
-                pts_global = [v + next_link.Placement.Base for v in pts]
+                pts_global = [next_link.Placement.multVec(v) for v in pts]
                 if not points[-1][-1].isEqual(pts_global[0], tol):
                     gaps.append((i, (points[-1][-1], pts_global[0])))
                 points.append(pts_global)

@@ -221,14 +221,13 @@ class WireFlex(Draft.Wire):
         pts = obj.Points
         for idx, vect in enumerate(vlist):
             if vect:
-                pts[idx] = vect - obj.Placement.Base
+                pts[idx] = obj.Placement.inverse().multVec(vect)
         if pts != obj.Points:
             obj.Points = pts
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(f"Execute started({obj.Label})" + "\n")
         edg_cnt_old = len(obj.Shape.Edges) if hasattr(obj, "Shape") else 0
-
         obj.positionBySupport()
         self.recalculate_points(obj)
         if obj.PathType == 'Wire':
@@ -554,7 +553,7 @@ def make_wireflex(plist=None):
     if len(plist) == 1:
         pobj = plist[0][0]
         if hasattr(pobj, "Points"):
-            vpoints = [p+pobj.Placement.Base for p in pobj.Points]
+            vpoints = [pobj.Placement.multVec(p) for p in pobj.Points]
         elif hasattr(pobj, "Shape") and pobj.Shape.Vertexes > 1:
             vpoints = [pobj.Shape.Vertexes[0].Point,
                        pobj.Shape.vertexes[-1].Point]

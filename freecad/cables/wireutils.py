@@ -271,7 +271,7 @@ def getIndexForNewPoint(obj, edgename, vector):
         min_diff = None
         min_idx = 0
         for i, pt in enumerate(points):
-            pe = getCurveParameter(edge.Curve, pt+obj.Placement.Base)
+            pe = getCurveParameter(edge.Curve, obj.Placement.multVec(pt))
             if pe is None:
                 continue
             if (p-pe > 0) and not min_diff:
@@ -315,7 +315,7 @@ def getIndexForPointToEdit(obj, vector):
     try:
         points = obj.Points
         for i, pt in enumerate(points):
-            pt = pt + obj.Placement.Base
+            pt = obj.Placement.multVec(pt)
             if pt.isEqual(vector, tol):
                 return i
         edges = []
@@ -336,11 +336,11 @@ def getIndexForPointToEdit(obj, vector):
         if p is not None:       # vector lies on edge
             pts_on_edge = []
             for i, pt in enumerate(points):
-                pt = pt + obj.Placement.Base
+                pt = obj.Placement.multVec(pt)
                 pe = getCurveParameter(e.Curve, pt)
                 if pe is not None:
                     pts_on_edge.append(i)
-            v = vector - obj.Placement.Base
+            v = obj.Placement.inverse().multVec(vector)
             if pts_on_edge:
                 p1_idx = DraftGeomUtils.findClosest(
                     v, [points[n] for n in pts_on_edge])
@@ -389,7 +389,7 @@ def addPointToWire(plist=None, point=None):
         return None
     vlist = obj.Proxy.get_vlist(obj)
     pts = obj.Points
-    pts.insert(idx, newVector-obj.Placement.Base)
+    pts.insert(idx, obj.Placement.inverse().multVec(newVector))
     vlist.insert(idx, None)
     obj.Points = pts
     obj.Proxy.update_vrtxs_mid(obj, vlist)
@@ -715,7 +715,7 @@ def getAttachedPointsCoordList(obj):
     coords = []
     for v in obj.Proxy.get_vlist(obj):
         if v:
-            vect = v - obj.Placement.Base
+            vect = obj.Placement.inverse().multVec(v)
             coords.append((vect.x, vect.y, vect.z))
     return tuple(coords)
 
@@ -743,7 +743,7 @@ def getBoundarySegCoordList(obj):
         if i[0] > 0 and obj.PathType != 'Wire':
             vrtxs = obj.Shape.Vertexes
             if abs((vrtxs[i1].Point-vrtxs[i2].Point).Length - i[0]) < tol:
-                vect = vrtxs[i2].Point - obj.Placement.Base
+                vect = obj.Placement.inverse().multVec(vrtxs[i2].Point)
             else:
                 v0 = obj.Points[i1]
                 v1 = obj.Points[i2]

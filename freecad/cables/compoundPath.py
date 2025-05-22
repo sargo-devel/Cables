@@ -583,6 +583,8 @@ def make_compoundpath(plist=None):
     if not plist:
         plist = wireutils.processGuiSelection(
             single=False, subshape_class=Part.Vertex, obj_proxy_class=None)
+        # get list of type [obj, ...]:
+        plist = [x[0] for x in plist] if plist and len(plist) > 1 else None
     if not plist:
         return None
     path = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",

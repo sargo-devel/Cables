@@ -554,9 +554,8 @@ def make_wireflex(plist=None):
         pobj = plist[0][0]
         if hasattr(pobj, "Points"):
             vpoints = [pobj.Placement.multVec(p) for p in pobj.Points]
-        elif hasattr(pobj, "Shape") and pobj.Shape.Vertexes > 1:
-            vpoints = [pobj.Shape.Vertexes[0].Point,
-                       pobj.Shape.vertexes[-1].Point]
+        elif hasattr(pobj, "Shape") and len(pobj.Shape.Vertexes) > 1:
+            vpoints = [v.Point for v in pobj.Shape.Vertexes]
         else:
             FreeCAD.Console.PrintError("make_wireflex", translate(
                 "Cables", "wrong object selected") + "\n")

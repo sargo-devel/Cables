@@ -987,6 +987,101 @@ def getBezCurve(wire, deg):
     return wire
 
 
+def getBSpline_P(vector_list, periodic=False, degree=3, interpolate=False):
+    """
+    It returns BSpline Curve created from input vector list.
+    Input vectors are assigned as poles.
+
+    Parameters
+    ----------
+    vector_list : list of vector objects
+    periodic: bool
+        if True output line will be periodic
+    degree : int
+        curve degree
+    interpolate : bool
+        if True output line will be interpolated
+
+    Returns
+    -------
+    curve : Curve objecy (BSpline Curve)
+    """
+    spline = Part.BSplineCurve()
+    spline.buildFromPoles(vector_list, periodic, degree, interpolate)
+    return spline
+
+
+def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True, innerTangents=True, tanCoeff=0.5, param=1.0):
+    """
+    It returns BSpline Curve created from input vector list.
+    Input vectors are assigned as knots.
+
+    Parameters
+    ----------
+    vector_list : list of vector objects
+    vstart, vend: vector objects
+        normalized vectors interpreted as tangents at start and end
+    boundaryTangents: bool
+        if True tangents on boundary BSpline vertexes are applied
+    innerTangents: bool
+        if True tangents on inner BSpline vertexes are applied
+    tanCoeff : float
+        range [0,1] tangency symetry coefficient (0.5 = symmetric)
+    param : float
+        it applies parameterization
+
+    Returns
+    -------
+    curve : Curve objecy (BSpline Curve)
+    """
+    spline = Part.BSplineCurve()
+    vlist = getInnerTangents(vector_list, tanCoeff)
+    vlist = [vstart, *vlist, vend]
+    flags = [False]*len(vector_list)
+    knotSeq = parameterization(vector_list, param, False)
+    if boundaryTangents:
+        flags[0] = flags[-1] = True
+    if innerTangents:
+        flags[1:-1] = [True]*(len(flags)-2)
+    spline.interpolate(vector_list, Parameters=knotSeq, Tangents=vlist,
+                       TangentFlags=flags)
+    return spline
+
+
+def parameterization(pts, a, closed):
+    """Computes a knot Sequence for a set of points.
+    fac (0-1) : parameterization factor
+    fac = 0 -> Uniform / fac=0.5 -> Centripetal / fac=1.0 -> Chord-Length
+    Function copied from Draft.bspline
+    """
+    if closed:
+        # we need to add the first point as the end point
+        pts.append(pts[0])
+    params = [0]
+    for i in range(1, len(pts)):
+        p = pts[i].sub(pts[i-1])
+        pl = pow(p.Length, a)
+        params.append(params[-1] + pl)
+    return params
+
+
+def getInnerTangents(points, fac=0.5):
+    """Computes a list of tangents vectors from a set of points.
+    fac (0-1) : tangent factor
+    returns list of vectors
+    """
+    tlist = []
+    for i in range(1, len(points)-1):
+        v1 = points[i] - points[i-1]
+        v2 = points[i+1] - points[i]
+        v1.normalize()
+        v2.normalize()
+        vt = v1*(1-fac) + v2*fac
+        vt.normalize()
+        tlist.append(vt)
+    return tlist
+
+
 def getMinimumRadius(wire):
     """
     It calculates minimum radius which appears in a wire

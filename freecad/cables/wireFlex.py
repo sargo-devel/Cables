@@ -233,9 +233,9 @@ class WireFlex(Draft.Wire):
         if obj.PathType == 'Wire':
             super().execute(obj)
         elif obj.PathType == 'BSpline_P':
-            self.execute_bspline_p(obj)
+            self.execute_bspline(obj, "P")
         elif obj.PathType == 'BSpline_K':
-            self.execute_bspline_k(obj)
+            self.execute_bspline(obj, "K")
 
         edg_cnt_new = len(obj.Shape.Edges) if hasattr(obj, "Shape") else 0
         if edg_cnt_new < edg_cnt_old:
@@ -252,7 +252,7 @@ class WireFlex(Draft.Wire):
             obj.Length = obj.Shape.Length
         # FreeCAD.Console.PrintMessage(f"Execute ended({obj.Label})" + "\n")
 
-    def execute_bspline_p(self, obj):
+    def execute_bspline(self, obj, bstype):
         points = obj.Points
         points, idxs, idxe = self.appendStartEndSegment(obj, points)
         edges = []
@@ -260,47 +260,21 @@ class WireFlex(Draft.Wire):
             edges.append(Part.LineSegment(points[0], points[1]).toShape())
         if obj.BoundarySegmentEnd > 0:
             edges.append(Part.LineSegment(points[-2], points[-1]).toShape())
-        spline = Part.BSplineCurve()
-        # spline.buildFromPoles(points[idxs:idxe], False, 3, True)
-        spline.buildFromPoles(points[idxs:idxe])
+        if bstype == 'K':
+            vinit = (points[1] - points[0]).normalize()
+            vfinal = (points[-1] - points[-2]).normalize()
+            spline = wireutils.getBSpline_K(
+                points[idxs:idxe], vinit, vfinal, obj.BoundaryTangents,
+                obj.InnerTangents, obj.TangencyCoefficient, obj.Parameterization)
+        if bstype == 'P':
+            # spline = wireutils.getBSpline_P(points[idxs:idxe], interpolate=True)
+            spline = wireutils.getBSpline_P(points[idxs:idxe])
         edges.insert(idxs or 0, spline.toShape())
         try:
             shape = Part.Wire(edges)
         except Part.OCCError:
-            FreeCAD.Console.PrintError(translate(
-                "Cables", "Error wiring edges for BSpline_P") + "\n")
-            shape = None
-        if shape:
-            obj.Shape = shape
-
-    def execute_bspline_k(self, obj):
-        points = obj.Points
-        points, idxs, idxe = self.appendStartEndSegment(obj, points)
-        edges = []
-        if obj.BoundarySegmentStart > 0:
-            edges.append(Part.LineSegment(points[0], points[1]).toShape())
-        if obj.BoundarySegmentEnd > 0:
-            edges.append(Part.LineSegment(points[-2], points[-1]).toShape())
-        spline = Part.BSplineCurve()
-        vinit = (points[1] - points[0]).normalize()
-        vfinal = (points[-1] - points[-2]).normalize()
-        vlist = self.getTangents(points[idxs:idxe], obj.TangencyCoefficient)
-        vlist = [vinit, *vlist, vfinal]
-        flags = [False]*len(points[idxs:idxe])
-        knotSeq = self.parameterization(points[idxs:idxe],
-                                        obj.Parameterization, False)
-        if obj.BoundaryTangents:
-            flags[0] = flags[-1] = True
-        if obj.InnerTangents:
-            flags[1:-1] = [True]*(len(flags)-2)
-        spline.interpolate(points[idxs:idxe], Parameters=knotSeq,
-                           Tangents=vlist, TangentFlags=flags)
-        edges.insert(idxs or 0, spline.toShape())
-        try:
-            shape = Part.Wire(edges)
-        except Part.OCCError:
-            FreeCAD.Console.PrintError(translate(
-                "Cables", "Error wiring edges for BSpline_K") + "\n")
+            FreeCAD.Console.PrintError(obj.Label, translate(
+                "Cables", "Error wiring edges for BSpline") + f"_{bstype}\n")
             shape = None
         if shape:
             obj.Shape = shape
@@ -328,38 +302,6 @@ class WireFlex(Draft.Wire):
             else:
                 points.insert(len(points)-2, new_point)
         return points, idx_s, idx_e
-
-    def parameterization(self, pts, a, closed):
-        """Computes a knot Sequence for a set of points.
-        fac (0-1) : parameterization factor
-        fac = 0 -> Uniform / fac=0.5 -> Centripetal / fac=1.0 -> Chord-Length
-        Function copied from Draft.bspline
-        """
-        if closed:
-            # we need to add the first point as the end point
-            pts.append(pts[0])
-        params = [0]
-        for i in range(1, len(pts)):
-            p = pts[i].sub(pts[i-1])
-            pl = pow(p.Length, a)
-            params.append(params[-1] + pl)
-        return params
-
-    def getTangents(self, points, fac=0.5):
-        """Computes a list of tangents vectors from a set of points.
-        fac (0-1) : tangent factor
-        returns list of vectors
-        """
-        tlist = []
-        for i in range(1, len(points)-1):
-            v1 = points[i] - points[i-1]
-            v2 = points[i+1] - points[i]
-            v1.normalize()
-            v2.normalize()
-            vt = v1*(1-fac) + v2*fac
-            vt.normalize()
-            tlist.append(vt)
-        return tlist
 
 
 class ViewProviderWireFlex(Draft.ViewProviderWire):

@@ -816,9 +816,9 @@ def makeConnectionWith2Fillets(edge1, edge2, ctype="Arc", radius=None, deg=3,
         endpar = c_tmp.parameter(vend)
         startpar = c_tmp.parameter(vstart)
         if edge.isSame(edge2):
-            x = c_tmp.value((startpar+endpar)/4.0)
+            x = c_tmp.value(startpar+(endpar-startpar)*0.25)
         else:
-            x = c_tmp.value((startpar+endpar)*3.0/4.0)
+            x = c_tmp.value(startpar+(endpar-startpar)*0.75)
         e1 = Part.Edge(Part.LineSegment(vstart, x))
         e2 = Part.Edge(Part.LineSegment(x, vend))
         # get temp wire

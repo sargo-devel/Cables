@@ -897,10 +897,13 @@ def makeConnectionWith2Fillets(edge1, edge2, ctype="Arc", radius=None, deg=3,
         # FreeCAD.Console.PrintMessage("[conn2fil] v1e is equal v2e\n")
         e2 = Part.Edge(Part.LineSegment(v1e, vend))
         wire = Part.Wire([e1, e2])
-        r_max = getMaximumRadius(wire)
-        r_min = radius if not None else defaultradius
-        r = r_max if r_max > r_min else r_min
-        wire = DraftGeomUtils.filletWire(wire, r)
+        if ctype == 'Arc':
+            r_max = getMaximumRadius(wire)
+            r_min = radius if not None else defaultradius
+            r = r_max if r_max > r_min else r_min
+            wire = DraftGeomUtils.filletWire(wire, r)
+        else:
+            wire = getBezCurve(wire, deg)
         wire = Part.Wire([edge1]+wire.Edges+[edge2])
         wire = _cleanWire(wire)
         return wire

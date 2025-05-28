@@ -193,6 +193,7 @@ class CompoundPath:
         elif obj.PathType == 'Complex':
             points, edges = self.getEdgesList(obj)
             if points is None or edges is None:
+                raise Part.OCCError("Unable to create shape")
                 return
             sh = Part.Wire(edges)
             shapes.append(sh)
@@ -200,6 +201,7 @@ class CompoundPath:
         elif obj.PathType == 'Wire':
             points, _ = self.getEdgesList(obj)
             if points is None:
+                raise Part.OCCError("Unable to create shape")
                 return
             sh = Part.makePolygon(points)
             if obj.MinimumFilletRadius.Value > 0:
@@ -233,9 +235,12 @@ class CompoundPath:
         for i, link in enumerate(obj.Links):
             if not hasattr(link, 'Points'):
                 FreeCAD.Console.PrintError(f"{link.Label}", translate(
-                    "Cables", "link object has no Points" +
-                    "property"))
-                continue
+                    "Cables", "link object has no Points property") + "\n")
+                return None, None
+            if i+1 < links_len and not hasattr(obj.Links[i+1], 'Points'):
+                FreeCAD.Console.PrintError(f"{obj.Links[i+1].Label}", translate(
+                    "Cables", "link object has no Points property") + "\n")
+                return None, None
             if i+1 < links_len:
                 next_link = obj.Links[i+1]
                 reverse_link, reverse_next_link = self.needsReverse(link,
@@ -266,6 +271,8 @@ class CompoundPath:
 
         # get points
         points, gaps = self.getPointsList(obj, groups=True)
+        if not points:
+            return None, None
 
         # add offset to points
         for i, pts in enumerate(points):

@@ -137,7 +137,7 @@ class CompoundPath:
                              'Ratio', 'Degree']
                 unhide_list = []
             if obj.PathType == 'Wire':
-                hide_list = []
+                hide_list = ['ConnectionType', 'Ratio', 'Degree']
                 unhide_list = ['ConnectionOffsetAngle', 'ConnectionOffsetDist',
                                'MinimumFilletRadius', 'SmallestBendingRadius',
                                'EdgeWithSmallestBendingRadius']

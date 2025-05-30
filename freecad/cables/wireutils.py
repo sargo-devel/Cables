@@ -1011,7 +1011,8 @@ def getBSpline_P(vector_list, periodic=False, degree=3, interpolate=False):
     return spline
 
 
-def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True, innerTangents=True, tanCoeff=0.5, param=1.0):
+def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True,
+                 innerTangents=True, tanCoeff=0.5, param=1.0):
     """
     It returns BSpline Curve created from input vector list.
     Input vectors are assigned as knots.
@@ -1123,8 +1124,10 @@ def getMinimumRadius(wire):
         if etype == bezier_t:
             c = e.Curve.toBSpline()
             arcslist = c.toBiArcs(bspline_approx_tol)
-            rmin = min([a.Radius for a in arcslist])
-            rlist.append(rmin)
+            arcs_r = [a.Radius for a in arcslist if hasattr(a, "Radius")]
+            if arcs_r:
+                rmin = min(arcs_r)
+                rlist.append(rmin)
             idxlist.append(i+1)
         # get radius from arc
         if etype == circle_t:

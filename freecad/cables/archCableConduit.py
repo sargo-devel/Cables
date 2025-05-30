@@ -123,7 +123,6 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             subshape = obj.SubConduits[0].Shape.copy()
             sh = Part.makeCompound([ownshape, subshape])
             obj.Shape = sh
-            return
 
     def mergeSubConduitShapes(self, obj):
         if hasattr(obj, 'MergeSubConduits') and obj.MergeSubConduits and \

@@ -136,9 +136,9 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
     List of type [(obj, subelement_name), ...]
     """
     if single or not preserve_sel_ord:
-        slist = FreeCAD.Gui.Selection.getSelectionEx('', 1, single)
+        slist = FreeCAD.Gui.Selection.getSelectionEx('', 0, single)
     else:
-        slist = FreeCAD.Gui.Selection.getCompleteSelection()
+        slist = FreeCAD.Gui.Selection.getCompleteSelection(0)
     retlist = None
     if not slist and single:
         FreeCAD.Console.PrintError(translate(

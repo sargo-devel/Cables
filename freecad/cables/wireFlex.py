@@ -510,7 +510,7 @@ def make_wireflex(plist=None):
             vpoints.append(wireutils.getVector(plink))
     base_wire = Draft.make_wire(vpoints, placement=pl, closed=False,
                                 face=False, support=None)
-    if plist[0][1]:
+    if plist[0][1] and plist[0][0].TypeId != 'App::Link':
         base_wire.AttachmentSupport = [plist[0]]
         base_wire.MapMode = 'Translate'
     WireFlex(base_wire)

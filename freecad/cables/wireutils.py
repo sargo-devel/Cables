@@ -8,7 +8,7 @@ import DraftGeomUtils
 from freecad.cables import wireFlex
 from freecad.cables import translate
 
-tol = 1e-4      # tolerance for isEqual() comparision
+tol = 1e-4      # tolerance for isEqual() comparison
 
 
 def getVector(obj, prop='Vrtx_start', shape_type='Vertex'):
@@ -229,7 +229,7 @@ def getCurveParameter(curve, point):
 
 def getIndexForNewPoint(obj, edgename, vector):
     """It calculates a new index in obj.Points for a given vector.
-    The fuction is designed to work with obj wires with Fillets or bsplines.
+    The function is designed to work with obj wires with Fillets or bsplines.
     The vector should belong to object edge.
     The obj should have Points property.
     Function does not modify any obj property, it just returns index
@@ -291,7 +291,7 @@ def getIndexForNewPoint(obj, edgename, vector):
 def getIndexForPointToEdit(obj, vector):
     """It calculates an index of corresponding point in obj.Points
     for a given vector.
-    The fuction is designed to work with obj wires with Fillets.
+    The function is designed to work with obj wires with Fillets.
     The vector should belong to one of object edges.
     The obj should have Points property.
     Function does not modify any obj property, it just returns index
@@ -1027,7 +1027,7 @@ def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True,
     innerTangents: bool
         if True tangents on inner BSpline vertexes are applied
     tanCoeff : float
-        range [0,1] tangency symetry coefficient (0.5 = symmetric)
+        range [0,1] tangency symmetry coefficient (0.5 = symmetric)
     param : float
         it applies parameterization
 

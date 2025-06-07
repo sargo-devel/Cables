@@ -34,7 +34,7 @@ from freecad.cables import QT_TRANSLATE_NOOP
 
 
 CLASS_COMPOUNDPATH_ICON = os.path.join(iconPath, "classCompoundPath.svg")
-tol = 1e-6     # tolerance for isEqual() comparision
+tol = 1e-6     # tolerance for isEqual() comparison
 
 
 class CompoundPath:

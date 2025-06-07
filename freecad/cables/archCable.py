@@ -42,7 +42,7 @@ from freecad.cables import QT_TRANSLATE_NOOP
 
 
 CLASS_CABLE_ICON = os.path.join(iconPath, "classArchCable.svg")
-tol = 1e-6     # tolerance for isEqual() comparision
+tol = 1e-6     # tolerance for isEqual() comparison
 
 
 class ArchCable(ArchPipe._ArchPipe):
@@ -345,7 +345,7 @@ class ArchCable(ArchPipe._ArchPipe):
         '''Checks if base path (compound of many wires) is properly constructed
         It checks if:
         1. the path is continuous
-        2. the first vertex of first wire is at the begining of path
+        2. the first vertex of first wire is at the beginning of path
         3. the last vertex of last wire is at the end of path
         '''
         last_vertex = None

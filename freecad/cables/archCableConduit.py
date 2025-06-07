@@ -36,7 +36,7 @@ from freecad.cables import QT_TRANSLATE_NOOP
 
 
 CLASS_CABLE_CONDUIT_ICON = os.path.join(iconPath, "classArchCableConduit.svg")
-tol = 1e-6     # tolerance for isEqual() comparision
+tol = 1e-6     # tolerance for isEqual() comparison
 
 
 class ArchCableConduit(ArchPipe._ArchPipe):
@@ -196,8 +196,8 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         '''Checks if base path (compound of many wires or edges) is properly
         constructed
         It checks if:
-        1. the path is continous
-        2. the first vertex of first edge is at the begining of path
+        1. the path is continuous
+        2. the first vertex of first edge is at the beginning of path
         3. the last vertex of last edge is at the end of path
         '''
         last_edge = None
@@ -219,7 +219,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
                     else:
                         FreeCAD.Console.PrintError(translate(
                             "Cables", "Conduit: Base compound object not" +
-                            "continous\n"))
+                            "continuous\n"))
                         Part.show(last_edge)
                         Part.show(edge)
                         return path_type
@@ -242,7 +242,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
                     else:
                         FreeCAD.Console.PrintError(translate(
                             "Cables", "Conduit: Base compound object not" +
-                            "continous\n"))
+                            "continuous\n"))
                         Part.show(last_wire)
                         Part.show(wire)
                         return path_type

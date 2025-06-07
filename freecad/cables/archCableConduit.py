@@ -301,9 +301,11 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             if hasattr(obj, "ProfileType") and obj.ProfileType == "Circle":
                 new_gauge = math.pi*pow(obj.Diameter.Value/2.0, 2)
             if hasattr(obj, "ProfileType") and obj.ProfileType == "Square":
-                new_gauge = obj.Width.Value * obj.Width.Value
+                if obj.Width.Value > 0:
+                    new_gauge = obj.Width.Value * obj.Width.Value
             if hasattr(obj, "ProfileType") and obj.ProfileType == "Rectangle":
-                new_gauge = obj.Width.Value * obj.Height.Value
+                if obj.Width.Value > 0 and obj.Height.Value > 0:
+                    new_gauge = obj.Width.Value * obj.Height.Value
             if new_gauge is not None and obj.Gauge != new_gauge:
                 obj.Gauge = new_gauge
 
@@ -499,6 +501,8 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
     if profileobj:
         obj.Profile = profileobj
     else:
+        obj.Width.Value = 10.0
+        obj.Height.Value = 10.0
         if gauge:
             obj.Gauge = gauge
         else:

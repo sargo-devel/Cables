@@ -1,9 +1,11 @@
 # FreeCAD Cables Workbench
 
-Electrical cables drawing tools workbench for [FreeCAD](https://freecad.org)
+Electric cables drawing tools workbench for [FreeCAD](https://freecad.org)
 
 ![Cable](doc/cable.png) ![Box](doc/box.png)
 ![ElectricInst](doc/electric_inst.png)
+![Harness](doc/harness_example_new.png)
+
 
 ## The goal and idea
 The Cables Workbench has the following goals:
@@ -58,6 +60,16 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes:
+* v0.2.0  14 Jun 2025
+  * WireFlex can now take the shape of polyline or bspline.
+  * Added option of WireFlex creation from the vertices of another object.
+  * Introduced special Edit Mode for WireFlex allowing to add, delete, modify, attach, detach its points preserving all properties. Additionally it is possible to make edges vertical or horizontal with one click in Edit Mode.
+  * Introduced colored markings of attached vertices in WireFlex.
+  * Added CompoundPath and CableConduit objects which enable the creation of complex bundles.
+  * Added undo/redo support.
+  * Added commands visibility in console.
+  * Added shortcut keys.
+  * A few minor bug fixes and improvements.
 * v0.1.4  15 Mar 2025
   * Added translations: German, Polish, Spanish
   * ArchCable class: added option to create cable without profile (single wire cable)

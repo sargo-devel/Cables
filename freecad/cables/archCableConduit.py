@@ -58,8 +58,8 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         if "SubConduits" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubConduits", "Conduit",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "List of coduits belonging " +
-                                "to the bundle"))
+                                "App::Property", "List of conduits " +
+                                "belonging to the bundle"))
         if "MergeSubConduits" not in pl:
             obj.addProperty("App::PropertyBool", "MergeSubConduits",
                             "Conduit",

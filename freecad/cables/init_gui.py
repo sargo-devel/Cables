@@ -20,8 +20,6 @@
 # ***************************************************************************/
 
 import os
-from draftguitools import gui_grid
-from draftguitools import gui_selectplane
 import FreeCADGui as Gui
 from freecad.cables import QT_TRANSLATE_NOOP
 from freecad.cables import translate
@@ -44,8 +42,16 @@ class CablesWorkbench (Gui.Workbench):
         It is executed once in a FreeCAD sessionfollowed by the Activated
         function.
         """
+        import FreeCAD
         from freecad.cables import cablesCommands
         from freecad.cables import cablesEdit
+
+        try:
+            import DraftTools
+        except Exception as exc:
+            FreeCAD.Console.PrintError(exc)
+            FreeCAD.Console.PrintError("Error: Initializing one or more "
+                                       "of the Draft modules failed\n")
 
         self.list_wires = ["Cables_WireFlex",
                            "Cables_AddVertex",

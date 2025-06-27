@@ -22,10 +22,12 @@ class ArchCableBox(ArchComponent.Component):
         ArchComponent.Component.__init__(self, obj)
         self.setProperties(obj)
         from ArchIFC import IfcTypes
-        if "Cable Fitting" in IfcTypes:
-            obj.IfcType = "Cable Fitting"
+        if "Junction Box" in IfcTypes:
+            obj.IfcType = "Junction Box"
+            if hasattr(obj, "PredefinedType"):
+                obj.PredefinedType = "POWER"
         else:
-            # IFC2x3 does not know a Cable Fitting
+            # IFC2x3 does not know a Juction Box
             obj.IfcType = "Building Element Proxy"
         obj.addExtension('Part::AttachExtensionPython')
 

@@ -46,10 +46,12 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         # super().__init__(obj)
         ArchPipe._ArchPipe.__init__(self, obj)
         from ArchIFC import IfcTypes
-        if "Cable Segment" in IfcTypes:
-            obj.IfcType = "Cable Segment"
+        if "Cable Carrier Segment" in IfcTypes:
+            obj.IfcType = "Cable Carrier Segment"
+            if hasattr(obj, "PredefinedType"):
+                obj.PredefinedType = "CONDUITSEGMENT"
         else:
-            # IFC2x3 does not know a Cable Segment
+            # IFC2x3 does not know a Cable Carrier Segment
             obj.IfcType = "Building Element Proxy"
 
     def setProperties(self, obj):
@@ -91,6 +93,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         self.Type = "Pipe"
 
     def onChanged(self, obj, prop):
+        ArchComponent.Component.onChanged(self, obj, prop)
         ArchPipe._ArchPipe.onChanged(self, obj, prop)
         if prop == "Gauge":
             if hasattr(obj, "Profile") and not obj.Profile:

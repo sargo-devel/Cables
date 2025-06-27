@@ -54,6 +54,8 @@ class ArchCable(ArchPipe._ArchPipe):
         from ArchIFC import IfcTypes
         if "Cable Segment" in IfcTypes:
             obj.IfcType = "Cable Segment"
+            if hasattr(obj, "PredefinedType"):
+                obj.PredefinedType = "CABLESEGMENT"
         else:
             # IFC2x3 does not know a Cable Segment
             obj.IfcType = "Building Element Proxy"
@@ -175,6 +177,7 @@ class ArchCable(ArchPipe._ArchPipe):
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(f"{obj.Label}", f"onChanged(start): {prop}\n")
+        ArchComponent.Component.onChanged(self, obj, prop)
         ArchPipe._ArchPipe.onChanged(self, obj, prop)
         if prop == "ShowSubLines" and hasattr(obj, "SubProfiles") \
            and hasattr(obj, "SubWires"):

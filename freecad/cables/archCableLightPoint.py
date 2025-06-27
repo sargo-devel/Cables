@@ -23,6 +23,8 @@ class ArchCableLightPoint(ArchComponent.Component):
         from ArchIFC import IfcTypes
         if "Cable Fitting" in IfcTypes:
             obj.IfcType = "Cable Fitting"
+            if hasattr(obj, "PredefinedType"):
+                obj.PredefinedType = "TRANSITION"
         else:
             # IFC2x3 does not know a Cable Fitting
             obj.IfcType = "Building Element Proxy"

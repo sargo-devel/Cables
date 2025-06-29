@@ -26,22 +26,22 @@
     <message>
       <location filename="../../archCableConduit.py" line="62"/>
       <source>List of coduits belonging to the bundle</source>
-      <translation type="unfinished"/>
+      <translation>Liste der Leitungsführungen, die zum Bündel gehören</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="68"/>
       <source>Merge all subconduits into one shape</source>
-      <translation type="unfinished"/>
+      <translation>Alle Teilleitungsführungen in eine Form zusammenfassen</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="73"/>
       <source>Automatically change label of base object</source>
-      <translation type="unfinished"/>
+      <translation>Benennung des Basisobjekts automatisch anpassen</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="78"/>
       <source>Shows/hides all sub conduits</source>
-      <translation type="unfinished"/>
+      <translation>Blendet alle Teilleitungsführungen ein bzw. aus</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="83"/>
@@ -51,7 +51,7 @@
     <message>
       <location filename="../../archCableConduit.py" line="89"/>
       <source>Thickness of insulation if profile not used</source>
-      <translation type="unfinished"/>
+      <translation>Wandstärke der Isolation, wenn keine Profilskizze verwendet wird</translation>
     </message>
     <message>
       <location filename="../../wireFlex.py" line="68"/>
@@ -91,7 +91,7 @@
     <message>
       <location filename="../../wireFlex.py" line="105"/>
       <source>Parameterization factor</source>
-      <translation type="unfinished"/>
+      <translation>Parametrisierungsfaktor</translation>
     </message>
     <message>
       <location filename="../../wireFlex.py" line="111"/>
@@ -121,17 +121,17 @@
     <message>
       <location filename="../../compoundPath.py" line="54"/>
       <source>List of objects added to the compound path</source>
-      <translation type="unfinished"/>
+      <translation>Liste der Objekte, die zum Verbundverlauf hinzugefügt werden</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="59"/>
       <source>Type of compound shape</source>
-      <translation type="unfinished"/>
+      <translation>Art der Verbundform</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="66"/>
       <source>Minimum radius to use to fillet the corners</source>
-      <translation type="unfinished"/>
+      <translation>Kleinster Radius, der zum Ausrunden der Ecken verwendet wird</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="72"/>
@@ -146,7 +146,7 @@
     <message>
       <location filename="../../compoundPath.py" line="86"/>
       <source>The length of this path</source>
-      <translation type="unfinished"/>
+      <translation>Die Länge dieses Leitungsverlaufs</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="92"/>
@@ -166,7 +166,7 @@
     <message>
       <location filename="../../compoundPath.py" line="110"/>
       <source>Type of added/modified connection curves between edges</source>
-      <translation type="unfinished"/>
+      <translation>Art der hinzugefügten bzw. geänderten Verbindungskurven zwischen Kanten</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="118"/>
@@ -176,7 +176,7 @@
     <message>
       <location filename="../../compoundPath.py" line="124"/>
       <source>The degree of the Bezier function. Best is 3</source>
-      <translation type="unfinished"/>
+      <translation>Der Grad der Bézier-Funktion. Am besten ist 3</translation>
     </message>
     <message>
       <location filename="../../archCableLightPoint.py" line="38"/>
@@ -342,12 +342,12 @@
     <message>
       <location filename="../../archCableConduit.py" line="473"/>
       <source>Cable Conduit</source>
-      <translation type="unfinished"/>
+      <translation>Leitungsführung</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="480"/>
       <source>No base objects for Cable Conduit. Aborting</source>
-      <translation type="unfinished"/>
+      <translation>Kein Basisobjekt für Leitungsführung. Vorgang wird abgebrochen</translation>
     </message>
     <message>
       <location filename="../../wireFlex.py" line="277"/>
@@ -357,7 +357,7 @@
     <message>
       <location filename="../../wireFlex.py" line="503"/>
       <source>wrong object selected</source>
-      <translation type="unfinished"/>
+      <translation>Falsches Objekt ausgewählt</translation>
     </message>
     <message>
       <location filename="../../cableSupport.py" line="21"/>
@@ -373,43 +373,43 @@
       <location filename="../../compoundPath.py" line="238"/>
       <location filename="../../compoundPath.py" line="242"/>
       <source>link object has no Points property</source>
-      <translation type="unfinished"/>
+      <translation>Verbindungsobjekt besitzt keine Eigenschaft Points</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="319"/>
       <source>Unable to build compound path</source>
-      <translation type="unfinished"/>
+      <translation>Verbundverlauf konnte nicht erstellt werden</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="56"/>
       <location filename="../../cablesEdit.py" line="63"/>
       <source>Delete point</source>
-      <translation type="unfinished"/>
+      <translation>Punkt löschen</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="71"/>
       <source>Add point</source>
-      <translation type="unfinished"/>
+      <translation>Punkt hinzufügen</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="85"/>
       <source>Attach point</source>
-      <translation type="unfinished"/>
+      <translation>Punkt befestigen</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="90"/>
       <source>Remove point attachment</source>
-      <translation type="unfinished"/>
+      <translation>Punktbefestigung entfernen</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="95"/>
       <source>Make edge horizontal</source>
-      <translation type="unfinished"/>
+      <translation>Kante horizontal ausrichten</translation>
     </message>
     <message>
       <location filename="../../cablesEdit.py" line="100"/>
       <source>Make edge vertical</source>
-      <translation type="unfinished"/>
+      <translation>Kante vertikal ausrichten</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="66"/>
@@ -429,17 +429,17 @@
     <message>
       <location filename="../../cablesCommands.py" line="155"/>
       <source>Attach Vertex</source>
-      <translation>Punkt befestigen</translation>
+      <translation>Knoten befestigen</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="185"/>
       <source>Remove Vertex Attachment</source>
-      <translation>Knoten-Befestigung entfernen</translation>
+      <translation>Knotenbefestigung entfernen</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="214"/>
       <source>CompoundPath</source>
-      <translation type="unfinished"/>
+      <translation>Verbundverlauf</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="241"/>
@@ -450,7 +450,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="269"/>
       <source>CableConduit</source>
-      <translation type="unfinished"/>
+      <translation>Leitungsführung</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="297"/>
@@ -500,17 +500,17 @@
     <message>
       <location filename="../../archCable.py" line="438"/>
       <source>Unable to build the cable base path</source>
-      <translation type="unfinished"/>
+      <translation>Basisleitungsverlauf konnte nicht erstellt werden</translation>
     </message>
     <message>
       <location filename="../../archCable.py" line="520"/>
       <source>unable to build subshape</source>
-      <translation type="unfinished"/>
+      <translation>Teilform kann nicht erstellt werden</translation>
     </message>
     <message>
       <location filename="../../archCable.py" line="915"/>
       <source>No base object for cable. Aborting</source>
-      <translation type="unfinished"/>
+      <translation>Kein Basisobjekt für Leitung. Vorgang wird abgebrochen</translation>
     </message>
     <message>
       <location filename="../../cableProfile.py" line="46"/>
@@ -580,17 +580,17 @@
     <message>
       <location filename="../../wireutils.py" line="262"/>
       <source>Selection is not an edge or obj has no Points property</source>
-      <translation type="unfinished"/>
+      <translation>Auswahl ist keine Kante oder obj hat keine Eigenschaft Points</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="269"/>
       <source>The new point is not lying on edge</source>
-      <translation type="unfinished"/>
+      <translation>Der neue Punkt liegt nicht auf der Kante</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="287"/>
       <source>Selected edge is not supported:</source>
-      <translation type="unfinished"/>
+      <translation>Die ausgewählte Kante wird nicht unterstützt:</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="329"/>
@@ -612,7 +612,7 @@
       <location filename="../../wireutils.py" line="378"/>
       <location filename="../../wireutils.py" line="644"/>
       <source>Wrong edge type selected</source>
-      <translation type="unfinished"/>
+      <translation>Falsche Kantenart ausgewählt</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="385"/>
@@ -643,7 +643,7 @@
     <message>
       <location filename="../../wireutils.py" line="522"/>
       <source>Point attachment not assigned</source>
-      <translation type="unfinished"/>
+      <translation>Punktbefestigung nicht zugeordnet</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="652"/>
@@ -653,7 +653,7 @@
     <message>
       <location filename="../../wireutils.py" line="670"/>
       <source>Second selection is not a proper vertex</source>
-      <translation type="unfinished"/>
+      <translation>Die zweite Auswahl ist kein richtiger Knoten</translation>
     </message>
     <message>
       <location filename="../../wireutils.py" line="675"/>
@@ -694,7 +694,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="168"/>
       <source>Attach Vertex</source>
-      <translation>Punkt befestigen</translation>
+      <translation>Knoten befestigen</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="176"/>
@@ -712,7 +712,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="263"/>
       <source>It adds a new cable object from WireFlex and a profile. Select WireFlex object first (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
-      <translation type="unfinished"/>
+      <translation>Fügt ein Leitungsobjekt aus einem Leitungsverlauf und einem Leitungsprofil hinzu. Zuerst ein WireFlex-Objekt auswählen (oder eine Abfolge von Leitungsverläufen, Leitungen oder Leitungsführungen), dann wahlweise ein Leitungsprofil am Ende</translation>
     </message>
   </context>
   <context>
@@ -733,12 +733,12 @@
     <message>
       <location filename="../../cablesCommands.py" line="282"/>
       <source>CableConduit</source>
-      <translation type="unfinished"/>
+      <translation>Leitungsführung</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="292"/>
       <source>It adds a new cable conduit object from single WireFlex or sequence of wires (and optionally profile). Select single WireFlex object (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
-      <translation type="unfinished"/>
+      <translation>Fügt ein Leitungsführungsobjekt aus einem einzelnen Leitungsverlauf oder eine Abfolge von Leitungsverläufen (und wahlweise einem Leitungsprofil) hinzu. Ein einzelnes WireFlex-Objekt auswählen (oder eine Abfolge von Leitungsverläufen, Leitungen oder Leitungsführungen), dann wahlweise ein Leitungsprofil am Ende</translation>
     </message>
   </context>
   <context>
@@ -772,12 +772,12 @@
     <message>
       <location filename="../../cablesCommands.py" line="227"/>
       <source>CompoundPath</source>
-      <translation type="unfinished"/>
+      <translation>Verbundverlauf</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="235"/>
       <source>It creates a new compound path based on selected objects. At least two objects have to be selected first</source>
-      <translation type="unfinished"/>
+      <translation>Erstellt einen neuen Verbundverlauf auf Basis ausgewählter Objekte. Es müssen zuerst mindestens zwei Objekte ausgewählt werden</translation>
     </message>
   </context>
   <context>
@@ -806,7 +806,10 @@
 Press E or ALT + Left Click or ALT + Left DubleClick
 to display context menu on supported nodes
 and on supported objects.</source>
-      <translation type="unfinished"/>
+      <translation>Bearbeitet das aktive Objekt.
+E drücken, Alt + Linksklick oder Alt + doppeltem Linksklick,
+um das Kontextmenü an unterstützten Knoten
+und unterstützten Objekten anzuzeigen.</translation>
     </message>
   </context>
   <context>
@@ -840,7 +843,7 @@ and on supported objects.</source>
     <message>
       <location filename="../../cablesCommands.py" line="198"/>
       <source>Remove Vertex Attachment</source>
-      <translation>Knoten-Befestigung entfernen</translation>
+      <translation>Knotenbefestigung entfernen</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="206"/>
@@ -858,7 +861,7 @@ and on supported objects.</source>
     <message>
       <location filename="../../cablesCommands.py" line="489"/>
       <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
-      <translation>Neue Hilfslinie hinzufügen, an welcher ein Kabel oder anderes Element befestigt werden kann. Mindestens ein Punkt zuerst auswählen</translation>
+      <translation>Fügt eine neue Hilfslinie hinzu, an der eine Leitung oder anderes Element befestigt werden kann. Zuerst mindestens einen Punkt auswählen</translation>
     </message>
   </context>
   <context>
@@ -871,7 +874,7 @@ and on supported objects.</source>
     <message>
       <location filename="../../cablesCommands.py" line="454"/>
       <source>It adds a new support point to which a cable or other element can be attached</source>
-      <translation>Neuen Hilfspunkt hinzufügen, an welchem ein Kabel oder anderes Element befestigt werden kann</translation>
+      <translation>Fügt einen neuen Hilfspunkt hinzu, an dem eine Leitung oder anderes Element befestigt werden kann</translation>
     </message>
   </context>
   <context>

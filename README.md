@@ -51,7 +51,7 @@ It is possible to translate Cables Workbench. See [here](https://github.com/sarg
 Available translations:
 
 * German
-  * translator: [@maxwxyz](https://github.com/maxwxyz)
+  * translators: [@maxwxyz](https://github.com/maxwxyz), @FBXL5
 * Polish
   * translators: @kaktus, @mgr_wojtal, @Piter
 * Spanish
@@ -60,6 +60,10 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes:
+* v0.2.1  30 Jun 2025
+  * Fixed bug with DraftTools import
+  * Updated German translation
+  * Updated IFC types
 * v0.2.0  14 Jun 2025
   * WireFlex can now take the shape of polyline or bspline.
   * Added option of WireFlex creation from the vertices of another object.

@@ -75,6 +75,8 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
              lambda: self.horizontal_wire_edge(edit_command, obj, position)),
             (self.get_vertical_menu_text(obj),
              lambda: self.vertical_wire_edge(edit_command, obj, position)),
+            (self.get_coaxial_menu_text(obj),
+             lambda: self.coaxial_wire_edge(edit_command, obj, position)),
         ]
 
     def get_attach_menu_text(self, obj):
@@ -96,6 +98,11 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         """This function is overridden in the DraftBSplineGuiTools class.
         """
         return translate("Cables", "Make edge vertical")
+
+    def get_coaxial_menu_text(self, obj):
+        """This function is overridden in the DraftBSplineGuiTools class.
+        """
+        return translate("Cables", "Make edge coaxial")
 
     def add_point(self, edit_command, obj, pos):
         # FreeCAD.Console.PrintMessage(f"edit_command={edit_command}\n")
@@ -136,6 +143,12 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         info, newPoint = edit_command.get_specific_object_info(obj, pos)
         wireutils.modifyWireEdge([(obj, info["Component"])], point=newPoint,
                                  cmd='vertical')
+        obj.recompute(True)
+
+    def coaxial_wire_edge(self, edit_command, obj, pos):
+        info, newPoint = edit_command.get_specific_object_info(obj, pos)
+        wireutils.modifyWireEdge([(obj, info["Component"])], point=newPoint,
+                                 cmd='coaxial')
         obj.recompute(True)
 
     def is_node_attached(self, obj, node_idx):

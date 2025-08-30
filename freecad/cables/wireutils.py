@@ -624,8 +624,9 @@ def modifyWireEdge(plist=None, point=None, cmd=None):
         Optional point selecting which vertex of edge should be moved
     cmd : str
         Command to execute
-        'vertical' - set edge vertical
-        'horizontal' - set edge vertical
+        'vertical' - set edge vertical (parallel to global Z axis)
+        'horizontal' - set edge horizontal (normal to global Z axis)
+        'coaxial' - set edge coaxial with the adjacent edge
     """
     if not plist:
         plist = processGuiSelection(single=False, subshape_class=Part.Edge,
@@ -695,6 +696,14 @@ def modifyWireEdge(plist=None, point=None, cmd=None):
             vect = FreeCAD.Vector(pts[vnr-1].x, pts[vnr-1].y, pts[2*nr-vnr].z)
         pts[vnr-1] = vect
         obj.Points = pts
+    if cmd == 'coaxial':
+        e_nr = nr-1 if vnr > nr else nr+1
+        if 0 < e_nr < len(obj.Shape.Edges)+1:
+            e = obj.Shape.Edges[e_nr-1]
+            v_old = obj.Placement.multVec(pts[vnr-1])
+            vect = e.valueAt(e.Curve.parameter(v_old))
+            pts[vnr-1] = obj.Placement.inverse().multVec(vect)
+            obj.Points = pts
     return None
 
 

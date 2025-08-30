@@ -4,22 +4,34 @@
 import os
 import math
 import FreeCAD
-import ArchComponent
 import Part
+from freecad.cables import archCableBaseElement
 from freecad.cables import iconPath
+from freecad.cables import presetsPath
+from freecad.cables import libPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
 
 CLASS_CABLECONNECTOR_ICON = os.path.join(iconPath,
                                          "classArchCableConnector.svg")
+tol = 1e-6
+
+# Presets in the form: Name, Shape Type, Connector Class, [preset data]
+# Search for connector presets in presets and in the user path
+presetfiles = [os.path.join(presetsPath, "connectorpresets.csv"),
+               os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
+                            "connectorpresets.csv")]
+libdirs = [libPath, os.path.join(FreeCAD.getUserAppDataDir(), "Cables", "lib")]
+default_preset = "TerminalStrip_2.5mm2_x3"
 
 
-class ArchCableConnector(ArchComponent.Component):
+class ArchCableConnector(archCableBaseElement.BaseElement):
     """The ArchCableConnector object
     """
     def __init__(self, obj):
-        ArchComponent.Component.__init__(self, obj)
+        eltype = "CableConnector"
+        archCableBaseElement.BaseElement.__init__(self, obj, eltype=eltype)
         self.setProperties(obj)
         from ArchIFC import IfcTypes
         if "Cable Fitting" in IfcTypes:
@@ -53,41 +65,80 @@ class ArchCableConnector(ArchComponent.Component):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The number of holes for " +
                                 "cables"))
-        self.Type = "CableConnector"
+        self.Type = "Component"
 
     def onDocumentRestored(self, obj):
-        ArchComponent.Component.onDocumentRestored(self, obj)
+        eltype = "CableConnector"
+        archCableBaseElement.BaseElement.onDocumentRestored(self, obj, eltype)
         self.setProperties(obj)
 
     def onChanged(self, obj, prop):
-        ArchComponent.Component.onChanged(self, obj, prop)
+        archCableBaseElement.BaseElement.onChanged(self, obj, prop)
+        if prop == "Preset":
+            if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
+                hide_list = ["Height", "HoleSize", "NumberOfHoles",
+                             "Thickness"]
+                unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
+                               "SuppLines"]
+            else:
+                hide_list = ["NumberOfTerminals", "NumberOfSuppLines",
+                             "SuppLines"]
+                unhide_list = ["Height", "HoleSize", "NumberOfHoles",
+                               "Thickness"]
+            for element in hide_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, "Hidden")
+            for element in unhide_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, "-Hidden")
 
     def execute(self, obj):
+        # FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
+        archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        shapes.append(self.makeSupportPoints(obj))
-        shapes.append(self.makeBox(obj))
-        sh = Part.makeCompound(shapes)
-        obj.Shape = self.processSubShapes(obj, sh, pl)
-        obj.Placement = pl
-        # FreeCAD.Console.PrintMessage("ArchCableConnector.execute: end\n")
+        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+            shapes.append(self.makeBox(obj))
+            sh = Part.makeCompound(shapes)
+            if obj.Additions or obj.Subtractions:
+                sh = self.processSubShapes(obj, sh, pl)
+            if not self.sameShapes(sh, obj.Shape):
+                obj.Shape = sh
+                # obj.Placement = pl
+            elif obj.Material:
+                # refresh colors
+                obj.Material = obj.Material
+        # FreeCAD.Console.PrintMessage(obj.Label, "execute: end\n")
 
-    def makeSupportPoints(self, obj):
-        hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
-        ln = obj.NumberOfHoles * \
-            (hole_diameter + obj.Thickness.Value) + \
-            obj.Thickness.Value
+    def getPresets(self, obj):
+        pr = archCableBaseElement.BaseElement.getPresets(self, obj,
+                                                         presetfiles)
+        return pr
+
+    def updateTerminalsParameters(self, obj):
         z = 2
-        y = 0
-        vertexes1 = []
-        vertexes2 = []
-        for i in range(obj.NumberOfHoles):
-            x = -ln/2 + obj.Thickness.Value + hole_diameter/2 + \
-                i*(hole_diameter + obj.Thickness.Value)
-            vertexes1.append(Part.Vertex(x, y, z))
-            vertexes2.append(Part.Vertex(x, y, -obj.Height.Value-z))
-        s = Part.Shape(vertexes1 + vertexes2)
-        return s
+        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+            # Shape type: ParametricTerminal
+            if hasattr(obj, "Terminals") and obj.Terminals:
+                for t in obj.Terminals:
+                    length = obj.Height.Value + 2*z
+                    # set terminal length
+                    if t.Length.Value != length:
+                        t.Length = length
+                    # set terminal spacing
+                    hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
+                    spacing = hole_diameter + obj.Thickness.Value
+                    if t.Spacing.Value != spacing:
+                        t.Spacing = spacing
+                    # set terminal connections
+                    if t.NumberOfConnections != obj.NumberOfHoles:
+                        t.NumberOfConnections = obj.NumberOfHoles
+                    # set terminal placement
+                    b = FreeCAD.Vector(0, 0, -obj.Height/2.0)
+                    r = FreeCAD.Rotation("XYZ", 90, 0, 0)
+                    base_pl = FreeCAD.Placement(b, r)
+                    if base_pl != t.Offset:
+                        t.Offset = base_pl
 
     def makeBox(self, obj):
         hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
@@ -109,19 +160,122 @@ class ArchCableConnector(ArchComponent.Component):
             box = box.cut(hole)
         return box
 
+    def updatePropertiesFromPreset(self, obj, presets):
+        paramlist = ["NumberOfHoles", "NumberOfTerminals", "Height",
+                     "HoleSize", "Thickness"]
+        for param in paramlist:
+            if not hasattr(obj, param):
+                return
 
-class ViewProviderCableConnector(ArchComponent.ViewProviderComponent):
+        name = obj.Preset
+        if name == "Customized":
+            obj.ExtShape = Part.Shape()
+            nr_of_term = 1
+            nr_of_supp = 0
+            if obj.NumberOfTerminals != nr_of_term:
+                obj.NumberOfTerminals = nr_of_term
+                self.makeTerminalChildObjects(obj)
+            if obj.NumberOfSuppLines != nr_of_supp:
+                obj.NumberOfSuppLines = nr_of_supp
+                self.makeSupportLinesChildObjects(obj)
+            return
+        preset = None
+        for p in presets:
+            p_name = f"{p[3]}_{p[1]}"
+            if name == p_name:
+                preset = p
+                break
+        if preset is not None:
+            try:
+                if preset[2] == "ParametricTerminal":
+                    obj.NumberOfHoles = int(preset[4])
+                    nr_of_term = int(preset[5])
+                    nr_of_supp = 0
+                    obj.Height.Value = preset[6]
+                    obj.HoleSize = preset[7]
+                    obj.Thickness.Value = preset[8]
+                    obj.ExtShape = Part.Shape()
+                    obj.ExtColor = []
+                    if obj.NumberOfTerminals != nr_of_term:
+                        obj.NumberOfTerminals = nr_of_term
+                        self.makeTerminalChildObjects(obj)
+                    if obj.NumberOfSuppLines != nr_of_supp:
+                        obj.NumberOfSuppLines = nr_of_supp
+                        self.makeSupportLinesChildObjects(obj)
+                    for t in obj.Terminals:
+                        t.Proxy.setPropertiesReadOnly(t)
+                if preset[2] == "Fixed":
+                    ext_shape, ext_color = self.readExtShape(obj, preset[4])
+                    nr_of_term = int(preset[5])
+                    nr_of_supp = int(preset[6])
+                    ext_data = self.readExtData(
+                        obj, f"{preset[3]}_{preset[1]}.csv")
+                    if obj.NumberOfTerminals != nr_of_term or \
+                       len(obj.Terminals) != nr_of_term:
+                        obj.NumberOfTerminals = nr_of_term
+                        self.makeTerminalChildObjects(obj)
+                    if obj.NumberOfSuppLines != nr_of_supp or \
+                       len(obj.SuppLines) != nr_of_supp:
+                        obj.NumberOfSuppLines = nr_of_supp
+                        self.makeSupportLinesChildObjects(obj)
+                    if ext_data:
+                        sh_offset = ext_data["ExtShape"][0][0]
+                        ext_shape.Placement = sh_offset
+                        for i, t in enumerate(obj.Terminals):
+                            t.Offset = ext_data["Terminal"][i][0]
+                            t.NumberOfConnections = int(
+                                ext_data["Terminal"][i][1])
+                            t.Length = ext_data["Terminal"][i][2]
+                            t.Spacing = ext_data["Terminal"][i][3]
+                        # update SupportLines
+                        if obj.SuppLines and ext_data["SupportLines"]:
+                            for i, s in enumerate(obj.SuppLines):
+                                s.Offset = ext_data["SupportLines"][i][0]
+                    obj.ExtShape = ext_shape
+                    obj.ExtColor = ext_color
+            except ValueError:
+                FreeCAD.Console.PrintError(
+                    f"Preset loading error for preset name '{name}'. Wrong " +
+                    "value assignment!\n")
+            except IndexError:
+                FreeCAD.Console.PrintError(
+                    f"Preset loading error for preset name '{name}'. Wrong " +
+                    "number of Terminals or SupportLines\n")
+        else:
+            FreeCAD.Console.PrintError(
+                f"Preset loading error for preset name '{name}'. Preset " +
+                "does not exist!\n")
+
+    def readExtShape(self, obj, filename, libdirs=libdirs):
+        """Function reads object shape and colors from step file.
+        Returns tuple (shape, list of colors)
+        """
+        sh_col = archCableBaseElement.BaseElement.readExtShape(
+            self, obj, filename, libdirs=libdirs)
+        return sh_col
+
+    def readExtData(self, obj, filename, libdirs=libdirs):
+        """Function reads data: shape offset, terminals, support lines
+        from csv file.
+        Returns dict
+        """
+        data = archCableBaseElement.BaseElement.readExtData(
+            self, obj, filename, libdirs=libdirs)
+        return data
+
+
+class ViewProviderCableConnector(archCableBaseElement.ViewProviderBaseElement):
     """A View Provider for the ArchCableBox object
     """
     def __init__(self, vobj):
-        ArchComponent.ViewProviderComponent.__init__(self, vobj)
+        archCableBaseElement.ViewProviderBaseElement.__init__(self, vobj)
 
     def getIcon(self):
         return CLASS_CABLECONNECTOR_ICON
 
 
 def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
-                       height=0, placement=None, name=None):
+                       height=0, preset=None, placement=None, name=None):
     """makeCableConnector([baseobj],[nrofholes],[holesize],[thickness],
     [height],[placement],[name]):
     creates a cable connector object from the given base object
@@ -146,6 +300,12 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
         obj.HoleSize = holesize if holesize else 2.0
         obj.Thickness = thickness if thickness else 1.0
         obj.Height = height if height else 5.0
+    if preset is not None:
+        obj.Proxy.setPreset(obj, preset)
+    else:
+        obj.Proxy.setPreset(obj, default_preset)
     if placement:
         obj.Placement = placement
+    if hasattr(obj, "Terminals") and not obj.Terminals:
+        obj.Proxy.makeTerminalChildObjects(obj)
     return obj

@@ -285,10 +285,22 @@ class ArchCable(ArchPipe._ArchPipe):
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(f"{obj.Label}", "execute start\n")
+
+        # Prepare to process Component Additions and Subtractions
+        pl0 = FreeCAD.Placement()
+        additions = obj.Additions
+        subtractions = obj.Subtractions
+        if additions:
+            obj.Additions = []
+        if subtractions:
+            obj.Subtractions = []
+        pl = obj.Placement
+        if not obj.Placement.isIdentity():
+            obj.Placement = pl0
+
         if not obj.SubProfiles:
             self.updateStartEndOffsets(obj)
             ArchPipe._ArchPipe.execute(self, obj)
-            pl = obj.Placement
             main_shape = obj.Shape
             if not obj.Shape.Wires:
                 return
@@ -297,13 +309,21 @@ class ArchCable(ArchPipe._ArchPipe):
             if obj.OffsetStart > 0 and obj.OffsetEnd > 0:
                 shapes.extend(self.buildStrips(obj))
             sh = Part.makeCompound(shapes)
-            obj.Shape = self.processSubShapes(obj, sh, pl)
+            obj.Placement = pl
+            if additions:
+                obj.Additions = additions
+            if subtractions:
+                obj.Subtractions = subtractions
+            if additions or subtractions:
+                shadd = self.processSubShapes(obj, sh.Solids[0], pl)
+                obj.Shape = Part.makeCompound([*shadd.Solids, *sh.Solids[1:]])
+            else:
+                obj.Shape = sh
         else:
             # check if subprofiles need recompute
             for s in obj.SubProfiles:
                 if not s.isValid():
                     s.MapMode = "Deactivated"
-            pl = obj.Placement
             main_shape = self.makeMainShape(obj)
             if not main_shape:
                 return
@@ -312,10 +332,22 @@ class ArchCable(ArchPipe._ArchPipe):
             if obj.SubProfiles and obj.SubWires:
                 shapes += self.buildSubCables(obj)
             sh = Part.makeCompound(shapes)
-            obj.Shape = self.processSubShapes(obj, sh, pl)
+            obj.Shape = sh
             self.readjustEndProfile(obj)
             self.rotateEndProfile(obj)
             self.readjustSubWires(obj)
+
+            sh = obj.Shape
+            # Process Component Additions and Subtractions
+            if not pl.isIdentity():
+                obj.Placement = pl
+            if additions:
+                obj.Additions = additions
+            if subtractions:
+                obj.Subtractions = subtractions
+            if additions or subtractions:
+                shadd = self.processSubShapes(obj, sh.Solids[0], pl)
+                obj.Shape = Part.makeCompound([*shadd.Solids, *sh.Solids[1:]])
         # FreeCAD.Console.PrintMessage(f"{obj.Label}", "execute end\n")
 
     def getWire(self, obj):

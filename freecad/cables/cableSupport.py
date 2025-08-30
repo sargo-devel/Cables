@@ -1,9 +1,17 @@
 """cableSupport
 """
 
+import os
 import FreeCAD
 import Draft
 from freecad.cables import translate
+from freecad.cables import iconPath
+from freecad.cables import QT_TRANSLATE_NOOP
+
+
+CLASS_EXTSUPPLINES_ICON = os.path.join(iconPath, "classExtSuppLines.svg")
+SuppPointColor = (255, 85, 0)
+SuppLineColor = (255, 170, 127)
 
 
 def makeSupportPoint(placement=None, name=None):
@@ -19,7 +27,7 @@ def makeSupportPoint(placement=None, name=None):
         point = Draft.make_point(0.0, 0.0, 0.0)
     point.Label = name if name else translate("Cables", "SupportPoint")
     point.ViewObject.PointSize = 8
-    point.ViewObject.PointColor = (255, 85, 0)
+    point.ViewObject.PointColor = SuppPointColor
     Draft.autogroup(point)
     point.addExtension('Part::AttachExtensionPython')
     return point
@@ -51,7 +59,93 @@ def makeSupportLine(p1=None, p2=None, name=None):
     #line.addExtension('Part::AttachExtensionPython')
     line.Subdivisions = 1
     line.ViewObject.PointSize = 8
-    line.ViewObject.PointColor = (255, 85, 0)
-    line.ViewObject.LineColor = (255, 170, 127)
+    line.ViewObject.PointColor = SuppPointColor
+    line.ViewObject.LineColor = SuppLineColor
     Draft.autogroup(line)
     return line
+
+
+class ExtSuppLines:
+    """The ExtSuppLines object
+    """
+    def __init__(self, obj):
+        obj.Proxy = self
+        self.Type = "SuppLines"
+        self.setProperties(obj)
+
+    def setProperties(self, obj):
+        pl = obj.PropertiesList
+        if "Lines" not in pl:
+            obj.addProperty("Part::PropertyPartShape", "Lines",
+                            "ShapeLines",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The shape containing " +
+                                "support lines"))
+        if "ParentName" not in pl:
+            obj.addProperty("App::PropertyString", "ParentName",
+                            "Terminal",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The name of parent object"))
+            obj.setPropertyStatus("ParentName", ["ReadOnly", "Hidden"])
+        if "Offset" not in pl:
+            obj.addProperty("App::PropertyPlacement", "Offset",
+                            "SuppLines",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The SuppLines placement " +
+                                "offset relative to parent placement"))
+
+    def onChanged(self, obj, prop):
+        # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
+        if prop in ["Offset"]:
+            # set own placement relave to parent placement
+            if not obj.ParentName:
+                self.findParent(obj)
+            parent = FreeCAD.ActiveDocument.getObject(obj.ParentName)
+            pl = parent.Placement.multiply(obj.Offset)
+            if pl != obj.Placement:
+                obj.Placement = pl
+
+    def execute(self, obj):
+        # FreeCAD.Console.PrintMessage(obj.Label, "execute started\n")
+        if hasattr(obj, "Lines") and obj.Lines:
+            if not obj.Shape.isPartner(obj.Lines):
+                obj.Shape = obj.Lines
+        # forcing to recalculate offset
+        obj.Offset = obj.Offset
+
+    def findParent(self, obj):
+        valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
+                             "ArchCableBox", "ArchCableLightPoint"]
+        for p in obj.InList:
+            if type(p.Proxy).__name__ in valid_parent_list:
+                obj.ParentName = p.Name
+                return
+
+
+class ViewProviderExtSuppLines:
+    """A View Provider for the ExtSuppLines object
+    """
+    def __init__(self, vobj):
+        vobj.Proxy = self
+        vobj.PointSize = 4
+        vobj.LineWidth = 1
+        vobj.PointColor = SuppPointColor
+        vobj.LineColor = SuppLineColor
+
+    def getIcon(self):
+        return CLASS_EXTSUPPLINES_ICON
+
+    def attach(self, obj):
+        return
+
+    def updateData(self, fp, prop):
+        return
+
+    def getDisplayModes(self, obj):
+        return []
+
+#    def getDefaultDisplayMode(self):
+#        return "Shaded"
+
+    def onChanged(self, vobj, prop):
+        pass

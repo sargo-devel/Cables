@@ -292,8 +292,11 @@ def createProfileSubWires(profile, norm, nr_of_wires, wo_nr):
     return wo, wi, p, nr
 
 
-# function copied from archProfile.py
+# function copied from archProfile.py and adopted
 def readCablePresets(pfiles=profilefiles):
+    # When special type is detected on position row[1], the row[3] and higher
+    # are treated as strings
+    special_types = ["Fixed"]
     Presets = []
     bid = 1     # Unique index
     for profilefile in pfiles:
@@ -307,7 +310,10 @@ def readCablePresets(pfiles=profilefiles):
                         try:
                             r = [bid, row[0], row[1], row[2]]
                             for i in range(3, len(row)):
-                                r = r + [float(row[i])]
+                                if row[1] in special_types:
+                                    r = r + [str(row[i])]
+                                else:
+                                    r = r + [float(row[i])]
                             if r not in Presets:
                                 Presets.append(r)
                             bid = bid + 1

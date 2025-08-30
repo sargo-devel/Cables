@@ -1,0 +1,489 @@
+"""ArchCableBaseElement
+"""
+
+import os
+import FreeCAD
+import ArchComponent
+import Part
+import Import
+from freecad.cables import cableTerminal
+from freecad.cables import cableSupport
+from freecad.cables import cableProfile
+from freecad.cables import libPath
+from freecad.cables import presetsPath
+from freecad.cables import translate
+from freecad.cables import QT_TRANSLATE_NOOP
+
+
+presetfiles = [os.path.join(presetsPath, "presets.csv"),
+               os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
+                            "presets.csv")]
+libdirs = [libPath, os.path.join(FreeCAD.getUserAppDataDir(), "Cables", "lib")]
+
+
+class BaseElement(ArchComponent.Component):
+    """The ArchCableBaseElement object
+    """
+    def __init__(self, obj, eltype="CableBaseElement"):
+        ArchComponent.Component.__init__(self, obj)
+        BaseElement.setProperties(self, obj, eltype)
+
+    def setProperties(self, obj, eltype):
+        pl = obj.PropertiesList
+        if "Preset" not in pl:
+            obj.addProperty("App::PropertyEnumeration", "Preset",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The predefined set of " +
+                                "parameters for this object"))
+            obj.Preset, _ = self.getPresets(obj)
+        if "Terminals" not in pl:
+            obj.addProperty("App::PropertyLinkList", "Terminals",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "List of terminals " +
+                                "belonging to this object"))
+        if "SuppLines" not in pl:
+            obj.addProperty("App::PropertyLinkList", "SuppLines", eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Link to Support Lines " +
+                                "object"))
+        if "NumberOfTerminals" not in pl:
+            obj.addProperty("App::PropertyInteger", "NumberOfTerminals",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The number of Terminals " +
+                                "in this object"))
+            obj.setPropertyStatus("NumberOfTerminals", "ReadOnly")
+        if "NumberOfSuppLines" not in pl:
+            obj.addProperty("App::PropertyInteger", "NumberOfSuppLines",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The number of Support " +
+                                "Lines in this object"))
+            obj.setPropertyStatus("NumberOfSuppLines", "ReadOnly")
+        if "ExtShape" not in pl:
+            obj.addProperty("Part::PropertyPartShape", "ExtShape",
+                            "Ext",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The external shape loaded" +
+                                "from file"))
+        if "ExtColor" not in pl:
+            obj.addProperty("App::PropertyColorList", "ExtColor",
+                            "Ext",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The colors of external" +
+                                "shape loaded from file"))
+        self.Type = "Component"
+
+    def onDocumentRestored(self, obj, eltype="CableBaseElement"):
+        ArchComponent.Component.onDocumentRestored(self, obj)
+        BaseElement.setProperties(self, obj, eltype)
+
+    def onChanged(self, obj, prop):
+        # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
+        ArchComponent.Component.onChanged(self, obj, prop)
+        if prop == "Label":
+            if hasattr(obj, "Terminals") and obj.Terminals:
+                for nr, t in enumerate(obj.Terminals):
+                    label = f"{obj.Label}_Term{nr+1:03}"
+                    if not label == t.Label:
+                        t.Label = label
+            if hasattr(obj, "SuppLines") and obj.SuppLines:
+                for nr, s in enumerate(obj.SuppLines):
+                    label = f"{obj.Label}_SuppLines{nr+1:03}"
+                    if not label == s.Label:
+                        s.Label = label
+        if prop == "Preset":
+            # refresh presets names:
+            presetnames, presets = self.getPresets(obj)
+            if presetnames != obj.getEnumerationsOfProperty("Preset"):
+                obj.Preset = presetnames
+            self.updatePropertiesFromPreset(obj, presets)
+        if prop == "Shape":
+            if hasattr(obj, "SuppLines") and obj.SuppLines:
+                self.adjustSuppLines(obj)
+                for s in obj.SuppLines:
+                    # prevent from cyclic recompute
+                    if "Touched" in s.State and "Recompute2" in s.State:
+                        s.purgeTouched()
+            if hasattr(obj, "Terminals") and obj.Terminals:
+                self.adjustTerminals(obj)
+                for t in obj.Terminals:
+                    # prevent from cyclic recompute
+                    if "Touched" in t.State and "Recompute2" in t.State:
+                        t.purgeTouched()
+
+    def execute(self, obj):
+        # FreeCAD.Console.PrintMessage(obj.Label, "BE execute start\n")
+        if hasattr(obj, "Terminals") and not obj.Terminals:
+            self.makeTerminalChildObjects(obj)
+        if hasattr(obj, "SuppLines") and not obj.SuppLines:
+            self.makeSupportLinesChildObjects(obj)
+
+        pl = obj.Placement
+        shapes = []
+        if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
+            # Shape type: Fixed
+            shapes.append(obj.ExtShape)
+            sh = Part.makeCompound(shapes)
+            if obj.Additions or obj.Subtractions:
+                sh = self.processSubShapes(obj, sh, pl)
+            if not self.sameShapes(sh, obj.Shape):
+                obj.Shape = sh
+            elif obj.Material:
+                # refresh colors
+                obj.Material = obj.Material
+
+    def getPresets(self, obj, presetfiles=presetfiles):
+        presets = cableProfile.readCablePresets(presetfiles)
+        presetnames = ["Customized"]
+        for p in presets:
+            presetnames.append(f"{p[3]}_{p[1]}")
+        presetnames.sort()
+        return presetnames, presets
+
+    def setPreset(self, obj, preset):
+        try:
+            obj.Preset = preset
+        except ValueError:
+            FreeCAD.Console.PrintError(obj.Label,
+                                       f"Preset {preset} does not exist!\n")
+            if obj.Preset is None:
+                obj.Preset = "Customized"
+
+    def updatePropertiesFromPreset(self, obj, presets):
+        return
+
+    def readExtShape(self, obj, filename, libdirs=libdirs):
+        """Function reads object shape and colors from step file.
+        Returns tuple (shape, list of colors)
+        """
+        fullname = None
+        for libdir in libdirs:
+            fullpath = os.path.join(libdir, filename)
+            if os.path.exists(fullpath):
+                fullname = fullpath
+                break
+        if fullname is None:
+            FreeCAD.Console.PrintError(
+                obj.Label, f"File loading error {filename}. " +
+                "File not found in library\n")
+            return Part.Shape(), []
+        # ImportGui.insert(fullname, FreeCAD.ActiveDocument.Name)
+        # objlist = App.ActiveDocument.findObjects(Label='...')
+        data = Import.insert(fullname, FreeCAD.ActiveDocument.Name)
+        sh = data[0][0].Shape.copy()
+        sh_colors = data[0][1]
+        FreeCAD.ActiveDocument.removeObject(data[0][0].Name)
+        return sh, sh_colors
+
+    def readExtData(self, obj, filename, libdirs=libdirs):
+        """Function reads data: shape offset, terminals, support lines
+        from csv file.
+        Returns dict
+        """
+        fullname = None
+        for libdir in libdirs:
+            fullpath = os.path.join(libdir, filename)
+            if os.path.exists(fullpath):
+                fullname = fullpath
+                break
+        if fullname is None:
+            FreeCAD.Console.PrintError(
+                obj.Label, f"File loading error {filename}. " +
+                "File not found in library\n")
+            return {}
+        rawdata = cableProfile.readCablePresets([fullname])
+        terminals = []
+        connector = []
+        supplines = []
+        for d in rawdata:
+            if d[2] == "ExtShape":
+                offset = FreeCAD.Vector(d[4], d[5], d[6])
+                rotation = FreeCAD.Rotation(d[7], d[8], d[9])
+                pl = FreeCAD.Placement(offset, rotation)
+                connector.append((pl,))
+            elif d[2] == "Terminal":
+                offset = FreeCAD.Vector(d[4], d[5], d[6])
+                rotation = FreeCAD.Rotation(d[7], d[8], d[9])
+                pl = FreeCAD.Placement(offset, rotation)
+                terminals.append((pl, d[10], d[11], d[12]))
+            elif d[2] == "SupportLines":
+                offset = FreeCAD.Vector(d[4], d[5], d[6])
+                rotation = FreeCAD.Rotation(d[7], d[8], d[9])
+                pl = FreeCAD.Placement(offset, rotation)
+                supplines.append((pl,))
+        data = {"ExtShape": connector, "Terminal": terminals,
+                "SupportLines": supplines}
+        return data
+
+    def makeTerminalChildObjects(self, obj):
+        if hasattr(obj, "Terminals"):
+            terminals = obj.Terminals
+            if terminals:
+                for t in terminals:
+                    FreeCAD.ActiveDocument.removeObject(t.Name)
+            terminals = []
+            for i in range(obj.NumberOfTerminals):
+                child_obj = cableTerminal.makeCableTerminal()
+                child_obj.Label = f"{obj.Label}_Term{i+1:03}"
+                child_obj.ParentName = obj.Name
+                terminals.append(child_obj)
+            if terminals != obj.Terminals:
+                obj.Terminals = terminals
+            self.adjustTerminals(obj)
+
+    def adjustTerminals(self, obj):
+        self.updateTerminalsParameters(obj)
+        if hasattr(obj, "Terminals") and obj.Terminals:
+            for t in obj.Terminals:
+                t.touch()
+
+    def updateTerminalsParameters(self, obj):
+        # Default terminal update. Can be overwritten by child class
+        return
+
+    def makeSupportLinesChildObjects(self, obj):
+        if hasattr(obj, "SuppLines"):
+            supplines = obj.SuppLines
+            if supplines:
+                for supp in supplines:
+                    FreeCAD.ActiveDocument.removeObject(supp.Name)
+            supplines = []
+            for i in range(obj.NumberOfSuppLines):
+                child_obj = FreeCAD.ActiveDocument.addObject(
+                    "Part::FeaturePython", "CableSuppLines")
+                cableSupport.ExtSuppLines(child_obj)
+                if FreeCAD.GuiUp:
+                    cableSupport.ViewProviderExtSuppLines(child_obj.ViewObject)
+                child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
+                child_obj.ParentName = obj.Name
+                child_obj.Lines = Part.Shape()
+                supplines.append(child_obj)
+            obj.SuppLines = supplines
+            self.adjustSuppLines(obj)
+
+    def adjustSuppLines(self, obj):
+        if hasattr(obj, "SuppLines") and obj.SuppLines:
+            for supp in obj.SuppLines:
+                supp_lines = self.makeSupportLines(obj)
+                if not self.sameShapes(supp_lines, supp.Lines) \
+                   or len(supp_lines.Edges) > 4:
+                    supp.Lines = supp_lines
+                supp.touch()
+
+    def makeSupportLines(self, obj):
+        # dafault support lines cross. Can be overwritten by child class
+        x0 = 0
+        y0 = 0
+        z0 = 0
+        x = y = 5.0
+        cross = [(x0, y0, z0),
+                 (x0+x, y0, z0),
+                 (x0-x, y0, z0),
+                 (x0, y0+y, z0),
+                 (x0, y0-y, z0)]
+        v = []
+        for c in cross:
+            v.append(FreeCAD.Vector(*c))
+        lines = []
+        lines.append(Part.LineSegment(v[0], v[3]))
+        lines.append(Part.LineSegment(v[0], v[2]))
+        lines.append(Part.LineSegment(v[0], v[4]))
+        lines.append(Part.LineSegment(v[0], v[1]))
+        s = Part.Shape(lines)
+        return s
+
+    def sameShapes(self, sh1, sh2):
+        """Compares shapes for equality.
+        Returns True if shapes are equal, False otherwise.
+        Warning: comparison is not 100% effective
+        """
+        if len(sh1.Solids) != len(sh2.Solids):
+            return False
+        nr_of_solids = len(sh1.Solids)
+        if nr_of_solids < 1:
+            if sh1.dumps() == sh2.dumps():
+                return True
+            sign1 = (sh1.MemSize, round(sh1.Length, 5) if not sh1.isNull()
+                     else 0)
+            sign2 = (sh2.MemSize, round(sh2.Length, 5) if not sh2.isNull()
+                     else 0)
+            if not sign1 == sign2:
+                return False
+        for i in ["Faces", "Edges", "Vertexes"]:
+            if len(getattr(sh1, i)) != len(getattr(sh2, i)):
+                return False
+        for i in range(nr_of_solids):
+            s1 = sh1.Solids[i]
+            s2 = sh2.Solids[i]
+            sign1 = (s1.ShapeType, round(s1.Volume, 5), round(s1.Area, 5),
+                     round(s1.Length, 5))
+            sign2 = (s2.ShapeType, round(s2.Volume, 5), round(s2.Area, 5),
+                     round(s2.Length, 5))
+            if not sign1 == sign2:
+                return False
+        return True
+
+
+class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
+    """A View Provider for the ArchCableBaseElement object
+    """
+    def __init__(self, vobj):
+        ArchComponent.ViewProviderComponent.__init__(self, vobj)
+
+    def claimChildren(self):
+        c = ArchComponent.ViewProviderComponent.claimChildren(self)
+        if hasattr(self.Object, "Terminals") and self.Object.Terminals:
+            c.extend(self.Object.Terminals)
+        if hasattr(self.Object, "SuppLines") and self.Object.SuppLines:
+            c.extend(self.Object.SuppLines)
+        return c
+
+    def updateData(self, obj, prop):
+        # FreeCAD.Console.PrintMessage(obj.Label, f"vobj updateData: {prop}\n")
+        ArchComponent.ViewProviderComponent.updateData(self, obj, prop)
+        if prop == "ExtColor":
+            if (hasattr(obj.ViewObject, "UseMaterialColor") and not
+               obj.ViewObject.UseMaterialColor) \
+               or \
+               (hasattr(obj.ViewObject, "UseMaterialColor") and
+               obj.ViewObject.UseMaterialColor and not obj.Material):
+                # process colors without Materials directly from obj.ExtColor
+                self.colorize_without_material(obj)
+            else:
+                # process colors with Materials from obj.ExtColor
+                self.colorize(obj)
+        if prop in ["Shape", "Material"]:
+            if hasattr(obj.ViewObject, "UseMaterialColor") and \
+               obj.ViewObject.UseMaterialColor:
+                self.colorize(obj)
+
+    def onChanged(self, vobj, prop):
+        if prop == "UseMaterialColor":
+            if vobj.UseMaterialColor and vobj.Object.Material:
+                # clear Shape Apperiance reload Material
+                vobj.ShapeAppearance = (FreeCAD.Material(),)
+                m = vobj.Object.Material
+                vobj.Object.Material = m
+                self.colorize(vobj.Object)
+            if not vobj.UseMaterialColor or not vobj.Object.Material:
+                self.colorize_without_material(vobj.Object)
+        ArchComponent.ViewProviderComponent.onChanged(self, vobj, prop)
+
+    def colorize(self, obj, force=False):
+        def _sort_mat(col_list):
+            l_cols = list(set(col_list))
+            v = [col_list.count(i) for i in l_cols]
+            p = sorted(zip(l_cols, v), key=lambda x: x[1], reverse=True)
+            return [i[0] for i in p]
+
+        def _get_mat_assignments(col_list):
+            sorted_cols = _sort_mat(col_list)
+            m_as = []
+            for a in sorted_cols:
+                idxs = [i for i, val in enumerate(col_list) if val == a]
+                m_as.append(idxs)
+            return m_as
+
+        def _get_flat_list(obj, mat, m_as):
+            if len(mat) != len(m_as):
+                FreeCAD.Console.PrintError(
+                    obj.Label, f"The MultiMaterial <{obj.Material.Label}> " +
+                    f"should have {len(m_as)} materials, not {len(mat)}\n")
+                return None
+            lmax = sum([len(i) for i in m_as])
+            matlist = [mat[0]]*lmax
+            for midx, m in enumerate(mat[1:]):
+                for f in m_as[midx]:
+                    matlist[f] = m
+            return matlist
+
+        def _convert_materials(matlist):
+            new_mlist = []
+            for m in matlist:
+                new_m = FreeCAD.Material()
+                if "DiffuseColor" in m.Material:
+                    diff_col = m.Material["DiffuseColor"]
+                    if "(" in diff_col:
+                        col_str_lst = diff_col.strip("()").split(",")
+                        color = tuple([float(f) for f in col_str_lst])
+                    if color and ('Transparency' in m.Material):
+                        t = float(m.Material['Transparency'])/100.0
+                        color = color[:3] + (t, )
+                new_m.DiffuseColor = color[:3] + (0.0, )
+                new_m.Transparency = color[3]
+                new_mlist.append(new_m)
+            return new_mlist
+
+        # FreeCAD.Console.PrintMessage(obj.Label, "BE vobj colorize\n")
+        ArchComponent.ViewProviderComponent.colorize(self, obj, force)
+        if hasattr(obj, "ExtColor") and obj.ExtColor and \
+           hasattr(obj, "Material") and hasattr(obj.Material, "Materials"):
+            mat_assign = _get_mat_assignments(obj.ExtColor)
+            mats = _convert_materials(obj.Material.Materials)
+            sapp = _get_flat_list(obj, mats, mat_assign)
+            if sapp is not None:
+                if not self.shapeAppearanceIsSame(
+                   obj.ViewObject.ShapeAppearance, sapp):
+                    obj.ViewObject.ShapeAppearance = sapp
+
+    def colorize_without_material(self, obj):
+        if hasattr(obj, "ExtColor") and obj.ExtColor:
+            # FreeCAD.Console.PrintMessage(obj.Label, f"BE color w/o mat.\n")
+            # obsolete: obj.ViewObject.DiffuseColor = obj.ExtColor
+            colors_set = set(obj.ExtColor)
+            materials = []
+            for c in colors_set:
+                m = FreeCAD.Material()
+                m.DiffuseColor = c
+                materials.append(m)
+            sapp = []
+            palette = [m.DiffuseColor for m in materials]
+            for color in obj.ExtColor:
+                i = palette.index(color)
+                sapp.append(materials[i])
+            if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
+                                              sapp):
+                obj.ViewObject.ShapeAppearance = sapp
+        else:
+            # FreeCAD.Console.PrintMessage("color w/o mat. w/o ExtColor\n")
+            sapp = (FreeCAD.Material(),)
+            if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
+                                              sapp):
+                obj.ViewObject.ShapeAppearance = sapp
+
+    def shapeAppearanceIsSame(self, sapp1, sapp2):
+        def _shapeAppearanceMaterialIsSame(sapp_mat1, sapp_mat2):
+            for prop in (
+                "AmbientColor",
+                "DiffuseColor",
+                "EmissiveColor",
+                "Shininess",
+                "SpecularColor",
+                "Transparency",
+            ):
+                if getattr(sapp_mat1, prop) != getattr(sapp_mat2, prop):
+                    return False
+            return True
+
+        if len(sapp1) != len(sapp2):
+            return False
+        for sapp_mat1, sapp_mat2 in zip(sapp1, sapp2):
+            if not _shapeAppearanceMaterialIsSame(sapp_mat1, sapp_mat2):
+                return False
+        return True
+
+
+def makeBaseElement(name=None):
+    if not FreeCAD.ActiveDocument:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "No active document. Aborting") + "\n")
+        return
+    obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
+                                           "CableBaseElement")
+    obj.Label = name if name else translate("Cables", "CableBaseElement")
+    BaseElement(obj)
+    if FreeCAD.GuiUp:
+        ViewProviderBaseElement(obj.ViewObject)

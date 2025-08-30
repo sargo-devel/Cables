@@ -3,8 +3,8 @@
 
 import os
 import FreeCAD
-import ArchComponent
 import Part
+from freecad.cables import archCableBaseElement
 from freecad.cables import iconPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
@@ -14,11 +14,12 @@ CLASS_CABLELIGHTPOINT_ICON = os.path.join(iconPath,
                                           "classArchCableLightPoint.svg")
 
 
-class ArchCableLightPoint(ArchComponent.Component):
+class ArchCableLightPoint(archCableBaseElement.BaseElement):
     """The ArchCableLightPoint object
     """
     def __init__(self, obj):
-        ArchComponent.Component.__init__(self, obj)
+        eltype = "CableLightPoint"
+        archCableBaseElement.BaseElement.__init__(self, obj, eltype=eltype)
         self.setProperties(obj)
         from ArchIFC import IfcTypes
         if "Cable Fitting" in IfcTypes:
@@ -49,33 +50,43 @@ class ArchCableLightPoint(ArchComponent.Component):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The height of the light " +
                                 "point fitting"))
-        self.Type = "LightPoint"
+        if "Terminals" in pl:
+            obj.removeProperty("Terminals")
+        if "NumberOfTerminals" in pl:
+            obj.removeProperty("NumberOfTerminals")
+        if "NumberOfSuppLines" in pl:
+            obj.setPropertyStatus("NumberOfSuppLines", "Hidden")
+        if "Preset" in pl:
+            obj.setPropertyStatus("Preset", "Hidden")
+        self.Type = "Component"
 
     def onDocumentRestored(self, obj):
-        ArchComponent.Component.onDocumentRestored(self, obj)
+        eltype = "CableLightPoint"
+        archCableBaseElement.BaseElement.onDocumentRestored(self, obj, eltype)
         self.setProperties(obj)
 
     def onChanged(self, obj, prop):
-        ArchComponent.Component.onChanged(self, obj, prop)
+        archCableBaseElement.BaseElement.onChanged(self, obj, prop)
 
     def execute(self, obj):
+        archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        shapes.append(self.makeSupportPoints(obj))
-        shapes.append(self.makeBox(obj))
-        sh = Part.makeCompound(shapes)
-        obj.Shape = self.processSubShapes(obj, sh, pl)
-        obj.Placement = pl
+        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+            shapes.append(self.makeBox(obj))
+            sh = Part.makeCompound(shapes)
+            if obj.Additions or obj.Subtractions:
+                sh = self.processSubShapes(obj, sh, pl)
+            obj.Shape = sh
+            # obj.Placement = pl
 
-    def makeSupportPoints(self, obj):
+    def makeSupportLines(self, obj):
         z = 2
-        y = 0
-        vertexes1 = []
-        vertexes2 = []
-        x = 0
-        vertexes1.append(Part.Vertex(x, y, z))
-        vertexes2.append(Part.Vertex(x, y, -obj.Height.Value-z))
-        s = Part.Shape(vertexes1 + vertexes2)
+        s1 = archCableBaseElement.BaseElement.makeSupportLines(self, obj)
+        s2 = archCableBaseElement.BaseElement.makeSupportLines(self, obj)
+        s1.Placement.Base.z = z
+        s2.Placement.Base.z = -obj.Height.Value-z
+        s = Part.Shape(s1.Edges + s2.Edges)
         return s
 
     def makeBox(self, obj):
@@ -88,11 +99,12 @@ class ArchCableLightPoint(ArchComponent.Component):
         return box
 
 
-class ViewProviderCableLightPoint(ArchComponent.ViewProviderComponent):
+class ViewProviderCableLightPoint(
+     archCableBaseElement.ViewProviderBaseElement):
     """A View Provider for the ArchCableBox object
     """
     def __init__(self, vobj):
-        ArchComponent.ViewProviderComponent.__init__(self, vobj)
+        archCableBaseElement.ViewProviderBaseElement.__init__(self, vobj)
 
     def getIcon(self):
         return CLASS_CABLELIGHTPOINT_ICON
@@ -122,4 +134,8 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
         obj.Height = height if height else 5
     if placement:
         obj.Placement = placement
+    if hasattr(obj, "NumberOfSuppLines"):
+        obj.NumberOfSuppLines = 1
+    if hasattr(obj, "SuppLines") and not obj.SuppLines:
+        obj.Proxy.makeSupportLinesChildObjects(obj)
     return obj

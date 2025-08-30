@@ -376,6 +376,23 @@ class ArchCable(ArchPipe._ArchPipe):
             w = ArchPipe._ArchPipe.getWire(self, obj)
         return w
 
+    def getProfile(self, obj):
+        FreeCAD.Console.PrintMessage(f"{obj.Label}", "get profile\n")
+        p = ArchPipe._ArchPipe.getProfile(self, obj)
+        if 0 in self.wireNrWithTwoColors(obj) and len(p.Edges) == 1:
+            # make splitted profile for two-color insulation
+            p = self.splitProfile(p)
+        return p
+
+    def splitProfile(self, p):
+        # make splitted profile for two-color insulation
+        pl = p.Placement.copy()
+        e = p.Edges[0]
+        last_p = e.LastParameter - e.FirstParameter
+        p = e.split([last_p/4, last_p/2, last_p*3/4])
+        p.Placement = pl
+        return p
+
     def isBasePathContinuous(self, obj):
         '''Checks if base path (compound of many wires) is properly constructed
         It checks if:
@@ -529,7 +546,12 @@ class ArchCable(ArchPipe._ArchPipe):
             shapes2 = []
             for idxw, p in enumerate(subprofile.Shape.Wires[1:sub_qty+1]):
                 if obj.SubWires[idxw+sub_qty*idxp].Shape.Wires:
-                    w = obj.SubWires[idxw+sub_qty*idxp].Shape.Wires[0]
+                    i = idxw + sub_qty*idxp
+                    if i+1 in self.wireNrWithTwoColors(obj) and \
+                       len(p.Edges) == 1:
+                        # make splitted profile for two-color insulation
+                        p = self.splitProfile(p)
+                    w = obj.SubWires[i].Shape.Wires[0]
                     p_in = subprofile.Shape.Wires[1+idxw+sub_qty]
                     # subwire insulation
                     shapes1.append(self.buildSingleSubShape(obj, p, p_in, w))
@@ -546,7 +568,14 @@ class ArchCable(ArchPipe._ArchPipe):
                 wire = self.addOffsetToWire(obj, wire)
                 shape = wire.makePipeShell([profile_out], True, False, 2)
                 shape_in = wire.makePipeShell([profile_in], True, False, 2)
-                shape = shape.cut(shape_in)
+                # version with shell (ensures proper order of faces)
+                # important for two-color insulation
+                face_s = shape.Faces[-2].cut(shape_in.Faces[-2]).Faces[0]
+                face_e = shape.Faces[-1].cut(shape_in.Faces[-1]).Faces[0]
+                shape = Part.makeSolid(Part.makeShell(shape.Faces[:-2] +
+                                       shape_in.Faces[:-2] + [face_s, face_e]))
+                # version with cut (simpler, but gives mixed order of faces)
+                # shape = shape.cut(shape_in)
             else:
                 shape = wire.makePipeShell([profile_out], True, False, 2)
         except Part.OCCError:
@@ -726,6 +755,25 @@ class ArchCable(ArchPipe._ArchPipe):
             if obj.SubWiresFilletRadius.Value != radius:
                 obj.SubWiresFilletRadius.Value = radius
 
+    def wireNrWithTwoColors(self, obj):
+        wire_list = []
+        w0 = []
+        if obj.Material is not None:
+            if hasattr(obj.Material, "Names"):
+                names = obj.Material.Names
+                duplicates = [i for i in set(names) if names.count(i) > 1]
+                if hasattr(obj, "SubWires"):
+                    w_max = int(len(obj.SubWires)/2)
+                else:
+                    w_max = 1
+                if obj.ViewObject.Proxy.getSolidName(obj, 0) in duplicates:
+                    w0 = [0]
+                wire_list = [[i+1, i+1+w_max] for i in range(w_max)
+                             if obj.ViewObject.Proxy.getSolidName(obj, i+1)
+                             in duplicates]
+                wire_list = [i for sub in wire_list for i in sub]
+        return w0 + wire_list
+
 
 class ViewProviderCable(ArchComponent.ViewProviderComponent):
     """A View Provider for the ArchCable object
@@ -819,14 +867,27 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
             color = None
             mat_name = self.getSolidName(obj, i)
             # FreeCAD.Console.PrintMessage(f"mat_name: {mat_name}\n")
-            color = self.getSolidMaterial(obj, arch_mat, mat_name)
-            if color is None:
-                sapp_mat = base_sapp_mat
+            colors = self.getSolidMaterial(obj, arch_mat, mat_name)
+            if len(colors) > 1:
+                sapp_mats = []
+                for color in colors[:2]:
+                    sapp_mat = FreeCAD.Material()
+                    sapp_mat.DiffuseColor = color[:3] + (0.0, )
+                    sapp_mat.Transparency = color[3]
+                    sapp_mats.append(sapp_mat)
+                for f_idx in range(len(solids[i].Faces)):
+                    sapp_mat = sapp_mats[f_idx % 2]
+                    sapp.append(sapp_mat)
+                sapp[-1] = sapp_mats[0]
             else:
-                sapp_mat = FreeCAD.Material()
-                sapp_mat.DiffuseColor = color[:3] + (0.0, )
-                sapp_mat.Transparency = color[3]
-            sapp.extend((sapp_mat, ) * len(solids[i].Faces))
+                color = colors[0] if colors else None
+                if color is None:
+                    sapp_mat = base_sapp_mat
+                else:
+                    sapp_mat = FreeCAD.Material()
+                    sapp_mat.DiffuseColor = color[:3] + (0.0, )
+                    sapp_mat.Transparency = color[3]
+                sapp.extend((sapp_mat, ) * len(solids[i].Faces))
 
         if clone is not None:
             obj = clone
@@ -867,21 +928,26 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
         return name
 
     def getSolidMaterial(self, obj, arch_mat, mat_name):
-        color = None
+        colors = []
         if arch_mat is not None and hasattr(arch_mat, "Materials"):
             if mat_name in arch_mat.Names:
-                mat_idx = arch_mat.Names.index(mat_name)
-                mat = arch_mat.Materials[mat_idx]
-                if mat:
-                    if 'DiffuseColor' in mat.Material:
-                        diff_col = mat.Material['DiffuseColor']
-                        if "(" in diff_col:
-                            col_str_lst = diff_col.strip("()").split(",")
-                            color = tuple([float(f) for f in col_str_lst])
-                    if color and ('Transparency' in mat.Material):
-                        t = float(mat.Material['Transparency'])/100.0
-                        color = color[:3] + (t, )
-        return color
+                idx = 0
+                for i in range(arch_mat.Names.count(mat_name)):
+                    mat_idx = arch_mat.Names.index(mat_name, idx)
+                    idx = mat_idx + 1
+                    mat = arch_mat.Materials[mat_idx]
+                    color = None
+                    if mat:
+                        if 'DiffuseColor' in mat.Material:
+                            diff_col = mat.Material['DiffuseColor']
+                            if "(" in diff_col:
+                                col_str_lst = diff_col.strip("()").split(",")
+                                color = tuple([float(f) for f in col_str_lst])
+                        if color and ('Transparency' in mat.Material):
+                            t = float(mat.Material['Transparency'])/100.0
+                            color = color[:3] + (t, )
+                    colors.append(color)
+        return colors[:2]
 
 
 def getObjectsForCable(selectlist):

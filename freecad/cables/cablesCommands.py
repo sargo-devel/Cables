@@ -36,6 +36,7 @@ CMD_CABLECONNECTOR_ICON = os.path.join(iconPath, "cmdNewCableConnector.svg")
 CMD_CABLEPROFILE_ICON = os.path.join(iconPath, "cmdNewCableProfile.svg")
 CMD_CABLEMATERIAL_ICON = os.path.join(iconPath, "cmdNewCableMaterial.svg")
 CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
+CMD_ELECTRICALDEVICE_ICON = os.path.join(iconPath, "cmdNewElectricalDevice.svg")
 CMD_SUPPORTPOINT_ICON = os.path.join(iconPath, "cmdNewSupportPoint.svg")
 CMD_SUPPORTLINE_ICON = os.path.join(iconPath, "cmdNewSupportLine.svg")
 
@@ -50,6 +51,7 @@ keyShorts = {'WireFlex': 'W, F',
              'CableBox': 'C, X',
              'CableConnector': 'C, N',
              'CableLightPoint': 'C, L',
+             'ElectricalDevice': 'C, E',
              'SupportPoint': 'X, P',
              'SupportLine': 'X, L',
              }
@@ -421,6 +423,37 @@ class newCableLightPoint:
                     "the light point")}
 
 
+class newElectricalDevice:
+    def Activated(self):
+        sel_obj = Gui.Selection.getCompleteSelection()
+        c = "freecad.cables.archElectricalDevice"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Electrical Device"))
+        FreeCADGui.addModule(f"{c}")
+        if len(sel_obj) > 0:
+            pos_vect = sel_obj[0].PickedPoints[0]
+            FreeCADGui.doCommand("pl = FreeCAD.Placement()")
+            FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
+            FreeCADGui.doCommand(f"{c}.makeElectricalDevice(placement=pl)")
+        else:
+            FreeCADGui.doCommand(f"{c}.makeElectricalDevice()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_ELECTRICALDEVICE_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_ElectricalDevice",
+                                              "Electrical Device"),
+                "Accel": keyShorts['ElectricalDevice'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_CableLightPoint", "It adds a new electrical " +
+                    "device. Select any point in 3D view first, then add " +
+                    "the device")}
+
+
 class newSupportPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
@@ -499,5 +532,6 @@ Gui.addCommand('Cables_CableConnector', newCableConnectorCommand())
 Gui.addCommand('Cables_Profile', newProfileCommand())
 Gui.addCommand('Cables_Material', newMaterialCommand())
 Gui.addCommand('Cables_CableLightPoint', newCableLightPoint())
+Gui.addCommand('Cables_ElectricalDevice', newElectricalDevice())
 Gui.addCommand('Cables_SupportPoint', newSupportPoint())
 Gui.addCommand('Cables_SupportLine', newSupportLine())

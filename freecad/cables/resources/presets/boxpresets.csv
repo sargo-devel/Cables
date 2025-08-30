@@ -1,0 +1,34 @@
+# Data structure:
+
+# Name, Profile Type, Box Class, geometric data...
+
+# All measures must be in millimeters
+
+# Possible profile types are:
+
+# Circle =  Round box
+# Rectangle =  Rectangular box
+
+# Additional profile types must be implemented in archCableBox.py first
+
+# Proposed naming convention for Box Class:
+# 1G_FlushMnt; 2G_FlushMnt : 1-gang flush-mounted box; 2-gang flush-mounted box etc
+# DIN1x18; DIN3x18 : DIN rail box with 1 rail and 18 modules on rail; DIN rail box with 3 rails and 18 modules on each rail etc
+
+###########################################
+
+# Circle Profile Type
+# All dimensions are inner box dimensions
+# Name,Circle,Box Class,diameter,height,thickness,holediameter
+Round_D60_h62,Circle,1G_FlushMnt,60.0,62.0,2.0,20.0
+Round_D60_h45,Circle,1G_FlushMnt,60.0,45.0,2.0,20.0
+Round_D74_h28,Circle,1G_FlushMnt,74.0,28.0,2.0,20.0
+
+# Rectangle Profile Type
+# All dimensions are inner box dimensions
+# Name,Rectangle,Box Class,width,depth,height,thickness,filletradius,holediameter,holesdistance
+Square_74x74_h30,Rectangle,1G_FlushMnt,74.0,74.0,30.0,2.5,12.0,20.0,74.0
+Square_50x50_h18,Rectangle,1G_FlushMnt,50.0,50.0,18.0,2.5,2.0,11.0,50.0
+Rectangle_80x32_h33,Rectangle,1G_FlushMnt,80.0,32.0,33.0,3.0,3.0,20.0,24.0
+Rectangle_136x60_h45,Rectangle,2G_FlushMnt,136.0,60.0,45.0,2.0,28.0,20.0,50.0
+Rectangle_365x212_h103,Rectangle,DIN1x18,365.0,212.0,103.0,3.0,10.0,20.0,60.0

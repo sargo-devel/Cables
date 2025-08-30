@@ -58,6 +58,8 @@ class CablesWorkbench (Gui.Workbench):
                            "Cables_DelVertex",
                            "Cables_AttachVertex",
                            "Cables_RemoveVertexAttachment",
+                           "Cables_AttachWireToTerminal",
+                           "Cables_DetachWireFromTerminal",
                            "Cables_CompoundPath",
                            "Cables_Edit"]
         self.list_cables = ["Cables_Profile",
@@ -69,7 +71,9 @@ class CablesWorkbench (Gui.Workbench):
                             "Cables_ElectricalDevice",
                             "Cables_Material"]
         self.list_support = ["Cables_SupportPoint",
-                             "Cables_SupportLine"]
+                             "Cables_SupportLine",
+                             "Cables_AttachInPlace",
+                             "Cables_DeactivateAttachment"]
         self.list_draft = ["Draft_ToggleGrid",
                            # "Draft_SelectPlane"]
                            ]

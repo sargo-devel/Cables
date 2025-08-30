@@ -39,12 +39,19 @@ CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
 CMD_ELECTRICALDEVICE_ICON = os.path.join(iconPath, "cmdNewElectricalDevice.svg")
 CMD_SUPPORTPOINT_ICON = os.path.join(iconPath, "cmdNewSupportPoint.svg")
 CMD_SUPPORTLINE_ICON = os.path.join(iconPath, "cmdNewSupportLine.svg")
+CMD_ATTACHINPLACE_ICON = os.path.join(iconPath, "cmdAttachInPlace.svg")
+CMD_DEACTIVATEATTACHMENT_ICON = os.path.join(iconPath,
+                                             "cmdDeactivateAttachment.svg")
+CMD_ATTWIRETOTERMINAL_ICON = os.path.join(iconPath, "cmdAttWireToTerminal.svg")
+CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath, "cmdDetWireFromTerminal.svg")
 
 keyShorts = {'WireFlex': 'W, F',
              'AddVertex': 'W, A',
              'DelVertex': 'W, D',
              'AttachVertex': 'W, T',
              'RemoveVertexAttachment': 'W, R',
+             'AttachWireToTerminal': 'T, A',
+             'DetachWireFromTerminal': 'T, R',
              'CompoundPath': 'C, P',
              'Cable': 'C, B',
              'CableConduit': 'C, D',
@@ -54,6 +61,8 @@ keyShorts = {'WireFlex': 'W, F',
              'ElectricalDevice': 'C, E',
              'SupportPoint': 'X, P',
              'SupportLine': 'X, L',
+             'AttachInPlace': 'X, A',
+             'DeactivateAttachment': 'X, D'
              }
 
 
@@ -449,7 +458,7 @@ class newElectricalDevice:
                                               "Electrical Device"),
                 "Accel": keyShorts['ElectricalDevice'],
                 'ToolTip': QT_TRANSLATE_NOOP(
-                    "Cables_CableLightPoint", "It adds a new electrical " +
+                    "Cables_ElectricalDevice", "It adds a new electrical " +
                     "device. Select any point in 3D view first, then add " +
                     "the device")}
 
@@ -519,6 +528,114 @@ class newSupportLine:
                     "at least one point first")}
 
 
+class attachInPlace:
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables.cableutils"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Attach In Place"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.attach_in_place({s})")
+        #FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_ATTACHINPLACE_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_AttachInPlace",
+                                              "Attach In Place"),
+                "Accel": keyShorts['AttachInPlace'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_AttachInPlace", "It makes attachment without " +
+                    "changing global placement of an object. Select " +
+                    "objects to attach then at the end the object which " +
+                    "will be the attachment support for them")}
+
+
+class deactivateAttachment:
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables.cableutils"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Deactivate Attachment"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.deactivate_attachment({s})")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_DEACTIVATEATTACHMENT_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_DeactivateAttachment",
+                                              "Deactivate Attachment"),
+                "Accel": keyShorts['DeactivateAttachment'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_DeactivateAttachment", "It daeactivates " +
+                    "attachment of selected objects")}
+
+
+class attachWireToTerminal:
+    def Activated(self):
+        sel = wireutils.processGuiSelection(False, Part.Vertex,
+                                            wireFlex.WireFlex)
+        s = wireutils.reprintSelection("doc", sel)
+        c = "freecad.cables.cableutils"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Attach Wire To Terminal"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.attach_wire_to_terminal({s})")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_ATTWIRETOTERMINAL_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_AttachWireToTerminal",
+                                              "AttachWireToTerminal"),
+                "Accel": keyShorts['AttachWireToTerminal'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_AttachWireToTerminal", "It makes attachment of " +
+                    "wire end to the terminal. Select WireFlex then Terminal")}
+
+
+class detachWireFromTerminal:
+    def Activated(self):
+        sel_obj = Gui.Selection.getSelection()
+        s = wireutils.reprintSelection("doc", sel_obj)
+        c = "freecad.cables.cableutils"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Detach Wire From Terminal"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+        FreeCADGui.doCommand(f"{c}.detach_wire_from_terminal({s})")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_DETWIREFROMTERMINAL_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_DetachWireFromTerminal",
+                                              "DetachWireFromTerminal"),
+                "Accel": keyShorts['DetachWireFromTerminal'],
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_AttachWireToTerminal", "It removes wire end " +
+                    "attachment from the terminal. Select WireFlex then " +
+                    "Terminal")}
+
+
 Gui.addCommand('Cables_WireFlex', newWireFlexCommand())
 Gui.addCommand('Cables_AddVertex', addVertexCommand())
 Gui.addCommand('Cables_DelVertex', delVertexCommand())
@@ -535,3 +652,7 @@ Gui.addCommand('Cables_CableLightPoint', newCableLightPoint())
 Gui.addCommand('Cables_ElectricalDevice', newElectricalDevice())
 Gui.addCommand('Cables_SupportPoint', newSupportPoint())
 Gui.addCommand('Cables_SupportLine', newSupportLine())
+Gui.addCommand('Cables_AttachInPlace', attachInPlace())
+Gui.addCommand('Cables_DeactivateAttachment', deactivateAttachment())
+Gui.addCommand('Cables_AttachWireToTerminal', attachWireToTerminal())
+Gui.addCommand('Cables_DetachWireFromTerminal', detachWireFromTerminal())

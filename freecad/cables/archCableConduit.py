@@ -123,6 +123,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         if hasattr(obj, 'SubConduits') and len(obj.SubConduits) > 0 and \
                 obj.SubConduits[0].TypeId == 'Part::Compound':
             ownshape = obj.Shape.copy()
+            ownshape.Placement = FreeCAD.Placement()
             subshape = obj.SubConduits[0].Shape.copy()
             sh = Part.makeCompound([ownshape, subshape])
             obj.Shape = sh

@@ -7,16 +7,8 @@ import FreeCADGui
 from FreeCAD import Gui
 import Part
 from freecad.cables import wireutils
-from freecad.cables import compoundPath
-from freecad.cables import archCable
-from freecad.cables import archCableConduit
-from freecad.cables import archCableBox
-from freecad.cables import archCableConnector
-from freecad.cables import archCableLightPoint
 from freecad.cables import wireFlex
 from freecad.cables import cableProfile
-from freecad.cables import cableMaterial
-from freecad.cables import cableSupport
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -36,14 +28,16 @@ CMD_CABLECONNECTOR_ICON = os.path.join(iconPath, "cmdNewCableConnector.svg")
 CMD_CABLEPROFILE_ICON = os.path.join(iconPath, "cmdNewCableProfile.svg")
 CMD_CABLEMATERIAL_ICON = os.path.join(iconPath, "cmdNewCableMaterial.svg")
 CMD_CABLELIGHTPOINT_ICON = os.path.join(iconPath, "cmdNewCableLightPoint.svg")
-CMD_ELECTRICALDEVICE_ICON = os.path.join(iconPath, "cmdNewElectricalDevice.svg")
+CMD_ELECTRICALDEVICE_ICON = os.path.join(iconPath,
+                                         "cmdNewElectricalDevice.svg")
 CMD_SUPPORTPOINT_ICON = os.path.join(iconPath, "cmdNewSupportPoint.svg")
 CMD_SUPPORTLINE_ICON = os.path.join(iconPath, "cmdNewSupportLine.svg")
 CMD_ATTACHINPLACE_ICON = os.path.join(iconPath, "cmdAttachInPlace.svg")
 CMD_DEACTIVATEATTACHMENT_ICON = os.path.join(iconPath,
                                              "cmdDeactivateAttachment.svg")
 CMD_ATTWIRETOTERMINAL_ICON = os.path.join(iconPath, "cmdAttWireToTerminal.svg")
-CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath, "cmdDetWireFromTerminal.svg")
+CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath,
+                                            "cmdDetWireFromTerminal.svg")
 
 keyShorts = {'WireFlex': 'W, F',
              'AddVertex': 'W, A',

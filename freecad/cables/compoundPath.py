@@ -238,8 +238,10 @@ class CompoundPath:
                     "Cables", "link object has no Points property") + "\n")
                 return None, None
             if i+1 < links_len and not hasattr(obj.Links[i+1], 'Points'):
-                FreeCAD.Console.PrintError(f"{obj.Links[i+1].Label}", translate(
-                    "Cables", "link object has no Points property") + "\n")
+                FreeCAD.Console.PrintError(
+                    f"{obj.Links[i+1].Label}",
+                    translate("Cables",
+                              "link object has no Points property") + "\n")
                 return None, None
             if i+1 < links_len:
                 next_link = obj.Links[i+1]

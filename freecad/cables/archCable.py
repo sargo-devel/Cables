@@ -377,7 +377,6 @@ class ArchCable(ArchPipe._ArchPipe):
         return w
 
     def getProfile(self, obj):
-        FreeCAD.Console.PrintMessage(f"{obj.Label}", "get profile\n")
         p = ArchPipe._ArchPipe.getProfile(self, obj)
         if 0 in self.wireNrWithTwoColors(obj) and len(p.Edges) == 1:
             # make splitted profile for two-color insulation

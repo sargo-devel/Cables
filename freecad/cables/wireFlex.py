@@ -265,7 +265,8 @@ class WireFlex(Draft.Wire):
             vfinal = (points[-1] - points[-2]).normalize()
             spline = wireutils.getBSpline_K(
                 points[idxs:idxe], vinit, vfinal, obj.BoundaryTangents,
-                obj.InnerTangents, obj.TangencyCoefficient, obj.Parameterization)
+                obj.InnerTangents, obj.TangencyCoefficient,
+                obj.Parameterization)
         if bstype == 'P':
             # spline = wireutils.getBSpline_P(points[idxs:idxe], interpolate=True)
             spline = wireutils.getBSpline_P(points[idxs:idxe])

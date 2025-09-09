@@ -326,6 +326,10 @@ class ViewProviderCableConduit(ArchComponent.ViewProviderComponent):
 
     def updateData(self, obj, prop):
         ArchComponent.ViewProviderComponent.updateData(self, obj, prop)
+        if prop == "SubConduits":
+            if obj.MergeSubConduits:
+                for sub in obj.SubConduits:
+                    sub.ViewObject.hide()
         if prop == "Shape":
             self.colorize(obj)
 

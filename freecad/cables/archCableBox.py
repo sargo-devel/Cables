@@ -6,10 +6,13 @@ from math import pi
 from math import sin
 from math import cos
 import FreeCAD
+if FreeCAD.GuiUp:
+    import FreeCADGui
 import Part
 from freecad.cables import archCableBaseElement
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
+from freecad.cables import uiPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -23,6 +26,99 @@ presetfiles = [os.path.join(presetsPath, "boxpresets.csv"),
                os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                             "boxpresets.csv")]
 default_preset = "1G_FlushMnt_Round_D60_h62"
+
+ui_box = os.path.join(uiPath, "box.ui")
+
+
+class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
+    def __init__(self, obj, ui=ui_box):
+        archCableBaseElement.TaskPanelBaseElement.__init__(self, obj, ui)
+        self.profile_types = self.obj.getEnumerationsOfProperty("ProfileType")
+        self.form.comboPreset.addItems(self.presetnames)
+        self.form.comboProfileType.addItems(self.profile_types)
+        self.connectEnumVar(self.form.comboPreset, "Preset",
+                            self.updateVisibility)
+        self.connectEnumVar(self.form.comboProfileType, "ProfileType",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sWidth, "Width")
+        self.connectSpinVar(self.form.sDepth, "Depth")
+        self.connectSpinVar(self.form.sFilletRadius, "FilletRadius")
+        self.connectSpinVar(self.form.sDiameter, "Diameter")
+        self.connectSpinVar(self.form.sHeight, "Height")
+        self.connectSpinVar(self.form.sThickness, "Thickness")
+        self.connectSpinVar(self.form.sHoleDiameter, "HoleDiameter")
+        self.connectSpinVar(self.form.sHolesDistance, "HolesDistance")
+        self.reloadPropertiesFromObj()
+
+    def accept(self):
+        # prepare commands to track changes in console
+        pnames = []
+        pvalues = []
+        if self.obj.Preset == "Customized":
+            pnames = ["ProfileType", "Width", "Depth", "FilletRadius",
+                      "Diameter", "Height", "Thickness", "HoleDiameter",
+                      "HolesDistance"]
+            pvalues.append(self.obj.ProfileType)
+            pvalues.append(str(self.obj.Width))
+            pvalues.append(str(self.obj.Depth))
+            pvalues.append(str(self.obj.FilletRadius))
+            pvalues.append(str(self.obj.Diameter))
+            pvalues.append(str(self.obj.Height))
+            pvalues.append(str(self.obj.Thickness))
+            pvalues.append(str(self.obj.HoleDiameter))
+            pvalues.append(str(self.obj.HolesDistance))
+        FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
+                             f"'{self.obj.Preset}', {pnames}, {pvalues})")
+        archCableBaseElement.TaskPanelBaseElement.accept(self)
+
+    def updateVisibility(self, pname, pvalue):
+        def _updateProfileTypeVisibility(pvalue):
+            if self.profile_types[pvalue] == "Circle":
+                self.form.sWidth.setVisible(False)
+                self.form.sWidthLabel.setVisible(False)
+                self.form.sDepth.setVisible(False)
+                self.form.sDepthLabel.setVisible(False)
+                self.form.sFilletRadius.setVisible(False)
+                self.form.sFilletRadiusLabel.setVisible(False)
+                self.form.sDiameter.setVisible(True)
+                self.form.sDiameterLabel.setVisible(True)
+                self.form.sHolesDistance.setVisible(False)
+                self.form.sHolesDistanceLabel.setVisible(False)
+            elif self.profile_types[pvalue] == "Rectangle":
+                self.form.sWidth.setVisible(True)
+                self.form.sWidthLabel.setVisible(True)
+                self.form.sDepth.setVisible(True)
+                self.form.sDepthLabel.setVisible(True)
+                self.form.sFilletRadius.setVisible(False)
+                self.form.sFilletRadiusLabel.setVisible(False)
+                self.form.sDiameter.setVisible(False)
+                self.form.sDiameterLabel.setVisible(False)
+                self.form.sHolesDistance.setVisible(True)
+                self.form.sHolesDistanceLabel.setVisible(True)
+        if pname == "Preset":
+            preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
+            if preset_name == "Customized":
+                self.form.customBox.setVisible(True)
+            else:
+                self.form.customBox.setVisible(False)
+            if self.form.comboPreset.currentText() == "Customized":
+                idx = self.profile_types.index(self.obj.ProfileType)
+                _updateProfileTypeVisibility(idx)
+                self.reloadPropertiesFromObj()
+        if pname == "ProfileType":
+            _updateProfileTypeVisibility(pvalue)
+
+    def reloadPropertiesFromObj(self):
+        archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
+        self.form.comboProfileType.setCurrentText(self.obj.ProfileType)
+        self.form.sWidth.setProperty("value", self.obj.Width)
+        self.form.sDepth.setProperty("value", self.obj.Depth)
+        self.form.sFilletRadius.setProperty("value", self.obj.FilletRadius)
+        self.form.sDiameter.setProperty("value", self.obj.Diameter)
+        self.form.sHeight.setProperty("value", self.obj.Height)
+        self.form.sThickness.setProperty("value", self.obj.Thickness)
+        self.form.sHoleDiameter.setProperty("value", self.obj.HoleDiameter)
+        self.form.sHolesDistance.setProperty("value", self.obj.HolesDistance)
 
 
 class ArchCableBox(archCableBaseElement.BaseElement):
@@ -407,6 +503,11 @@ class ViewProviderCableBox(archCableBaseElement.ViewProviderBaseElement):
 
     def getIcon(self):
         return CLASS_CABLEBOX_ICON
+
+    def setEdit(self, vobj, mode):
+        return archCableBaseElement.ViewProviderBaseElement.setEditBase(
+            self, vobj, mode, TaskPanelCableBox,
+            translate("Cables", "edit Cable Box"))
 
 
 def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,

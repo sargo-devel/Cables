@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TaskPanelNewProfile</class>
+ <widget class="QDialog" name="TaskPanelNewProfile">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>551</width>
+    <height>492</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Cable Connector</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Cable Box properties</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Preset</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QComboBox" name="comboPreset"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QGroupBox" name="customBox">
+        <property name="title">
+         <string>Custom Cable Box</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="comboProfileTypeLabel">
+             <property name="text">
+              <string>Profile Type</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboProfileType"/>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QLabel" name="sWidthLabel">
+             <property name="text">
+              <string>Width</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sWidth" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="QLabel" name="sDepthLabel">
+             <property name="text">
+              <string>Depth</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sDepth" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <item>
+            <widget class="QLabel" name="sFilletRadiusLabel">
+             <property name="text">
+              <string>Fillet Radius</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sFilletRadius" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="4" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="sDiameterLabel">
+             <property name="text">
+              <string>Diameter (inner)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sDiameter" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="5" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="sHeightLabel">
+             <property name="text">
+              <string>Height</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sHeight" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="6" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLabel" name="sThicknessLabel">
+             <property name="text">
+              <string>Thickness</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sThickness" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="7" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QLabel" name="sHoleDiameterLabel">
+             <property name="text">
+              <string>Hole Diameter</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sHoleDiameter" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="8" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <widget class="QLabel" name="sHolesDistanceLabel">
+             <property name="text">
+              <string>Holes Distance</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Gui::QuantitySpinBox" name="sHolesDistance" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Thickness of sheet</string>
+             </property>
+             <property name="decimals" stdset="0">
+              <number>1</number>
+             </property>
+             <property name="minimum" stdset="0">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="maximum" stdset="0">
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="rawValue" stdset="0">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Gui::QuantitySpinBox</class>
+   <extends>QWidget</extends>
+   <header>Gui/QuantitySpinBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

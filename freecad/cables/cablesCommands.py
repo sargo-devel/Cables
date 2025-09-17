@@ -10,6 +10,7 @@ from freecad.cables import wireutils
 from freecad.cables import wireFlex
 from freecad.cables import cableProfile
 from freecad.cables import archCableConnector
+from freecad.cables import archCableBox
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -301,16 +302,23 @@ class newCableBoxCommand:
         c = "freecad.cables.archCableBox"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Box"))
+        lst_before = doc.findObjects(Name=translate(
+                                     "Cables", "CableBox"))
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(f"{c}.makeCableBox(placement=pl)")
+            FreeCADGui.doCommand(f"obj = {c}.makeCableBox(placement=pl)")
         else:
-            FreeCADGui.doCommand(f"{c}.makeCableBox()")
+            FreeCADGui.doCommand(f"obj = {c}.makeCableBox()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        doc.commitTransaction()
+        lst_after = doc.findObjects(Name=translate("Cables", "CableBox"))
+        obj = list(set(lst_after)-set(lst_before))[0]
+        panel = archCableBox.TaskPanelCableBox(obj)
+        FreeCADGui.Control.showDialog(panel)
+        # the below commitTransaction is made inside panel
+        # doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None

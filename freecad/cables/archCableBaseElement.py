@@ -2,6 +2,7 @@
 """
 
 import os
+import math
 import FreeCAD
 import ArchComponent
 import Part
@@ -54,6 +55,30 @@ class TaskPanelBaseElement:
         FreeCADGui.Control.closeDialog()
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
+
+    def updateProperty(self, pname, pvalue, callback):
+        ptype = self.obj.getTypeIdOfProperty(pname)
+        try:
+            prop = getattr(self.obj, pname)
+            if ptype == "App::PropertyEnumeration":
+                if self.obj.getEnumerationsOfProperty(pname)[pvalue] != prop:
+                    setattr(self.obj, pname, pvalue)
+            elif ptype == "App::PropertyFloat" and pvalue != "custom":
+                if not math.isclose(float(pvalue), prop):
+                    setattr(self.obj, pname, float(pvalue))
+            elif ptype == "App::PropertyInteger":
+                if int(pvalue) != prop:
+                    setattr(self.obj, pname, int(pvalue))
+            elif pvalue != "custom":
+                if pvalue != prop:
+                    setattr(self.obj, pname, pvalue)
+            if hasattr(self.obj, "recompute"):
+                self.obj.recompute(True)
+        except (AttributeError, ValueError):
+            FreeCAD.Console.PrintError(
+                self.obj, f"Can't set {pname} with value: {pvalue}")
+        if callback is not None:
+            callback(pname, pvalue)
 
     def connectEnumVar(self, element, pname, callback=None):
         enumlist = self.obj.getEnumerationsOfProperty(pname)

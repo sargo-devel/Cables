@@ -60,16 +60,12 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             pvalues.append(str(self.obj.Height))
             pvalues.append(self.obj.HoleSize)
             pvalues.append(str(self.obj.Thickness))
-        # FreeCADGui.doCommand(
-        #     f"obj = FreeCAD.activeDocument().getObject('{self.obj.Name}')")
         FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
                              f"'{self.obj.Preset}', {pnames}, {pvalues})")
         archCableBaseElement.TaskPanelBaseElement.accept(self)
 
     def updateVisibility(self, pname, pvalue):
-        #FreeCAD.Console.PrintMessage(f"pvalue={pvalue}, pname={pname}\n")
         if pname == "Preset":
-            #FreeCAD.Console.PrintMessage(f"object={self.obj.Label}\n")
             preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
             if preset_name == "Customized":
                 self.form.customBox.setVisible(True)
@@ -85,26 +81,6 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             elif isinstance(pvalue, str):
                 self.form.customHoleSize.setVisible(False)
                 self.form.customHoleSizeLabel.setVisible(False)
-
-    def updateProperty(self, pname, pvalue, callback):
-        ptype = self.obj.getTypeIdOfProperty(pname)
-        #FreeCAD.Console.PrintMessage(f"ptype={ptype}, pvalue={pvalue}, pname={pname}\n")
-        try:
-            if ptype == "App::PropertyEnumeration":
-                setattr(self.obj, pname, pvalue)
-            elif ptype == "App::PropertyFloat" and pvalue != "custom":
-                setattr(self.obj, pname, float(pvalue))
-            elif ptype == "App::PropertyInteger":
-                setattr(self.obj, pname, int(pvalue))
-            elif pvalue != "custom":
-                setattr(self.obj, pname, pvalue)
-            if hasattr(self.obj, "recompute"):
-                self.obj.recompute(True)
-        except (AttributeError, ValueError):
-            FreeCAD.Console.PrintError(
-                self.obj, f"Can't set {pname} with value: {pvalue}")
-        if callback is not None:
-            callback(pname, pvalue)
 
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)

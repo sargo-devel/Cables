@@ -9,6 +9,7 @@ import Part
 from freecad.cables import wireutils
 from freecad.cables import wireFlex
 from freecad.cables import cableProfile
+from freecad.cables import archCableConnector
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -330,17 +331,23 @@ class newCableConnectorCommand:
         c = "freecad.cables.archCableConnector"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Connector"))
+        lst_before = doc.findObjects(Name=translate(
+                                     "Cables", "CableConnector"))
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(f"{c}.makeCableConnector(placement=pl)")
+            FreeCADGui.doCommand(f"obj = {c}.makeCableConnector(placement=pl)")
         else:
-            FreeCADGui.doCommand(
-                f"{c}.makeCableConnector()")
+            FreeCADGui.doCommand(f"obj = {c}.makeCableConnector()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        doc.commitTransaction()
+        lst_after = doc.findObjects(Name=translate("Cables", "CableConnector"))
+        obj = list(set(lst_after)-set(lst_before))[0]
+        panel = archCableConnector.TaskPanelCableConnector(obj)
+        FreeCADGui.Control.showDialog(panel)
+        # the below commitTransaction is made inside panel
+        # doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None

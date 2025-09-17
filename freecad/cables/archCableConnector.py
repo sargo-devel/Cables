@@ -4,10 +4,14 @@
 import os
 import math
 import FreeCAD
+if FreeCAD.GuiUp:
+    import FreeCADGui
 import Part
 from freecad.cables import archCableBaseElement
+from freecad.cables import cableProfile
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
+from freecad.cables import uiPath
 from freecad.cables import libPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
@@ -24,6 +28,94 @@ presetfiles = [os.path.join(presetsPath, "connectorpresets.csv"),
                             "connectorpresets.csv")]
 libdirs = [libPath, os.path.join(FreeCAD.getUserAppDataDir(), "Cables", "lib")]
 default_preset = "TerminalStrip_2.5mm2_x3"
+
+ui_connector = os.path.join(uiPath, "connector.ui")
+gauge_mm2_list = cableProfile.gauge_mm2_list
+
+
+class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
+    def __init__(self, obj, ui=ui_connector, gauge_list=gauge_mm2_list):
+        archCableBaseElement.TaskPanelBaseElement.__init__(self, obj, ui)
+        self.gauge_list = gauge_list
+        self.form.comboPreset.addItems(self.presetnames)
+        self.form.comboHoleSize.addItems(gauge_list)
+        self.connectEnumVar(self.form.comboPreset, "Preset",
+                            self.updateVisibility)
+        self.connectEnumVar(self.form.comboHoleSize, "HoleSize",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.customHoleSize, "HoleSize",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.nrOfHoles, "NumberOfHoles")
+        self.connectSpinVar(self.form.sHeight, "Height")
+        self.connectSpinVar(self.form.sThickness, "Thickness")
+        self.reloadPropertiesFromObj()
+
+    def accept(self):
+        # prepare commands to track changes in console
+        pnames = []
+        pvalues = []
+        if self.obj.Preset == "Customized":
+            pnames = ["NumberOfHoles", "Height", "HoleSize", "Thickness"]
+            pvalues.append(self.obj.NumberOfHoles)
+            pvalues.append(str(self.obj.Height))
+            pvalues.append(self.obj.HoleSize)
+            pvalues.append(str(self.obj.Thickness))
+        # FreeCADGui.doCommand(
+        #     f"obj = FreeCAD.activeDocument().getObject('{self.obj.Name}')")
+        FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
+                             f"'{self.obj.Preset}', {pnames}, {pvalues})")
+        archCableBaseElement.TaskPanelBaseElement.accept(self)
+
+    def updateVisibility(self, pname, pvalue):
+        #FreeCAD.Console.PrintMessage(f"pvalue={pvalue}, pname={pname}\n")
+        if pname == "Preset":
+            #FreeCAD.Console.PrintMessage(f"object={self.obj.Label}\n")
+            preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
+            if preset_name == "Customized":
+                self.form.customBox.setVisible(True)
+            else:
+                self.form.customBox.setVisible(False)
+            if self.form.comboPreset.currentText() == "Customized":
+                self.reloadPropertiesFromObj()
+        if pname == "HoleSize":
+            if pvalue == "custom":
+                self.form.customHoleSize.setVisible(True)
+                self.form.customHoleSizeLabel.setVisible(True)
+                self.form.customHoleSize.setValue(self.obj.HoleSize)
+            elif isinstance(pvalue, str):
+                self.form.customHoleSize.setVisible(False)
+                self.form.customHoleSizeLabel.setVisible(False)
+
+    def updateProperty(self, pname, pvalue, callback):
+        ptype = self.obj.getTypeIdOfProperty(pname)
+        #FreeCAD.Console.PrintMessage(f"ptype={ptype}, pvalue={pvalue}, pname={pname}\n")
+        try:
+            if ptype == "App::PropertyEnumeration":
+                setattr(self.obj, pname, pvalue)
+            elif ptype == "App::PropertyFloat" and pvalue != "custom":
+                setattr(self.obj, pname, float(pvalue))
+            elif ptype == "App::PropertyInteger":
+                setattr(self.obj, pname, int(pvalue))
+            elif pvalue != "custom":
+                setattr(self.obj, pname, pvalue)
+            if hasattr(self.obj, "recompute"):
+                self.obj.recompute(True)
+        except (AttributeError, ValueError):
+            FreeCAD.Console.PrintError(
+                self.obj, f"Can't set {pname} with value: {pvalue}")
+        if callback is not None:
+            callback(pname, pvalue)
+
+    def reloadPropertiesFromObj(self):
+        archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
+        self.form.nrOfHoles.setValue(self.obj.NumberOfHoles)
+        if f"{self.obj.HoleSize:g}" in self.gauge_list:
+            self.form.comboHoleSize.setCurrentText(f"{self.obj.HoleSize:g}")
+        else:
+            self.form.comboHoleSize.setCurrentText("custom")
+            self.form.customHoleSize.setValue(self.obj.HoleSize)
+        self.form.sHeight.setProperty("value", self.obj.Height)
+        self.form.sThickness.setProperty("value", self.obj.Thickness)
 
 
 class ArchCableConnector(archCableBaseElement.BaseElement):
@@ -272,6 +364,11 @@ class ViewProviderCableConnector(archCableBaseElement.ViewProviderBaseElement):
 
     def getIcon(self):
         return CLASS_CABLECONNECTOR_ICON
+
+    def setEdit(self, vobj, mode):
+        return archCableBaseElement.ViewProviderBaseElement.setEditBase(
+            self, vobj, mode, TaskPanelCableConnector,
+            translate("Cables", "edit Cable Connector"))
 
 
 def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,

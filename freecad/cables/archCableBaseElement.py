@@ -13,12 +13,77 @@ from freecad.cables import libPath
 from freecad.cables import presetsPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
-
+if FreeCAD.GuiUp:
+    import FreeCADGui
 
 presetfiles = [os.path.join(presetsPath, "presets.csv"),
                os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                             "presets.csv")]
 libdirs = [libPath, os.path.join(FreeCAD.getUserAppDataDir(), "Cables", "lib")]
+
+
+class TaskPanelBaseElement:
+    """This class shouldn't be used directly, it can be the base class only.
+    The child class should have ui form.comboPreset QComboBox"""
+    def __init__(self, obj, ui):
+        self.form = FreeCADGui.PySideUic.loadUi(ui)
+        self.obj = obj
+        self.presetnames, _ = obj.Proxy.getPresets(obj)
+        self.invalidpreset = False
+        self.invalidpresetname = None
+
+    def accept(self):
+        # execute this code after child class accept method
+        FreeCAD.ActiveDocument.commitTransaction()
+        if self.invalidpreset and self.invalidpresetname != self.obj.Preset:
+            # This is to avoid App crash when trying to undo
+            # non existing Preset
+            FreeCAD.ActiveDocument.clearUndos()
+        FreeCADGui.Control.closeDialog()
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+
+    def reject(self):
+        if self.invalidpreset and self.invalidpresetname != self.obj.Preset:
+            FreeCAD.ActiveDocument.commitTransaction()
+            # This is to avoid App crash when trying to undo
+            # non existing Preset
+            FreeCAD.ActiveDocument.clearUndos()
+        else:
+            FreeCAD.ActiveDocument.abortTransaction()
+        FreeCADGui.Control.closeDialog()
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+
+    def connectEnumVar(self, element, pname, callback=None):
+        enumlist = self.obj.getEnumerationsOfProperty(pname)
+        if enumlist is None:
+            element.currentTextChanged.connect(
+                lambda txtval: self.updateProperty(pname, txtval, callback))
+        else:
+            element.currentIndexChanged.connect(
+                lambda idx: self.updateProperty(pname, idx, callback))
+
+    def connectSpinVar(self, element, pname, callback=None):
+        # disable recompute on every key press
+        element.setProperty("keyboardTracking", False)
+        element.valueChanged.connect(
+            lambda value: self.updateProperty(pname, value, callback))
+
+    def reloadPropertiesFromObj(self):
+        if self.obj.Preset in self.presetnames:
+            self.form.comboPreset.setCurrentText(self.obj.Preset)
+        else:
+            self.form.comboPreset.setCurrentIndex(0)
+            self.updateVisibility("Preset", 0)
+            self.invalidpreset = True
+            self.invalidpresetname = self.obj.Preset
+            FreeCAD.Console.PrintError(
+                self.obj.Label, f"{self.obj.Preset} preset not found in" +
+                "library.")
+            FreeCAD.Console.PrintWarning(
+                self.obj.Label, "After selecting a new Preset, the Undo" +
+                " history will be deleted!")
 
 
 class BaseElement(ArchComponent.Component):
@@ -143,14 +208,23 @@ class BaseElement(ArchComponent.Component):
         presetnames.sort()
         return presetnames, presets
 
-    def setPreset(self, obj, preset):
+    def setPreset(self, obj, preset, pnames=[], pvalues=[]):
         try:
-            obj.Preset = preset
+            if preset != obj.Preset:
+                obj.Preset = preset
         except ValueError:
             FreeCAD.Console.PrintError(obj.Label,
                                        f"Preset {preset} does not exist!\n")
             if obj.Preset is None:
                 obj.Preset = "Customized"
+        if preset == "Customized" and len(pnames) == len(pvalues):
+            try:
+                for p in zip(pnames, pvalues):
+                    if getattr(obj, p[0]) != p[1]:
+                        setattr(obj, p[0], p[1])
+            except (AttributeError, ValueError):
+                FreeCAD.Console.PrintError(
+                    obj, f"Can't set {p[0]} with value: {p[1]}")
 
     def updatePropertiesFromPreset(self, obj, presets):
         return
@@ -473,6 +547,25 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
         for sapp_mat1, sapp_mat2 in zip(sapp1, sapp2):
             if not _shapeAppearanceMaterialIsSame(sapp_mat1, sapp_mat2):
                 return False
+        return True
+
+    def setEditBase(self, vobj, mode, task_panel=None, undo_text=""):
+        # this is a base for child class setEdit method
+        if mode != 0:
+            return None
+        panel = task_panel(vobj.Object)
+        FreeCADGui.Selection.clearSelection()
+        FreeCAD.ActiveDocument.openTransaction(
+            translate("Cables", undo_text))
+        FreeCADGui.doCommand(
+            f"obj = FreeCAD.activeDocument().getObject('{vobj.Object.Name}')")
+        FreeCADGui.Control.showDialog(panel)
+        return True
+
+    def unsetEdit(self, vobj, mode):
+        if mode != 0:
+            return None
+        FreeCADGui.Control.closeDialog()
         return True
 
 

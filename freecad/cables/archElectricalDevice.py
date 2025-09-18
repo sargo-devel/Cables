@@ -3,10 +3,13 @@
 
 import os
 import FreeCAD
+if FreeCAD.GuiUp:
+    import FreeCADGui
 import Part
 from freecad.cables import archCableBaseElement
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
+from freecad.cables import uiPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -21,6 +24,38 @@ presetfiles = [os.path.join(presetsPath, "devicepresets.csv"),
                os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                             "devicepresets.csv")]
 default_preset = "MCB_1-Pole"
+
+ui_device = os.path.join(uiPath, "device.ui")
+
+
+class TaskPanelElectricalDevice(archCableBaseElement.TaskPanelBaseElement):
+    def __init__(self, obj, ui=ui_device):
+        archCableBaseElement.TaskPanelBaseElement.__init__(self, obj, ui)
+        self.form.comboPreset.addItems(self.presetnames)
+        self.connectEnumVar(self.form.comboPreset, "Preset",
+                            self.updateVisibility)
+        self.reloadPropertiesFromObj()
+
+    def accept(self):
+        # prepare commands to track changes in console
+        pnames = []
+        pvalues = []
+        FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
+                             f"'{self.obj.Preset}', {pnames}, {pvalues})")
+        archCableBaseElement.TaskPanelBaseElement.accept(self)
+
+    def updateVisibility(self, pname, pvalue):
+        if pname == "Preset":
+            preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
+            if preset_name == "Customized":
+                self.form.customBox.setVisible(True)
+            else:
+                self.form.customBox.setVisible(False)
+            if self.form.comboPreset.currentText() == "Customized":
+                self.reloadPropertiesFromObj()
+
+    def reloadPropertiesFromObj(self):
+        archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
 
 
 class ArchElectricalDevice(archCableBaseElement.BaseElement):
@@ -60,7 +95,7 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
         return pr
 
     def updatePropertiesFromPreset(self, obj, presets):
-        paramlist = []
+        paramlist = ["NumberOfTerminals", "NumberOfSuppLines"]
         for param in paramlist:
             if not hasattr(obj, param):
                 return
@@ -139,6 +174,11 @@ class ViewProviderElectricalDevice(
 
     def getIcon(self):
         return CLASS_ELECTRICALDEVICE_ICON
+
+    def setEdit(self, vobj, mode):
+        return archCableBaseElement.ViewProviderBaseElement.setEditBase(
+            self, vobj, mode, TaskPanelElectricalDevice,
+            translate("Cables", "edit Electrical Device"))
 
 
 def makeElectricalDevice(baseobj=None, preset=None, placement=None, name=None):

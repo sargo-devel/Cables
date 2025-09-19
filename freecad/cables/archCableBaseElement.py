@@ -517,12 +517,31 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
             return new_mlist
 
         # FreeCAD.Console.PrintMessage(obj.Label, "BE vobj colorize\n")
+
+        # colorize with single material
         ArchComponent.ViewProviderComponent.colorize(self, obj, force)
+
+        # colorize according to ExtColor schema
         if hasattr(obj, "ExtColor") and obj.ExtColor and \
            hasattr(obj, "Material") and hasattr(obj.Material, "Materials"):
             mat_assign = _get_mat_assignments(obj.ExtColor)
             mats = _convert_materials(obj.Material.Materials)
             sapp = _get_flat_list(obj, mats, mat_assign)
+            if sapp is not None:
+                if not self.shapeAppearanceIsSame(
+                   obj.ViewObject.ShapeAppearance, sapp):
+                    obj.ViewObject.ShapeAppearance = sapp
+
+        # colorize first solid with 1 material, the rest with 2 material
+        elif hasattr(obj, "Material") and hasattr(obj.Material, "Materials"):
+            mats = _convert_materials(obj.Material.Materials)
+            nr_of_s1_faces = len(obj.Shape.Solids[0].Faces)
+            nr_of_all_faces = len(obj.Shape.Faces)
+            sapp = []
+            for i in range(nr_of_s1_faces):
+                sapp.append(mats[0])
+            for i in range(nr_of_s1_faces, nr_of_all_faces):
+                sapp.append(mats[1])
             if sapp is not None:
                 if not self.shapeAppearanceIsSame(
                    obj.ViewObject.ShapeAppearance, sapp):

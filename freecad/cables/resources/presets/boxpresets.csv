@@ -32,3 +32,4 @@ Square_50x50_h18,Rectangle,1G_FlushMnt,50.0,50.0,18.0,2.5,2.0,11.0,50.0
 Rectangle_80x32_h33,Rectangle,1G_FlushMnt,80.0,32.0,33.0,3.0,3.0,20.0,24.0
 Rectangle_136x60_h45,Rectangle,2G_FlushMnt,136.0,60.0,45.0,2.0,28.0,20.0,50.0
 Rectangle_365x212_h103,Rectangle,DIN1x18,365.0,212.0,103.0,3.0,10.0,20.0,60.0
+Rectangle_245x375_h103,Rectangle,DIN3x12,245.0,375.0,110.0,3.0,10.0,20.0,60.0

@@ -222,6 +222,12 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The height below lid of " +
                                 "helper ring 2"))
+        if "DinRails" not in pl:
+            obj.addProperty("App::PropertyBool", "DinRails", "CableBox",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Enables auto creation of " +
+                                "DIN TH35 rails inside box depending on box " +
+                                "shape and dimensions"))
         if "Terminals" in pl:
             obj.removeProperty("Terminals")
         if "NumberOfTerminals" in pl:
@@ -260,11 +266,23 @@ class ArchCableBox(archCableBaseElement.BaseElement):
         shapes = []
         if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
             if not obj.BoxBodyHidden:
+                # make main body
                 if obj.ProfileType == "Circle":
                     shapes.append(self.makeRoundBox(obj))
                 else:
                     shapes.append(self.makeRectangularBox(obj))
+            if obj.ProfileType == "Rectangle" and obj.DinRails:
+                # make DIN rails
+                offsets = self.calculateDinRailsOffset(obj)
+                if offsets is not None:
+                    xs = obj.Width/2
+                    din = self.makeDinRail(-xs, xs)
+                    for offset in offsets:
+                        sh = din.copy()
+                        sh.Placement = sh.Placement.multiply(offset)
+                        shapes.append(sh)
             if not obj.HelperRingsHidden:
+                # make helper rings
                 shapes.append(self.makeHelperRings(obj))
             sh = Part.makeCompound(shapes) if shapes else Part.Shape()
             if obj.Additions or obj.Subtractions:
@@ -451,6 +469,55 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                 box = box.cut(hole)
         return box
 
+    def makeDinRail(self, xstart, xend, offset=None):
+        # rail DIN TH35
+        elist = []
+        v = FreeCAD.Vector
+        elist.append(Part.makeLine(v(0, 0, 0), v(0, -11.5, 0)))
+        elist.append(Part.makeCircle(2, v(0, -11.5, 2), v(-1, 0, 0), 180, 270))
+        elist.append(Part.makeLine(v(0, -13.5, 2), v(0, -13.5, 5)))
+        elist.append(Part.makeCircle(1, v(0, -14.5, 5), v(1, 0, 0), 0, 90))
+        elist.append(Part.makeLine(v(0, -14.5, 6), v(0, -17.5, 6)))
+        elist.append(Part.makeLine(v(0, -17.5, 6), v(0, -17.5, 7)))
+
+        elist.append(Part.makeLine(v(0, -17.5, 7), v(0, -14.5, 7)))
+        elist.append(Part.makeCircle(2, v(0, -14.5, 5), v(-1, 0, 0), 0, 90))
+        elist.append(Part.makeLine(v(0, -12.5, 5), v(0, -12.5, 2)))
+        elist.append(Part.makeCircle(1, v(0, -11.5, 2), v(1, 0, 0), 180, 270))
+        elist.append(Part.makeLine(v(0, -11.5, 1), v(0, 0, 1)))
+
+        w1 = Part.Wire(elist)
+        w2 = w1.mirror(v(0, 0, 0), v(0, 1, 0))
+        w = Part.Wire(w1.Edges + w2.Edges)
+        f = Part.Face(w)
+        solid1 = f.extrude(v(xend, 0, 0))
+        solid2 = f.extrude(v(xstart, 0, 0))
+        solid = Part.makeSolid(solid1.fuse(solid2))
+        if offset:
+            solid.Placement = solid.Placement.multiply(offset)
+        return solid
+
+    def calculateDinRailsOffset(self, obj):
+        zpos = -50.0
+        ydist = 125.0
+        vcz = -2.0/3.001*obj.Height.Value
+        zdist = vcz + obj.HoleDiameter.Value/2
+        if zdist > zpos:
+            # box is not high enough for DIN rail
+            return None
+        if ydist > obj.Depth.Value:
+            # box is not deep enough for DIN rail
+            return None
+        nr_of_rails = int(obj.Depth.Value//ydist)
+        ystart = ydist*(nr_of_rails - 1)/2
+        plist = []
+        for i in range(nr_of_rails):
+            pl = FreeCAD.Placement()
+            pl.Base.z = zpos
+            pl.Base.y = ystart - i*ydist
+            plist.append(pl)
+        return plist
+
     def updatePropertiesFromPreset(self, obj, presets):
         paramlist = ["Diameter", "Width", "Depth", "Height", "Thickness",
                      "FilletRadius", "HoleDiameter", "HolesDistance"]
@@ -544,6 +611,7 @@ def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,
         obj.Proxy.setPreset(obj, default_preset)
     obj.Proxy.setHelperRingsDefaults(obj)
     obj.BoxBodyHidden = False
+    obj.DinRails = True
     obj.HelperRingsHidden = True
     if placement:
         obj.Placement = placement

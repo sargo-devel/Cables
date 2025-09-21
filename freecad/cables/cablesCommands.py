@@ -75,7 +75,13 @@ class newWireFlexCommand:
         doc.openTransaction(translate("Cables", "WireFlex"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.make_wireflex({s})")
+        if s is not None:
+            FreeCADGui.doCommand(f"{c}.make_wireflex({s})")
+        else:
+            vlist = "[FreeCAD.Vector(0,0,0), FreeCAD.Vector(50,0,0)]"
+            FreeCADGui.doCommand(f"{c}.make_wireflex_from_vectors({vlist})")
+            FreeCAD.Console.PrintWarning(
+                translate("Cables", "Default wireFlex object created."))
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 
@@ -608,6 +614,10 @@ class attachWireToTerminal:
             vec = Gui.Selection.getSelectionEx()[0].PickedPoints[0]
             side = cableutils.detect_selected_wire_side(sel, vec)
         except (IndexError, ValueError):
+            FreeCAD.Console.PrintError("attach_wire_to_terminal",
+                                       "Selected object side not detected. " +
+                                       "Please select vertex or edge of " +
+                                       "wireFlex object in 3D view.\n")
             side = None
         if side is not None:
             s = wireutils.reprintSelection("doc", sel)
@@ -630,7 +640,9 @@ class attachWireToTerminal:
                 "Accel": keyShorts['AttachWireToTerminal'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_AttachWireToTerminal", "It makes attachment of " +
-                    "wire end to the terminal. Select WireFlex then Terminal")}
+                    "wire end to the terminal. Select vertex or edge of " +
+                    "WireFlex object in 3D view then select the Terminal or " +
+                    "its vertex")}
 
 
 class detachWireFromTerminal:

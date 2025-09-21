@@ -554,4 +554,5 @@ def make_wireflex_from_vectors(vectorlist):
                                 face=False, support=None)
     WireFlex(base_wire)
     ViewProviderWireFlex(base_wire.ViewObject)
+    base_wire.PathType = "Wire"
     return base_wire

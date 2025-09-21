@@ -88,7 +88,7 @@ class CableTerminal:
         self.setProperties(obj)
 
     def onChanged(self, obj, prop):
-        FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
+        # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
         if prop == "Offset":
             # set own placement relave to parent placement.
             if not obj.ParentName:

@@ -12,6 +12,7 @@ from freecad.cables import cableProfile
 from freecad.cables import archCableConnector
 from freecad.cables import archCableBox
 from freecad.cables import archElectricalDevice
+from freecad.cables import cableutils
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -603,15 +604,21 @@ class attachWireToTerminal:
     def Activated(self):
         sel = wireutils.processGuiSelection(False, Part.Vertex,
                                             wireFlex.WireFlex)
-        s = wireutils.reprintSelection("doc", sel)
-        c = "freecad.cables.cableutils"
-        doc = FreeCAD.ActiveDocument
-        doc.openTransaction(translate("Cables", "Attach Wire To Terminal"))
-        FreeCADGui.addModule(f"{c}")
-        FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
-        FreeCADGui.doCommand(f"{c}.attach_wire_to_terminal({s})")
-        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        doc.commitTransaction()
+        try:
+            vec = Gui.Selection.getSelectionEx()[0].PickedPoints[0]
+            side = cableutils.detect_selected_wire_side(sel, vec)
+        except (IndexError, ValueError):
+            side = None
+        if side is not None:
+            s = wireutils.reprintSelection("doc", sel)
+            c = "freecad.cables.cableutils"
+            doc = FreeCAD.ActiveDocument
+            doc.openTransaction(translate("Cables", "Attach Wire To Terminal"))
+            FreeCADGui.addModule(f"{c}")
+            FreeCADGui.doCommand("doc = FreeCAD.ActiveDocument")
+            FreeCADGui.doCommand(f"{c}.attach_wire_to_terminal({s}, '{side}')")
+            FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+            doc.commitTransaction()
 
     def IsActive(self):
         return Gui.ActiveDocument is not None

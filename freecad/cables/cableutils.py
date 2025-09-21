@@ -27,7 +27,31 @@ def deactivate_attachment(obj_list):
             s.MapMode = "Deactivated"
 
 
-def attach_wire_to_terminal(sel_list):
+def detect_selected_wire_side(sel_list, vect):
+    """It calculates selected wire side before attachment to terminal.
+    Returns: "start", "end" or None
+    """
+    if sel_list is None or len(sel_list) < 2:
+        FreeCAD.Console.PrintError("attach_wire_to_terminal",
+                                   "Not enough objects selected\n")
+        return None
+    try:
+        if type(sel_list[0][0].Proxy).__name__ == "WireFlex":
+            wire = sel_list[0][0]
+        else:
+            raise TypeError
+    except TypeError:
+        FreeCAD.Console.PrintError("attach_wire_to_terminal",
+                                   "Wrong objects selected\n")
+        return None
+    if vect is not None and not isSubwireOfCable(wire) and \
+       wireutils.getWireHalf(wire.Shape.Wires[0], vect) == 1:
+        return "start"
+    else:
+        return "end"
+
+
+def attach_wire_to_terminal(sel_list, side):
     """It attaches wire end to terminal
     """
     if sel_list is None or len(sel_list) < 2:
@@ -37,7 +61,6 @@ def attach_wire_to_terminal(sel_list):
     try:
         if type(sel_list[0][0].Proxy).__name__ == "WireFlex":
             wire = sel_list[0][0]
-            wvrtx = sel_list[0][1]
         else:
             raise TypeError
         if type(sel_list[1][0].Proxy).__name__ == "CableTerminal":
@@ -49,8 +72,8 @@ def attach_wire_to_terminal(sel_list):
         FreeCAD.Console.PrintError("attach_wire_to_terminal",
                                    "Wrong objects selected\n")
         return
-    if wvrtx and int(wvrtx.strip("Vertx")) <= len(wire.Shape.Vertexes)/2:
-        # selected vertex is in first part of wire
+    if side == "start":
+        # selected point is in a first half of wire
         update_wire_points(wire, "s")
         wire_v1 = "Vertex2"
         wire_v2 = "Vertex1"
@@ -164,3 +187,19 @@ def update_wire_points(wire, tip):
         _add_point(wire, tip)
         if len(wire.Points) < 4:
             _add_point(wire, tip)
+
+
+def isSubwireOfCable(wire):
+    """It checks if wire is one of cable subwires.
+    If yes it returns True, otherwise False
+    """
+    cable = False
+    for obj in wire.InList:
+        try:
+            if type(obj.Proxy).__name__ == "ArchCable":
+                if wire in obj.SubWires:
+                    cable = True
+                    break
+        except AttributeError:
+            pass
+    return cable

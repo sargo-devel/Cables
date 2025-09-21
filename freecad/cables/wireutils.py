@@ -1237,3 +1237,36 @@ def isBaseWire(obj):
     if not plist:
         plist = [(False, None)]
     return plist
+
+
+def getWireHalf(wire, vector):
+    """
+    It checks to which half of wire the given vector has shorter distance.
+    The vector should be as close as possible to wire to get proper result.
+    Due to discretization method it is possible that vector which is close
+    to the mid point of wire can be wrongly classified.
+
+    Parameters
+    ----------
+    wire : Wire shape object
+    vector: Vector object
+
+    Returns
+    -------
+    int: 1 - if the vector is closer to the first half of wire
+         2 - if the vector is closer to the second half of wire
+    """
+    nr_of_points = 10*len(wire.Vertexes)
+    vlist = wire.discretize(nr_of_points)
+    for i, v in enumerate(vlist):
+        dist = (v-vector).Length
+        if i == 0:
+            mindist = dist
+            minidx = i
+        elif dist < mindist:
+            mindist = dist
+            minidx = i
+    if minidx > nr_of_points/2:
+        return 2
+    else:
+        return 1

@@ -659,9 +659,11 @@ class ArchCable(ArchPipe._ArchPipe):
             angle_deg = math.degrees(angle)
             old_angle_deg = math.degrees(prof.AttachmentOffset.Rotation.Angle)
             new_angle_deg = (old_angle_deg + angle_deg) % 360
-            prof.AttachmentOffset = FreeCAD.Placement(
+            new_offset = FreeCAD.Placement(
                 FreeCAD.Vector(0, 0, 0),
                 FreeCAD.Rotation(FreeCAD.Vector(0, 0, 1), new_angle_deg))
+            if not prof.AttachmentOffset.isSame(new_offset, tol):
+                prof.AttachmentOffset = new_offset
 
     def readjustSubWires(self, obj):
         """It keeps the first edge of subwire normal to cable start/end face

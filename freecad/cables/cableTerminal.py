@@ -42,6 +42,7 @@ class CableTerminal:
         obj.Proxy = self
         self.Type = "Terminal"
         self.setProperties(obj)
+        obj.addExtension('Part::AttachExtensionPython')
 
     def setProperties(self, obj):
         pl = obj.PropertiesList
@@ -89,21 +90,15 @@ class CableTerminal:
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
-        if prop == "Offset":
-            # set own placement relative to parent placement.
-            self.findParent(obj)
-            if obj.ParentName:
-                parent = FreeCAD.ActiveDocument.getObject(obj.ParentName)
-                pl = parent.Placement.multiply(obj.Offset)
-                if pl != obj.Placement:
-                    obj.Placement = pl
+        return
 
     def execute(self, obj):
+        # FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
         obj.Shape = self.makeTerminalLines(obj)
-        # forcing to recalculate offset
-        obj.Offset = obj.Offset
         # forcing to recalculate list of connected wires
         self.updateConnectedWires(obj)
+        if obj.AttachmentSupport and obj.MapMode == "Deactivated":
+            obj.MapMode = "ObjectXY"
 
     def makeTerminalLines(self, obj):
         # make terminal lines

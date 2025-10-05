@@ -45,9 +45,12 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
                             self.updateVisibility)
         self.connectSpinVar(self.form.customHoleSize, "HoleSize",
                             self.updateVisibility)
-        self.connectSpinVar(self.form.nrOfHoles, "NumberOfHoles")
-        self.connectSpinVar(self.form.sHeight, "Height")
-        self.connectSpinVar(self.form.sThickness, "Thickness")
+        self.connectSpinVar(self.form.nrOfHoles, "NumberOfHoles",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sHeight, "Height",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sThickness, "Thickness",
+                            self.updateVisibility)
         self.reloadPropertiesFromObj()
 
     def accept(self):
@@ -81,6 +84,7 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             elif isinstance(pvalue, str):
                 self.form.customHoleSize.setVisible(False)
                 self.form.customHoleSizeLabel.setVisible(False)
+        FreeCAD.ActiveDocument.recompute()
 
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
@@ -170,8 +174,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) and \
-           (not hasattr(obj, "Base") or obj.Base is None):
+        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) \
+           and (not hasattr(obj, "Base") or obj.Base is None):
             shapes.append(self.makeBox(obj))
             sh = Part.makeCompound(shapes)
             if obj.Additions or obj.Subtractions:
@@ -195,8 +199,9 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             return
         elif not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0:
             # Shape type: ParametricTerminal
-            if hasattr(obj, "Terminals") and obj.Terminals:
-                for t in obj.Terminals:
+            self.Terminals = self.findTerminals(obj)
+            if self.Terminals:
+                for t in self.Terminals:
                     length = obj.Height.Value + 2*z
                     # set terminal length
                     if t.Length.Value != length:
@@ -213,8 +218,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     b = FreeCAD.Vector(0, 0, -obj.Height/2.0)
                     r = FreeCAD.Rotation("XYZ", 90, 0, 0)
                     base_pl = FreeCAD.Placement(b, r)
-                    if base_pl != t.Offset:
-                        t.Offset = base_pl
+                    if base_pl != t.AttachmentOffset:
+                        t.AttachmentOffset = base_pl
 
     def makeBox(self, obj):
         hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
@@ -268,6 +273,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                 break
         if preset is not None:
             try:
+                self.Terminals = self.findTerminals(obj)
+                self.SuppLines = self.findSuppLines(obj)
                 if preset[2] == "ParametricTerminal":
                     obj.NumberOfHoles = int(preset[4])
                     nr_of_term = int(preset[5])
@@ -284,7 +291,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     if obj.NumberOfSuppLines != nr_of_supp:
                         obj.NumberOfSuppLines = nr_of_supp
                         self.makeSupportLinesChildObjects(obj)
-                    for t in obj.Terminals:
+                    for t in self.Terminals:
                         t.Proxy.setPropertiesReadOnly(t)
                 if preset[2] == "Fixed":
                     ext_shape, ext_color = self.readExtShape(obj, preset[4])
@@ -293,26 +300,27 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     ext_data = self.readExtData(
                         obj, f"{preset[3]}_{preset[1]}.csv")
                     if obj.NumberOfTerminals != nr_of_term or \
-                       len(obj.Terminals) != nr_of_term:
+                       len(self.Terminals) != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
                         self.makeTerminalChildObjects(obj)
                     if obj.NumberOfSuppLines != nr_of_supp or \
-                       len(obj.SuppLines) != nr_of_supp:
+                       len(self.SuppLines) != nr_of_supp:
                         obj.NumberOfSuppLines = nr_of_supp
                         self.makeSupportLinesChildObjects(obj)
                     if ext_data:
                         sh_offset = ext_data["ExtShape"][0][0]
                         ext_shape.Placement = sh_offset
-                        for i, t in enumerate(obj.Terminals):
-                            t.Offset = ext_data["Terminal"][i][0]
+                        for i, t in enumerate(self.Terminals):
+                            t.AttachmentOffset = ext_data["Terminal"][i][0]
                             t.NumberOfConnections = int(
                                 ext_data["Terminal"][i][1])
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
                         # update SupportLines
-                        if obj.SuppLines and ext_data["SupportLines"]:
-                            for i, s in enumerate(obj.SuppLines):
-                                s.Offset = ext_data["SupportLines"][i][0]
+                        if self.SuppLines and ext_data["SupportLines"]:
+                            for i, s in enumerate(self.SuppLines):
+                                s.AttachmentOffset = ext_data[
+                                    "SupportLines"][i][0]
                     self.ExtShape = ext_shape
                     obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color
@@ -394,6 +402,7 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
         obj.Proxy.setPreset(obj, default_preset)
     if placement:
         obj.Placement = placement
-    if hasattr(obj, "Terminals") and not obj.Terminals:
+    obj.Proxy.Terminals = obj.Proxy.findTerminals(obj)
+    if not obj.Proxy.Terminals:
         obj.Proxy.makeTerminalChildObjects(obj)
     return obj

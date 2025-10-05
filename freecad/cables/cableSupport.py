@@ -56,7 +56,6 @@ def makeSupportLine(p1=None, p2=None, name=None):
     line = Draft.make_wire([p1, p2], placement=pl, closed=False,
                            face=False, support=None)
     line.Label = name if name else translate("Cables", "SupportLine")
-    #line.addExtension('Part::AttachExtensionPython')
     line.Subdivisions = 1
     line.ViewObject.PointSize = 8
     line.ViewObject.PointColor = SuppPointColor
@@ -72,6 +71,7 @@ class ExtSuppLines:
         obj.Proxy = self
         self.Type = "SuppLines"
         self.setProperties(obj)
+        obj.addExtension('Part::AttachExtensionPython')
 
     def setProperties(self, obj):
         pl = obj.PropertiesList
@@ -87,31 +87,18 @@ class ExtSuppLines:
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The name of parent object"))
             obj.setPropertyStatus("ParentName", ["ReadOnly", "Hidden"])
-        if "Offset" not in pl:
-            obj.addProperty("App::PropertyPlacement", "Offset",
-                            "SuppLines",
-                            QT_TRANSLATE_NOOP(
-                                "App::Property", "The SuppLines placement " +
-                                "offset relative to parent placement"))
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
-        if prop in ["Offset"]:
-            # set own placement relave to parent placement
-            if not obj.ParentName:
-                self.findParent(obj)
-            parent = FreeCAD.ActiveDocument.getObject(obj.ParentName)
-            pl = parent.Placement.multiply(obj.Offset)
-            if pl != obj.Placement:
-                obj.Placement = pl
+        return
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(obj.Label, "execute started\n")
         if hasattr(obj, "Lines") and obj.Lines:
             if not obj.Shape.isPartner(obj.Lines):
                 obj.Shape = obj.Lines
-        # forcing to recalculate offset
-        obj.Offset = obj.Offset
+        if obj.AttachmentSupport and obj.MapMode == "Deactivated":
+            obj.MapMode = "ObjectXY"
 
     def findParent(self, obj):
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",

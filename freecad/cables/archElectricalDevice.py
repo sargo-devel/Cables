@@ -5,13 +5,11 @@ import os
 import FreeCAD
 if FreeCAD.GuiUp:
     import FreeCADGui
-import Part
 from freecad.cables import archCableBaseElement
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
 from freecad.cables import uiPath
 from freecad.cables import translate
-from freecad.cables import QT_TRANSLATE_NOOP
 
 
 CLASS_ELECTRICALDEVICE_ICON = os.path.join(iconPath,
@@ -53,6 +51,7 @@ class TaskPanelElectricalDevice(archCableBaseElement.TaskPanelBaseElement):
                 self.form.customBox.setVisible(False)
             if self.form.comboPreset.currentText() == "Customized":
                 self.reloadPropertiesFromObj()
+        FreeCAD.ActiveDocument.recompute()
 
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
@@ -127,32 +126,33 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
             try:
                 if preset[2] == "Fixed":
                     ext_shape, ext_color = self.readExtShape(obj, preset[4])
+                    terminals = self.findTerminals(obj)
+                    supplines = self.findSuppLines(obj)
                     nr_of_term = int(preset[5])
                     nr_of_supp = int(preset[6])
                     ext_data = self.readExtData(
                         obj, f"{preset[3]}_{preset[1]}.csv")
                     if obj.NumberOfTerminals != nr_of_term or \
-                       len(obj.Terminals) != nr_of_term:
+                       len(terminals) != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
                         self.makeTerminalChildObjects(obj)
                     if obj.NumberOfSuppLines != nr_of_supp or \
-                       len(obj.SuppLines) != nr_of_supp:
+                       len(supplines) != nr_of_supp:
                         obj.NumberOfSuppLines = nr_of_supp
                         self.makeSupportLinesChildObjects(obj)
                     if ext_data:
                         sh_offset = ext_data["ExtShape"][0][0]
                         ext_shape.Placement = sh_offset
                         # Update Terminals
-                        for i, t in enumerate(obj.Terminals):
-                            t.Offset = ext_data["Terminal"][i][0]
+                        for i, t in enumerate(self.Terminals):
+                            t.AttachmentOffset = ext_data["Terminal"][i][0]
                             t.NumberOfConnections = int(
                                 ext_data["Terminal"][i][1])
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
                         # update SupportLines
-                        if obj.SuppLines and ext_data["SupportLines"]:
-                            for i, s in enumerate(obj.SuppLines):
-                                s.Offset = ext_data["SupportLines"][i][0]
+                        for i, s in enumerate(self.SuppLines):
+                            s.AttachmentOffset = ext_data["SupportLines"][i][0]
                     self.ExtShape = ext_shape
                     obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color

@@ -40,14 +40,20 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
                             self.updateVisibility)
         self.connectEnumVar(self.form.comboProfileType, "ProfileType",
                             self.updateVisibility)
-        self.connectSpinVar(self.form.sWidth, "Width")
-        self.connectSpinVar(self.form.sDepth, "Depth")
-        self.connectSpinVar(self.form.sFilletRadius, "FilletRadius")
-        self.connectSpinVar(self.form.sDiameter, "Diameter")
-        self.connectSpinVar(self.form.sHeight, "Height")
-        self.connectSpinVar(self.form.sThickness, "Thickness")
-        self.connectSpinVar(self.form.sHoleDiameter, "HoleDiameter")
-        self.connectSpinVar(self.form.sHolesDistance, "HolesDistance")
+        self.connectSpinVar(self.form.sWidth, "Width", self.updateVisibility)
+        self.connectSpinVar(self.form.sDepth, "Depth", self.updateVisibility)
+        self.connectSpinVar(self.form.sFilletRadius, "FilletRadius",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sDiameter, "Diameter",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sHeight, "Height",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sThickness, "Thickness",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sHoleDiameter, "HoleDiameter",
+                            self.updateVisibility)
+        self.connectSpinVar(self.form.sHolesDistance, "HolesDistance",
+                            self.updateVisibility)
         self.reloadPropertiesFromObj()
 
     def accept(self):
@@ -107,6 +113,7 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
                 self.reloadPropertiesFromObj()
         if pname == "ProfileType":
             _updateProfileTypeVisibility(pvalue)
+        FreeCAD.ActiveDocument.recompute()
 
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
@@ -264,8 +271,8 @@ class ArchCableBox(archCableBaseElement.BaseElement):
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) and \
-           (not hasattr(obj, "Base") or obj.Base is None):
+        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) \
+           and (not hasattr(obj, "Base") or obj.Base is None):
             if not obj.BoxBodyHidden:
                 # make main body
                 if obj.ProfileType == "Circle":
@@ -621,6 +628,7 @@ def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,
         obj.Placement = placement
     if hasattr(obj, "NumberOfSuppLines"):
         obj.NumberOfSuppLines = 1
-    if hasattr(obj, "SuppLines") and not obj.SuppLines:
+    obj.Proxy.SuppLines = obj.Proxy.findSuppLines(obj)
+    if not obj.Proxy.SuppLines:
         obj.Proxy.makeSupportLinesChildObjects(obj)
     return obj

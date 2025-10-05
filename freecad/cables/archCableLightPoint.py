@@ -136,6 +136,7 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
         obj.Placement = placement
     if hasattr(obj, "NumberOfSuppLines"):
         obj.NumberOfSuppLines = 1
-    if hasattr(obj, "SuppLines") and not obj.SuppLines:
+    obj.Proxy.SuppLines = obj.Proxy.findSuppLines(obj)
+    if not obj.Proxy.SuppLines:
         obj.Proxy.makeSupportLinesChildObjects(obj)
     return obj

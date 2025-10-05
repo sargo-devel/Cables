@@ -184,50 +184,37 @@ class BaseElement(ArchComponent.Component):
                     label = f"{obj.Label}_SuppLines{nr+1:03}"
                     if not label == s.Label:
                         s.Label = label
-        if prop == "NumberOfTerminals":
-            self.updateNumberOfTerminals(obj)
-            #pass
+        if prop == "Terminals":
+            obj.NumberOfTerminals = len(obj.Terminals)
+        if prop == "SuppLines":
+            obj.NumberOfSuppLines = len(obj.SuppLines)
         if prop == "Preset":
             # refresh presets names:
             presetnames, presets = self.getPresets(obj)
             if presetnames != obj.getEnumerationsOfProperty("Preset"):
                 obj.Preset = presetnames
-            # self.updatePropertyStatusForBase(
-            #     obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
             self.updatePropertiesFromPreset(obj, presets)
         if prop == "Base":
-            # if obj.Base is not None:
-            #     obj.Preset = "Customized"
             self.updatePropertyStatusForBase(
                 obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
+            self.updatePropertyStatusForBase(
+                obj, ["NumberOfTerminals", "NumberOfSuppLines", "Terminals",
+                      "SuppLines"], "Hidden")
             if obj.Base is not None:
                 self.updatePropertyStatusForBase(obj, ["Preset"], "Hidden", 0)
-            obj.ExtColor=obj.ExtColor
-
-        if prop == "Shape":
-            if hasattr(obj, "SuppLines") and obj.SuppLines:
-                self.adjustSuppLines(obj)
-                for s in obj.SuppLines:
-                    # prevent from cyclic recompute
-                    if "Touched" in s.State and "Recompute2" in s.State:
-                        s.purgeTouched()
-            if hasattr(obj, "Terminals") and obj.Terminals:
-                self.adjustTerminals(obj)
-                for t in obj.Terminals:
-                    # prevent from cyclic recompute
-                    if "Touched" in t.State and "Recompute2" in t.State:
-                        t.purgeTouched()
+                if hasattr(obj, "Terminals") and obj.Terminals:
+                    for t in obj.Terminals:
+                        t.Proxy.setPropertiesReadWrite(t)
+            obj.ExtColor = obj.ExtColor
 
     def execute(self, obj):
-        # FreeCAD.Console.PrintMessage(obj.Label, "BE execute start\n")
-        if hasattr(obj, "Terminals") and not obj.Terminals:
-            self.makeTerminalChildObjects(obj)
-        if hasattr(obj, "SuppLines") and not obj.SuppLines:
-            self.makeSupportLinesChildObjects(obj)
-
         if hasattr(obj, "Terminals") and hasattr(obj, "NumberOfTerminals") \
            and len(obj.Terminals) != obj.NumberOfTerminals:
-            obj.NumberOfTerminals = len(obj.Terminals)
+            self.updateNumberOfTerminals(obj)
+
+        if hasattr(obj, "SuppLines") and hasattr(obj, "NumberOfSuppLines") \
+           and len(obj.SuppLines) != obj.NumberOfSuppLines:
+            self.updateNumberOfSuppLines(obj)
 
         if hasattr(obj, "Base") and obj.Base is None and \
            "Hidden" in obj.getPropertyStatus("Preset"):
@@ -250,6 +237,18 @@ class BaseElement(ArchComponent.Component):
             elif obj.Material:
                 # refresh colors
                 obj.Material = obj.Material
+        if hasattr(obj, "Terminals") and obj.Terminals:
+            self.adjustTerminals(obj)
+            for t in obj.Terminals:
+                # prevent from cyclic recompute
+                if "Touched" in t.State and "Recompute2" in t.State:
+                    t.purgeTouched()
+        if hasattr(obj, "SuppLines") and obj.SuppLines:
+            self.adjustSuppLines(obj)
+            for s in obj.SuppLines:
+                # prevent from cyclic recompute
+                if "Touched" in s.State and "Recompute2" in s.State:
+                    s.purgeTouched()
 
     def getPresets(self, obj, presetfiles=presetfiles):
         presets = cableProfile.readCablePresets(presetfiles)
@@ -346,11 +345,12 @@ class BaseElement(ArchComponent.Component):
     def makeTerminalChildObjects(self, obj):
         if hasattr(obj, "Terminals"):
             terminals = obj.Terminals
+            nr = obj.NumberOfTerminals
             if terminals:
                 for t in terminals:
                     FreeCAD.ActiveDocument.removeObject(t.Name)
             terminals = []
-            for i in range(obj.NumberOfTerminals):
+            for i in range(nr):
                 child_obj = cableTerminal.makeCableTerminal()
                 child_obj.Label = f"{obj.Label}_Term{i+1:03}"
                 child_obj.ParentName = obj.Name
@@ -360,26 +360,21 @@ class BaseElement(ArchComponent.Component):
             self.adjustTerminals(obj)
 
     def updateNumberOfTerminals(self, obj):
-        FreeCAD.Console.PrintMessage(f"run updateNumberOfTerminals: {obj.NumberOfTerminals},{len(obj.Terminals)} \n")
-        FreeCAD.Console.PrintMessage(f"{obj.Label} state = {obj.State}\n")
         if hasattr(obj, "Terminals") and hasattr(obj, "NumberOfTerminals") \
            and len(obj.Terminals) != obj.NumberOfTerminals:
             terminals = obj.Terminals
             nr = obj.NumberOfTerminals
             if len(terminals) > nr:
-                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals1\n")
                 for t in terminals[nr:]:
                     FreeCAD.ActiveDocument.removeObject(t.Name)
                 terminals = terminals[:nr]
             elif len(terminals) < nr:
-                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals2\n")
                 for i in range(len(terminals), nr):
                     child_obj = cableTerminal.makeCableTerminal()
                     child_obj.Label = f"{obj.Label}_Term{i+1:03}"
                     child_obj.ParentName = obj.Name
                     terminals.append(child_obj)
             if terminals != obj.Terminals:
-                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals3\n")
                 obj.Terminals = terminals
             self.adjustTerminals(obj)
 
@@ -396,11 +391,12 @@ class BaseElement(ArchComponent.Component):
     def makeSupportLinesChildObjects(self, obj):
         if hasattr(obj, "SuppLines"):
             supplines = obj.SuppLines
+            nr = obj.NumberOfSuppLines
             if supplines:
                 for supp in supplines:
                     FreeCAD.ActiveDocument.removeObject(supp.Name)
             supplines = []
-            for i in range(obj.NumberOfSuppLines):
+            for i in range(nr):
                 child_obj = FreeCAD.ActiveDocument.addObject(
                     "Part::FeaturePython", "CableSuppLines")
                 cableSupport.ExtSuppLines(child_obj)
@@ -411,6 +407,31 @@ class BaseElement(ArchComponent.Component):
                 child_obj.Lines = Part.Shape()
                 supplines.append(child_obj)
             obj.SuppLines = supplines
+            self.adjustSuppLines(obj)
+
+    def updateNumberOfSuppLines(self, obj):
+        if hasattr(obj, "SuppLines") and hasattr(obj, "NumberOfSuppLines") \
+           and len(obj.SuppLines) != obj.NumberOfSuppLines:
+            supplines = obj.SuppLines
+            nr = obj.NumberOfSuppLines
+            if len(supplines) > nr:
+                for s in supplines[nr:]:
+                    FreeCAD.ActiveDocument.removeObject(s.Name)
+                supplines = supplines[:nr]
+            elif len(supplines) < nr:
+                for i in range(len(supplines), nr):
+                    child_obj = FreeCAD.ActiveDocument.addObject(
+                        "Part::FeaturePython", "CableSuppLines")
+                    cableSupport.ExtSuppLines(child_obj)
+                    if FreeCAD.GuiUp:
+                        cableSupport.ViewProviderExtSuppLines(
+                            child_obj.ViewObject)
+                    child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
+                    child_obj.ParentName = obj.Name
+                    child_obj.Lines = Part.Shape()
+                    supplines.append(child_obj)
+            if supplines != obj.SuppLines:
+                obj.SuppLines = supplines
             self.adjustSuppLines(obj)
 
     def adjustSuppLines(self, obj):
@@ -624,9 +645,6 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
             for color in obj.ExtColor:
                 i = palette.index(color)
                 sapp.append(materials[i])
-            #if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
-            #                                   sapp):
-            #     obj.ViewObject.ShapeAppearance = sapp
         else:
             # FreeCAD.Console.PrintMessage("color w/o mat. w/o ExtColor\n")
             sapp = (FreeCAD.Material(),)

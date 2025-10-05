@@ -141,24 +141,19 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         self.setProperties(obj)
 
     def onChanged(self, obj, prop):
-        FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
+        # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
         archCableBaseElement.BaseElement.onChanged(self, obj, prop)
         if prop == "Preset":
-            if hasattr(obj, "Base") and obj.Base is not None:
+            if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
                 hide_list = ["Height", "HoleSize", "NumberOfHoles",
                              "Thickness"]
                 unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
-                               "SuppLines"]
-            elif hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
-                hide_list = ["Height", "HoleSize", "NumberOfHoles",
-                             "Thickness"]
-                unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
-                               "SuppLines"]
+                               "SuppLines", "Terminals"]
             else:
                 hide_list = ["NumberOfTerminals", "NumberOfSuppLines",
                              "SuppLines"]
                 unhide_list = ["Height", "HoleSize", "NumberOfHoles",
-                               "Thickness"]
+                               "Thickness", "Terminals"]
             for element in hide_list:
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "Hidden")
@@ -166,14 +161,12 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "-Hidden")
         if prop == "Base":
-            self.updatePropertyStatusForBase(obj, ["Height", "HoleSize", "NumberOfHoles", "Thickness"], "Hidden", 0)
-            self.updatePropertyStatusForBase(obj, ["NumberOfTerminals", "NumberOfSuppLines"], "Hidden")
-            if obj.Base is not None:
-                for t in obj.Terminals:
-                    t.Proxy.setPropertiesReadWrite(t)
+            self.updatePropertyStatusForBase(
+                obj, ["Height", "HoleSize", "NumberOfHoles", "Thickness"],
+                "Hidden", 0)
 
     def execute(self, obj):
-        FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
+        # FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
@@ -251,10 +244,6 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                 return
 
         if obj.Base is not None:
-            #obj.ExtShape = Part.Shape()
-            #obj.ExtColor = []
-            for t in obj.Terminals:
-                t.Proxy.setPropertiesReadWrite(t)
             return
 
         name = obj.Preset

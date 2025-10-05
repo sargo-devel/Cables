@@ -100,9 +100,13 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
             if not hasattr(obj, param):
                 return
 
+        if obj.Base is not None:
+            return
+
         name = obj.Preset
         if name == "Customized":
             obj.ExtShape = Part.Shape()
+            obj.ExtColor = []
             nr_of_term = 0
             nr_of_supp = 0
             if obj.NumberOfTerminals != nr_of_term:

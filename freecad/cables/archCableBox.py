@@ -264,7 +264,8 @@ class ArchCableBox(archCableBaseElement.BaseElement):
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+        if (not hasattr(obj, "ExtShape") or obj.ExtShape.isNull()) and \
+           (not hasattr(obj, "Base") or obj.Base is None):
             if not obj.BoxBodyHidden:
                 # make main body
                 if obj.ProfileType == "Circle":
@@ -524,6 +525,9 @@ class ArchCableBox(archCableBaseElement.BaseElement):
         for param in paramlist:
             if not hasattr(obj, param):
                 return
+
+        if obj.Base is not None:
+            return
 
         name = obj.Preset
         if name == "Customized":

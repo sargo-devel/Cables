@@ -110,7 +110,8 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
             if self.form.comboPreset.currentText() == "Customized":
                 idx = self.profile_types.index(self.obj.ProfileType)
                 _updateProfileTypeVisibility(idx)
-                self.reloadPropertiesFromObj()
+                if not self.invalidpreset:
+                    self.reloadPropertiesFromObj()
         if pname == "ProfileType":
             _updateProfileTypeVisibility(pvalue)
         FreeCAD.ActiveDocument.recompute()

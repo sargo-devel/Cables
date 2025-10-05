@@ -36,22 +36,12 @@ class TaskPanelBaseElement:
     def accept(self):
         # execute this code after child class accept method
         FreeCAD.ActiveDocument.commitTransaction()
-        if self.invalidpreset and self.invalidpresetname != self.obj.Preset:
-            # This is to avoid App crash when trying to undo
-            # non existing Preset
-            FreeCAD.ActiveDocument.clearUndos()
         FreeCADGui.Control.closeDialog()
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
 
     def reject(self):
-        if self.invalidpreset and self.invalidpresetname != self.obj.Preset:
-            FreeCAD.ActiveDocument.commitTransaction()
-            # This is to avoid App crash when trying to undo
-            # non existing Preset
-            FreeCAD.ActiveDocument.clearUndos()
-        else:
-            FreeCAD.ActiveDocument.abortTransaction()
+        FreeCAD.ActiveDocument.abortTransaction()
         FreeCADGui.Control.closeDialog()
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
@@ -100,15 +90,13 @@ class TaskPanelBaseElement:
             self.form.comboPreset.setCurrentText(self.obj.Preset)
         else:
             self.form.comboPreset.setCurrentIndex(0)
-            self.updateVisibility("Preset", 0)
             self.invalidpreset = True
             self.invalidpresetname = self.obj.Preset
+            setattr(self.obj, "Preset", 0)
+            self.updateVisibility("Preset", 0)
             FreeCAD.Console.PrintError(
-                self.obj.Label, f"{self.obj.Preset} preset not found in" +
-                "library.")
-            FreeCAD.Console.PrintWarning(
-                self.obj.Label, "After selecting a new Preset, the Undo" +
-                " history will be deleted!")
+                self.obj.Label, f"{self.invalidpresetname} preset not found " +
+                "in library.")
 
 
 class BaseElement(ArchComponent.Component):
@@ -167,8 +155,9 @@ class BaseElement(ArchComponent.Component):
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
+        undoredo = FreeCAD.ActiveDocument.Transacting
         ArchComponent.Component.onChanged(self, obj, prop)
-        if prop == "Label":
+        if prop == "Label" and not undoredo:
             self.Terminals = self.findTerminals(obj)
             self.SuppLines = self.findSuppLines(obj)
             if self.Terminals:
@@ -181,21 +170,21 @@ class BaseElement(ArchComponent.Component):
                     label = f"{obj.Label}_SuppLines{nr+1:03}"
                     if not label == s.Label:
                         s.Label = label
-        if prop == "NumberOfTerminals":
+        if prop == "NumberOfTerminals" and not undoredo:
             self.Terminals = self.findTerminals(obj)
             if len(self.Terminals) != obj.NumberOfTerminals:
                 self.updateNumberOfTerminals(obj)
-        if prop == "NumberOfSuppLines":
+        if prop == "NumberOfSuppLines" and not undoredo:
             self.SuppLines = self.findSuppLines(obj)
             if len(self.SuppLines) != obj.NumberOfSuppLines:
                 self.updateNumberOfSuppLines(obj)
-        if prop == "Preset":
+        if prop == "Preset" and not undoredo:
             # refresh presets names:
             presetnames, presets = self.getPresets(obj)
             if presetnames != obj.getEnumerationsOfProperty("Preset"):
                 obj.Preset = presetnames
             self.updatePropertiesFromPreset(obj, presets)
-        if prop == "Base":
+        if prop == "Base" and not undoredo:
             self.updatePropertyStatusForBase(
                 obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
             self.updatePropertyStatusForBase(

@@ -75,7 +75,8 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             else:
                 self.form.customBox.setVisible(False)
             if self.form.comboPreset.currentText() == "Customized":
-                self.reloadPropertiesFromObj()
+                if not self.invalidpreset:
+                    self.reloadPropertiesFromObj()
         if pname == "HoleSize":
             if pvalue == "custom":
                 self.form.customHoleSize.setVisible(True)
@@ -402,7 +403,4 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
         obj.Proxy.setPreset(obj, default_preset)
     if placement:
         obj.Placement = placement
-    obj.Proxy.Terminals = obj.Proxy.findTerminals(obj)
-    if not obj.Proxy.Terminals:
-        obj.Proxy.makeTerminalChildObjects(obj)
     return obj

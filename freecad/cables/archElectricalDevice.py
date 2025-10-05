@@ -50,7 +50,8 @@ class TaskPanelElectricalDevice(archCableBaseElement.TaskPanelBaseElement):
             else:
                 self.form.customBox.setVisible(False)
             if self.form.comboPreset.currentText() == "Customized":
-                self.reloadPropertiesFromObj()
+                if not self.invalidpreset:
+                    self.reloadPropertiesFromObj()
         FreeCAD.ActiveDocument.recompute()
 
     def reloadPropertiesFromObj(self):

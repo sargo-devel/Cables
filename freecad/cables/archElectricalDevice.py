@@ -105,7 +105,8 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
 
         name = obj.Preset
         if name == "Customized":
-            obj.ExtShape = Part.Shape()
+            self.ExtShape = None
+            obj.ExtShapeSolids = 0
             obj.ExtColor = []
             nr_of_term = 0
             nr_of_supp = 0
@@ -152,7 +153,8 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
                         if obj.SuppLines and ext_data["SupportLines"]:
                             for i, s in enumerate(obj.SuppLines):
                                 s.Offset = ext_data["SupportLines"][i][0]
-                    obj.ExtShape = ext_shape
+                    self.ExtShape = ext_shape
+                    obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color
             except ValueError:
                 FreeCAD.Console.PrintError(

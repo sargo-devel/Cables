@@ -117,6 +117,7 @@ class BaseElement(ArchComponent.Component):
     def __init__(self, obj, eltype="CableBaseElement"):
         ArchComponent.Component.__init__(self, obj)
         BaseElement.setProperties(self, obj, eltype)
+        self.ExtShape = None
 
     def setProperties(self, obj, eltype):
         pl = obj.PropertiesList
@@ -152,11 +153,11 @@ class BaseElement(ArchComponent.Component):
                                 "App::Property", "The number of Support " +
                                 "Lines in this object"))
             obj.setPropertyStatus("NumberOfSuppLines", "ReadOnly")
-        if "ExtShape" not in pl:
-            obj.addProperty("Part::PropertyPartShape", "ExtShape",
+        if "ExtShapeSolids" not in pl:
+            obj.addProperty("App::PropertyInteger", "ExtShapeSolids",
                             "Ext",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The external shape loaded" +
+                                "App::Property", "The number of solids in a loaded external shape" +
                                 "from file"))
         if "ExtColor" not in pl:
             obj.addProperty("App::PropertyColorList", "ExtColor",
@@ -169,6 +170,7 @@ class BaseElement(ArchComponent.Component):
     def onDocumentRestored(self, obj, eltype="CableBaseElement"):
         ArchComponent.Component.onDocumentRestored(self, obj)
         BaseElement.setProperties(self, obj, eltype)
+        self.ExtShape = None
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
@@ -226,9 +228,14 @@ class BaseElement(ArchComponent.Component):
         if (hasattr(obj, "Base") and obj.Base is not None):
             # Shape taken from BaseElement
             ArchComponent.Component.execute(self, obj)
-        elif hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
-            # Shape type: Fixed
-            shapes.append(obj.ExtShape)
+        elif hasattr(obj, "ExtShapeSolids") and obj.ExtShapeSolids > 0:
+            if self.ExtShape is not None:
+                # Shape type: Fixed, new shape
+                shapes.extend(self.ExtShape.Solids)
+                self.ExtShape = None
+            else:
+                # Shape type: Fixed
+                shapes.extend(obj.Shape.Solids[:obj.ExtShapeSolids])
             sh = Part.makeCompound(shapes)
             if obj.Additions or obj.Subtractions:
                 sh = self.processSubShapes(obj, sh, pl)

@@ -144,7 +144,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
         archCableBaseElement.BaseElement.onChanged(self, obj, prop)
         if prop == "Preset":
-            if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
+            if hasattr(obj, "ExtShapeSolids") and obj.ExtShapeSolids > 0:
                 hide_list = ["Height", "HoleSize", "NumberOfHoles",
                              "Thickness"]
                 unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
@@ -170,7 +170,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if (not hasattr(obj, "ExtShape") or obj.ExtShape.isNull()) and \
+        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) and \
            (not hasattr(obj, "Base") or obj.Base is None):
             shapes.append(self.makeBox(obj))
             sh = Part.makeCompound(shapes)
@@ -193,7 +193,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         z = 2
         if obj.Base is not None:
             return
-        elif not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+        elif not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0:
             # Shape type: ParametricTerminal
             if hasattr(obj, "Terminals") and obj.Terminals:
                 for t in obj.Terminals:
@@ -248,7 +248,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
 
         name = obj.Preset
         if name == "Customized":
-            obj.ExtShape = Part.Shape()
+            self.ExtShape = None
+            obj.ExtShapeSolids = 0
             obj.ExtColor = []
             nr_of_term = 1
             nr_of_supp = 0
@@ -274,7 +275,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     obj.Height.Value = preset[6]
                     obj.HoleSize = preset[7]
                     obj.Thickness.Value = preset[8]
-                    obj.ExtShape = Part.Shape()
+                    self.ExtShape = None
+                    obj.ExtShapeSolids = 0
                     obj.ExtColor = []
                     if obj.NumberOfTerminals != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
@@ -311,7 +313,8 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                         if obj.SuppLines and ext_data["SupportLines"]:
                             for i, s in enumerate(obj.SuppLines):
                                 s.Offset = ext_data["SupportLines"][i][0]
-                    obj.ExtShape = ext_shape
+                    self.ExtShape = ext_shape
+                    obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color
             except ValueError:
                 FreeCAD.Console.PrintError(

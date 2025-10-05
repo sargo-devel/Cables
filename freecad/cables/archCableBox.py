@@ -264,7 +264,7 @@ class ArchCableBox(archCableBaseElement.BaseElement):
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if (not hasattr(obj, "ExtShape") or obj.ExtShape.isNull()) and \
+        if (not hasattr(obj, "ExtShapeSolids") or obj.ExtShapeSolids == 0) and \
            (not hasattr(obj, "Base") or obj.Base is None):
             if not obj.BoxBodyHidden:
                 # make main body

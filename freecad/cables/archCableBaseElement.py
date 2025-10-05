@@ -138,12 +138,14 @@ class BaseElement(ArchComponent.Component):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The number of solids in " +
                                 "an external shape loaded from file"))
+            obj.setPropertyStatus("ExtShapeSolids", ["ReadOnly", "Hidden"])
         if "ExtColor" not in pl:
             obj.addProperty("App::PropertyColorList", "ExtColor",
                             "Ext",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The colors of external" +
+                                "App::Property", "The colors of external " +
                                 "shape loaded from file"))
+            obj.setPropertyStatus("ExtColor", ["ReadOnly", "Hidden"])
         self.Type = "Component"
 
     def onDocumentRestored(self, obj, eltype="CableBaseElement"):

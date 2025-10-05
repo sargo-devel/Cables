@@ -184,12 +184,26 @@ class BaseElement(ArchComponent.Component):
                     label = f"{obj.Label}_SuppLines{nr+1:03}"
                     if not label == s.Label:
                         s.Label = label
+        if prop == "NumberOfTerminals":
+            self.updateNumberOfTerminals(obj)
+            #pass
         if prop == "Preset":
             # refresh presets names:
             presetnames, presets = self.getPresets(obj)
             if presetnames != obj.getEnumerationsOfProperty("Preset"):
                 obj.Preset = presetnames
+            # self.updatePropertyStatusForBase(
+            #     obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
             self.updatePropertiesFromPreset(obj, presets)
+        if prop == "Base":
+            # if obj.Base is not None:
+            #     obj.Preset = "Customized"
+            self.updatePropertyStatusForBase(
+                obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
+            if obj.Base is not None:
+                self.updatePropertyStatusForBase(obj, ["Preset"], "Hidden", 0)
+            obj.ExtColor=obj.ExtColor
+
         if prop == "Shape":
             if hasattr(obj, "SuppLines") and obj.SuppLines:
                 self.adjustSuppLines(obj)
@@ -211,9 +225,21 @@ class BaseElement(ArchComponent.Component):
         if hasattr(obj, "SuppLines") and not obj.SuppLines:
             self.makeSupportLinesChildObjects(obj)
 
+        if hasattr(obj, "Terminals") and hasattr(obj, "NumberOfTerminals") \
+           and len(obj.Terminals) != obj.NumberOfTerminals:
+            obj.NumberOfTerminals = len(obj.Terminals)
+
+        if hasattr(obj, "Base") and obj.Base is None and \
+           "Hidden" in obj.getPropertyStatus("Preset"):
+            self.updatePropertyStatusForBase(obj, ["Preset"], "Hidden", 0)
+            obj.Preset = obj.Preset
+
         pl = obj.Placement
         shapes = []
-        if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
+        if (hasattr(obj, "Base") and obj.Base is not None):
+            # Shape taken from BaseElement
+            ArchComponent.Component.execute(self, obj)
+        elif hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
             # Shape type: Fixed
             shapes.append(obj.ExtShape)
             sh = Part.makeCompound(shapes)
@@ -333,6 +359,30 @@ class BaseElement(ArchComponent.Component):
                 obj.Terminals = terminals
             self.adjustTerminals(obj)
 
+    def updateNumberOfTerminals(self, obj):
+        FreeCAD.Console.PrintMessage(f"run updateNumberOfTerminals: {obj.NumberOfTerminals},{len(obj.Terminals)} \n")
+        FreeCAD.Console.PrintMessage(f"{obj.Label} state = {obj.State}\n")
+        if hasattr(obj, "Terminals") and hasattr(obj, "NumberOfTerminals") \
+           and len(obj.Terminals) != obj.NumberOfTerminals:
+            terminals = obj.Terminals
+            nr = obj.NumberOfTerminals
+            if len(terminals) > nr:
+                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals1\n")
+                for t in terminals[nr:]:
+                    FreeCAD.ActiveDocument.removeObject(t.Name)
+                terminals = terminals[:nr]
+            elif len(terminals) < nr:
+                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals2\n")
+                for i in range(len(terminals), nr):
+                    child_obj = cableTerminal.makeCableTerminal()
+                    child_obj.Label = f"{obj.Label}_Term{i+1:03}"
+                    child_obj.ParentName = obj.Name
+                    terminals.append(child_obj)
+            if terminals != obj.Terminals:
+                FreeCAD.Console.PrintMessage("run updateNumberOfTerminals3\n")
+                obj.Terminals = terminals
+            self.adjustTerminals(obj)
+
     def adjustTerminals(self, obj):
         self.updateTerminalsParameters(obj)
         if hasattr(obj, "Terminals") and obj.Terminals:
@@ -393,6 +443,15 @@ class BaseElement(ArchComponent.Component):
         lines.append(Part.LineSegment(v[0], v[1]))
         s = Part.Shape(lines)
         return s
+
+    def updatePropertyStatusForBase(self, obj, plist, param, mode=1):
+        if obj.Base is not None:
+            switch = "-" if mode == 1 else ""
+        else:
+            switch = "" if mode == 1 else "-"
+        for p in plist:
+            if hasattr(obj, p):
+                obj.setPropertyStatus(p, switch + param)
 
     def sameShapes(self, sh1, sh2):
         """Compares shapes for equality.
@@ -548,7 +607,10 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
                     obj.ViewObject.ShapeAppearance = sapp
 
     def colorize_without_material(self, obj):
-        if hasattr(obj, "ExtColor") and obj.ExtColor:
+        if obj.Base is not None:
+            if hasattr(obj.Base.ViewObject, "ShapeAppearance"):
+                sapp = obj.Base.ViewObject.ShapeAppearance
+        elif hasattr(obj, "ExtColor") and obj.ExtColor:
             # FreeCAD.Console.PrintMessage(obj.Label, f"BE color w/o mat.\n")
             # obsolete: obj.ViewObject.DiffuseColor = obj.ExtColor
             colors_set = set(obj.ExtColor)
@@ -562,15 +624,15 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
             for color in obj.ExtColor:
                 i = palette.index(color)
                 sapp.append(materials[i])
-            if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
-                                              sapp):
-                obj.ViewObject.ShapeAppearance = sapp
+            #if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
+            #                                   sapp):
+            #     obj.ViewObject.ShapeAppearance = sapp
         else:
             # FreeCAD.Console.PrintMessage("color w/o mat. w/o ExtColor\n")
             sapp = (FreeCAD.Material(),)
-            if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
-                                              sapp):
-                obj.ViewObject.ShapeAppearance = sapp
+        if not self.shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance,
+                                          sapp):
+            obj.ViewObject.ShapeAppearance = sapp
 
     def shapeAppearanceIsSame(self, sapp1, sapp2):
         def _shapeAppearanceMaterialIsSame(sapp_mat1, sapp_mat2):

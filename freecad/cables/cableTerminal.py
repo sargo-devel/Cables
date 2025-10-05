@@ -74,7 +74,7 @@ class CableTerminal:
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "List of names of " +
                                 "connected wires with number of connection"))
-            obj.setPropertyStatus("ParentName", ["ReadOnly"])
+            obj.setPropertyStatus("ConnectedWires", ["ReadOnly"])
         if "Offset" not in pl:
             obj.addProperty("App::PropertyPlacement", "Offset",
                             "Terminal",
@@ -91,12 +91,13 @@ class CableTerminal:
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
         if prop == "Offset":
             # set own placement relave to parent placement.
-            if not obj.ParentName:
-                self.findParent(obj)
-            parent = FreeCAD.ActiveDocument.getObject(obj.ParentName)
-            pl = parent.Placement.multiply(obj.Offset)
-            if pl != obj.Placement:
-                obj.Placement = pl
+            #if not obj.ParentName:
+            self.findParent(obj)
+            if obj.ParentName:
+                parent = FreeCAD.ActiveDocument.getObject(obj.ParentName)
+                pl = parent.Placement.multiply(obj.Offset)
+                if pl != obj.Placement:
+                    obj.Placement = pl
 
     def execute(self, obj):
         obj.Shape = self.makeTerminalLines(obj)
@@ -137,16 +138,27 @@ class CableTerminal:
         proplist = ["Placement", "NumberOfConnections", "Length", "Spacing"]
         for prop in proplist:
             if (prop in pl) and \
-               (str(obj.getPropertyStatus(prop)[0]) != "ReadOnly"):
+               ("ReadOnly" not in obj.getPropertyStatus(prop)):
                 obj.setPropertyStatus(prop, "ReadOnly")
+
+    def setPropertiesReadWrite(self, obj):
+        pl = obj.PropertiesList
+        proplist = ["Placement", "NumberOfConnections", "Length", "Spacing"]
+        FreeCAD.Console.PrintMessage("setPropertiesReadWrite\n")
+        for prop in proplist:
+            if (prop in pl) and \
+               ("ReadOnly" in obj.getPropertyStatus(prop)):
+                obj.setPropertyStatus(prop, "-ReadOnly")
 
     def findParent(self, obj):
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
         for p in obj.InList:
             if type(p.Proxy).__name__ in valid_parent_list:
-                obj.ParentName = p.Name
+                if p.Name != obj.ParentName:
+                    obj.ParentName = p.Name
                 return
+        obj.ParentName = ""
 
     def updateConnectedWires(self, obj):
         conn_list = []

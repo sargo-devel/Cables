@@ -141,9 +141,15 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         self.setProperties(obj)
 
     def onChanged(self, obj, prop):
+        FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
         archCableBaseElement.BaseElement.onChanged(self, obj, prop)
         if prop == "Preset":
-            if hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
+            if hasattr(obj, "Base") and obj.Base is not None:
+                hide_list = ["Height", "HoleSize", "NumberOfHoles",
+                             "Thickness"]
+                unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
+                               "SuppLines"]
+            elif hasattr(obj, "ExtShape") and not obj.ExtShape.isNull():
                 hide_list = ["Height", "HoleSize", "NumberOfHoles",
                              "Thickness"]
                 unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
@@ -159,13 +165,20 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             for element in unhide_list:
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "-Hidden")
+        if prop == "Base":
+            self.updatePropertyStatusForBase(obj, ["Height", "HoleSize", "NumberOfHoles", "Thickness"], "Hidden", 0)
+            self.updatePropertyStatusForBase(obj, ["NumberOfTerminals", "NumberOfSuppLines"], "Hidden")
+            if obj.Base is not None:
+                for t in obj.Terminals:
+                    t.Proxy.setPropertiesReadWrite(t)
 
     def execute(self, obj):
-        # FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
+        FreeCAD.Console.PrintMessage(obj.Label, "execute: start\n")
         archCableBaseElement.BaseElement.execute(self, obj)
         pl = obj.Placement
         shapes = []
-        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+        if (not hasattr(obj, "ExtShape") or obj.ExtShape.isNull()) and \
+           (not hasattr(obj, "Base") or obj.Base is None):
             shapes.append(self.makeBox(obj))
             sh = Part.makeCompound(shapes)
             if obj.Additions or obj.Subtractions:
@@ -185,7 +198,9 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
 
     def updateTerminalsParameters(self, obj):
         z = 2
-        if not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
+        if obj.Base is not None:
+            return
+        elif not hasattr(obj, "ExtShape") or obj.ExtShape.isNull():
             # Shape type: ParametricTerminal
             if hasattr(obj, "Terminals") and obj.Terminals:
                 for t in obj.Terminals:
@@ -235,9 +250,17 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             if not hasattr(obj, param):
                 return
 
+        if obj.Base is not None:
+            #obj.ExtShape = Part.Shape()
+            #obj.ExtColor = []
+            for t in obj.Terminals:
+                t.Proxy.setPropertiesReadWrite(t)
+            return
+
         name = obj.Preset
         if name == "Customized":
             obj.ExtShape = Part.Shape()
+            obj.ExtColor = []
             nr_of_term = 1
             nr_of_supp = 0
             if obj.NumberOfTerminals != nr_of_term:

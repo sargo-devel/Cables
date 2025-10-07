@@ -317,6 +317,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                                 ext_data["Terminal"][i][1])
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
+                            t.PinName = ext_data["Terminal"][i][4]
                         # update SupportLines
                         if self.SuppLines and ext_data["SupportLines"]:
                             for i, s in enumerate(self.SuppLines):

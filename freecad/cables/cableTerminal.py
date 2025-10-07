@@ -76,14 +76,20 @@ class CableTerminal:
                                 "App::Property", "List of names of " +
                                 "connected wires with number of connection"))
             obj.setPropertyStatus("ConnectedWires", ["ReadOnly"])
-        if "Offset" not in pl:
-            obj.addProperty("App::PropertyPlacement", "Offset",
-                            "Terminal",
+        if "PinName" not in pl:
+            obj.addProperty("App::PropertyString", "PinName",
+                            "Net",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The Terminal placement " +
-                                "offset relative to parent placement. It is " +
-                                "up to the parent to decide whether to use " +
-                                "this parameter"))
+                                "App::Property", "The functional name of " +
+                                "the terminal pin"))
+        if "NodeName" not in pl:
+            obj.addProperty("App::PropertyString", "NodeName",
+                            "Net",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The name of the terminal " +
+                                "node. The node name should be the same for " +
+                                "all terminals connected to each other by " +
+                                "cables"))
 
     def onDocumentRestored(self, obj):
         self.setProperties(obj)

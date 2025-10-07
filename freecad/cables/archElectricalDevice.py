@@ -151,6 +151,7 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
                                 ext_data["Terminal"][i][1])
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
+                            t.PinName = ext_data["Terminal"][i][4]
                         # update SupportLines
                         for i, s in enumerate(self.SuppLines):
                             s.AttachmentOffset = ext_data["SupportLines"][i][0]

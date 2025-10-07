@@ -308,25 +308,25 @@ class BaseElement(ArchComponent.Component):
             return {}
         rawdata = cableProfile.readCablePresets([fullname])
         terminals = []
-        connector = []
+        extshape = []
         supplines = []
         for d in rawdata:
             if d[2] == "ExtShape":
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
-                connector.append((pl,))
+                extshape.append((pl,))
             elif d[2] == "Terminal":
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
-                terminals.append((pl, d[10], d[11], d[12]))
+                terminals.append((pl, d[10], d[11], d[12], d[1]))
             elif d[2] == "SupportLines":
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
                 supplines.append((pl,))
-        data = {"ExtShape": connector, "Terminal": terminals,
+        data = {"ExtShape": extshape, "Terminal": terminals,
                 "SupportLines": supplines}
         return data
 

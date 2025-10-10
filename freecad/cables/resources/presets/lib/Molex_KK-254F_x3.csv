@@ -1,0 +1,34 @@
+# Data structure:
+
+# Name, Element Type, Connector Class, geometric data...
+
+# All measures must be in millimeters
+
+# Possible element types are:
+
+# ExtShape =  Details of a Connector shape
+# Terminal =  Details of a single terminal
+# SupportLines = Details of a single Support Lines shape
+
+# Additional preset types must be implemented in archCableConnector.py first
+
+# Proposed naming convention for Connector Class:
+# for Connector Element Type: repeated class from connectorpresets.csv
+# for Terminal and SupportLines Types: Terminal or SupportLines accordingly
+
+###########################################
+
+# Connector Element Type
+# Name,ExtShape,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+KK-254F_x3,ExtShape,Molex,0.0,0.0,0.0,0.0,0.0,0.0
+
+# Terminal Element Type
+# Name,Terminal,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X),NrOfConnections,Length,Spacing
+Pin001,Terminal,Terminal, -2.54,0.0,9.0,0.0,0.0,90.0,1,6.0,1.0
+Pin002,Terminal,Terminal,   0.0,0.0,9.0,0.0,0.0,90.0,1,6.0,1.0
+Pin003,Terminal,Terminal,  2.54,0.0,9.0,0.0,0.0,90.0,1,6.0,1.0
+
+# SupportLines Element Type
+# Name,SupportLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+SuppLines001,SupportLines,SupportLines,0,0,20.0,0,0,0
+

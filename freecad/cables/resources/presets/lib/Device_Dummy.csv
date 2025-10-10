@@ -1,0 +1,33 @@
+# Data structure:
+
+# Name, Element Type, Device Class, geometric data...
+
+# All measures must be in millimeters
+
+# Possible element types are:
+
+# ExtShape =  Details of a Device shape
+# Terminal =  Details of a single terminal
+# SupportLines = Details of a single Support Lines shape
+
+# Additional element types must be implemented in archElectricalDevice.py first
+
+# Proposed naming convention for Device Class:
+# for ExtShape Element Type: repeated class from devicepresets.csv
+# for Terminal and SupportLines Types: Terminal or SupportLines accordingly
+
+###########################################
+
+# Connector Element Type
+# Name,ExtShape,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+Dummy,ExtShape,Device,0.0,0.0,0.0,0.0,0.0,0.0
+
+# Terminal Element Type
+# Name,Terminal,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X),NrOfConnections,Length,Spacing
+Term001,Terminal,Terminal, -2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
+Term002,Terminal,Terminal,  2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
+
+# SupportLines Element Type
+# Name,SupportLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+SuppLines001,SupportLines,SupportLines,-10.0,0,5.0,0,90.0,0
+SuppLines002,SupportLines,SupportLines, 10.0,0,5.0,0,90.0,0

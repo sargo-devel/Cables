@@ -1,0 +1,36 @@
+# Data structure:
+
+# Name, PresetType, ConnectorClass, geometric data...
+
+# All measures must be in millimeters
+
+# Possible options for PresetType are:
+
+# ParametricTerminal =  Parametric terminal strip
+# Fixed =  Fixed shape loaded from STEP file "StepFileName" in library.
+#          Additionally the file "ConnectorClass_Name.csv" from library is loaded.
+#          Example: "D-Sub_DE-9_F.step" and "D-Sub_DE-9_F1.csv" are loaded from library if
+#                   ConnectorClass="D-Sub",
+#                   Name="DE-9_F1",
+#                   StepFileName="D-Sub_DE-9_F.step" are set
+
+# Additional preset types must be implemented in archCableConnector.py first
+
+# Proposed naming convention for ConnectorClass:
+# TerminalStrip : for presets related to ParametricTerminal
+# Company name or widely used common name for group of connectors : e.g. Molex, D-Sub
+
+###########################################
+
+# ParametricTerminal PresetType
+# Name,ParametricTerminal,ConnectorClass,NrOfHoles,NrOfTerminals,Height,HoleSize,Thickness
+1.5mm2_x3,ParametricTerminal,TerminalStrip,3,1,5.0,1.5,1.0
+2.5mm2_x3,ParametricTerminal,TerminalStrip,3,1,5.0,2.5,1.0
+4mm2_x3,ParametricTerminal,TerminalStrip,3,1,5.0,4.0,1.0
+
+# Fixed PresetType
+# Name,Fixed,ConnectorClass,StepFileName,NrOfTerminals,NrOfSuppLines
+DE-9_F,Fixed,D-Sub,D-Sub_DE-9_F.step,9,1
+DE-9_M,Fixed,D-Sub,D-Sub_DE-9_M.step,9,1
+KK-254F_x3,Fixed,Molex,Molex_KK-254F_x3.step,3,1
+Dummy,Fixed,Connector,Dummy_Dummy.step,3,1

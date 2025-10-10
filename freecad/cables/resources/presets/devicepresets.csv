@@ -1,0 +1,27 @@
+# Data structure:
+
+# Name, PresetType, DeviceClass, geometric data...
+
+# All measures must be in millimeters
+
+# Possible preset types are:
+
+# Fixed =  Fixed shape loaded from STEP file "StepFileName" in library.
+#          Additionally the file "DeviceClass_Name.csv" from library is loaded.
+#          Example: "Dummy_Dummy.step" and "Device_Dummy.csv" are loaded from library if
+#                   DeviceClass="Device",
+#                   Name="Dummy",
+#                   StepFileName="Dummy_Dummy.step" are set
+
+# Additional preset types must be implemented in archElectricalDevice.py first
+
+# Proposed naming convention for DeviceClass:
+# Company name or widely used common name for group of devices
+
+###########################################
+
+# Fixed Preset Type
+# Name,Fixed,DeviceClass,StepFileName,NrOfTerminals,NrOfSuppLines
+Dummy,Fixed,Device,Dummy_Dummy.step,2,2
+1-Pole,Fixed,MCB,MCB_1-Pole.step,2,0
+3-Pole,Fixed,MCB,MCB_3-Pole.step,6,0

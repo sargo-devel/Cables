@@ -1,0 +1,40 @@
+# Data structure:
+
+# Name, Element Type, Connector Class, geometric data...
+
+# All measures must be in millimeters
+
+# Possible element types are:
+
+# ExtShape =  Details of a Connector shape
+# Terminal =  Details of a single terminal
+# SupportLines = Details of a single Support Lines shape
+
+# Additional preset types must be implemented in archCableConnector.py first
+
+# Proposed naming convention for Connector Class:
+# for Connector Element Type: repeated class from connectorpresets.csv
+# for Terminal and SupportLines Types: Terminal or SupportLines accordingly
+
+###########################################
+
+# ExtShape Element Type
+# Name,ExtShape,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+DE-9_F,ExtShape,D-Sub,0.0,0.0,0.0,0.0,0.0,180.0
+
+# Terminal Element Type
+# Name,Terminal,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X),NrOfConnections,Length,Spacing
+CD,Terminal,Terminal,   5.54,-1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+TXD,Terminal,Terminal,  2.77,-1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+RXD,Terminal,Terminal,   0.0,-1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+DTR,Terminal,Terminal, -2.77,-1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+GND,Terminal,Terminal, -5.54,-1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+DSR,Terminal,Terminal, 4.155, 1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+CTS,Terminal,Terminal, 1.385, 1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+RTS,Terminal,Terminal,-1.385, 1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+RI,Terminal,Terminal, -4.155, 1.8,8.6,0.0,0.0,90.0,1,2.0,1.0
+
+# SupportLines Element Type
+# Name,SupportLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+SuppLines001,SupportLines,SupportLines,0,0,25.0,0,0,0
+

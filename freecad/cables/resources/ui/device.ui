@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Cable Connector</string>
+   <string>Electrical Device</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

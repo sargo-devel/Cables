@@ -42,7 +42,7 @@ multi_names8 = [('J', 'InsulJacket'), ('P1A', 'InsulOrange'),
                 ('P4A', 'InsulBlue'), ('P4B', 'InsulWhite'),
                 ('P4B', 'InsulBlue'), ('CU', 'Cu')]
 
-multi_list = {'boxMultimat2m': multi_names2, 'cableMultiMat3w': multi_names3,
+multi_list = {'boxMultiMat2m': multi_names2, 'cableMultiMat3w': multi_names3,
               'cableMultiMat5w': multi_names5, 'cableMultiMat8w': multi_names8}
 
 mat_table = {

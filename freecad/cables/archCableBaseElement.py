@@ -426,7 +426,7 @@ class BaseElement(ArchComponent.Component):
                 supp.Lines = supp_lines
 
     def makeSupportLines(self, obj):
-        # dafault support lines cross. Can be overwritten by child class
+        # default support lines cross. Can be overwritten by child class
         x0 = 0
         y0 = 0
         z0 = 0

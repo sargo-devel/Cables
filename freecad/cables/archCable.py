@@ -379,12 +379,12 @@ class ArchCable(ArchPipe._ArchPipe):
     def getProfile(self, obj):
         p = ArchPipe._ArchPipe.getProfile(self, obj)
         if 0 in self.wireNrWithTwoColors(obj) and len(p.Edges) == 1:
-            # make splitted profile for two-color insulation
+            # make split profile for two-color insulation
             p = self.splitProfile(p)
         return p
 
     def splitProfile(self, p):
-        # make splitted profile for two-color insulation
+        # make split profile for two-color insulation
         pl = p.Placement.copy()
         e = p.Edges[0]
         last_p = e.LastParameter - e.FirstParameter
@@ -548,7 +548,7 @@ class ArchCable(ArchPipe._ArchPipe):
                     i = idxw + sub_qty*idxp
                     if i+1 in self.wireNrWithTwoColors(obj) and \
                        len(p.Edges) == 1:
-                        # make splitted profile for two-color insulation
+                        # make split profile for two-color insulation
                         p = self.splitProfile(p)
                     w = obj.SubWires[i].Shape.Wires[0]
                     p_in = subprofile.Shape.Wires[1+idxw+sub_qty]

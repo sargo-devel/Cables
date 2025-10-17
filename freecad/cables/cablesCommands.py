@@ -462,11 +462,13 @@ class newElectricalDevice:
             pos_vect = sel_obj[0].PickedPoints[0]
             FreeCADGui.doCommand("pl = FreeCAD.Placement()")
             FreeCADGui.doCommand(f"pl.Base = FreeCAD.{pos_vect}")
-            FreeCADGui.doCommand(f"obj = {c}.makeElectricalDevice(placement=pl)")
+            FreeCADGui.doCommand("obj = " +
+                                 f"{c}.makeElectricalDevice(placement=pl)")
         else:
             FreeCADGui.doCommand(f"obj = {c}.makeElectricalDevice()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        lst_after = doc.findObjects(Name=translate("Cables", "ElectricalDevice"))
+        lst_after = doc.findObjects(Name=translate("Cables",
+                                                   "ElectricalDevice"))
         obj = list(set(lst_after)-set(lst_before))[0]
         panel = archElectricalDevice.TaskPanelElectricalDevice(obj)
         FreeCADGui.Control.showDialog(panel)
@@ -636,7 +638,7 @@ class attachWireToTerminal:
     def GetResources(self):
         return {'Pixmap': CMD_ATTWIRETOTERMINAL_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_AttachWireToTerminal",
-                                              "AttachWireToTerminal"),
+                                              "Attach Wire To Terminal"),
                 "Accel": keyShorts['AttachWireToTerminal'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_AttachWireToTerminal", "It makes attachment of " +
@@ -664,7 +666,7 @@ class detachWireFromTerminal:
     def GetResources(self):
         return {'Pixmap': CMD_DETWIREFROMTERMINAL_ICON,
                 'MenuText': QT_TRANSLATE_NOOP("Cables_DetachWireFromTerminal",
-                                              "DetachWireFromTerminal"),
+                                              "Detach Wire From Terminal"),
                 "Accel": keyShorts['DetachWireFromTerminal'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_AttachWireToTerminal", "It removes wire end " +

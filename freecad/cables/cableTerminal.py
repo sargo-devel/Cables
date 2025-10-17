@@ -144,7 +144,6 @@ class CableTerminal:
     def setPropertiesReadWrite(self, obj):
         pl = obj.PropertiesList
         proplist = ["Placement", "NumberOfConnections", "Length", "Spacing"]
-        FreeCAD.Console.PrintMessage("setPropertiesReadWrite\n")
         for prop in proplist:
             if (prop in pl) and \
                ("ReadOnly" in obj.getPropertyStatus(prop)):

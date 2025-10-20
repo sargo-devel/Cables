@@ -446,14 +446,11 @@ def getObjectsForCableConduit(selectlist):
 
     baselist = []
     for sel in selectlist:
-        if sel.TypeId == 'Part::Part2DObjectPython':
-            if sel.Proxy.Type in ['Wire', 'BSpline']:
+        if sel.TypeId in ['Part::Part2DObjectPython', 'Part::FeaturePython']:
+            if sel.Proxy.Type in ['Wire', 'BSpline', 'Compound']:
                 baselist.append(sel)
-        elif sel.TypeId == 'Part::FeaturePython':
             if sel.Proxy.Type == 'Pipe':
                 baselist.append(sel.Base)
-            if sel.Proxy.Type in ['Wire', 'Compound']:
-                baselist.append(sel)
         elif sel.TypeId == 'Part::Compound':
             baselist.append(sel)
     if len(baselist) > 1:

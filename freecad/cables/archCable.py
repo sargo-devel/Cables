@@ -971,6 +971,7 @@ def getObjectsForCable(selectlist):
     # detect profileobj
     if (len(selectlist) > 1) and hasattr(selectlist[-1], 'TypeId'):
         if selectlist[-1].TypeId in ['Part::Part2DObjectPython',
+                                     'Part::FeaturePython',
                                      'Sketcher::SketchObject']:
             try:
                 if selectlist[-1].Shape.Wires[0].isClosed():
@@ -981,10 +982,7 @@ def getObjectsForCable(selectlist):
     # detect baseobj
     baselist = []
     for sel in selectlist:
-        if sel.TypeId == 'Part::Part2DObjectPython':
-            if sel.Proxy.Type == 'Wire':
-                baselist.append(sel)
-        elif sel.TypeId == 'Part::FeaturePython':
+        if sel.TypeId in ['Part::Part2DObjectPython', 'Part::FeaturePython']:
             if sel.Proxy.Type in ['Wire', 'Compound']:
                 baselist.append(sel)
             if sel.Proxy.Type == 'Pipe' and sel.Base:

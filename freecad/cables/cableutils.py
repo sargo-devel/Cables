@@ -196,7 +196,8 @@ def isSubwireOfCable(wire):
     cable = False
     for obj in wire.InList:
         try:
-            if type(obj.Proxy).__name__ == "ArchCable":
+            if hasattr(obj, "Proxy") and \
+               type(obj.Proxy).__name__ == "ArchCable":
                 if wire in obj.SubWires:
                     cable = True
                     break

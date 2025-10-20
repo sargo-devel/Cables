@@ -153,7 +153,8 @@ class CableTerminal:
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
         for p in obj.InList:
-            if type(p.Proxy).__name__ in valid_parent_list:
+            if hasattr(p, "Proxy") and \
+               type(p.Proxy).__name__ in valid_parent_list:
                 if p.Name != obj.ParentName:
                     obj.ParentName = p.Name
                 return
@@ -162,7 +163,8 @@ class CableTerminal:
     def updateConnectedWires(self, obj):
         conn_list = []
         for p in obj.InList:
-            if type(p.Proxy).__name__ == "WireFlex":
+            if hasattr(p, "Proxy") and \
+               type(p.Proxy).__name__ == "WireFlex":
                 conn_list.append(p)
         conn_wires = []
         for wire in conn_list:

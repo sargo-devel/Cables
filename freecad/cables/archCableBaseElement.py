@@ -459,14 +459,16 @@ class BaseElement(ArchComponent.Component):
     def findTerminals(self, obj):
         tlist = []
         for p in obj.InList:
-            if type(p.Proxy).__name__ == "CableTerminal":
+            if hasattr(p, "Proxy") and \
+               type(p.Proxy).__name__ == "CableTerminal":
                 tlist.append(p)
         return tlist
 
     def findSuppLines(self, obj):
         tlist = []
         for p in obj.InList:
-            if type(p.Proxy).__name__ == "ExtSuppLines":
+            if hasattr(p, "Proxy") and \
+               type(p.Proxy).__name__ == "ExtSuppLines":
                 tlist.append(p)
         return tlist
 

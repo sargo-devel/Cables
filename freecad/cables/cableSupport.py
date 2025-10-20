@@ -104,7 +104,8 @@ class ExtSuppLines:
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
         for p in obj.InList:
-            if type(p.Proxy).__name__ in valid_parent_list:
+            if hasattr(p, "Proxy") and \
+               type(p.Proxy).__name__ in valid_parent_list:
                 obj.ParentName = p.Name
                 return
 

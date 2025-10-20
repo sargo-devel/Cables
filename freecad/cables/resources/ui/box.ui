@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TaskPanelNewProfile</class>
- <widget class="QDialog" name="TaskPanelNewProfile">
+ <class>TaskPanelNewBox</class>
+ <widget class="QDialog" name="TaskPanelNewBox">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>551</width>
-    <height>492</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">

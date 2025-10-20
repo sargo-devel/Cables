@@ -424,12 +424,12 @@
     </message>
     <message>
         <location filename="../../archCableConnector.py" line="383"/>
-        <location filename="../../archCableConduit.py" line="476"/>
-        <location filename="../../archCableBaseElement.py" line="697"/>
+        <location filename="../../archCableConduit.py" line="473"/>
+        <location filename="../../archCableBaseElement.py" line="699"/>
         <location filename="../../cableSupport.py" line="22"/>
         <location filename="../../cableSupport.py" line="41"/>
         <location filename="../../archCableLightPoint.py" line="119"/>
-        <location filename="../../archCable.py" line="1011"/>
+        <location filename="../../archCable.py" line="1009"/>
         <location filename="../../archCableBox.py" line="599"/>
         <location filename="../../archElectricalDevice.py" line="197"/>
         <source>No active document. Aborting</source>
@@ -450,17 +450,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="481"/>
+        <location filename="../../archCableConduit.py" line="478"/>
         <source>Cable Conduit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="488"/>
+        <location filename="../../archCableConduit.py" line="485"/>
         <source>No base objects for Cable Conduit. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="702"/>
+        <location filename="../../archCableBaseElement.py" line="704"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -568,7 +568,7 @@
     </message>
     <message>
         <location filename="../../cablesCommands.py" line="256"/>
-        <location filename="../../archCable.py" line="1021"/>
+        <location filename="../../archCable.py" line="1019"/>
         <source>Cable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -672,7 +672,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="1017"/>
+        <location filename="../../archCable.py" line="1015"/>
         <source>No base object for cable. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1122,6 +1122,163 @@ and on supported objects.</source>
     </message>
 </context>
 <context>
+    <name>TaskPanelNewBox</name>
+    <message>
+        <location filename="../ui/box.ui" line="14"/>
+        <source>Cable Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="20"/>
+        <source>Cable Box properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="38"/>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="54"/>
+        <source>Custom Cable Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="62"/>
+        <source>Profile Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="76"/>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="95"/>
+        <location filename="../ui/box.ui" line="140"/>
+        <location filename="../ui/box.ui" line="185"/>
+        <location filename="../ui/box.ui" line="230"/>
+        <location filename="../ui/box.ui" line="275"/>
+        <location filename="../ui/box.ui" line="320"/>
+        <location filename="../ui/box.ui" line="365"/>
+        <location filename="../ui/box.ui" line="410"/>
+        <source>Thickness of sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="121"/>
+        <source>Depth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="166"/>
+        <source>Fillet Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="211"/>
+        <source>Diameter (inner)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="256"/>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="301"/>
+        <source>Thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="346"/>
+        <source>Hole Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="391"/>
+        <source>Holes Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TaskPanelNewConnector</name>
+    <message>
+        <location filename="../ui/connector.ui" line="14"/>
+        <source>Cable Connector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="20"/>
+        <source>Cable Connector properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="29"/>
+        <source>Custom Terminal Strip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="37"/>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="56"/>
+        <location filename="../ui/connector.ui" line="156"/>
+        <source>Thickness of sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="82"/>
+        <source>Custom hole size [mm2]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="109"/>
+        <source>Number of holes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="123"/>
+        <source>Hole size [mm2]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="137"/>
+        <source>Thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="195"/>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TaskPanelNewDevice</name>
+    <message>
+        <location filename="../ui/device.ui" line="14"/>
+        <source>Electrical Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/device.ui" line="20"/>
+        <source>Electrical Device properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/device.ui" line="38"/>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/device.ui" line="54"/>
+        <source>Custom Electrical Device Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TaskPanelNewProfile</name>
     <message>
         <location filename="../ui/profile.ui" line="14"/>
@@ -1151,134 +1308,6 @@ and on supported objects.</source>
     <message>
         <location filename="../ui/profile.ui" line="66"/>
         <source>Custom wire gauge [mm2]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/device.ui" line="14"/>
-        <source>Electrical Device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/device.ui" line="20"/>
-        <source>Electrical Device properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/device.ui" line="38"/>
-        <location filename="../ui/box.ui" line="38"/>
-        <location filename="../ui/connector.ui" line="195"/>
-        <source>Preset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/device.ui" line="54"/>
-        <source>Custom Electrical Device Box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="14"/>
-        <source>Cable Box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="20"/>
-        <source>Cable Box properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="54"/>
-        <source>Custom Cable Box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="62"/>
-        <source>Profile Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="76"/>
-        <source>Width</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="95"/>
-        <location filename="../ui/box.ui" line="140"/>
-        <location filename="../ui/box.ui" line="185"/>
-        <location filename="../ui/box.ui" line="230"/>
-        <location filename="../ui/box.ui" line="275"/>
-        <location filename="../ui/box.ui" line="320"/>
-        <location filename="../ui/box.ui" line="365"/>
-        <location filename="../ui/box.ui" line="410"/>
-        <location filename="../ui/connector.ui" line="56"/>
-        <location filename="../ui/connector.ui" line="156"/>
-        <source>Thickness of sheet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="121"/>
-        <source>Depth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="166"/>
-        <source>Fillet Radius</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="211"/>
-        <source>Diameter (inner)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="256"/>
-        <location filename="../ui/connector.ui" line="37"/>
-        <source>Height</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="301"/>
-        <location filename="../ui/connector.ui" line="137"/>
-        <source>Thickness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="346"/>
-        <source>Hole Diameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="391"/>
-        <source>Holes Distance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="14"/>
-        <source>Cable Connector</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="20"/>
-        <source>Cable Connector properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="29"/>
-        <source>Custom Terminal Strip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="82"/>
-        <source>Custom hole size [mm2]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="109"/>
-        <source>Number of holes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/connector.ui" line="123"/>
-        <source>Hole size [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -49,24 +49,28 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations/README.md) for details.
 
 Available translations:
-
+* Chinese Traditional
+  * translators: @DrBenson
 * German
-  * translators: [@maxwxyz](https://github.com/maxwxyz), @FBXL5
+  * translators: [@maxwxyz](https://github.com/maxwxyz), @FBXL5, [@ryanthara](https://github.com/ryanthara)
 * Polish
   * translators: @kaktus, @mgr_wojtal, @Piter
 * Spanish
-  * translator: [@hasecilu](https://github.com/hasecilu)
+  * translators: [@hasecilu](https://github.com/hasecilu)
+* Swedish
+  * translators: @yeager74
 
 Big thanks to the translators for their work!
 
 ### Release notes
-* v0.3.0   Oct 2025
+* v0.3.0  23 Oct 2025
   * New elements introduced: Electrical Device, CableTerminal, SuppLines.
   * Changed concept for: Cable Box, Cable Connector, Cable Light Point. Introduced presets, support for CableTerminal, SuppLines and non parametric shapes imported from STEP files.
-  * New commands for wires introduced: Attach Wire to Terminal, Detach Wire From Terminal
-  * New support commands introduced: Attach In Place, Deactivate Atttachment
+  * New commands for wires introduced: Attach Wire to Terminal, Detach Wire From Terminal.
+  * New support commands introduced: Attach In Place, Deactivate Atttachment.
   * Added support for two-color insulation.
   * Added command 'coaxial' in CablesEdit.
+  * Added translations: Chinese, Swedish.
 * v0.2.1  30 Jun 2025
   * Fixed bug with DraftTools import
   * Updated German translation

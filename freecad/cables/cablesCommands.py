@@ -310,8 +310,7 @@ class newCableBoxCommand:
         c = "freecad.cables.archCableBox"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Box"))
-        lst_before = doc.findObjects(Name=translate(
-                                     "Cables", "CableBox"))
+        lst_before = doc.findObjects(Name="CableBox")
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
@@ -321,7 +320,7 @@ class newCableBoxCommand:
         else:
             FreeCADGui.doCommand(f"obj = {c}.makeCableBox()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        lst_after = doc.findObjects(Name=translate("Cables", "CableBox"))
+        lst_after = doc.findObjects(Name="CableBox")
         obj = list(set(lst_after)-set(lst_before))[0]
         panel = archCableBox.TaskPanelCableBox(obj)
         FreeCADGui.Control.showDialog(panel)
@@ -347,8 +346,7 @@ class newCableConnectorCommand:
         c = "freecad.cables.archCableConnector"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Connector"))
-        lst_before = doc.findObjects(Name=translate(
-                                     "Cables", "CableConnector"))
+        lst_before = doc.findObjects(Name="CableConnector")
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
@@ -358,7 +356,7 @@ class newCableConnectorCommand:
         else:
             FreeCADGui.doCommand(f"obj = {c}.makeCableConnector()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        lst_after = doc.findObjects(Name=translate("Cables", "CableConnector"))
+        lst_after = doc.findObjects(Name="CableConnector")
         obj = list(set(lst_after)-set(lst_before))[0]
         panel = archCableConnector.TaskPanelCableConnector(obj)
         FreeCADGui.Control.showDialog(panel)
@@ -455,8 +453,7 @@ class newElectricalDevice:
         c = "freecad.cables.archElectricalDevice"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Electrical Device"))
-        lst_before = doc.findObjects(Name=translate(
-                                     "Cables", "ElectricalDevice"))
+        lst_before = doc.findObjects(Name="ElectricalDevice")
         FreeCADGui.addModule(f"{c}")
         if len(sel_obj) > 0:
             pos_vect = sel_obj[0].PickedPoints[0]
@@ -467,8 +464,7 @@ class newElectricalDevice:
         else:
             FreeCADGui.doCommand(f"obj = {c}.makeElectricalDevice()")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
-        lst_after = doc.findObjects(Name=translate("Cables",
-                                                   "ElectricalDevice"))
+        lst_after = doc.findObjects(Name="ElectricalDevice")
         obj = list(set(lst_after)-set(lst_before))[0]
         panel = archElectricalDevice.TaskPanelElectricalDevice(obj)
         FreeCADGui.Control.showDialog(panel)

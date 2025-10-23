@@ -437,8 +437,6 @@
     </message>
     <message>
         <location filename="../../archCableConnector.py" line="389"/>
-        <location filename="../../cablesCommands.py" line="351"/>
-        <location filename="../../cablesCommands.py" line="361"/>
         <source>CableConnector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -583,66 +581,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="314"/>
-        <location filename="../../cablesCommands.py" line="324"/>
         <location filename="../../archCableBox.py" line="603"/>
         <source>CableBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="349"/>
+        <location filename="../../cablesCommands.py" line="348"/>
         <source>Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="403"/>
+        <location filename="../../cablesCommands.py" line="401"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="426"/>
+        <location filename="../../cablesCommands.py" line="424"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="457"/>
+        <location filename="../../cablesCommands.py" line="455"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="459"/>
-        <location filename="../../cablesCommands.py" line="471"/>
         <location filename="../../archElectricalDevice.py" line="202"/>
         <source>ElectricalDevice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="497"/>
+        <location filename="../../cablesCommands.py" line="493"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="527"/>
+        <location filename="../../cablesCommands.py" line="523"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="563"/>
+        <location filename="../../cablesCommands.py" line="559"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="591"/>
+        <location filename="../../cablesCommands.py" line="587"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="628"/>
+        <location filename="../../cablesCommands.py" line="624"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="656"/>
+        <location filename="../../cablesCommands.py" line="652"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -861,12 +855,12 @@
 <context>
     <name>Cables_AttachInPlace</name>
     <message>
-        <location filename="../../cablesCommands.py" line="576"/>
+        <location filename="../../cablesCommands.py" line="572"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="585"/>
+        <location filename="../../cablesCommands.py" line="581"/>
         <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
         <translation type="unfinished"></translation>
     </message>
@@ -887,17 +881,17 @@
 <context>
     <name>Cables_AttachWireToTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="641"/>
+        <location filename="../../cablesCommands.py" line="637"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="650"/>
+        <location filename="../../cablesCommands.py" line="646"/>
         <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="677"/>
+        <location filename="../../cablesCommands.py" line="673"/>
         <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -918,12 +912,12 @@
 <context>
     <name>Cables_CableBox</name>
     <message>
-        <location filename="../../cablesCommands.py" line="337"/>
+        <location filename="../../cablesCommands.py" line="336"/>
         <source>Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="344"/>
+        <location filename="../../cablesCommands.py" line="343"/>
         <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
         <translation type="unfinished"></translation>
     </message>
@@ -944,12 +938,12 @@
 <context>
     <name>Cables_CableConnector</name>
     <message>
-        <location filename="../../cablesCommands.py" line="374"/>
+        <location filename="../../cablesCommands.py" line="372"/>
         <source>Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="382"/>
+        <location filename="../../cablesCommands.py" line="380"/>
         <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -957,12 +951,12 @@
 <context>
     <name>Cables_CableLightPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="444"/>
+        <location filename="../../cablesCommands.py" line="442"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="452"/>
+        <location filename="../../cablesCommands.py" line="450"/>
         <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -983,12 +977,12 @@
 <context>
     <name>Cables_DeactivateAttachment</name>
     <message>
-        <location filename="../../cablesCommands.py" line="604"/>
+        <location filename="../../cablesCommands.py" line="600"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="611"/>
+        <location filename="../../cablesCommands.py" line="607"/>
         <source>It daeactivates attachment of selected objects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1009,7 +1003,7 @@
 <context>
     <name>Cables_DetachWireFromTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="669"/>
+        <location filename="../../cablesCommands.py" line="665"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1033,12 +1027,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_ElectricalDevice</name>
     <message>
-        <location filename="../../cablesCommands.py" line="484"/>
+        <location filename="../../cablesCommands.py" line="480"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="492"/>
+        <location filename="../../cablesCommands.py" line="488"/>
         <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1046,12 +1040,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Material</name>
     <message>
-        <location filename="../../cablesCommands.py" line="415"/>
+        <location filename="../../cablesCommands.py" line="413"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="421"/>
+        <location filename="../../cablesCommands.py" line="419"/>
         <source>It adds new multimaterials for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1059,12 +1053,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Profile</name>
     <message>
-        <location filename="../../cablesCommands.py" line="394"/>
+        <location filename="../../cablesCommands.py" line="392"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="399"/>
+        <location filename="../../cablesCommands.py" line="397"/>
         <source>It adds a new cable profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1085,12 +1079,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportLine</name>
     <message>
-        <location filename="../../cablesCommands.py" line="549"/>
+        <location filename="../../cablesCommands.py" line="545"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="557"/>
+        <location filename="../../cablesCommands.py" line="553"/>
         <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1098,12 +1092,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="515"/>
+        <location filename="../../cablesCommands.py" line="511"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="522"/>
+        <location filename="../../cablesCommands.py" line="518"/>
         <source>It adds a new support point to which a cable or other element can be attached</source>
         <translation type="unfinished"></translation>
     </message>

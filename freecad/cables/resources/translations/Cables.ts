@@ -591,17 +591,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="401"/>
+        <location filename="../../cablesCommands.py" line="402"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="424"/>
+        <location filename="../../cablesCommands.py" line="425"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="455"/>
+        <location filename="../../cablesCommands.py" line="456"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -611,32 +611,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="493"/>
+        <location filename="../../cablesCommands.py" line="494"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="523"/>
+        <location filename="../../cablesCommands.py" line="524"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="559"/>
+        <location filename="../../cablesCommands.py" line="560"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="587"/>
+        <location filename="../../cablesCommands.py" line="588"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="624"/>
+        <location filename="../../cablesCommands.py" line="625"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="652"/>
+        <location filename="../../cablesCommands.py" line="653"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -671,32 +671,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="46"/>
+        <location filename="../../cableProfile.py" line="102"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="66"/>
+        <location filename="../../cableProfile.py" line="336"/>
         <source>Cable needs to have number of wires &gt; 0 and nonzero wire gauge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="84"/>
+        <location filename="../../cableProfile.py" line="354"/>
         <source>Flat cable needs to have at least 2 wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="172"/>
+        <location filename="../../cableProfile.py" line="442"/>
         <source>Round cable needs to have at least 1 wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="323"/>
+        <location filename="../../cableProfile.py" line="579"/>
+        <location filename="../../cableProfile.py" line="594"/>
+        <source>Skipping bad profile or preset:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableProfile.py" line="629"/>
         <source>Skipping bad line:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="326"/>
+        <location filename="../../cableProfile.py" line="632"/>
         <source>Could not open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -855,12 +861,12 @@
 <context>
     <name>Cables_AttachInPlace</name>
     <message>
-        <location filename="../../cablesCommands.py" line="572"/>
+        <location filename="../../cablesCommands.py" line="573"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="581"/>
+        <location filename="../../cablesCommands.py" line="582"/>
         <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
         <translation type="unfinished"></translation>
     </message>
@@ -881,17 +887,17 @@
 <context>
     <name>Cables_AttachWireToTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="637"/>
+        <location filename="../../cablesCommands.py" line="638"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="646"/>
+        <location filename="../../cablesCommands.py" line="647"/>
         <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="673"/>
+        <location filename="../../cablesCommands.py" line="674"/>
         <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -951,12 +957,12 @@
 <context>
     <name>Cables_CableLightPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="442"/>
+        <location filename="../../cablesCommands.py" line="443"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="450"/>
+        <location filename="../../cablesCommands.py" line="451"/>
         <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,12 +983,12 @@
 <context>
     <name>Cables_DeactivateAttachment</name>
     <message>
-        <location filename="../../cablesCommands.py" line="600"/>
+        <location filename="../../cablesCommands.py" line="601"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="607"/>
+        <location filename="../../cablesCommands.py" line="608"/>
         <source>It daeactivates attachment of selected objects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1003,7 +1009,7 @@
 <context>
     <name>Cables_DetachWireFromTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="665"/>
+        <location filename="../../cablesCommands.py" line="666"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1027,12 +1033,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_ElectricalDevice</name>
     <message>
-        <location filename="../../cablesCommands.py" line="480"/>
+        <location filename="../../cablesCommands.py" line="481"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="488"/>
+        <location filename="../../cablesCommands.py" line="489"/>
         <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1040,12 +1046,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Material</name>
     <message>
-        <location filename="../../cablesCommands.py" line="413"/>
+        <location filename="../../cablesCommands.py" line="414"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="419"/>
+        <location filename="../../cablesCommands.py" line="420"/>
         <source>It adds new multimaterials for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1053,12 +1059,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Profile</name>
     <message>
-        <location filename="../../cablesCommands.py" line="392"/>
+        <location filename="../../cablesCommands.py" line="393"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="397"/>
+        <location filename="../../cablesCommands.py" line="398"/>
         <source>It adds a new cable profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1079,12 +1085,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportLine</name>
     <message>
-        <location filename="../../cablesCommands.py" line="545"/>
+        <location filename="../../cablesCommands.py" line="546"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="553"/>
+        <location filename="../../cablesCommands.py" line="554"/>
         <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1092,12 +1098,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="511"/>
+        <location filename="../../cablesCommands.py" line="512"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="518"/>
+        <location filename="../../cablesCommands.py" line="519"/>
         <source>It adds a new support point to which a cable or other element can be attached</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1280,27 +1286,70 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="20"/>
-        <source>Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/profile.ui" line="28"/>
+        <location filename="../ui/profile.ui" line="48"/>
         <source>Standard wire gauge [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="42"/>
+        <location filename="../ui/profile.ui" line="34"/>
         <source>Number of wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="57"/>
+        <location filename="../ui/profile.ui" line="20"/>
+        <source>Preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="26"/>
+        <source>Profile wires</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="93"/>
+        <location filename="../ui/profile.ui" line="268"/>
         <source>Profile type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="66"/>
+        <location filename="../ui/profile.ui" line="99"/>
+        <source>Profile type details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="107"/>
+        <source>Profile class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="121"/>
+        <source>[1] Jacket thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="140"/>
+        <location filename="../ui/profile.ui" line="188"/>
+        <location filename="../ui/profile.ui" line="236"/>
+        <source>Thickness of sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="169"/>
+        <source>[2] Single insulation thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="217"/>
+        <source>[3] Insulation distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="280"/>
+        <source>Show details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="62"/>
         <source>Custom wire gauge [mm2]</source>
         <translation type="unfinished"></translation>
     </message>

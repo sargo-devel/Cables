@@ -1,6 +1,28 @@
 """cableProfile
 """
 
+# ***************************************************************************
+# *   Copyright 2024 SargoDevel <sargo-devel at o2 dot pl>                  *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU Lesser General Public License (LGPL)    *
+# *   as published by the Free Software Foundation; either version 2 of     *
+# *   the License, or (at your option) any later version.                   *
+# *   for detail see the LICENSE text file.                                 *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU Lesser General Public License for more details.                   *
+# *                                                                         *
+# *   You should have received a copy of the GNU Library General Public     *
+# *   License along with this program; if not, write to the Free Software   *
+# *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# *   USA                                                                   *
+# *                                                                         *
+# ***************************************************************************/
+
+
 import os
 import csv
 import math
@@ -8,12 +30,19 @@ import FreeCAD
 import FreeCADGui
 import Part
 import Sketcher
+import Show
 import ProfileLib.RegularPolygon
+from PySide import QtGui
 from freecad.cables import uiPath, presetsPath
 
 
 translate = FreeCAD.Qt.translate
 ui_profile = os.path.join(uiPath, "profile.ui")
+svg_img = {"R": (os.path.join(uiPath, "profile-simple-r.svg"), 64, 64),
+           "F": (os.path.join(uiPath, "profile-simple-f.svg"), 64, 64),
+           "Rf": (os.path.join(uiPath, "profile-full-r.svg"), 90, 90),
+           "Ff": (os.path.join(uiPath, "profile-full-f.svg"), 90, 90)
+           }
 gauge_mm2_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
                   '10', '16', '25', '35', '50', '70', '95', '120']
 
@@ -22,43 +51,284 @@ gauge_mm2_list = ['custom', '0.2', '0.5', '0.75', '1', '1.5', '2.5', '4', '6',
 profilefiles = [os.path.join(presetsPath, "profiles.csv"),
                 os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                              "profiles.csv")]
+default_preset = "YDY_3x1.5_750V"
+prof_class_list = ["Round", "Flat"]
+prof_class = {prof_class_list[0]: "R", prof_class_list[1]: "F"}
+prof_class_r = {"R": prof_class_list[0], "F": prof_class_list[1]}
 
 
 class TaskPanelProfile:
-    def __init__(self, gauge_list=gauge_mm2_list):
+    def __init__(self, obj, presetname=default_preset,
+                 gauge_list=gauge_mm2_list):
+        self.obj = obj
+        self.reload_counter = 0
+        self.table = {"ShowDetails": 0}
         self.form = FreeCADGui.PySideUic.loadUi(ui_profile)
-        self.presets = readCablePresets()
-        profile_list = [i[1]+'_'+i[3] for i in self.presets]
-        self.form.comboProfile.addItems(profile_list)
+        self.presetnames, self.presets = getPresets()
+        self.gauge_list = [round(float(val), 4) for val in gauge_list[1:]]
+        self.form.comboPreset.addItems(self.presetnames)
+        profile_list = list(set([i[1]+'_'+i[3] for i in self.presets]))
+        profile_list.sort()
+        profile_list = ['custom'] + profile_list
+        self.form.comboProfileType.addItems(profile_list)
         self.form.comboWireGauge.addItems(gauge_list)
+        self.form.comboProfClass.addItems(prof_class_list)
+        self.setLabelProfileType(svg_img["R"])
+        self.setTable(presetname)
+        self.reloadPropertiesFromTable()
+        signal_list = [
+            (self.connectEnumVar, self.form.comboPreset, "Preset"),
+            (self.connectEnumVar, self.form.comboProfileType, "ProfileType"),
+            (self.connectEnumVar, self.form.comboProfClass, "ProfileClass"),
+            (self.connectStateVar, self.form.detailsCheckBox, "ShowDetails"),
+            (self.connectSpinVar, self.form.sJacketThick, "JacketThick"),
+            (self.connectSpinVar, self.form.sSingleInsul, "SingleInsulThick"),
+            (self.connectSpinVar, self.form.sInsulDist, "InsulDist"),
+            (self.connectSpinVar, self.form.NumberOfWires, "NrOfWires"),
+            (self.connectEnumVar, self.form.comboWireGauge, "WireGauge"),
+            (self.connectSpinVar, self.form.customWireGauge, "WireGauge")]
+        for element in signal_list:
+            element[0](element[1], element[2], self.updateVisibility)
+        self.updateVisibility("", "")
+        self.addTempoVis()
+        self.setTopCameraView()
 
     def accept(self):
-        idx = self.form.comboProfile.currentIndex()
-        profile = self.presets[idx]
-        nr_of_wires = self.form.NumberOfWires.value()
-        try:
-            wire_gauge_mm2 = float(
-                self.form.comboWireGauge.currentText())
-        except ValueError:
-            wire_gauge_mm2 = self.form.customWireGauge.value()
+        profile, wireparams = self.getDataToBuildProfile()
+        if hasattr(self.obj, "Name"):
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
         c = "freecad.cables"
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(translate("Cables", "Cable Profile"))
         FreeCADGui.addModule(f"{c}")
         FreeCADGui.doCommand(f"{c}.cableProfile.makeCableProfile(" +
-                             f"{profile}, {nr_of_wires}, {wire_gauge_mm2})")
+                             f"{profile}, {wireparams[0]}, {wireparams[1]})")
         FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
         doc.commitTransaction()
+        self.removeTempoVis()
         FreeCADGui.Control.closeDialog()
 
+    def reject(self):
+        if hasattr(self.obj, "Name"):
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+        self.removeTempoVis()
+        FreeCADGui.Control.closeDialog()
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
 
-def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
+    def updateVisibility(self, pname, pvalue):
+        self.reloadPropertiesFromTable()
+        if self.form.detailsCheckBox.isChecked():
+            self.form.profileTypeDetailsBox.setVisible(True)
+            suffix = "f"
+        else:
+            self.form.profileTypeDetailsBox.setVisible(False)
+            suffix = ""
+        img_type = prof_class[self.table["ProfileClass"]] + suffix
+        self.setLabelProfileType(svg_img[img_type])
+
+        switch = False if self.table["WireGauge"] in self.gauge_list else True
+        self.form.customWireGauge.setVisible(switch)
+        self.form.labelCustomWireGauge.setVisible(switch)
+
+        if self.reload_counter == 0 and pname != "ShowDetails":
+            if hasattr(self.obj, "Name"):
+                FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+            profile, wireparams = self.getDataToBuildProfile()
+            self.obj = makeCableProfile(profile, *wireparams)
+            FreeCAD.ActiveDocument.recompute()
+            FreeCADGui.Selection.addSelection(FreeCAD.ActiveDocument.Name,
+                                              self.obj.Name)
+
+    def setLabelProfileType(self, img_element):
+        pic = QtGui.QPixmap(img_element[0])
+        self.form.labelProfileType.setPixmap(pic)
+        self.form.labelProfileType.setFixedSize(img_element[1], img_element[2])
+
+    def connectEnumVar(self, element, pname, callback=None):
+        element.currentTextChanged.connect(
+                lambda txtval: self.updateProperty(pname, txtval, callback))
+
+    def connectStateVar(self, element, pname, callback=None):
+        element.stateChanged.connect(
+                lambda intval: self.updateProperty(pname, intval, callback))
+
+    def connectSpinVar(self, element, pname, callback=None):
+        # disable recompute on every key press
+        element.setProperty("keyboardTracking", False)
+        element.valueChanged.connect(
+            lambda value: self.updateProperty(pname, value, callback))
+
+    def updateProperty(self, pname, pvalue, callback):
+        ptype = type(self.table[pname]).__name__
+        try:
+            if ptype == "str":
+                if pname == "Preset":
+                    self.setTable(pvalue)
+                else:
+                    self.table[pname] = pvalue
+            if ptype == "int":
+                self.table[pname] = int(pvalue)
+            if ptype in ["float", "Quantity"]:
+                if pname == "WireGauge":
+                    self.updateWireGauge(pvalue)
+                else:
+                    self.table[pname] = round(float(pvalue), 4)
+        except (AttributeError, ValueError):
+            FreeCAD.Console.PrintError(
+                "Profile", f"Can't set {pname} with value: {pvalue}")
+        if pname in ["ProfileClass", "JacketThick", "SingleInsulThick",
+                     "InsulDist"]:
+            self.setProfileTypeFromDetails()
+        if pname == "ProfileType":
+            self.setTableFromProfileType()
+        if pname in ["NrOfWires", "WireGauge"]:
+            self.setTableFromWires()
+        if callback is not None:
+            callback(pname, pvalue)
+
+    def updateWireGauge(self, pvalue):
+        vtype = type(pvalue).__name__
+        if vtype == "float":
+            if pvalue in self.gauge_list:
+                if pvalue > self.table["WireGauge"]:
+                    pvalue += 0.05
+                else:
+                    pvalue -= 0.05
+        if pvalue != "custom":
+            self.table["WireGauge"] = round(float(pvalue), 4)
+        else:
+            self.table["WireGauge"] = self.form.customWireGauge.value()
+
+    def getDataToBuildProfile(self):
+        profile = [1, self.table["Name"],
+                   prof_class[self.table["ProfileClass"]],
+                   self.table["VoltageClass"],
+                   self.table["JacketThick"],
+                   self.table["SingleInsulThick"],
+                   self.table["InsulDist"]]
+        wireparams = [self.table["NrOfWires"], self.table["WireGauge"]]
+        return profile, wireparams
+
+    def setTable(self, presetname):
+        preset = None
+        for p in self.presets:
+            p_name = f"{p[1]}_{p[7]}x{p[8]:g}_{p[3]}"
+            if presetname == p_name:
+                preset = p
+                break
+        if preset is None:
+            self.table["Preset"] = presetname
+            if "ProfileType" not in self.table.keys():
+                preset = [1, "Round", "R", "Custom", 1.2, 0.8, 0.1, 2, 1.0]
+            else:
+                return
+        self.table["Preset"] = presetname
+        self.table["ProfileType"] = f"{preset[1]}_{preset[3]}"
+        self.table["Name"] = preset[1]
+        self.table["ProfileClass"] = prof_class_r[f"{preset[2]}"]
+        self.table["VoltageClass"] = preset[3]
+        self.table["JacketThick"] = preset[4]
+        self.table["SingleInsulThick"] = preset[5]
+        self.table["InsulDist"] = preset[6]
+        self.table["NrOfWires"] = preset[7]
+        self.table["WireGauge"] = preset[8]
+
+    def setTableFromWires(self):
+        presetname = None
+        pname = f'{self.table["Name"]}_{self.table["NrOfWires"]}x' + \
+                f'{self.table["WireGauge"]:g}_{self.table["VoltageClass"]}'
+        for p in self.presetnames:
+            if pname == p:
+                presetname = p
+                break
+        if presetname is None:
+            self.table["Preset"] = "Customized"
+        else:
+            self.table["Preset"] = presetname
+
+    def setTableFromProfileType(self):
+        preset = None
+        for p in self.presets:
+            p_name = f"{p[1]}_{p[3]}"
+            if self.table["ProfileType"] == p_name:
+                preset = p
+                break
+        if preset is None:
+            self.table["Preset"] = "Customized"
+        else:
+            self.table["Name"] = preset[1]
+            self.table["ProfileClass"] = prof_class_r[f"{preset[2]}"]
+            self.table["VoltageClass"] = preset[3]
+            self.table["JacketThick"] = preset[4]
+            self.table["SingleInsulThick"] = preset[5]
+            self.table["InsulDist"] = preset[6]
+            self.setTableFromWires()
+
+    def setProfileTypeFromDetails(self):
+        preset = None
+        pclass_lst = [
+            prof_class[self.table["ProfileClass"]],
+            self.table["JacketThick"],
+            self.table["SingleInsulThick"],
+            self.table["InsulDist"]
+            ]
+        for p in self.presets:
+            if pclass_lst == [p[2], p[4], p[5], p[6]]:
+                preset = p
+                break
+        if preset is None:
+            self.table["ProfileType"] = "custom"
+            self.table["Name"] = self.table["ProfileClass"]
+            self.table["VoltageClass"] = "Custom"
+        else:
+            self.table["ProfileType"] = f"{p[1]}_{p[3]}"
+
+    def reloadPropertiesFromTable(self):
+        self.reload_counter += 1
+        self.form.comboPreset.setCurrentText(self.table["Preset"])
+        self.form.comboProfileType.setCurrentText(self.table["ProfileType"])
+        self.form.detailsCheckBox.setChecked(self.table["ShowDetails"])
+        self.form.comboProfClass.setCurrentText(self.table["ProfileClass"])
+        self.form.sJacketThick.setProperty("rawValue",
+                                           self.table["JacketThick"])
+        self.form.sSingleInsul.setProperty("rawValue",
+                                           self.table["SingleInsulThick"])
+        self.form.sInsulDist.setProperty("rawValue", self.table["InsulDist"])
+        self.form.NumberOfWires.setProperty("value", self.table["NrOfWires"])
+        if self.table["WireGauge"] in self.gauge_list:
+            self.form.comboWireGauge.setCurrentText(
+                f"{self.table['WireGauge']:g}")
+        else:
+            self.form.comboWireGauge.setCurrentText("custom")
+            self.form.customWireGauge.setValue(self.table["WireGauge"])
+        self.reload_counter -= 1
+        self.reloading = False
+
+    def addTempoVis(self):
+        self.tv = Show.TempoVis(FreeCAD.ActiveDocument)
+        self.tv.sketchClipPlane(self.obj, None, False)
+        self.tv.saveCamera()
+
+    def removeTempoVis(self):
+        self.tv.restore()
+        del self.tv
+
+    def setTopCameraView(self):
+        FreeCADGui.Selection.clearSelection()
+        FreeCADGui.Selection.addSelection(FreeCAD.ActiveDocument.Name,
+                                          self.obj.Name)
+        FreeCADGui.SendMsgToActiveView("ViewSelection")
+        FreeCADGui.activeView().setCameraOrientation((0.0, 0.0, 0.0, 1.0))
+
+
+def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.2, 0.8, 0.1],
                      nr_of_wires=3, wire_gauge_mm2=1.5):
     """Makes cable profile
     profile=[idx,name,profile_class,voltage_class,jacket_thickness,
              single_insulation_thickness,insul_dist]
     """
-    label = f"{profile[1]}{nr_of_wires}x{wire_gauge_mm2}_{profile[3]}"
+    label = f"{profile[1]}_{nr_of_wires}x{wire_gauge_mm2:g}_{profile[3]}"
     # FreeCAD.Console.PrintMessage(f"Label: {label}\n")
     if nr_of_wires < 1 or wire_gauge_mm2 == 0:
         FreeCAD.Console.PrintError(translate(
@@ -73,7 +343,7 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.45, 0.7, 0.1],
     return p
 
 
-def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
+def makeCableProfileF(label, insul=[1.2, 0.8, 0.1], nr_of_wires=3,
                       wire_gauge_mm2=1.5):
     """Profile for flat cable
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
@@ -161,7 +431,7 @@ def makeCableProfileF(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
     return profile
 
 
-def makeCableProfileR(label, insul=[1.45, 0.7, 0.1], nr_of_wires=3,
+def makeCableProfileR(label, insul=[1.2, 0.8, 0.1], nr_of_wires=3,
                       wire_gauge_mm2=1.5):
     """Profile for round cable
     insul=[jacket_thickness,single_insulation_thickness,insul_dist]
@@ -292,6 +562,42 @@ def createProfileSubWires(profile, norm, nr_of_wires, wo_nr):
     return wo, wi, p, nr
 
 
+def getPresets(presetfiles=profilefiles):
+    list_all = readCablePresets(presetfiles)
+    profiles = []
+    presets = []
+    presetnames = []
+    for p in list_all:
+        try:
+            if p[2] in prof_class.values() and p[6] is not None:
+                profiles.append(p)
+            if p[2] == "PRESET" and p[5] is not None:
+                presets.append(p)
+                presetnames.append(f"{p[1]}_{int(p[4])}x{p[5]:g}_{p[3]}")
+        except (IndexError, ValueError):
+            FreeCAD.Console.PrintError(translate(
+                "Cables", "Skipping bad profile or preset:") + f"{p}\n")
+
+    presets_ext = []
+    buf = []
+    for i, pres in enumerate(presets):
+        for prof in profiles:
+            try:
+                if pres[1] == prof[1] and pres[3] == prof[3]:
+                    presets_ext.append(prof + [int(pres[4]), pres[5]])
+                elif f"{prof[1]}_{prof[3]}" not in buf:
+                    presets_ext.append(prof + [0, 0.0])
+                buf.append(f"{prof[1]}_{prof[3]}")
+            except (IndexError, ValueError):
+                FreeCAD.Console.PrintError(translate(
+                    "Cables", "Skipping bad profile or preset:") +
+                        f"{prof}, {pres}\n")
+
+    presetnames.sort()
+    presetnames = ["Customized"] + presetnames
+    return presetnames, presets_ext
+
+
 # function copied from archProfile.py and adopted
 def readCablePresets(pfiles=profilefiles):
     # When special type is detected on position row[1], the row[3] and higher
@@ -317,10 +623,10 @@ def readCablePresets(pfiles=profilefiles):
                             if r not in Presets:
                                 Presets.append(r)
                             bid = bid + 1
-                        except ValueError:
+                        except (IndexError, ValueError):
                             FreeCAD.Console.PrintError(translate(
                                 "Cables", "Skipping bad line:")
-                                + " " + str(row) + "\n")
+                                + " " + str(row) + f", [{csvfile.name}]\n")
             except IOError:
                 FreeCAD.Console.PrintError(translate(
                     "Cables", "Could not open"), profilefile, "\n")

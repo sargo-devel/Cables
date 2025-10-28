@@ -8,6 +8,8 @@
 
 # R=  Round cable
 # F=  Flat cable
+# PRESET= Not a profile but preset with additional data. Preset has to contain existing
+#         Name and VoltageClass defined in one of profiles.
 
 # Additional profile types must be implemented in cableProfile.py first
 
@@ -16,10 +18,31 @@
 # F-profile
 # Name,F,Voltage Class,jacket_thickness,single_insulation_thickness,insul_dist
 
-YDYp,F,750V,1.45,0.7,0.1
+YDYp,F,750V,1.2,0.8,0.1
+OMYp(H03VVH2-F),F,300V,0.65,0.5,0.2
 
 # R-profile
 # Name,R,Voltage Class,jacket_thickness,single_insulation_thickness,insul_dist
 
-YDY,R,750V,1.45,0.7,0.1
-UTP5e,R,LAN,0.7,0.3,0.05
+YDY,R,750V,1.2,0.8,0.1
+UTP5e,R,SIGN,0.7,0.25,0.1
+OMY(H03VV-F),R,300V,0.6,0.5,0.1
+OWY(H05VV-F),R,500V,0.9,0.7,0.1
+YTDY,R,100V,0.5,0.2,0.1
+YKY(NYY-J/O),R,1000V,1.8,1.0,0.1
+
+##########################################
+
+# Presets
+# Name,PRESET,Voltage Class,NumberOfWires,WireGauge
+YDY,PRESET,750V,3,1.5
+YDY,PRESET,750V,3,2.5
+YDYp,PRESET,750V,3,1.5
+YDYp,PRESET,750V,3,2.5
+UTP5e,PRESET,SIGN,8,0.2
+OMY(H03VV-F),PRESET,300V,2,0.75
+OMYp(H03VVH2-F),PRESET,300V,2,0.75
+OWY(H05VV-F),PRESET,500V,3,1.5
+YTDY,PRESET,100V,4,0.2
+YKY(NYY-J/O),PRESET,1000V,5,6.0
+

@@ -379,7 +379,8 @@ class newCableConnectorCommand:
 
 class newProfileCommand:
     def Activated(self):
-        panel = cableProfile.TaskPanelProfile()
+        sketch = cableProfile.makeCableProfile()
+        panel = cableProfile.TaskPanelProfile(sketch)
         FreeCADGui.Control.showDialog(panel)
         FreeCAD.ActiveDocument.recompute()
 

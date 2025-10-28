@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>360</height>
+    <width>616</width>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,75 +15,294 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="presetBox">
      <property name="title">
-      <string>Profile</string>
+      <string>Preset</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Standard wire gauge [mm2]</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboWireGauge"/>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Number of wires</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="NumberOfWires"/>
-        </item>
-       </layout>
-      </item>
+     <layout class="QGridLayout" name="gridLayout_3">
       <item row="2" column="0">
-       <widget class="QComboBox" name="comboProfile"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Profile type</string>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Profile wires</string>
         </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Number of wires</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="NumberOfWires"/>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Standard wire gauge [mm2]</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboWireGauge"/>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayoutCustomGauge">
+           <item>
+            <widget class="QLabel" name="labelCustomWireGauge">
+             <property name="text">
+              <string>Custom wire gauge [mm2]</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="customWireGauge">
+             <property name="decimals">
+              <number>4</number>
+             </property>
+             <property name="minimum">
+              <double>0.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>500.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.050000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.050000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </item>
-      <item row="5" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Custom wire gauge [mm2]</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="customWireGauge">
-          <property name="maximum">
-           <double>2.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.050000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="profileTypeBox">
+        <property name="title">
+         <string>Profile type</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="3" column="0">
+          <widget class="QGroupBox" name="profileTypeDetailsBox">
+           <property name="title">
+            <string>Profile type details</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLabel" name="labelProfClass">
+                <property name="text">
+                 <string>Profile class</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboProfClass"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QLabel" name="labelJacket">
+                <property name="text">
+                 <string>[1] Jacket thickness</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="Gui::QuantitySpinBox" name="sJacketThick" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Thickness of sheet</string>
+                </property>
+                <property name="unit" stdset="0">
+                 <string notr="true">mm</string>
+                </property>
+                <property name="decimals" stdset="0">
+                 <number>1</number>
+                </property>
+                <property name="minimum" stdset="0">
+                 <double>0.001000000000000</double>
+                </property>
+                <property name="maximum" stdset="0">
+                 <double>99999999.000000000000000</double>
+                </property>
+                <property name="singleStep" stdset="0">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="rawValue" stdset="0">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QLabel" name="labelSingleIns">
+                <property name="text">
+                 <string>[2] Single insulation thickness</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="Gui::QuantitySpinBox" name="sSingleInsul" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Thickness of sheet</string>
+                </property>
+                <property name="unit" stdset="0">
+                 <string notr="true">mm</string>
+                </property>
+                <property name="decimals" stdset="0">
+                 <number>1</number>
+                </property>
+                <property name="minimum" stdset="0">
+                 <double>0.001000000000000</double>
+                </property>
+                <property name="maximum" stdset="0">
+                 <double>99999999.000000000000000</double>
+                </property>
+                <property name="singleStep" stdset="0">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="rawValue" stdset="0">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QLabel" name="labelDist">
+                <property name="text">
+                 <string>[3] Insulation distance</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="Gui::QuantitySpinBox" name="sInsulDist" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Thickness of sheet</string>
+                </property>
+                <property name="unit" stdset="0">
+                 <string notr="true">mm</string>
+                </property>
+                <property name="decimals" stdset="0">
+                 <number>1</number>
+                </property>
+                <property name="minimum" stdset="0">
+                 <double>0.001000000000000</double>
+                </property>
+                <property name="maximum" stdset="0">
+                 <double>99999999.000000000000000</double>
+                </property>
+                <property name="singleStep" stdset="0">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="rawValue" stdset="0">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QLabel" name="labelProfileType">
+             <property name="text">
+              <string>Profile type</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QComboBox" name="comboProfileType"/>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="detailsCheckBox">
+               <property name="text">
+                <string>Show details</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QComboBox" name="comboPreset"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Gui::QuantitySpinBox</class>
+   <extends>QWidget</extends>
+   <header>Gui/QuantitySpinBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

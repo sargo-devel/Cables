@@ -425,7 +425,7 @@
     <message>
         <location filename="../../archCableConnector.py" line="383"/>
         <location filename="../../archCableConduit.py" line="473"/>
-        <location filename="../../archCableBaseElement.py" line="699"/>
+        <location filename="../../archCableBaseElement.py" line="700"/>
         <location filename="../../cableSupport.py" line="22"/>
         <location filename="../../cableSupport.py" line="41"/>
         <location filename="../../archCableLightPoint.py" line="119"/>
@@ -458,7 +458,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="704"/>
+        <location filename="../../archCableBaseElement.py" line="705"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1139,64 +1139,102 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="54"/>
+        <location filename="../ui/box.ui" line="51"/>
+        <source>The predefined set of parameters for this object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="58"/>
         <source>Custom Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="62"/>
+        <location filename="../ui/box.ui" line="66"/>
         <source>Profile Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="76"/>
+        <location filename="../ui/box.ui" line="73"/>
+        <source>The profile type of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="84"/>
         <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="95"/>
-        <location filename="../ui/box.ui" line="140"/>
-        <location filename="../ui/box.ui" line="185"/>
-        <location filename="../ui/box.ui" line="230"/>
-        <location filename="../ui/box.ui" line="275"/>
-        <location filename="../ui/box.ui" line="320"/>
-        <location filename="../ui/box.ui" line="365"/>
-        <location filename="../ui/box.ui" line="410"/>
-        <source>Thickness of sheet</source>
+        <location filename="../ui/box.ui" line="103"/>
+        <source>The inner width of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="121"/>
+        <location filename="../ui/box.ui" line="193"/>
+        <source>The inner fillet radius of side walls of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="219"/>
+        <source>Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="238"/>
+        <source>The inner diameter of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="418"/>
+        <source>The distance between holes on a single wall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="129"/>
         <source>Depth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="166"/>
+        <location filename="../ui/box.ui" line="148"/>
+        <source>The inner depth of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="174"/>
         <source>Fillet Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="211"/>
-        <source>Diameter (inner)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="256"/>
+        <location filename="../ui/box.ui" line="264"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="301"/>
+        <location filename="../ui/box.ui" line="283"/>
+        <source>The inner height of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="309"/>
         <source>Thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="346"/>
+        <location filename="../ui/box.ui" line="328"/>
+        <source>The wall thickness of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="354"/>
         <source>Hole Diameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="391"/>
+        <location filename="../ui/box.ui" line="373"/>
+        <source>The diameter of a single hole</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="399"/>
         <source>Holes Distance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1214,43 +1252,63 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="29"/>
+        <location filename="../ui/connector.ui" line="26"/>
+        <source>The predefined set of parameters for this object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="33"/>
         <source>Custom Terminal Strip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="37"/>
+        <location filename="../ui/connector.ui" line="41"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="56"/>
-        <location filename="../ui/connector.ui" line="156"/>
-        <source>Thickness of sheet</source>
+        <location filename="../ui/connector.ui" line="60"/>
+        <source>The height of this connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="82"/>
+        <location filename="../ui/connector.ui" line="86"/>
         <source>Custom hole size [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="109"/>
+        <location filename="../ui/connector.ui" line="96"/>
+        <location filename="../ui/connector.ui" line="141"/>
+        <source>The size of single hole in [mm2]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="116"/>
         <source>Number of holes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/connector.ui" line="123"/>
+        <source>The number of holes for cables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="134"/>
         <source>Hole size [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="137"/>
+        <location filename="../ui/connector.ui" line="152"/>
         <source>Thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="195"/>
+        <location filename="../ui/connector.ui" line="171"/>
+        <source>The wall thickness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/connector.ui" line="210"/>
         <source>Preset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1273,7 +1331,12 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/device.ui" line="54"/>
+        <location filename="../ui/device.ui" line="51"/>
+        <source>The predefined set of parameters for this object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/device.ui" line="58"/>
         <source>Custom Electrical Device Box</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1286,7 +1349,7 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="48"/>
+        <location filename="../ui/profile.ui" line="52"/>
         <source>Standard wire gauge [mm2]</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1306,50 +1369,80 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="93"/>
-        <location filename="../ui/profile.ui" line="268"/>
+        <location filename="../ui/profile.ui" line="41"/>
+        <source>Number of wires in the cable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="59"/>
+        <source>Wire cross-sectional area compliant with the IEC 60228 standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="77"/>
+        <source>Custom wire cross-sectional area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="104"/>
+        <location filename="../ui/profile.ui" line="283"/>
+        <location filename="../ui/profile.ui" line="292"/>
         <source>Profile type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="99"/>
+        <location filename="../ui/profile.ui" line="110"/>
         <source>Profile type details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="107"/>
+        <location filename="../ui/profile.ui" line="118"/>
+        <location filename="../ui/profile.ui" line="125"/>
         <source>Profile class</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="121"/>
+        <location filename="../ui/profile.ui" line="136"/>
         <source>[1] Jacket thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="140"/>
-        <location filename="../ui/profile.ui" line="188"/>
-        <location filename="../ui/profile.ui" line="236"/>
-        <source>Thickness of sheet</source>
+        <location filename="../ui/profile.ui" line="155"/>
+        <source>Thickness of the outer cover</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="169"/>
+        <location filename="../ui/profile.ui" line="313"/>
+        <source>The predefined set of parameters for this object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="184"/>
         <source>[2] Single insulation thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="217"/>
+        <location filename="../ui/profile.ui" line="203"/>
+        <source>Insulation thickness of a single wire</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="232"/>
         <source>[3] Insulation distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="280"/>
+        <location filename="../ui/profile.ui" line="251"/>
+        <source>Distance between individual insulations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="299"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="62"/>
+        <location filename="../ui/profile.ui" line="70"/>
         <source>Custom wire gauge [mm2]</source>
         <translation type="unfinished"></translation>
     </message>

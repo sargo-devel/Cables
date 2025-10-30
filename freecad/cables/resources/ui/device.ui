@@ -46,7 +46,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QComboBox" name="comboPreset"/>
+       <widget class="QComboBox" name="comboPreset">
+        <property name="toolTip">
+         <string>The predefined set of parameters for this object</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QGroupBox" name="customBox">

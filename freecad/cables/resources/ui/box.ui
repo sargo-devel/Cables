@@ -46,7 +46,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QComboBox" name="comboPreset"/>
+       <widget class="QComboBox" name="comboPreset">
+        <property name="toolTip">
+         <string>The predefined set of parameters for this object</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QGroupBox" name="customBox">
@@ -64,7 +68,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboProfileType"/>
+            <widget class="QComboBox" name="comboProfileType">
+             <property name="toolTip">
+              <string>The profile type of this box</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -92,7 +100,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The inner width of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -137,7 +145,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The inner depth of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -182,13 +190,13 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The inner fillet radius of side walls of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
              </property>
              <property name="minimum" stdset="0">
-              <double>0.010000000000000</double>
+              <double>0.000000000000000</double>
              </property>
              <property name="maximum" stdset="0">
               <double>99999999.000000000000000</double>
@@ -208,7 +216,7 @@
            <item>
             <widget class="QLabel" name="sDiameterLabel">
              <property name="text">
-              <string>Diameter (inner)</string>
+              <string>Diameter</string>
              </property>
             </widget>
            </item>
@@ -227,7 +235,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The inner diameter of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -272,7 +280,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The inner height of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -317,7 +325,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The wall thickness of this box</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -362,7 +370,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The diameter of a single hole</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -407,7 +415,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The distance between holes on a single wall</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>

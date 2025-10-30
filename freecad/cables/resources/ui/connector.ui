@@ -21,7 +21,11 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="2" column="0">
-       <widget class="QComboBox" name="comboPreset"/>
+       <widget class="QComboBox" name="comboPreset">
+        <property name="toolTip">
+         <string>The predefined set of parameters for this object</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QGroupBox" name="customBox">
@@ -53,7 +57,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The height of this connector</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>
@@ -88,6 +92,9 @@
              <property name="enabled">
               <bool>true</bool>
              </property>
+             <property name="toolTip">
+              <string>The size of single hole in [mm2]</string>
+             </property>
              <property name="maximum">
               <double>200.000000000000000</double>
              </property>
@@ -111,7 +118,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="nrOfHoles"/>
+            <widget class="QSpinBox" name="nrOfHoles">
+             <property name="toolTip">
+              <string>The number of holes for cables</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -125,7 +136,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboHoleSize"/>
+            <widget class="QComboBox" name="comboHoleSize">
+             <property name="toolTip">
+              <string>The size of single hole in [mm2]</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -153,7 +168,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>Thickness of sheet</string>
+              <string>The wall thickness</string>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>

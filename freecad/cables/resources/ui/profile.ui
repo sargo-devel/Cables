@@ -36,7 +36,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="NumberOfWires"/>
+            <widget class="QSpinBox" name="NumberOfWires">
+             <property name="toolTip">
+              <string>Number of wires in the cable</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -50,7 +54,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboWireGauge"/>
+            <widget class="QComboBox" name="comboWireGauge">
+             <property name="toolTip">
+              <string>Wire cross-sectional area compliant with the IEC 60228 standard</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -65,6 +73,9 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="customWireGauge">
+             <property name="toolTip">
+              <string>Custom wire cross-sectional area</string>
+             </property>
              <property name="decimals">
               <number>4</number>
              </property>
@@ -109,7 +120,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboProfClass"/>
+               <widget class="QComboBox" name="comboProfClass">
+                <property name="toolTip">
+                 <string>Profile class</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -137,7 +152,7 @@
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Thickness of sheet</string>
+                 <string>Thickness of the outer cover</string>
                 </property>
                 <property name="unit" stdset="0">
                  <string notr="true">mm</string>
@@ -185,7 +200,7 @@
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Thickness of sheet</string>
+                 <string>Insulation thickness of a single wire</string>
                 </property>
                 <property name="unit" stdset="0">
                  <string notr="true">mm</string>
@@ -233,7 +248,7 @@
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Thickness of sheet</string>
+                 <string>Distance between individual insulations</string>
                 </property>
                 <property name="unit" stdset="0">
                  <string notr="true">mm</string>
@@ -272,7 +287,11 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QComboBox" name="comboProfileType"/>
+              <widget class="QComboBox" name="comboProfileType">
+               <property name="toolTip">
+                <string>Profile type</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="detailsCheckBox">
@@ -289,7 +308,11 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QComboBox" name="comboPreset"/>
+       <widget class="QComboBox" name="comboPreset">
+        <property name="toolTip">
+         <string>The predefined set of parameters for this object</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

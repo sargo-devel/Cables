@@ -240,10 +240,11 @@ class BaseElement(ArchComponent.Component):
 
     def getPresets(self, obj, presetfiles=presetfiles):
         presets = cableProfile.readCablePresets(presetfiles)
-        presetnames = ["Customized"]
+        presetnames = []
         for p in presets:
             presetnames.append(f"{p[3]}_{p[1]}")
         presetnames.sort()
+        presetnames = ["Customized"] + presetnames
         return presetnames, presets
 
     def setPreset(self, obj, preset, pnames=[], pvalues=[]):

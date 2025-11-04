@@ -61,13 +61,14 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             pnames = ["NumberOfHoles", "Height", "HoleSize", "Thickness"]
             pvalues.append(self.obj.NumberOfHoles)
             pvalues.append(str(self.obj.Height))
-            pvalues.append(self.obj.HoleSize)
+            pvalues.append(str(self.obj.HoleSize))
             pvalues.append(str(self.obj.Thickness))
         FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
                              f"'{self.obj.Preset}', {pnames}, {pvalues})")
         archCableBaseElement.TaskPanelBaseElement.accept(self)
 
     def updateVisibility(self, pname, pvalue):
+        FreeCAD.Units.setSchema(self.newSchema)
         if pname == "Preset":
             preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
             if preset_name == "Customized":
@@ -81,7 +82,6 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
             if pvalue == "custom":
                 self.form.customHoleSize.setVisible(True)
                 self.form.customHoleSizeLabel.setVisible(True)
-                self.form.customHoleSize.setValue(self.obj.HoleSize)
             elif isinstance(pvalue, str):
                 self.form.customHoleSize.setVisible(False)
                 self.form.customHoleSizeLabel.setVisible(False)
@@ -90,11 +90,12 @@ class TaskPanelCableConnector(archCableBaseElement.TaskPanelBaseElement):
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
         self.form.nrOfHoles.setValue(self.obj.NumberOfHoles)
-        if f"{self.obj.HoleSize:g}" in self.gauge_list:
-            self.form.comboHoleSize.setCurrentText(f"{self.obj.HoleSize:g}")
+        if f"{self.obj.HoleSize.Value:g}" in self.gauge_list:
+            self.form.comboHoleSize.setCurrentText(
+                f"{self.obj.HoleSize.Value:g}")
         else:
             self.form.comboHoleSize.setCurrentText("custom")
-            self.form.customHoleSize.setValue(self.obj.HoleSize)
+            self.form.customHoleSize.setProperty("value", self.obj.HoleSize)
         self.form.sHeight.setProperty("value", self.obj.Height)
         self.form.sThickness.setProperty("value", self.obj.Thickness)
 
@@ -117,11 +118,11 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
     def setProperties(self, obj):
         pl = obj.PropertiesList
         if "HoleSize" not in pl:
-            obj.addProperty("App::PropertyFloat", "HoleSize",
+            obj.addProperty("App::PropertyArea", "HoleSize",
                             "CableConnector",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The size of single " +
-                                "hole in [mm2]"))
+                                "App::Property", "The cross-sectional area " +
+                                "of single hole"))
         if "Thickness" not in pl:
             obj.addProperty("App::PropertyLength", "Thickness",
                             "CableConnector",
@@ -208,7 +209,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     if t.Length.Value != length:
                         t.Length = length
                     # set terminal spacing
-                    hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
+                    hole_diameter = math.sqrt(obj.HoleSize.Value/math.pi)*2
                     spacing = hole_diameter + obj.Thickness.Value
                     if t.Spacing.Value != spacing:
                         t.Spacing = spacing
@@ -223,7 +224,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                         t.AttachmentOffset = base_pl
 
     def makeBox(self, obj):
-        hole_diameter = math.sqrt(obj.HoleSize/math.pi)*2
+        hole_diameter = math.sqrt(obj.HoleSize.Value/math.pi)*2
         vc = FreeCAD.Vector(0, 0, 0)
         vn = FreeCAD.Vector(0, 0, -1)
         ln = obj.NumberOfHoles * \
@@ -281,7 +282,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     nr_of_term = int(preset[5])
                     nr_of_supp = 0
                     obj.Height.Value = preset[6]
-                    obj.HoleSize = preset[7]
+                    obj.HoleSize.Value = preset[7]
                     obj.Thickness.Value = preset[8]
                     self.ExtShape = None
                     obj.ExtShapeSolids = 0
@@ -395,9 +396,9 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
         obj.Base = baseobj
     else:
         obj.NumberOfHoles = nrofholes if nrofholes else 3
-        obj.HoleSize = holesize if holesize else 2.0
-        obj.Thickness = thickness if thickness else 1.0
-        obj.Height = height if height else 5.0
+        obj.HoleSize.Value = holesize if holesize else 2.0
+        obj.Thickness.Value = thickness if thickness else 1.0
+        obj.Height.Value = height if height else 5.0
     if preset is not None:
         obj.Proxy.setPreset(obj, preset)
     else:

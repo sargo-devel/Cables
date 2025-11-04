@@ -21,6 +21,7 @@ presetfiles = [os.path.join(presetsPath, "presets.csv"),
                os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                             "presets.csv")]
 libdirs = [libPath, os.path.join(FreeCAD.getUserAppDataDir(), "Cables", "lib")]
+unit_schema_m2 = [4, 9]
 
 
 class TaskPanelBaseElement:
@@ -32,17 +33,24 @@ class TaskPanelBaseElement:
         self.presetnames, _ = obj.Proxy.getPresets(obj)
         self.invalidpreset = False
         self.invalidpresetname = None
+        self.oldSchema = FreeCAD.Units.getSchema()
+        if self.oldSchema in unit_schema_m2:
+            self.newSchema = 0
+        else:
+            self.newSchema = self.oldSchema
 
     def accept(self):
         # execute this code after child class accept method
         FreeCAD.ActiveDocument.commitTransaction()
         FreeCADGui.Control.closeDialog()
+        FreeCAD.Units.setSchema(self.oldSchema)
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
 
     def reject(self):
         FreeCAD.ActiveDocument.abortTransaction()
         FreeCADGui.Control.closeDialog()
+        FreeCAD.Units.setSchema(self.oldSchema)
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
 
@@ -54,8 +62,11 @@ class TaskPanelBaseElement:
                 if self.obj.getEnumerationsOfProperty(pname)[pvalue] != prop:
                     setattr(self.obj, pname, pvalue)
             elif ptype == "App::PropertyFloat" and pvalue != "custom":
-                if not math.isclose(float(pvalue), prop):
-                    setattr(self.obj, pname, float(pvalue))
+                if type(pvalue).__name__ == "Quantity":
+                    setattr(self.obj, pname, pvalue.Value)
+                else:
+                    if not math.isclose(float(pvalue), prop):
+                        setattr(self.obj, pname, float(pvalue))
             elif ptype == "App::PropertyInteger":
                 if int(pvalue) != prop:
                     setattr(self.obj, pname, int(pvalue))

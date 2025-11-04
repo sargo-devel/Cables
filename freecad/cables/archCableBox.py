@@ -78,6 +78,7 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
         archCableBaseElement.TaskPanelBaseElement.accept(self)
 
     def updateVisibility(self, pname, pvalue):
+
         def _updateProfileTypeVisibility(pvalue):
             if self.profile_types[pvalue] == "Circle":
                 self.form.sWidth.setVisible(False)
@@ -101,6 +102,8 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
                 self.form.sDiameterLabel.setVisible(False)
                 self.form.sHolesDistance.setVisible(True)
                 self.form.sHolesDistanceLabel.setVisible(True)
+
+        FreeCAD.Units.setSchema(self.newSchema)
         if pname == "Preset":
             preset_name = self.obj.getEnumerationsOfProperty(pname)[pvalue]
             if preset_name == "Customized":

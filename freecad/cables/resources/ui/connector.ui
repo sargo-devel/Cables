@@ -83,26 +83,26 @@
            <item>
             <widget class="QLabel" name="customHoleSizeLabel">
              <property name="text">
-              <string>Custom hole size [mm2]</string>
+              <string>Custom hole size</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="customHoleSize">
+            <widget class="Gui::QuantitySpinBox" name="customHoleSize" native="true">
              <property name="enabled">
               <bool>true</bool>
              </property>
              <property name="toolTip">
-              <string>The size of single hole in [mm2]</string>
+              <string>Cross-sectional area of ​​the hole in mm²</string>
              </property>
-             <property name="maximum">
-              <double>200.000000000000000</double>
+             <property name="unit" stdset="0">
+              <string notr="true">mm^2</string>
              </property>
-             <property name="singleStep">
+             <property name="maximum" stdset="0">
+              <double>10000.000000000000000</double>
+             </property>
+             <property name="singleStep" stdset="0">
               <double>0.050000000000000</double>
-             </property>
-             <property name="stepType">
-              <enum>QAbstractSpinBox::DefaultStepType</enum>
              </property>
             </widget>
            </item>
@@ -122,6 +122,9 @@
              <property name="toolTip">
               <string>The number of holes for cables</string>
              </property>
+             <property name="suffix">
+              <string notr="true"/>
+             </property>
             </widget>
            </item>
           </layout>
@@ -131,14 +134,14 @@
            <item>
             <widget class="QLabel" name="comboHoleSizeLabel">
              <property name="text">
-              <string>Hole size [mm2]</string>
+              <string>Hole size in mm²</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QComboBox" name="comboHoleSize">
              <property name="toolTip">
-              <string>The size of single hole in [mm2]</string>
+              <string>Cross-sectional area of ​​the hole in mm²</string>
              </property>
             </widget>
            </item>
@@ -169,6 +172,9 @@
              </property>
              <property name="toolTip">
               <string>The wall thickness</string>
+             </property>
+             <property name="unit" stdset="0">
+              <string notr="true"/>
              </property>
              <property name="decimals" stdset="0">
               <number>1</number>

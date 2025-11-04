@@ -4,22 +4,22 @@
 <context>
     <name>App::Property</name>
     <message>
-        <location filename="../../archCableConnector.py" line="124"/>
-        <source>The size of single hole in [mm2]</source>
+        <location filename="../../archCableConnector.py" line="125"/>
+        <source>The cross-sectional area of single hole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="129"/>
+        <location filename="../../archCableConnector.py" line="130"/>
         <source>The wall thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="134"/>
+        <location filename="../../archCableConnector.py" line="135"/>
         <source>The height of this connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="140"/>
+        <location filename="../../archCableConnector.py" line="141"/>
         <source>The number of holes for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -54,27 +54,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="119"/>
+        <location filename="../../archCableBaseElement.py" line="130"/>
         <source>The predefined set of parameters for this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="126"/>
+        <location filename="../../archCableBaseElement.py" line="137"/>
         <source>The number of Terminals in this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="133"/>
+        <location filename="../../archCableBaseElement.py" line="144"/>
         <source>The number of Support Lines in this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="140"/>
+        <location filename="../../archCableBaseElement.py" line="151"/>
         <source>The number of solids in an external shape loaded from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="147"/>
+        <location filename="../../archCableBaseElement.py" line="158"/>
         <source>The colors of external shape loaded from file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,82 +335,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="156"/>
+        <location filename="../../archCableBox.py" line="159"/>
         <source>The profile type of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="162"/>
+        <location filename="../../archCableBox.py" line="165"/>
         <source>The inner diameter of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="167"/>
+        <location filename="../../archCableBox.py" line="170"/>
         <source>The wall thickness of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="172"/>
+        <location filename="../../archCableBox.py" line="175"/>
         <source>The inner height of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="177"/>
+        <location filename="../../archCableBox.py" line="180"/>
         <source>The inner width of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="182"/>
+        <location filename="../../archCableBox.py" line="185"/>
         <source>The inner depth of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="187"/>
+        <location filename="../../archCableBox.py" line="190"/>
         <source>The inner fillet radius of side walls of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="192"/>
+        <location filename="../../archCableBox.py" line="195"/>
         <source>The distance between holes on a single wall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="197"/>
+        <location filename="../../archCableBox.py" line="200"/>
         <source>The diameter of a single hole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="202"/>
+        <location filename="../../archCableBox.py" line="205"/>
         <source>Hide the box body to have better access to helpers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="208"/>
+        <location filename="../../archCableBox.py" line="211"/>
         <source>Hide the helper rings if they are not needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="214"/>
+        <location filename="../../archCableBox.py" line="217"/>
         <source>The diameter of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="220"/>
+        <location filename="../../archCableBox.py" line="223"/>
         <source>The height below lid of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="226"/>
+        <location filename="../../archCableBox.py" line="229"/>
         <source>The diameter of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="232"/>
+        <location filename="../../archCableBox.py" line="235"/>
         <source>The height below lid of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="238"/>
+        <location filename="../../archCableBox.py" line="241"/>
         <source>Enables auto creation of DIN TH35 rails inside box depending on box shape and dimensions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -418,25 +418,25 @@
 <context>
     <name>Cables</name>
     <message>
-        <location filename="../../archCableConnector.py" line="372"/>
+        <location filename="../../archCableConnector.py" line="373"/>
         <source>edit Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="383"/>
+        <location filename="../../archCableConnector.py" line="384"/>
         <location filename="../../archCableConduit.py" line="473"/>
-        <location filename="../../archCableBaseElement.py" line="700"/>
+        <location filename="../../archCableBaseElement.py" line="711"/>
         <location filename="../../cableSupport.py" line="22"/>
         <location filename="../../cableSupport.py" line="41"/>
         <location filename="../../archCableLightPoint.py" line="119"/>
         <location filename="../../archCable.py" line="1009"/>
-        <location filename="../../archCableBox.py" line="599"/>
+        <location filename="../../archCableBox.py" line="602"/>
         <location filename="../../archElectricalDevice.py" line="197"/>
         <source>No active document. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="389"/>
+        <location filename="../../archCableConnector.py" line="390"/>
         <source>CableConnector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -458,7 +458,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="705"/>
+        <location filename="../../archCableBaseElement.py" line="716"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -581,11 +581,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="603"/>
-        <source>CableBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../cablesCommands.py" line="348"/>
         <source>Cable Connector</source>
         <translation type="unfinished"></translation>
@@ -603,11 +598,6 @@
     <message>
         <location filename="../../cablesCommands.py" line="456"/>
         <source>Electrical Device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archElectricalDevice.py" line="202"/>
-        <source>ElectricalDevice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -671,38 +661,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="102"/>
+        <location filename="../../cableProfile.py" line="109"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="336"/>
+        <location filename="../../cableProfile.py" line="350"/>
         <source>Cable needs to have number of wires &gt; 0 and nonzero wire gauge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="354"/>
+        <location filename="../../cableProfile.py" line="368"/>
         <source>Flat cable needs to have at least 2 wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="442"/>
+        <location filename="../../cableProfile.py" line="456"/>
         <source>Round cable needs to have at least 1 wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="579"/>
-        <location filename="../../cableProfile.py" line="594"/>
+        <location filename="../../cableProfile.py" line="593"/>
+        <location filename="../../cableProfile.py" line="608"/>
         <source>Skipping bad profile or preset:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="629"/>
+        <location filename="../../cableProfile.py" line="643"/>
         <source>Skipping bad line:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="632"/>
+        <location filename="../../cableProfile.py" line="646"/>
         <source>Could not open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -835,13 +825,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="589"/>
+        <location filename="../../archCableBox.py" line="592"/>
         <source>edit Cable Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBox.py" line="606"/>
+        <source>CableBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../archElectricalDevice.py" line="189"/>
         <source>edit Electrical Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archElectricalDevice.py" line="202"/>
+        <source>ElectricalDevice</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1169,26 +1169,6 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/box.ui" line="193"/>
-        <source>The inner fillet radius of side walls of this box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="219"/>
-        <source>Diameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="238"/>
-        <source>The inner diameter of this box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/box.ui" line="418"/>
-        <source>The distance between holes on a single wall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/box.ui" line="129"/>
         <source>Depth</source>
         <translation type="unfinished"></translation>
@@ -1201,6 +1181,21 @@ and on supported objects.</source>
     <message>
         <location filename="../ui/box.ui" line="174"/>
         <source>Fillet Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="193"/>
+        <source>The inner fillet radius of side walls of this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="219"/>
+        <source>Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/box.ui" line="238"/>
+        <source>The inner diameter of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1238,6 +1233,11 @@ and on supported objects.</source>
         <source>Holes Distance</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/box.ui" line="418"/>
+        <source>The distance between holes on a single wall</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TaskPanelNewConnector</name>
@@ -1273,13 +1273,13 @@ and on supported objects.</source>
     </message>
     <message>
         <location filename="../ui/connector.ui" line="86"/>
-        <source>Custom hole size [mm2]</source>
+        <source>Custom hole size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/connector.ui" line="96"/>
-        <location filename="../ui/connector.ui" line="141"/>
-        <source>The size of single hole in [mm2]</source>
+        <location filename="../ui/connector.ui" line="144"/>
+        <source>Cross-sectional area of ​​the hole in mm²</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1293,22 +1293,22 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="134"/>
-        <source>Hole size [mm2]</source>
+        <location filename="../ui/connector.ui" line="137"/>
+        <source>Hole size in mm²</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="152"/>
+        <location filename="../ui/connector.ui" line="155"/>
         <source>Thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="171"/>
+        <location filename="../ui/connector.ui" line="174"/>
         <source>The wall thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/connector.ui" line="210"/>
+        <location filename="../ui/connector.ui" line="216"/>
         <source>Preset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1349,16 +1349,6 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="52"/>
-        <source>Standard wire gauge [mm2]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/profile.ui" line="34"/>
-        <source>Number of wires</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/profile.ui" line="20"/>
         <source>Preset</source>
         <translation type="unfinished"></translation>
@@ -1369,13 +1359,28 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/profile.ui" line="34"/>
+        <source>Number of wires</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/profile.ui" line="41"/>
         <source>Number of wires in the cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/profile.ui" line="52"/>
+        <source>Standard wire gauge in mm²</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/profile.ui" line="59"/>
         <source>Wire cross-sectional area compliant with the IEC 60228 standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/profile.ui" line="70"/>
+        <source>Custom wire gauge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1412,11 +1417,6 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="313"/>
-        <source>The predefined set of parameters for this object</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/profile.ui" line="184"/>
         <source>[2] Single insulation thickness</source>
         <translation type="unfinished"></translation>
@@ -1442,8 +1442,8 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/profile.ui" line="70"/>
-        <source>Custom wire gauge [mm2]</source>
+        <location filename="../ui/profile.ui" line="313"/>
+        <source>The predefined set of parameters for this object</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

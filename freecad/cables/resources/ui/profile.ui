@@ -49,7 +49,7 @@
            <item>
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>Standard wire gauge [mm2]</string>
+              <string>Standard wire gauge in mm²</string>
              </property>
             </widget>
            </item>
@@ -67,28 +67,28 @@
            <item>
             <widget class="QLabel" name="labelCustomWireGauge">
              <property name="text">
-              <string>Custom wire gauge [mm2]</string>
+              <string>Custom wire gauge</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="customWireGauge">
+            <widget class="Gui::QuantitySpinBox" name="customWireGauge" native="true">
              <property name="toolTip">
               <string>Custom wire cross-sectional area</string>
              </property>
-             <property name="decimals">
+             <property name="decimals" stdset="0">
               <number>4</number>
              </property>
-             <property name="minimum">
-              <double>0.000000000000000</double>
+             <property name="minimum" stdset="0">
+              <double>0.000100000000000</double>
              </property>
-             <property name="maximum">
+             <property name="maximum" stdset="0">
               <double>500.000000000000000</double>
              </property>
-             <property name="singleStep">
+             <property name="singleStep" stdset="0">
               <double>0.050000000000000</double>
              </property>
-             <property name="value">
+             <property name="value" stdset="0">
               <double>0.050000000000000</double>
              </property>
             </widget>

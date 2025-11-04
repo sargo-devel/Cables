@@ -55,6 +55,7 @@ default_preset = "YDY_3x1.5_750V"
 prof_class_list = ["Round", "Flat"]
 prof_class = {prof_class_list[0]: "R", prof_class_list[1]: "F"}
 prof_class_r = {"R": prof_class_list[0], "F": prof_class_list[1]}
+unit_schema_m2 = [4, 9]
 
 
 class TaskPanelProfile:
@@ -65,6 +66,11 @@ class TaskPanelProfile:
         self.table = {"ShowDetails": 0}
         self.form = FreeCADGui.PySideUic.loadUi(ui_profile)
         self.presetnames, self.presets = getPresets()
+        self.oldSchema = FreeCAD.Units.getSchema()
+        if self.oldSchema in unit_schema_m2:
+            self.newSchema = 0
+        else:
+            self.newSchema = self.oldSchema
         self.gauge_list = [round(float(val), 4) for val in gauge_list[1:]]
         self.form.comboPreset.addItems(self.presetnames)
         profile_list = list(set([i[1]+'_'+i[3] for i in self.presets]))
@@ -74,6 +80,7 @@ class TaskPanelProfile:
         self.form.comboWireGauge.addItems(gauge_list)
         self.form.comboProfClass.addItems(prof_class_list)
         self.setLabelProfileType(svg_img["R"])
+        self.form.customWireGauge.setProperty("rawValue", 0.05)
         self.setTable(presetname)
         self.reloadPropertiesFromTable()
         signal_list = [
@@ -107,16 +114,19 @@ class TaskPanelProfile:
         doc.commitTransaction()
         self.removeTempoVis()
         FreeCADGui.Control.closeDialog()
+        FreeCAD.Units.setSchema(self.oldSchema)
 
     def reject(self):
         if hasattr(self.obj, "Name"):
             FreeCAD.ActiveDocument.removeObject(self.obj.Name)
         self.removeTempoVis()
         FreeCADGui.Control.closeDialog()
+        FreeCAD.Units.setSchema(self.oldSchema)
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
 
     def updateVisibility(self, pname, pvalue):
+        FreeCAD.Units.setSchema(self.newSchema)
         self.reloadPropertiesFromTable()
         if self.form.detailsCheckBox.isChecked():
             self.form.profileTypeDetailsBox.setVisible(True)
@@ -189,6 +199,9 @@ class TaskPanelProfile:
 
     def updateWireGauge(self, pvalue):
         vtype = type(pvalue).__name__
+        if vtype == "Quantity":
+            pvalue = pvalue.Value
+            vtype = "float"
         if vtype == "float":
             if pvalue in self.gauge_list:
                 if pvalue > self.table["WireGauge"]:
@@ -198,7 +211,7 @@ class TaskPanelProfile:
         if pvalue != "custom":
             self.table["WireGauge"] = round(float(pvalue), 4)
         else:
-            self.table["WireGauge"] = self.form.customWireGauge.value()
+            self.table["WireGauge"] = self.form.customWireGauge.property("rawValue")
 
     def getDataToBuildProfile(self):
         profile = [1, self.table["Name"],
@@ -301,7 +314,8 @@ class TaskPanelProfile:
                 f"{self.table['WireGauge']:g}")
         else:
             self.form.comboWireGauge.setCurrentText("custom")
-            self.form.customWireGauge.setValue(self.table["WireGauge"])
+            gauge = FreeCAD.Units.Quantity(f"{self.table['WireGauge']} mm^2")
+            self.form.customWireGauge.setProperty("value", gauge)
         self.reload_counter -= 1
         self.reloading = False
 

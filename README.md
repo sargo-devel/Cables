@@ -49,10 +49,13 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations/README.md) for details.
 
 Available translations:
+
+* Belarusian
+  * translators: @lidacity
 * Chinese Traditional
   * translators: @DrBenson
 * German
-  * translators: [@maxwxyz](https://github.com/maxwxyz), @FBXL5, [@ryanthara](https://github.com/ryanthara)
+  * translators: @FBXL5, [@maxwxyz](https://github.com/maxwxyz), [@ryanthara](https://github.com/ryanthara)
 * Polish
   * translators: @kaktus, @mgr_wojtal, @Piter
 * Spanish
@@ -63,6 +66,11 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes
+* v0.3.1  07 Nov 2025
+  * Updated task panel for cable profile.
+  * Updated predefined profiles and presets.
+  * Added translation: Belarusian.
+  * Minor UI changes and fixes.
 * v0.3.0  23 Oct 2025
   * New elements introduced: Electrical Device, CableTerminal, SuppLines.
   * Changed concept for: Cable Box, Cable Connector, Cable Light Point. Introduced presets, support for CableTerminal, SuppLines and non parametric shapes imported from STEP files.

@@ -279,6 +279,24 @@ class BaseElement(ArchComponent.Component):
     def updatePropertiesFromPreset(self, obj, presets):
         return
 
+    def process_multishape_STEP(self, data):
+        """Function processes list of tuples (shape, colors) obtained from
+        step file. It makes single compound of all shapes and  puts all colors
+        into single list.
+        Returns tuple (shape, list of colors)
+        """
+        shapes = []
+        colors = []
+        for pair in data:
+            shape = pair[0].Shape.copy()
+            if len(pair[1]) == 1:
+                color = len(shape.Faces)*pair[1]
+            else:
+                color = pair[1]
+            shapes.extend(shape.Solids)
+            colors.extend(color)
+        return Part.makeCompound(shapes), colors
+
     def readExtShape(self, obj, filename, libdirs=libdirs):
         """Function reads object shape and colors from step file.
         Returns tuple (shape, list of colors)
@@ -296,10 +314,26 @@ class BaseElement(ArchComponent.Component):
             return Part.Shape(), []
         # ImportGui.insert(fullname, FreeCAD.ActiveDocument.Name)
         # objlist = App.ActiveDocument.findObjects(Label='...')
+        oldobjlst = FreeCAD.ActiveDocument.Objects
         data = Import.insert(fullname, FreeCAD.ActiveDocument.Name)
-        sh = data[0][0].Shape.copy()
-        sh_colors = data[0][1]
-        FreeCAD.ActiveDocument.removeObject(data[0][0].Name)
+        if data is not None:
+            # imported STEP has colors
+            if len(data) == 1:
+                # STEP is a single shape
+                sh = data[0][0].Shape.copy()
+                sh_colors = data[0][1]
+            else:
+                # STEP is a group of shapes
+                sh, sh_colors = self.process_multishape_STEP(data)
+        else:
+            # imported STEP has no colors
+            sh = Part.read(fullname)
+            sh_colors = []
+        newobjlst = FreeCAD.ActiveDocument.Objects
+        dellist = [n for n in set(newobjlst)-set(oldobjlst)
+                   if n.TypeId in ['Part::Feature', 'App::Part']]
+        for el in dellist:
+            FreeCAD.ActiveDocument.removeObject(el.Name)
         return sh, sh_colors
 
     def readExtData(self, obj, filename, libdirs=libdirs):

@@ -104,7 +104,7 @@ PYLUPDATE = "lupdate"
 # lrelease util to use
 PYLRELEASE = "lrelease"
 
-# Treshold used to filter out untranslated languages, used in status command
+# Threshold used to filter out untranslated languages, used in status command
 THRESHOLD = 0.1
 
 # Token file name
@@ -257,7 +257,7 @@ def load_token():
             token = file.read().strip()
             if token:
                 return token
-    # if file does'nt exists read from CROWDIN_TOKEN
+    # if file doesn't exists read from CROWDIN_TOKEN
     return os.environ.get("CROWDIN_TOKEN")
 
 

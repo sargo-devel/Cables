@@ -260,7 +260,7 @@ info = doc.getObjectsByLabel("Info")[0]
 info.Text = """
 This is demo example of Cables Workbench
 
-To see Wire Flex in action you can zoom out to see the whole scene and change BoxSW1 Placement.Positon.y e.g. to -100cm
+To see Wire Flex in action you can zoom out to see the whole scene and change BoxSW1 Placement.Position.y e.g. to -100cm
 
 To enable/disable cable sublines visibility with one click you can change the cable property:
 ShowSubLines = True/False

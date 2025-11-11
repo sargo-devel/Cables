@@ -4,22 +4,22 @@
   <context>
     <name>App::Property</name>
     <message>
-      <location filename="../../archCableConnector.py" line="125"/>
+      <location filename="../../archCableConnector.py" line="147"/>
       <source>The cross-sectional area of single hole</source>
       <translation>Tvärsnittsarean för ett enstaka hål</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="130"/>
+      <location filename="../../archCableConnector.py" line="152"/>
       <source>The wall thickness</source>
       <translation>Väggens tjocklek</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="135"/>
+      <location filename="../../archCableConnector.py" line="157"/>
       <source>The height of this connector</source>
       <translation>Höjden på denna kontakt</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="141"/>
+      <location filename="../../archCableConnector.py" line="163"/>
       <source>The number of holes for cables</source>
       <translation>Antal hål för kablar</translation>
     </message>
@@ -54,27 +54,27 @@
       <translation>Isoleringstjocklek om profil inte används</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="130"/>
+      <location filename="../../archCableBaseElement.py" line="152"/>
       <source>The predefined set of parameters for this object</source>
       <translation>Den fördefinierade uppsättningen parametrar för detta objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="137"/>
+      <location filename="../../archCableBaseElement.py" line="159"/>
       <source>The number of Terminals in this object</source>
       <translation>Antalet terminaler i detta objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="144"/>
+      <location filename="../../archCableBaseElement.py" line="166"/>
       <source>The number of Support Lines in this object</source>
       <translation>Antalet stödlinjer i detta objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="151"/>
+      <location filename="../../archCableBaseElement.py" line="173"/>
       <source>The number of solids in an external shape loaded from file</source>
       <translation>Antalet solider i en extern form som lästs in från en fil</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="158"/>
+      <location filename="../../archCableBaseElement.py" line="180"/>
       <source>The colors of external shape loaded from file</source>
       <translation>Färgerna för extern form som lästs in från en fil</translation>
     </message>
@@ -95,7 +95,7 @@
     </message>
     <message>
       <location filename="../../cableTerminal.py" line="70"/>
-      <location filename="../../cableSupport.py" line="88"/>
+      <location filename="../../cableSupport.py" line="110"/>
       <source>The name of parent object</source>
       <translation>Namnet för överliggande objekt</translation>
     </message>
@@ -180,7 +180,7 @@
       <translation>Ställ in färg för gränssegmentets punkt</translation>
     </message>
     <message>
-      <location filename="../../cableSupport.py" line="83"/>
+      <location filename="../../cableSupport.py" line="105"/>
       <source>The shape containing support lines</source>
       <translation type="unfinished"/>
     </message>
@@ -245,17 +245,17 @@
       <translation>Graden av Bezier-funktionen. Bäst är 3</translation>
     </message>
     <message>
-      <location filename="../../archCableLightPoint.py" line="41"/>
+      <location filename="../../archCableLightPoint.py" line="63"/>
       <source>The diameter of the light point fitting</source>
       <translation>Ljuspunktsarmaturens diameter</translation>
     </message>
     <message>
-      <location filename="../../archCableLightPoint.py" line="47"/>
+      <location filename="../../archCableLightPoint.py" line="69"/>
       <source>The wall thickness of the light point fitting</source>
       <translation>Ljuspunktsarmaturens väggtjocklek</translation>
     </message>
     <message>
-      <location filename="../../archCableLightPoint.py" line="52"/>
+      <location filename="../../archCableLightPoint.py" line="74"/>
       <source>The height of the light point fitting</source>
       <translation>Ljuspunktsarmaturens höjd</translation>
     </message>
@@ -335,82 +335,82 @@
       <translation>Typ av alla underledares form</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="159"/>
+      <location filename="../../archCableBox.py" line="181"/>
       <source>The profile type of this box</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="165"/>
+      <location filename="../../archCableBox.py" line="187"/>
       <source>The inner diameter of this box</source>
       <translation>Den inre diametern för denna låda</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="170"/>
+      <location filename="../../archCableBox.py" line="192"/>
       <source>The wall thickness of this box</source>
       <translation>Väggtjockleken på denna låda</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="175"/>
+      <location filename="../../archCableBox.py" line="197"/>
       <source>The inner height of this box</source>
       <translation>Den inre höjden för denna box</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="180"/>
+      <location filename="../../archCableBox.py" line="202"/>
       <source>The inner width of this box</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="185"/>
+      <location filename="../../archCableBox.py" line="207"/>
       <source>The inner depth of this box</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="190"/>
+      <location filename="../../archCableBox.py" line="212"/>
       <source>The inner fillet radius of side walls of this box</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="195"/>
+      <location filename="../../archCableBox.py" line="217"/>
       <source>The distance between holes on a single wall</source>
       <translation>Avståndet mellan hålen på en enstaka vägg</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="200"/>
+      <location filename="../../archCableBox.py" line="222"/>
       <source>The diameter of a single hole</source>
       <translation>Diametern för ett enstaka hål</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="205"/>
+      <location filename="../../archCableBox.py" line="227"/>
       <source>Hide the box body to have better access to helpers</source>
       <translation>Dölj lådan för att få bättre tillgång till hjälpare</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="211"/>
+      <location filename="../../archCableBox.py" line="233"/>
       <source>Hide the helper rings if they are not needed</source>
       <translation>Göm hjälpringarna om de inte behövs</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="217"/>
+      <location filename="../../archCableBox.py" line="239"/>
       <source>The diameter of helper ring 1</source>
       <translation>Diametern på hjälpring 1</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="223"/>
+      <location filename="../../archCableBox.py" line="245"/>
       <source>The height below lid of helper ring 1</source>
       <translation>Höjden under locket på hjälpring 1</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="229"/>
+      <location filename="../../archCableBox.py" line="251"/>
       <source>The diameter of helper ring 2</source>
       <translation>Diametern på hjälpring 2</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="235"/>
+      <location filename="../../archCableBox.py" line="257"/>
       <source>The height below lid of helper ring 2</source>
       <translation>Höjden under locket på hjälpring 2</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="241"/>
+      <location filename="../../archCableBox.py" line="263"/>
       <source>Enables auto creation of DIN TH35 rails inside box depending on box shape and dimensions</source>
       <translation type="unfinished"/>
     </message>
@@ -418,25 +418,25 @@
   <context>
     <name>Cables</name>
     <message>
-      <location filename="../../archCableConnector.py" line="373"/>
+      <location filename="../../archCableConnector.py" line="395"/>
       <source>edit Cable Connector</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="384"/>
+      <location filename="../../archCableConnector.py" line="406"/>
       <location filename="../../archCableConduit.py" line="473"/>
-      <location filename="../../archCableBaseElement.py" line="711"/>
-      <location filename="../../cableSupport.py" line="22"/>
-      <location filename="../../cableSupport.py" line="41"/>
-      <location filename="../../archCableLightPoint.py" line="119"/>
+      <location filename="../../archCableBaseElement.py" line="767"/>
+      <location filename="../../cableSupport.py" line="44"/>
+      <location filename="../../cableSupport.py" line="63"/>
+      <location filename="../../archCableLightPoint.py" line="141"/>
       <location filename="../../archCable.py" line="1009"/>
-      <location filename="../../archCableBox.py" line="602"/>
-      <location filename="../../archElectricalDevice.py" line="197"/>
+      <location filename="../../archCableBox.py" line="624"/>
+      <location filename="../../archElectricalDevice.py" line="219"/>
       <source>No active document. Aborting</source>
       <translation>Inget aktivt dokument. Avbryter</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="390"/>
+      <location filename="../../archCableConnector.py" line="412"/>
       <source>CableConnector</source>
       <translation>KabelKontaktdon</translation>
     </message>
@@ -459,7 +459,7 @@
       <translation>Inga basobjekt för Cable Conduit. Avbryter</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="716"/>
+      <location filename="../../archCableBaseElement.py" line="772"/>
       <source>CableBaseElement</source>
       <translation type="unfinished"/>
     </message>
@@ -474,12 +474,12 @@
       <translation>fel objekt valt</translation>
     </message>
     <message>
-      <location filename="../../cableSupport.py" line="29"/>
+      <location filename="../../cableSupport.py" line="51"/>
       <source>SupportPoint</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cableSupport.py" line="59"/>
+      <location filename="../../cableSupport.py" line="81"/>
       <source>SupportLine</source>
       <translation>Stödlinje</translation>
     </message>
@@ -495,144 +495,144 @@
       <translation>Kan inte bygga sammansatt sökväg</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="56"/>
-      <location filename="../../cablesEdit.py" line="63"/>
+      <location filename="../../cablesEdit.py" line="78"/>
+      <location filename="../../cablesEdit.py" line="85"/>
       <source>Delete point</source>
       <translation>Ta bort punkt</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="71"/>
+      <location filename="../../cablesEdit.py" line="93"/>
       <source>Add point</source>
       <translation>Lägg till punkt</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="87"/>
+      <location filename="../../cablesEdit.py" line="109"/>
       <source>Attach point</source>
       <translation>Infästningspunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="92"/>
+      <location filename="../../cablesEdit.py" line="114"/>
       <source>Remove point attachment</source>
       <translation>Ta bort punktfästet</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="97"/>
+      <location filename="../../cablesEdit.py" line="119"/>
       <source>Make edge horizontal</source>
       <translation>Gör kanten horisontell</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="102"/>
+      <location filename="../../cablesEdit.py" line="124"/>
       <source>Make edge vertical</source>
       <translation>Gör kanten vertikal</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="107"/>
+      <location filename="../../cablesEdit.py" line="129"/>
       <source>Make edge coaxial</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="75"/>
+      <location filename="../../cablesCommands.py" line="97"/>
       <source>WireFlex</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="84"/>
+      <location filename="../../cablesCommands.py" line="106"/>
       <source>Default wireFlex object created.</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="111"/>
+      <location filename="../../cablesCommands.py" line="133"/>
       <source>Add Vertex</source>
       <translation>Lägg till hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="140"/>
+      <location filename="../../cablesCommands.py" line="162"/>
       <source>Delete Vertex</source>
       <translation>Ta bort hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="170"/>
+      <location filename="../../cablesCommands.py" line="192"/>
       <source>Attach Vertex</source>
       <translation>Fäst hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="200"/>
+      <location filename="../../cablesCommands.py" line="222"/>
       <source>Remove Vertex Attachment</source>
       <translation>Ta bort hörnpunktsbilaga</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="229"/>
+      <location filename="../../cablesCommands.py" line="251"/>
       <source>CompoundPath</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="256"/>
+      <location filename="../../cablesCommands.py" line="278"/>
       <location filename="../../archCable.py" line="1019"/>
       <source>Cable</source>
       <translation>Kabel</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="284"/>
+      <location filename="../../cablesCommands.py" line="306"/>
       <source>CableConduit</source>
       <translation>Kabelrör</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="312"/>
+      <location filename="../../cablesCommands.py" line="334"/>
       <source>Cable Box</source>
       <translation>Kabelbox</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="348"/>
+      <location filename="../../cablesCommands.py" line="370"/>
       <source>Cable Connector</source>
       <translation>Kabelanslutning</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="402"/>
+      <location filename="../../cablesCommands.py" line="424"/>
       <source>Cable Materials</source>
       <translation>Kabelmaterial</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="425"/>
+      <location filename="../../cablesCommands.py" line="447"/>
       <source>Cable Light Point</source>
       <translation>Kabel Ljuspunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="456"/>
+      <location filename="../../cablesCommands.py" line="478"/>
       <source>Electrical Device</source>
       <translation>Elektrisk enhet</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="494"/>
+      <location filename="../../cablesCommands.py" line="516"/>
       <source>Support Point</source>
       <translation>Stödpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="524"/>
+      <location filename="../../cablesCommands.py" line="546"/>
       <source>Support Line</source>
       <translation>Supportlinje</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="560"/>
+      <location filename="../../cablesCommands.py" line="582"/>
       <source>Attach In Place</source>
       <translation>Fäst på plats</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="588"/>
+      <location filename="../../cablesCommands.py" line="610"/>
       <source>Deactivate Attachment</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="625"/>
+      <location filename="../../cablesCommands.py" line="647"/>
       <source>Attach Wire To Terminal</source>
       <translation>Fäst tråd till terminal</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="653"/>
+      <location filename="../../cablesCommands.py" line="675"/>
       <source>Detach Wire From Terminal</source>
       <translation>Koppla loss tråd från terminal</translation>
     </message>
     <message>
-      <location filename="../../archCableLightPoint.py" line="124"/>
+      <location filename="../../archCableLightPoint.py" line="146"/>
       <source>CableLightPoint</source>
       <translation>KabelLjuspunkt</translation>
     </message>
@@ -698,151 +698,151 @@
       <translation>Kunde inte öppnas</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="63"/>
+      <location filename="../../wireutils.py" line="85"/>
       <source>Cables.wireutils.getVector: wrong property type.</source>
       <translation>Cables.wireutils.getVector: fel egenskapstyp.</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="75"/>
+      <location filename="../../wireutils.py" line="97"/>
       <source>Cables.wireutils.getVector: wrong object.</source>
       <translation>Cables.wireutils.getVector: fel objekt.</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="79"/>
+      <location filename="../../wireutils.py" line="101"/>
       <source>Cables.wireutils.getVector: wrong shape type.</source>
       <translation>Cables.wireutils.getVector: fel formtyp.</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="109"/>
+      <location filename="../../wireutils.py" line="131"/>
       <source>Cables.wireutils.getFlatLinkSubList: wrong property type.</source>
       <translation>Cables.wireutils.getFlatLinkSubList: fel egenskapstyp.</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="146"/>
+      <location filename="../../wireutils.py" line="168"/>
       <source>Wrong selection. Please select only one</source>
       <translation>Felaktigt val. Välj endast en</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="150"/>
+      <location filename="../../wireutils.py" line="172"/>
       <source>Nothing selected!</source>
       <translation>Inget valt!</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="157"/>
+      <location filename="../../wireutils.py" line="179"/>
       <source>Wrong selection. Please select</source>
       <translation>Fel val. Välj</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="262"/>
+      <location filename="../../wireutils.py" line="284"/>
       <source>Selection is not an edge or obj has no Points property</source>
       <translation>Markering är inte en edge eller obj har ingen egenskap Points</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="269"/>
+      <location filename="../../wireutils.py" line="291"/>
       <source>The new point is not lying on edge</source>
       <translation>Den nya punkten ligger inte på högkant</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="287"/>
+      <location filename="../../wireutils.py" line="309"/>
       <source>Selected edge is not supported:</source>
       <translation>Vald kant stöds inte:</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="329"/>
+      <location filename="../../wireutils.py" line="351"/>
       <source>Wrong selection or obj has no Points property</source>
       <translation>Fel val eller obj har ingen egenskap Points</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="333"/>
+      <location filename="../../wireutils.py" line="355"/>
       <source>The given vector does not belong to obj</source>
       <translation>Den angivna vektorn hör inte till obj</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="349"/>
+      <location filename="../../wireutils.py" line="371"/>
       <source>Proper point not found
 </source>
       <translation>Korrekt punkt hittades inte
 </translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="378"/>
-      <location filename="../../wireutils.py" line="645"/>
+      <location filename="../../wireutils.py" line="400"/>
+      <location filename="../../wireutils.py" line="667"/>
       <source>Wrong edge type selected</source>
       <translation>Fel kanttyp vald</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="385"/>
+      <location filename="../../wireutils.py" line="407"/>
       <source>Selection is not an edge</source>
       <translation>Valet är inte en kant</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="428"/>
+      <location filename="../../wireutils.py" line="450"/>
       <source>Selection is not a mid Vertex</source>
       <translation>Valet är inte en mitthörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="432"/>
-      <location filename="../../wireutils.py" line="560"/>
+      <location filename="../../wireutils.py" line="454"/>
+      <location filename="../../wireutils.py" line="582"/>
       <source>Selection is not a Vertex</source>
       <translation>Valet är inte en hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="474"/>
+      <location filename="../../wireutils.py" line="496"/>
       <source>Wrong selection. Please select two vertexes. First vertex has to belong to WireFlex, second to an external object</source>
       <translation>Felaktigt val. Välj två hörnpunkter. Första hörnpunkten måste tillhöra WireFlex, den andra ett externt objekt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="489"/>
+      <location filename="../../wireutils.py" line="511"/>
       <source>First selection is not a Vertex</source>
       <translation>Första valet är inte en hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="522"/>
+      <location filename="../../wireutils.py" line="544"/>
       <source>Point attachment not assigned</source>
       <translation>Punktfäste ej tilldelat</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="653"/>
+      <location filename="../../wireutils.py" line="675"/>
       <source>First selection is not an edge</source>
       <translation>Första valet är inte en edge</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="671"/>
+      <location filename="../../wireutils.py" line="693"/>
       <source>Second selection is not a proper vertex</source>
       <translation>Andra valet är inte en riktig hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="676"/>
+      <location filename="../../wireutils.py" line="698"/>
       <source>Selected vertex does not belong to selected edge</source>
       <translation>Vald hörnpunkt hör inte till vald kant</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="683"/>
+      <location filename="../../wireutils.py" line="705"/>
       <source>Vertex</source>
       <translation>Hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="684"/>
+      <location filename="../../wireutils.py" line="706"/>
       <source>is attached and can&apos;t be moved</source>
       <translation>är fäst och kan inte flyttas</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="592"/>
+      <location filename="../../archCableBox.py" line="614"/>
       <source>edit Cable Box</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="606"/>
+      <location filename="../../archCableBox.py" line="628"/>
       <source>CableBox</source>
       <translation>Kabelbox</translation>
     </message>
     <message>
-      <location filename="../../archElectricalDevice.py" line="189"/>
+      <location filename="../../archElectricalDevice.py" line="211"/>
       <source>edit Electrical Device</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../archElectricalDevice.py" line="202"/>
+      <location filename="../../archElectricalDevice.py" line="224"/>
       <source>ElectricalDevice</source>
       <translation type="unfinished"/>
     </message>
@@ -850,12 +850,12 @@
   <context>
     <name>Cables_AddVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="124"/>
+      <location filename="../../cablesCommands.py" line="146"/>
       <source>Add Vertex</source>
       <translation>Lägg till hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="131"/>
+      <location filename="../../cablesCommands.py" line="153"/>
       <source>It adds a new vertex to selected edge of Wire Flex</source>
       <translation>Det lägger till en ny hörnpunkt till den valda kanten på Wire Flex</translation>
     </message>
@@ -863,12 +863,12 @@
   <context>
     <name>Cables_AttachInPlace</name>
     <message>
-      <location filename="../../cablesCommands.py" line="573"/>
+      <location filename="../../cablesCommands.py" line="595"/>
       <source>Attach In Place</source>
       <translation>Fäst på plats</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="582"/>
+      <location filename="../../cablesCommands.py" line="604"/>
       <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
       <translation type="unfinished"/>
     </message>
@@ -876,12 +876,12 @@
   <context>
     <name>Cables_AttachVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="183"/>
+      <location filename="../../cablesCommands.py" line="205"/>
       <source>Attach Vertex</source>
       <translation>Fäst hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="191"/>
+      <location filename="../../cablesCommands.py" line="213"/>
       <source>It attaches a Wire Flex vertex to external vertex or object. Select Wire Flex vertex first then ext. vertex (or entire object)</source>
       <translation>Den fäster en Wire Flex-hörnpunkt till en extern vertex eller ett externt objekt. Välj Wire Flex-hörnpunkt först och sedan extern hörnpunkt (eller hela objektet)</translation>
     </message>
@@ -889,17 +889,17 @@
   <context>
     <name>Cables_AttachWireToTerminal</name>
     <message>
-      <location filename="../../cablesCommands.py" line="638"/>
+      <location filename="../../cablesCommands.py" line="660"/>
       <source>Attach Wire To Terminal</source>
       <translation>Fäst tråd till terminal</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="647"/>
+      <location filename="../../cablesCommands.py" line="669"/>
       <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="674"/>
+      <location filename="../../cablesCommands.py" line="696"/>
       <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
       <translation type="unfinished"/>
     </message>
@@ -907,12 +907,12 @@
   <context>
     <name>Cables_Cable</name>
     <message>
-      <location filename="../../cablesCommands.py" line="269"/>
+      <location filename="../../cablesCommands.py" line="291"/>
       <source>Cable</source>
       <translation>Kabel</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="278"/>
+      <location filename="../../cablesCommands.py" line="300"/>
       <source>It adds a new cable object from WireFlex and a profile. Select WireFlex object first (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
       <translation>Det lägger till ett nytt kabelobjekt från WireFlex och en profil. Välj först WireFlex-objektet (eller en sekvens av ledningar, kablar eller rör) och sedan eventuellt en profil i slutet</translation>
     </message>
@@ -920,12 +920,12 @@
   <context>
     <name>Cables_CableBox</name>
     <message>
-      <location filename="../../cablesCommands.py" line="336"/>
+      <location filename="../../cablesCommands.py" line="358"/>
       <source>Cable Box</source>
       <translation>Kabelbox</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="343"/>
+      <location filename="../../cablesCommands.py" line="365"/>
       <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
       <translation>Det lägger till ett nytt kabelboxobjekt. Välj först en punkt i 3D-vyn och lägg sedan till boxen</translation>
     </message>
@@ -933,12 +933,12 @@
   <context>
     <name>Cables_CableConduit</name>
     <message>
-      <location filename="../../cablesCommands.py" line="297"/>
+      <location filename="../../cablesCommands.py" line="319"/>
       <source>CableConduit</source>
       <translation>Kabelrör</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="307"/>
+      <location filename="../../cablesCommands.py" line="329"/>
       <source>It adds a new cable conduit object from single WireFlex or sequence of wires (and optionally profile). Select single WireFlex object (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
       <translation>Det lägger till ett nytt kabelrörsobjekt från ett enskilt WireFlex-objekt eller en sekvens av ledningar (och eventuellt en profil). Välj ett enskilt WireFlex-objekt (eller en sekvens av ledningar, kablar eller rör) och sedan eventuellt en profil i slutet</translation>
     </message>
@@ -946,12 +946,12 @@
   <context>
     <name>Cables_CableConnector</name>
     <message>
-      <location filename="../../cablesCommands.py" line="372"/>
+      <location filename="../../cablesCommands.py" line="394"/>
       <source>Cable Connector</source>
       <translation>Kabelanslutning</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="380"/>
+      <location filename="../../cablesCommands.py" line="402"/>
       <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
       <translation>Det lägger till ett nytt kabelanslutningsobjekt. Välj först valfri punkt i 3D-vyn och lägg sedan till kontakten</translation>
     </message>
@@ -959,12 +959,12 @@
   <context>
     <name>Cables_CableLightPoint</name>
     <message>
-      <location filename="../../cablesCommands.py" line="443"/>
+      <location filename="../../cablesCommands.py" line="465"/>
       <source>Cable Light Point</source>
       <translation>Kabel Ljuspunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="451"/>
+      <location filename="../../cablesCommands.py" line="473"/>
       <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
       <translation>Den lägger till en ny ljuspunkt för kabeln. Välj först valfri punkt i 3D-vyn och lägg sedan till ljuspunkten</translation>
     </message>
@@ -972,12 +972,12 @@
   <context>
     <name>Cables_CompoundPath</name>
     <message>
-      <location filename="../../cablesCommands.py" line="242"/>
+      <location filename="../../cablesCommands.py" line="264"/>
       <source>CompoundPath</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="250"/>
+      <location filename="../../cablesCommands.py" line="272"/>
       <source>It creates a new compound path based on selected objects. At least two objects have to be selected first</source>
       <translation>Den skapar en ny sammansatt sökväg baserat på valda objekt. Minst två objekt måste väljas först</translation>
     </message>
@@ -985,12 +985,12 @@
   <context>
     <name>Cables_DeactivateAttachment</name>
     <message>
-      <location filename="../../cablesCommands.py" line="601"/>
+      <location filename="../../cablesCommands.py" line="623"/>
       <source>Deactivate Attachment</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="608"/>
+      <location filename="../../cablesCommands.py" line="630"/>
       <source>It daeactivates attachment of selected objects</source>
       <translation type="unfinished"/>
     </message>
@@ -998,12 +998,12 @@
   <context>
     <name>Cables_DelVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="153"/>
+      <location filename="../../cablesCommands.py" line="175"/>
       <source>Delete Vertex</source>
       <translation>Ta bort hörnpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="160"/>
+      <location filename="../../cablesCommands.py" line="182"/>
       <source>It deletes selected vertex from Wire Flex</source>
       <translation>Det tar bort markerad hörnpunkt från Wire Flex</translation>
     </message>
@@ -1011,7 +1011,7 @@
   <context>
     <name>Cables_DetachWireFromTerminal</name>
     <message>
-      <location filename="../../cablesCommands.py" line="666"/>
+      <location filename="../../cablesCommands.py" line="688"/>
       <source>Detach Wire From Terminal</source>
       <translation>Koppla loss tråd från terminal</translation>
     </message>
@@ -1019,12 +1019,12 @@
   <context>
     <name>Cables_Edit</name>
     <message>
-      <location filename="../../cablesEdit.py" line="39"/>
+      <location filename="../../cablesEdit.py" line="61"/>
       <source>Edit</source>
       <translation>Redigera</translation>
     </message>
     <message>
-      <location filename="../../cablesEdit.py" line="48"/>
+      <location filename="../../cablesEdit.py" line="70"/>
       <source>Edits the active object.
 Press E or ALT + Left Click or ALT + Left DubleClick
 to display context menu on supported nodes
@@ -1038,12 +1038,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_ElectricalDevice</name>
     <message>
-      <location filename="../../cablesCommands.py" line="481"/>
+      <location filename="../../cablesCommands.py" line="503"/>
       <source>Electrical Device</source>
       <translation>Elektrisk enhet</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="489"/>
+      <location filename="../../cablesCommands.py" line="511"/>
       <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
       <translation type="unfinished"/>
     </message>
@@ -1051,12 +1051,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_Material</name>
     <message>
-      <location filename="../../cablesCommands.py" line="414"/>
+      <location filename="../../cablesCommands.py" line="436"/>
       <source>Cable Materials</source>
       <translation>Kabelmaterial</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="420"/>
+      <location filename="../../cablesCommands.py" line="442"/>
       <source>It adds new multimaterials for cables</source>
       <translation>Den lägger till nya multimaterial för kablar</translation>
     </message>
@@ -1064,12 +1064,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_Profile</name>
     <message>
-      <location filename="../../cablesCommands.py" line="393"/>
+      <location filename="../../cablesCommands.py" line="415"/>
       <source>Cable Profile</source>
       <translation>Kabelprofil</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="398"/>
+      <location filename="../../cablesCommands.py" line="420"/>
       <source>It adds a new cable profile</source>
       <translation>Den lägger till en ny kabelprofil</translation>
     </message>
@@ -1077,12 +1077,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_RemoveVertexAttachment</name>
     <message>
-      <location filename="../../cablesCommands.py" line="213"/>
+      <location filename="../../cablesCommands.py" line="235"/>
       <source>Remove Vertex Attachment</source>
       <translation>Ta bort hörnpunktsbilaga</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="221"/>
+      <location filename="../../cablesCommands.py" line="243"/>
       <source>It removes an attachment of external vertex or object from selected Wire Flex vertex</source>
       <translation>Det tar bort en koppling av extern hörnpunkt eller objekt från vald Wire Flex-hörnpunkt</translation>
     </message>
@@ -1090,12 +1090,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_SupportLine</name>
     <message>
-      <location filename="../../cablesCommands.py" line="546"/>
+      <location filename="../../cablesCommands.py" line="568"/>
       <source>Support Line</source>
       <translation>Supportlinje</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="554"/>
+      <location filename="../../cablesCommands.py" line="576"/>
       <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
       <translation>Den lägger till en ny stödlinje som en kabel eller annat element kan fästas vid. Välj minst en punkt först</translation>
     </message>
@@ -1103,12 +1103,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_SupportPoint</name>
     <message>
-      <location filename="../../cablesCommands.py" line="512"/>
+      <location filename="../../cablesCommands.py" line="534"/>
       <source>Support Point</source>
       <translation>Stödpunkt</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="519"/>
+      <location filename="../../cablesCommands.py" line="541"/>
       <source>It adds a new support point to which a cable or other element can be attached</source>
       <translation>Den lägger till en ny stödpunkt där en kabel eller annat element kan fästas</translation>
     </message>
@@ -1116,12 +1116,12 @@ och på objekt som stöds.</translation>
   <context>
     <name>Cables_WireFlex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="94"/>
+      <location filename="../../cablesCommands.py" line="116"/>
       <source>WireFlex</source>
       <translation type="unfinished"/>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="103"/>
+      <location filename="../../cablesCommands.py" line="125"/>
       <source>It creates a new line based on selected vertexes/objects. At least two vertexes/objects have to be selected first. If only one object is selected, a copy of it will be created.</source>
       <translation>Den skapar en ny linje baserad på valda hörnpunkter/objekt. Minst två hörnpunkter/objekt måste väljas först. Om endast ett objekt väljs skapas en kopia av det.</translation>
     </message>

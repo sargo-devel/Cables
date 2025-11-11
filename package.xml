@@ -2,8 +2,8 @@
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
   <name>Cables Workbench</name>
   <description>Electrical cables drawing tools workbench for FreeCAD.</description>
-  <version>0.3.1</version>
-  <date>2025-11-07</date>
+  <version>0.3.2</version>
+  <date>2025-11-11</date>
   <maintainer email="sargo-devel@o2.pl">SargoDevel</maintainer>
   <license file="LICENSE">LGPL-3.0-or-later</license>
   <url type="repository" branch="master">https://github.com/sargo-devel/Cables</url>

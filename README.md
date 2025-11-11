@@ -43,7 +43,7 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 ### References
 * Development repo: https://github.com/sargo-devel/Cables
 * FreeCAD Forum announcement/discussion [thread](https://forum.freecad.org/viewtopic.php?t=94090)
-* Authors: [@SargoDevel](https://github.com/sargo-devel)
+* Author: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Translations
 It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations/README.md) for details.
@@ -66,6 +66,9 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes
+* v0.3.2  11 Nov 2025
+  * fixed problem with loading STEP file without colors or multishape into CableConnector or ElectricalDevice
+  * updated translations
 * v0.3.1  07 Nov 2025
   * Updated task panel for cable profile.
   * Updated predefined profiles and presets.
@@ -106,6 +109,9 @@ Big thanks to the translators for their work!
   * Fixed cable rotation problem
 * v0.1.0  21 Jan 2025
   * Initial version
+
+## Donate
+If you appreciate my work and would like me to spend more time creating new tools, you can help me increasing my powers by contributing via [github](https://github.com/sponsors/sargo-devel) or [ko-fi](https://ko-fi.com/sargodevel).
 
 ## License
 LGPLv3 (see [LICENSE](LICENSE))

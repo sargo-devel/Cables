@@ -103,6 +103,10 @@ mat_table = {
         'mat_name': 'PVC-Generic',
         'color': (250, 250, 250)
     },
+    'InsulRed': {
+        'mat_name': 'PVC-Generic',
+        'color': (170, 0, 0)
+    },
     'RailSteel': {
         'mat_name': 'Steel-Generic',
         'color': (204, 204, 230)
@@ -158,3 +162,33 @@ def makeCableMaterials(table=mat_table, multi_list=multi_list):
         multi.Thicknesses = thickness
         multi.Label = multi_names[0]
     return materials
+
+
+def makeMultiMaterials(multi_list=multi_list):
+    """
+    It makes multimaterial(s) from existing materials in document.
+    Example:
+    multi_names = [('RED', 'InsulRed'), ('CU', 'Cu')]
+    multi_list = {'cableMultiMatRed1w': multi_names}
+    """
+    import Arch
+
+    materials = [obj for obj in FreeCAD.ActiveDocument.Objects
+                 if hasattr(obj, "Proxy") and obj.Proxy.Type == "Material"]
+    mat_labels = [m.Label for m in materials]
+    lmulti = []
+    for multi_names in multi_list.items():
+        multi = Arch.makeMultiMaterial()
+        lmat = []
+        lnames = []
+        for item in multi_names[1]:
+            idx = mat_labels.index(item[1])
+            lmat.append(materials[idx])
+            lnames.append(item[0])
+        multi.Materials = lmat
+        multi.Names = lnames
+        thickness = [0.0] * len(multi.Names)
+        multi.Thicknesses = thickness
+        multi.Label = multi_names[0]
+        lmulti.append(multi)
+    return lmulti

@@ -152,7 +152,7 @@ class CableTerminal:
     def findParent(self, obj):
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
-        for p in obj.InList:
+        for p in obj.OutList:
             if hasattr(p, "Proxy") and \
                type(p.Proxy).__name__ in valid_parent_list:
                 if p.Name != obj.ParentName:

@@ -318,6 +318,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     for t in self.Terminals:
                         t.Proxy.setPropertiesReadOnly(t)
                 if preset[2] == "Fixed":
+                    obj.NumberOfHoles = 0
                     ext_shape, ext_color = self.readExtShape(obj, preset[4])
                     nr_of_term = int(preset[5])
                     nr_of_supp = int(preset[6])

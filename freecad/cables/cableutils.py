@@ -105,6 +105,8 @@ def attach_wire_to_terminal(sel_list, side):
         update_wire_points(wire, 'e')
         wire_v1 = "Vertex" + str(len(wire.Shape.Vertexes)-1)
         wire_v2 = "Vertex" + str(len(wire.Shape.Vertexes))
+
+    terminal.Proxy.updateConnectedWires(terminal)
     if tvrtx:
         # get selected pair of terminal vertices
         term_v1 = tvrtx

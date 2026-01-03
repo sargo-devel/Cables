@@ -99,16 +99,16 @@ class ExtSuppLines:
         pl = obj.PropertiesList
         if "Lines" not in pl:
             obj.addProperty("Part::PropertyPartShape", "Lines",
-                            "ShapeLines",
+                            "SnapLines",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The shape containing " +
                                 "support lines"))
-        if "ParentName" not in pl:
-            obj.addProperty("App::PropertyString", "ParentName",
-                            "Terminal",
+        if "ParentElement" not in pl:
+            obj.addProperty("App::PropertyLink", "ParentElement",
+                            "SnapLines",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The name of parent object"))
-            obj.setPropertyStatus("ParentName", ["ReadOnly", "Hidden"])
+                                "App::Property", "The parent element object"))
+            obj.setPropertyStatus("ParentElement", ["ReadOnly", "Hidden"])
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
@@ -119,17 +119,20 @@ class ExtSuppLines:
         if hasattr(obj, "Lines") and obj.Lines:
             if not obj.Shape.isPartner(obj.Lines):
                 obj.Shape = obj.Lines
+        self.findParent(obj)
         if obj.AttachmentSupport and obj.MapMode == "Deactivated":
             obj.MapMode = "ObjectXY"
 
     def findParent(self, obj):
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
-        for p in obj.InList:
+        for p in obj.OutList:
             if hasattr(p, "Proxy") and \
                type(p.Proxy).__name__ in valid_parent_list:
-                obj.ParentName = p.Name
+                if p != obj.ParentElement:
+                    obj.ParentElement = p
                 return
+        obj.ParentElement = None
 
 
 class ViewProviderExtSuppLines:

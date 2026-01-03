@@ -63,12 +63,12 @@ class CableTerminal:
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The spacing between " +
                                 "connection segments"))
-        if "ParentName" not in pl:
-            obj.addProperty("App::PropertyString", "ParentName",
+        if "ParentElement" not in pl:
+            obj.addProperty("App::PropertyLink", "ParentElement",
                             "Terminal",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The name of parent object"))
-            obj.setPropertyStatus("ParentName", ["ReadOnly", "Hidden"])
+                                "App::Property", "The parent element object"))
+            obj.setPropertyStatus("ParentElement", ["ReadOnly", "Hidden"])
         if "ConnectedWires" not in pl:
             obj.addProperty("App::PropertyStringList", "ConnectedWires",
                             "Net",
@@ -103,6 +103,7 @@ class CableTerminal:
         obj.Shape = self.makeTerminalLines(obj)
         # forcing to recalculate list of connected wires
         self.updateConnectedWires(obj)
+        self.findParent(obj)
         if obj.AttachmentSupport and obj.MapMode == "Deactivated":
             obj.MapMode = "ObjectXY"
 
@@ -155,10 +156,10 @@ class CableTerminal:
         for p in obj.OutList:
             if hasattr(p, "Proxy") and \
                type(p.Proxy).__name__ in valid_parent_list:
-                if p.Name != obj.ParentName:
-                    obj.ParentName = p.Name
+                if p != obj.ParentElement:
+                    obj.ParentElement = p
                 return
-        obj.ParentName = ""
+        obj.ParentElement = None
 
     def updateConnectedWires(self, obj):
         conn_list = []

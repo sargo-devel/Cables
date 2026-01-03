@@ -141,6 +141,7 @@ class BaseElement(ArchComponent.Component):
         self.ExtShape = None
         self.Terminals = self.findTerminals(obj)
         self.SuppLines = self.findSuppLines(obj)
+        obj.ClaimChildren = True
 
     def setProperties(self, obj, eltype):
         pl = obj.PropertiesList
@@ -179,6 +180,13 @@ class BaseElement(ArchComponent.Component):
                                 "App::Property", "The colors of external " +
                                 "shape loaded from file"))
             obj.setPropertyStatus("ExtColor", ["ReadOnly", "Hidden"])
+        if "ClaimChildren" not in pl:
+            obj.addProperty("App::PropertyBool", "ClaimChildren",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "If it is true it will " +
+                                "claim the linked Terminals and SuppLines " +
+                                "as children in the Tree View."))
         self.Type = "Component"
 
     def onDocumentRestored(self, obj, eltype="CableBaseElement"):
@@ -408,7 +416,7 @@ class BaseElement(ArchComponent.Component):
         for i in range(nr):
             child_obj = cableTerminal.makeCableTerminal()
             child_obj.Label = f"{obj.Label}_Term{i+1:03}"
-            child_obj.ParentName = obj.Name
+            child_obj.ParentElement = obj
             child_obj.AttachmentSupport = [(obj, ('',))]
             terminals.append(child_obj)
         self.Terminals = terminals
@@ -428,7 +436,7 @@ class BaseElement(ArchComponent.Component):
                 for i in range(len(terminals), nr):
                     child_obj = cableTerminal.makeCableTerminal()
                     child_obj.Label = f"{obj.Label}_Term{i+1:03}"
-                    child_obj.ParentName = obj.Name
+                    child_obj.ParentElement = obj
                     child_obj.AttachmentSupport = [(obj, ('',))]
             self.Terminals = self.findTerminals(obj)
             self.adjustTerminals(obj)
@@ -454,7 +462,7 @@ class BaseElement(ArchComponent.Component):
             if FreeCAD.GuiUp:
                 cableSupport.ViewProviderExtSuppLines(child_obj.ViewObject)
             child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
-            child_obj.ParentName = obj.Name
+            child_obj.ParentElement = obj
             child_obj.Lines = Part.Shape()
             child_obj.AttachmentSupport = [(obj, ('',))]
             supplines.append(child_obj)
@@ -479,7 +487,7 @@ class BaseElement(ArchComponent.Component):
                         cableSupport.ViewProviderExtSuppLines(
                             child_obj.ViewObject)
                     child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
-                    child_obj.ParentName = obj.Name
+                    child_obj.ParentElement = obj
                     child_obj.Lines = Part.Shape()
                     child_obj.AttachmentSupport = [(obj, ('',))]
             self.SuppLines = self.findSuppLines(obj)
@@ -529,7 +537,8 @@ class BaseElement(ArchComponent.Component):
         for p in obj.InList:
             if hasattr(p, "Proxy") and \
                type(p.Proxy).__name__ == "CableTerminal":
-                tlist.append(p)
+                if p not in tlist:
+                    tlist.append(p)
         return tlist
 
     def findSuppLines(self, obj):
@@ -537,7 +546,8 @@ class BaseElement(ArchComponent.Component):
         for p in obj.InList:
             if hasattr(p, "Proxy") and \
                type(p.Proxy).__name__ == "ExtSuppLines":
-                tlist.append(p)
+                if p not in tlist:
+                    tlist.append(p)
         return tlist
 
     def sameShapes(self, sh1, sh2):
@@ -580,12 +590,13 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
 
     def claimChildren(self):
         c = ArchComponent.ViewProviderComponent.claimChildren(self)
-        terminals = self.Object.Proxy.findTerminals(self.Object)
-        supplines = self.Object.Proxy.findSuppLines(self.Object)
-        if terminals:
-            c.extend(terminals)
-        if supplines:
-            c.extend(supplines)
+        if self.Object.ClaimChildren:
+            terminals = self.Object.Proxy.findTerminals(self.Object)
+            supplines = self.Object.Proxy.findSuppLines(self.Object)
+            if terminals:
+                c.extend(terminals)
+            if supplines:
+                c.extend(supplines)
         return c
 
     def updateData(self, obj, prop):

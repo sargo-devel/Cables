@@ -153,13 +153,16 @@ class CableTerminal:
     def findParent(self, obj):
         valid_parent_list = ["ArchCableConnector", "ArchElectricalDevice",
                              "ArchCableBox", "ArchCableLightPoint"]
-        for p in obj.OutList:
-            if hasattr(p, "Proxy") and \
-               type(p.Proxy).__name__ in valid_parent_list:
-                if p != obj.ParentElement:
-                    obj.ParentElement = p
-                return
-        obj.ParentElement = None
+        try:
+            p = obj.AttachmentSupport[0][0]
+        except (TypeError, IndexError):
+            p = None
+        if p is not None and hasattr(p, "Proxy") and \
+           type(p.Proxy).__name__ in valid_parent_list:
+            if p != obj.ParentElement:
+                obj.ParentElement = p
+        return
+
 
     def updateConnectedWires(self, obj):
         conn_list = []

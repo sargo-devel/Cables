@@ -489,7 +489,13 @@ class ArchCable(ArchPipe._ArchPipe):
                 "Cables", "Unable to build the cable base path")+"\n")
             return None
         p = obj.SubProfiles[0].Shape.Wires[0]
-        sh = w.makePipeShell([p], True, False, 2)
+        try:
+            sh = w.makePipeShell([p], True, False, 2)
+        except Part.OCCError as err:
+            sh = None
+            FreeCAD.Console.PrintError(
+                f"{type(err)}:{err.args} makedMainShape(Name={obj.Name}); " +
+                translate("Cables", "unable to build main shape") + "\n")
         return sh
 
     def makeSubProfiles(self, obj):

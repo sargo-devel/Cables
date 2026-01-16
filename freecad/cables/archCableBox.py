@@ -48,6 +48,8 @@ presetfiles = [os.path.join(presetsPath, "boxpresets.csv"),
                os.path.join(FreeCAD.getUserAppDataDir(), "Cables",
                             "boxpresets.csv")]
 default_preset = "1G_FlushMnt_Round_D60_h62"
+ref_plane = ["XY", "XZ", "YZ", "-XY", "-XZ", "-YZ"]
+ref_plane_rot = [(0, 0, 0), (0, 0, 90), (90, 0, 90), (0, 0, 180), (180, 0, 90), (-90, 0, 90)]
 
 ui_box = os.path.join(uiPath, "box.ui")
 
@@ -56,11 +58,15 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
     def __init__(self, obj, ui=ui_box):
         archCableBaseElement.TaskPanelBaseElement.__init__(self, obj, ui)
         self.profile_types = self.obj.getEnumerationsOfProperty("ProfileType")
+        ref_planes = self.obj.getEnumerationsOfProperty("ShapeReferencePlane")
         self.form.comboPreset.addItems(self.presetnames)
         self.form.comboProfileType.addItems(self.profile_types)
+        self.form.comboRefPlane.addItems(ref_planes)
         self.connectEnumVar(self.form.comboPreset, "Preset",
                             self.updateVisibility)
         self.connectEnumVar(self.form.comboProfileType, "ProfileType",
+                            self.updateVisibility)
+        self.connectEnumVar(self.form.comboRefPlane, "ShapeReferencePlane",
                             self.updateVisibility)
         self.connectSpinVar(self.form.sWidth, "Width", self.updateVisibility)
         self.connectSpinVar(self.form.sDepth, "Depth", self.updateVisibility)
@@ -95,6 +101,8 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
             pvalues.append(str(self.obj.Thickness))
             pvalues.append(str(self.obj.HoleDiameter))
             pvalues.append(str(self.obj.HolesDistance))
+        FreeCADGui.doCommand("obj.ShapeReferencePlane = " +
+                             f"'{self.obj.ShapeReferencePlane}'")
         FreeCADGui.doCommand("obj.Proxy.setPreset(obj, " +
                              f"'{self.obj.Preset}', {pnames}, {pvalues})")
         archCableBaseElement.TaskPanelBaseElement.accept(self)
@@ -144,6 +152,7 @@ class TaskPanelCableBox(archCableBaseElement.TaskPanelBaseElement):
     def reloadPropertiesFromObj(self):
         archCableBaseElement.TaskPanelBaseElement.reloadPropertiesFromObj(self)
         self.form.comboProfileType.setCurrentText(self.obj.ProfileType)
+        self.form.comboRefPlane.setCurrentText(self.obj.ShapeReferencePlane)
         self.form.sWidth.setProperty("value", self.obj.Width)
         self.form.sDepth.setProperty("value", self.obj.Depth)
         self.form.sFilletRadius.setProperty("value", self.obj.FilletRadius)
@@ -180,6 +189,13 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                                 "App::Property", "The profile type of " +
                                 "this box"))
             obj.ProfileType = ['Circle', 'Rectangle']
+        if "ShapeReferencePlane" not in pl:
+            obj.addProperty("App::PropertyEnumeration", "ShapeReferencePlane",
+                            "CableBox",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The reference plane for " +
+                                "the shape of this box"))
+            obj.ShapeReferencePlane = ref_plane
         if "Diameter" not in pl:
             obj.addProperty("App::PropertyLength", "Diameter", "CableBox",
                             QT_TRANSLATE_NOOP(
@@ -318,6 +334,21 @@ class ArchCableBox(archCableBaseElement.BaseElement):
             if not obj.HelperRingsHidden:
                 # make helper rings
                 shapes.append(self.makeHelperRings(obj))
+
+            # apply shape reference plane
+            idx = ref_plane.index(obj.ShapeReferencePlane)
+            ref_offset = FreeCAD.Vector(0, 0, 0)
+            ref_rotation = FreeCAD.Rotation(*ref_plane_rot[idx])
+            ref_pl = FreeCAD.Placement(ref_offset, ref_rotation)
+            if hasattr(obj.Proxy, "SuppLines") and obj.Proxy.SuppLines:
+                supp = obj.Proxy.SuppLines[0]
+                if supp.AttachmentOffset != ref_pl:
+                    supp.AttachmentOffset = ref_pl
+            for shape in shapes:
+                new_pl = ref_pl.multiply(shape.Placement)
+                if shape.Placement != new_pl:
+                    shape.Placement = new_pl
+
             sh = Part.makeCompound(shapes) if shapes else Part.Shape()
             if obj.Additions or obj.Subtractions:
                 sh = self.processSubShapes(obj, sh, pl)

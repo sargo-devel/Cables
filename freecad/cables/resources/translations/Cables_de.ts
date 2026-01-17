@@ -51,7 +51,7 @@
     <message>
       <location filename="../../archCableConduit.py" line="91"/>
       <source>Thickness of insulation if profile not used</source>
-      <translation>Wandstärke der Isolation, wenn keine Profilskizze verwendet wird</translation>
+      <translation>Wandstärke der Isolierung, wenn keine Profilskizze verwendet wird</translation>
     </message>
     <message>
       <location filename="../../archCableBaseElement.py" line="152"/>
@@ -1361,7 +1361,7 @@ und unterstützten Objekten anzuzeigen.</translation>
     <message>
       <location filename="../ui/profile.ui" line="26"/>
       <source>Profile wires</source>
-      <translation type="unfinished"/>
+      <translation>Aderquerschnitte</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="34"/>
@@ -1403,18 +1403,18 @@ und unterstützten Objekten anzuzeigen.</translation>
     <message>
       <location filename="../ui/profile.ui" line="110"/>
       <source>Profile type details</source>
-      <translation type="unfinished"/>
+      <translation>Einzelheiten der Profilart</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="118"/>
       <location filename="../ui/profile.ui" line="125"/>
       <source>Profile class</source>
-      <translation type="unfinished"/>
+      <translation>Profilart</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="136"/>
       <source>[1] Jacket thickness</source>
-      <translation type="unfinished"/>
+      <translation>[1] Stärke der Ummantelung</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="155"/>
@@ -1424,7 +1424,7 @@ und unterstützten Objekten anzuzeigen.</translation>
     <message>
       <location filename="../ui/profile.ui" line="184"/>
       <source>[2] Single insulation thickness</source>
-      <translation type="unfinished"/>
+      <translation>[2] Stärke der Aderisolierung</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="203"/>
@@ -1434,7 +1434,7 @@ und unterstützten Objekten anzuzeigen.</translation>
     <message>
       <location filename="../ui/profile.ui" line="232"/>
       <source>[3] Insulation distance</source>
-      <translation type="unfinished"/>
+      <translation>[3] Abstand zwischen Isolierungen</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="251"/>

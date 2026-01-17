@@ -26,7 +26,7 @@
     <message>
       <location filename="../../archCableConduit.py" line="64"/>
       <source>List of conduits belonging to the bundle</source>
-      <translation type="unfinished"/>
+      <translation>Lista över ledningar som ingår i bunt</translation>
     </message>
     <message>
       <location filename="../../archCableConduit.py" line="70"/>
@@ -107,7 +107,7 @@
     <message>
       <location filename="../../cableTerminal.py" line="84"/>
       <source>The functional name of the terminal pin</source>
-      <translation type="unfinished"/>
+      <translation>Terminalstiftets funktionella namn</translation>
     </message>
     <message>
       <location filename="../../cableTerminal.py" line="92"/>
@@ -182,7 +182,7 @@
     <message>
       <location filename="../../cableSupport.py" line="105"/>
       <source>The shape containing support lines</source>
-      <translation type="unfinished"/>
+      <translation>Formen som innehåller stödlinjer</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="54"/>
@@ -337,7 +337,7 @@
     <message>
       <location filename="../../archCableBox.py" line="181"/>
       <source>The profile type of this box</source>
-      <translation type="unfinished"/>
+      <translation>Profiltypen för denna ruta</translation>
     </message>
     <message>
       <location filename="../../archCableBox.py" line="187"/>
@@ -357,17 +357,17 @@
     <message>
       <location filename="../../archCableBox.py" line="202"/>
       <source>The inner width of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre bredden på denna låda</translation>
     </message>
     <message>
       <location filename="../../archCableBox.py" line="207"/>
       <source>The inner depth of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre djupet av denna låda</translation>
     </message>
     <message>
       <location filename="../../archCableBox.py" line="212"/>
       <source>The inner fillet radius of side walls of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre filetradien på sidoväggarna i denna låda</translation>
     </message>
     <message>
       <location filename="../../archCableBox.py" line="217"/>
@@ -412,7 +412,7 @@
     <message>
       <location filename="../../archCableBox.py" line="263"/>
       <source>Enables auto creation of DIN TH35 rails inside box depending on box shape and dimensions</source>
-      <translation type="unfinished"/>
+      <translation>Möjliggör automatisk skapande av DIN TH35-skenor inuti lådan beroende på lådans form och mått.</translation>
     </message>
   </context>
   <context>
@@ -420,7 +420,7 @@
     <message>
       <location filename="../../archCableConnector.py" line="395"/>
       <source>edit Cable Connector</source>
-      <translation type="unfinished"/>
+      <translation>redigera Kabelanslutning</translation>
     </message>
     <message>
       <location filename="../../archCableConnector.py" line="406"/>
@@ -461,7 +461,7 @@
     <message>
       <location filename="../../archCableBaseElement.py" line="772"/>
       <source>CableBaseElement</source>
-      <translation type="unfinished"/>
+      <translation>Kabelbaselement</translation>
     </message>
     <message>
       <location filename="../../wireFlex.py" line="278"/>
@@ -528,7 +528,7 @@
     <message>
       <location filename="../../cablesEdit.py" line="129"/>
       <source>Make edge coaxial</source>
-      <translation type="unfinished"/>
+      <translation>Gör kanten koaxial</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="97"/>
@@ -538,7 +538,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="106"/>
       <source>Default wireFlex object created.</source>
-      <translation type="unfinished"/>
+      <translation>Standardobjekt wireFlex skapas.</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="133"/>
@@ -563,7 +563,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="251"/>
       <source>CompoundPath</source>
-      <translation type="unfinished"/>
+      <translation>Sammansatt sökväg</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="278"/>
@@ -619,7 +619,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="610"/>
       <source>Deactivate Attachment</source>
-      <translation type="unfinished"/>
+      <translation>Inaktivera koppling</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="647"/>
@@ -685,7 +685,7 @@
       <location filename="../../cableProfile.py" line="593"/>
       <location filename="../../cableProfile.py" line="608"/>
       <source>Skipping bad profile or preset:</source>
-      <translation type="unfinished"/>
+      <translation>Hoppar över felaktig profil eller förval:</translation>
     </message>
     <message>
       <location filename="../../cableProfile.py" line="643"/>
@@ -829,7 +829,7 @@
     <message>
       <location filename="../../archCableBox.py" line="614"/>
       <source>edit Cable Box</source>
-      <translation type="unfinished"/>
+      <translation>redigera Kabelbox</translation>
     </message>
     <message>
       <location filename="../../archCableBox.py" line="628"/>
@@ -839,12 +839,12 @@
     <message>
       <location filename="../../archElectricalDevice.py" line="211"/>
       <source>edit Electrical Device</source>
-      <translation type="unfinished"/>
+      <translation>redigera Elektrisk enhet</translation>
     </message>
     <message>
       <location filename="../../archElectricalDevice.py" line="224"/>
       <source>ElectricalDevice</source>
-      <translation type="unfinished"/>
+      <translation>Elektrisk enhet</translation>
     </message>
   </context>
   <context>
@@ -870,7 +870,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="604"/>
       <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
-      <translation type="unfinished"/>
+      <translation>Det skapar en koppling utan att ändra objektets globala placering. Välj objekt som ska kopplas och sedan det objekt som ska fungera som kopplingsstöd för dem</translation>
     </message>
   </context>
   <context>
@@ -896,12 +896,12 @@
     <message>
       <location filename="../../cablesCommands.py" line="669"/>
       <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
-      <translation type="unfinished"/>
+      <translation>Det gör att trådänden fästs vid terminalen. Välj hörnpunkt eller kant på WireFlex-objektet i 3D-vyn och välj sedan terminalen eller dess hörnpunkt</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="696"/>
       <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
-      <translation type="unfinished"/>
+      <translation>Det tar bort kabelanslutningen från terminalen. Välj WireFlex och sedan Terminal</translation>
     </message>
   </context>
   <context>
@@ -974,7 +974,7 @@
     <message>
       <location filename="../../cablesCommands.py" line="264"/>
       <source>CompoundPath</source>
-      <translation type="unfinished"/>
+      <translation>Sammansatt sökväg</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="272"/>
@@ -987,12 +987,12 @@
     <message>
       <location filename="../../cablesCommands.py" line="623"/>
       <source>Deactivate Attachment</source>
-      <translation type="unfinished"/>
+      <translation>Inaktivera koppling</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="630"/>
       <source>It daeactivates attachment of selected objects</source>
-      <translation type="unfinished"/>
+      <translation>Det inaktiverar bifogandet av valda objekt.</translation>
     </message>
   </context>
   <context>
@@ -1045,7 +1045,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../../cablesCommands.py" line="511"/>
       <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
-      <translation type="unfinished"/>
+      <translation>Det lägger till en ny elektrisk enhet. Välj först en punkt i 3D-vyn och lägg sedan till enheten.</translation>
     </message>
   </context>
   <context>
@@ -1136,7 +1136,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="20"/>
       <source>Cable Box properties</source>
-      <translation type="unfinished"/>
+      <translation>Kabelboxens egenskaper</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="38"/>
@@ -1151,7 +1151,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="58"/>
       <source>Custom Cable Box</source>
-      <translation type="unfinished"/>
+      <translation>Anpassad kabelbox</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="66"/>
@@ -1161,7 +1161,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="73"/>
       <source>The profile type of this box</source>
-      <translation type="unfinished"/>
+      <translation>Profiltypen för denna ruta</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="84"/>
@@ -1171,7 +1171,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="103"/>
       <source>The inner width of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre bredden på denna låda</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="129"/>
@@ -1181,7 +1181,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="148"/>
       <source>The inner depth of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre djupet av denna låda</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="174"/>
@@ -1191,7 +1191,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="193"/>
       <source>The inner fillet radius of side walls of this box</source>
-      <translation type="unfinished"/>
+      <translation>Den inre filetradien på sidoväggarna i denna låda</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="219"/>
@@ -1236,7 +1236,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/box.ui" line="399"/>
       <source>Holes Distance</source>
-      <translation type="unfinished"/>
+      <translation>Håldistans</translation>
     </message>
     <message>
       <location filename="../ui/box.ui" line="418"/>
@@ -1254,7 +1254,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/connector.ui" line="20"/>
       <source>Cable Connector properties</source>
-      <translation type="unfinished"/>
+      <translation>Kabelanslutningens egenskaper</translation>
     </message>
     <message>
       <location filename="../ui/connector.ui" line="26"/>
@@ -1264,7 +1264,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/connector.ui" line="33"/>
       <source>Custom Terminal Strip</source>
-      <translation type="unfinished"/>
+      <translation>Anpassad terminalremsa</translation>
     </message>
     <message>
       <location filename="../ui/connector.ui" line="41"/>
@@ -1290,7 +1290,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/connector.ui" line="116"/>
       <source>Number of holes</source>
-      <translation type="unfinished"/>
+      <translation>Antal hål</translation>
     </message>
     <message>
       <location filename="../ui/connector.ui" line="123"/>
@@ -1328,7 +1328,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/device.ui" line="20"/>
       <source>Electrical Device properties</source>
-      <translation type="unfinished"/>
+      <translation>Elektriska enheters egenskaper</translation>
     </message>
     <message>
       <location filename="../ui/device.ui" line="38"/>
@@ -1343,7 +1343,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/device.ui" line="58"/>
       <source>Custom Electrical Device Box</source>
-      <translation type="unfinished"/>
+      <translation>Anpassad elbox</translation>
     </message>
   </context>
   <context>
@@ -1361,7 +1361,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="26"/>
       <source>Profile wires</source>
-      <translation type="unfinished"/>
+      <translation>Profilkablar</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="34"/>
@@ -1371,7 +1371,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="41"/>
       <source>Number of wires in the cable</source>
-      <translation type="unfinished"/>
+      <translation>Antal ledare i kabeln</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="52"/>
@@ -1381,7 +1381,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="59"/>
       <source>Wire cross-sectional area compliant with the IEC 60228 standard</source>
-      <translation type="unfinished"/>
+      <translation>Trådens tvärsnittsarea överensstämmer med standarden IEC 60228.</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="70"/>
@@ -1391,7 +1391,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="77"/>
       <source>Custom wire cross-sectional area</source>
-      <translation type="unfinished"/>
+      <translation>Anpassad trådtvärsnittsarea</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="104"/>
@@ -1403,7 +1403,7 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="110"/>
       <source>Profile type details</source>
-      <translation type="unfinished"/>
+      <translation>Detaljer om profiltyp</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="118"/>
@@ -1414,32 +1414,32 @@ och på objekt som stöds.</translation>
     <message>
       <location filename="../ui/profile.ui" line="136"/>
       <source>[1] Jacket thickness</source>
-      <translation type="unfinished"/>
+      <translation>[1] Jackans tjocklek</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="155"/>
       <source>Thickness of the outer cover</source>
-      <translation type="unfinished"/>
+      <translation>Tjocklek på ytterhöljet</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="184"/>
       <source>[2] Single insulation thickness</source>
-      <translation type="unfinished"/>
+      <translation>[2] Enkel isoleringstjocklek</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="203"/>
       <source>Insulation thickness of a single wire</source>
-      <translation type="unfinished"/>
+      <translation>Isoleringstjocklek för en enskild tråd</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="232"/>
       <source>[3] Insulation distance</source>
-      <translation type="unfinished"/>
+      <translation>[3] Isolationsavstånd</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="251"/>
       <source>Distance between individual insulations</source>
-      <translation type="unfinished"/>
+      <translation>Avstånd mellan enskilda isoleringar</translation>
     </message>
     <message>
       <location filename="../ui/profile.ui" line="299"/>

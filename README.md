@@ -13,9 +13,9 @@ The Cables Workbench has the following goals:
 1. Creation and use of ready-made elements and cable profiles for modeling electrical installations in architectural designs and beyond. Other application areas, such as modeling connections inside electrical devices, can also be supported.
 2. Simplification of cable drawing in architectural models with the possibility of easy changes (like repositioning wall sockets or ligt switches with cables attached to them).
 3. Enable quick and easy connection of single wires if that detail level is needed (e.g. connecting wires to connectors in electrical boxes or swichboards).
-4. To be compatible with [BIM Workbench](https://wiki.freecad.org/BIM_Workbench) (objects should have the same base attributes and properties as other BIM objects: materials, IFC type and IFC attributes etc.).
+4. To be compatible with [BIM Workbench](https://wiki.freecad.org/BIM_Workbench) (objects should have the same base attributes and properties as other BIM objects: materials, IFC type and IFC attributes etc. See [BIM Workbench commpatibility table](https://wiki.freecad.org/Cables_Compatibility_with_BIM_Workbench) for details).
 
-The main idea of modeling cables (which are flexible in nature) as a static 3D elements is based on Wire Flex objects.
+The main idea of modelling cables (which are flexible in nature) as a static 3D elements is based on Wire Flex objects.
 These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) objects with additional features like the possibility of attaching any Wire Flex vertices to external objects. This allows to automatically change the cable shape and length while changing the placement of external elements like boxes, switches, light points, walls, ceilings etc.
 
 All solid elements (cables, boxes, connectors etc.) in this workbench are [Arch Component](https://wiki.freecad.org/Arch_Component) elements. The cable element is based on [Arch Pipe](https://wiki.freecad.org/Arch_Pipe) class.
@@ -66,6 +66,11 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes
+* v0.3.3  17 Jan 2026
+  * fixed problem with adding CableConnector or ElectricalDevice into Std Part
+  * Added ShapeReferencePlane to CableBox
+  * updated translations
+  * minor bugfixes
 * v0.3.2  11 Nov 2025
   * fixed problem with loading STEP file without colors or multishape into CableConnector or ElectricalDevice
   * updated translations

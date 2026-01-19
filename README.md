@@ -66,11 +66,13 @@ Available translations:
 Big thanks to the translators for their work!
 
 ### Release notes
+* v0.3.4  19 Jan 2026
+  * Fixed a potential issue with new attributes in old objects after update 0.3.3
 * v0.3.3  17 Jan 2026
-  * fixed problem with adding CableConnector or ElectricalDevice into Std Part
+  * Fixed problem with adding CableConnector or ElectricalDevice into Std Part
   * Added ShapeReferencePlane to CableBox
-  * updated translations
-  * minor bugfixes
+  * Updated translations
+  * Minor bugfixes
 * v0.3.2  11 Nov 2025
   * fixed problem with loading STEP file without colors or multishape into CableConnector or ElectricalDevice
   * updated translations

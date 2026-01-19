@@ -110,6 +110,12 @@ class ExtSuppLines:
                                 "App::Property", "The parent element object"))
             obj.setPropertyStatus("ParentElement", ["ReadOnly", "Hidden"])
 
+        # Remove old unused Properties
+        obj.removeProperty("ParentName")
+
+    def onDocumentRestored(self, obj):
+        self.setProperties(obj)
+
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
         return

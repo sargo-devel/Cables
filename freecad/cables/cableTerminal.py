@@ -91,6 +91,9 @@ class CableTerminal:
                                 "all terminals connected to each other by " +
                                 "cables"))
 
+        # Remove old unused Properties
+        obj.removeProperty("ParentName")
+
     def onDocumentRestored(self, obj):
         self.setProperties(obj)
 

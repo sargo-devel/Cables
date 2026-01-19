@@ -191,7 +191,13 @@ class BaseElement(ArchComponent.Component):
 
     def onDocumentRestored(self, obj, eltype="CableBaseElement"):
         ArchComponent.Component.onDocumentRestored(self, obj)
+        if not hasattr(obj, "ClaimChildren"):
+            old_claim_children = True
+        else:
+            old_claim_children = False
         BaseElement.setProperties(self, obj, eltype)
+        if old_claim_children:
+            obj.ClaimChildren = True
         self.ExtShape = None
         self.Terminals = self.findTerminals(obj)
         self.SuppLines = self.findSuppLines(obj)

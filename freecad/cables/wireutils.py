@@ -437,6 +437,8 @@ def delPointFromWire(plist=None, point_idx=None):
     if not plist:
         return None
     try:
+        # first remove any attachments from selected point
+        removePointAttachment(plist)
         obj = plist[0][0]
         if point_idx is not None:
             nr = point_idx + 1

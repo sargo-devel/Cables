@@ -218,7 +218,7 @@ class WireFlex(Draft.Wire):
             # assumption len(diff) == 1
             idx = old_vrtxs_mid_idx.index(diff[0])
             vrtxs_mid = wireutils.getFlatLinkSubList(obj, 'Vrtxs_mid')
-            vrtxs_mid.pop(idx)
+            vrtxs_mid.pop(idx) if len(vrtxs_mid) > idx else None
             obj.Vrtxs_mid = vrtxs_mid
         obj.Vrtxs_mid_idx = new_vrtxs_mid_idx
 

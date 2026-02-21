@@ -48,6 +48,7 @@ class WireFlex(Draft.Wire):
         """Add the properties"""
         self.setProperties(obj)
         self.setDefaultShapeParameters(obj)
+        self.oldVrtxs_mid = None
         obj.Proxy = self
         self.Type = 'Wire'
         obj.Label = 'WireFlex'
@@ -140,6 +141,11 @@ class WireFlex(Draft.Wire):
         super().onDocumentRestored(obj)
         self.setProperties(obj)
 
+    def onBeforeChange(self, obj, prop):
+        if prop == "Vrtxs_mid":
+            # needed for check_vrtxs_mid_idx
+            self.oldVrtxs_mid = wireutils.getFlatLinkSubList(obj, 'Vrtxs_mid')
+
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(f"Changed property: {prop} \n")
         super().onChanged(obj, prop)
@@ -180,6 +186,8 @@ class WireFlex(Draft.Wire):
                 obj.TangencyCoefficient = 0.0
             if obj.TangencyCoefficient > 1.0:
                 obj.TangencyCoefficient = 1.0
+        if prop == "Vrtxs_mid" and hasattr(obj, "Vrtxs_mid_idx"):
+            self.check_vrtxs_mid_idx(obj)
 
     def get_vlist(self, obj):
         """It gets vector list of all attached wire points
@@ -213,6 +221,29 @@ class WireFlex(Draft.Wire):
             vrtxs_mid.pop(idx)
             obj.Vrtxs_mid = vrtxs_mid
         obj.Vrtxs_mid_idx = new_vrtxs_mid_idx
+
+    def check_vrtxs_mid_idx(self, obj):
+        """It checks Vrtxs_mid_idx list and fixes it
+        in case of attachment links deletion
+        """
+        vrtxs_mid = wireutils.getFlatLinkSubList(obj, 'Vrtxs_mid')
+        if len(vrtxs_mid) < len(obj.Vrtxs_mid_idx) and \
+           self.oldVrtxs_mid is not None:
+            # Correct Vrtxs_mid_idx in case of attachment links deletion
+            new_idx = 0
+            del_idx_lst = []
+            max_idx = len(vrtxs_mid)
+            for i, el in enumerate(self.oldVrtxs_mid):
+                if new_idx < max_idx and el == vrtxs_mid[new_idx]:
+                    new_idx += 1
+                else:
+                    del_idx_lst.append(i)
+            if len(obj.Vrtxs_mid_idx) == len(self.oldVrtxs_mid):
+                vrtxs_mid_idx = obj.Vrtxs_mid_idx
+                for i in sorted(del_idx_lst, reverse=True):
+                    del vrtxs_mid_idx[i]
+                obj.Vrtxs_mid_idx = vrtxs_mid_idx
+            self.oldVrtxs_mid = None
 
     def recalculate_points(self, obj):
         """It recalculates all points from obj.Points

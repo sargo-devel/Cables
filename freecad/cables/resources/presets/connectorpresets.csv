@@ -34,3 +34,5 @@ DE-9_F,Fixed,D-Sub,D-Sub_DE-9_F.step,9,1
 DE-9_M,Fixed,D-Sub,D-Sub_DE-9_M.step,9,1
 KK-254F_x3,Fixed,Molex,Molex_KK-254F_x3.step,3,1
 Dummy,Fixed,Connector,Dummy_Dummy.step,3,1
+Saddle-D05,Fixed,Clamp,Clamp_Saddle-D05.step,0,1
+Saddle-D10,Fixed,Clamp,Clamp_Saddle-D10.step,0,3

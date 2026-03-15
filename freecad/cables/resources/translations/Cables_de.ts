@@ -54,29 +54,34 @@
       <translation>Wandstärke der Isolierung, wenn keine Profilskizze verwendet wird</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="152"/>
+      <location filename="../../archCableBaseElement.py" line="153"/>
       <source>The predefined set of parameters for this object</source>
       <translation>Der vordefinierte Parametersatz für dieses Objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="159"/>
+      <location filename="../../archCableBaseElement.py" line="160"/>
       <source>The number of Terminals in this object</source>
       <translation>Die Anzahl der Anschlüsse in diesem Objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="166"/>
+      <location filename="../../archCableBaseElement.py" line="167"/>
       <source>The number of Support Lines in this object</source>
       <translation>Die Anzahl der Befestigungslinien in diesem Objekt</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="173"/>
+      <location filename="../../archCableBaseElement.py" line="174"/>
       <source>The number of solids in an external shape loaded from file</source>
       <translation>Die aus einer Datei geladene Anzahl der Festkörper in einer externen Form</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="180"/>
+      <location filename="../../archCableBaseElement.py" line="181"/>
       <source>The colors of external shape loaded from file</source>
       <translation>Die aus einer Datei geladenen Farben einer externen Form</translation>
+    </message>
+    <message>
+      <location filename="../../archCableBaseElement.py" line="189"/>
+      <source>If it is true it will claim the linked Terminals and SuppLines as children in the Tree View.</source>
+      <translation>Wenn dies zutrifft, werden die verknüpften Anschlüsse und Anschlusskreuze in der Baumansicht als untergeordnete Elemente angezeigt.</translation>
     </message>
     <message>
       <location filename="../../cableTerminal.py" line="54"/>
@@ -96,8 +101,8 @@
     <message>
       <location filename="../../cableTerminal.py" line="70"/>
       <location filename="../../cableSupport.py" line="110"/>
-      <source>The name of parent object</source>
-      <translation>Der Name des übergeordneten Objekts</translation>
+      <source>The parent element object</source>
+      <translation>Das übergeordnete Elementobjekt</translation>
     </message>
     <message>
       <location filename="../../cableTerminal.py" line="77"/>
@@ -335,82 +340,87 @@
       <translation>Art aller Unter-Formtypen</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="181"/>
+      <location filename="../../archCableBox.py" line="190"/>
       <source>The profile type of this box</source>
       <translation>Der Profiltyp dieser Dose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="187"/>
+      <location filename="../../archCableBox.py" line="197"/>
+      <source>The reference plane for the shape of this box</source>
+      <translation>Die Referenzebene für die Form dieser Dose</translation>
+    </message>
+    <message>
+      <location filename="../../archCableBox.py" line="203"/>
       <source>The inner diameter of this box</source>
       <translation>Der Innendurchmesser dieser Installationsdose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="192"/>
+      <location filename="../../archCableBox.py" line="208"/>
       <source>The wall thickness of this box</source>
       <translation>Die Wandstärke dieser Installationsdose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="197"/>
+      <location filename="../../archCableBox.py" line="213"/>
       <source>The inner height of this box</source>
       <translation>Die Innenhöhe dieser Installationsdose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="202"/>
+      <location filename="../../archCableBox.py" line="218"/>
       <source>The inner width of this box</source>
       <translation>Die Innenbreite dieser Dose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="207"/>
+      <location filename="../../archCableBox.py" line="223"/>
       <source>The inner depth of this box</source>
       <translation>Die Innentiefe dieser Dose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="212"/>
+      <location filename="../../archCableBox.py" line="228"/>
       <source>The inner fillet radius of side walls of this box</source>
       <translation>Der innere Ausrundungsradius der Seitenwände dieser Installationsdose</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="217"/>
+      <location filename="../../archCableBox.py" line="233"/>
       <source>The distance between holes on a single wall</source>
       <translation>Der Abstand zwischen den Löchern an einer einzelnen Wand</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="222"/>
+      <location filename="../../archCableBox.py" line="238"/>
       <source>The diameter of a single hole</source>
       <translation>Der Durchmesser eines einzelnen Lochs</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="227"/>
+      <location filename="../../archCableBox.py" line="243"/>
       <source>Hide the box body to have better access to helpers</source>
       <translation>Versteckt den Installationsdose-Körper um besseren Zugang zu den Helfern zu haben</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="233"/>
+      <location filename="../../archCableBox.py" line="249"/>
       <source>Hide the helper rings if they are not needed</source>
       <translation>Helferringe ausblenden, falls diese nicht benötigt werden</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="239"/>
+      <location filename="../../archCableBox.py" line="255"/>
       <source>The diameter of helper ring 1</source>
       <translation>Der Durchmesser des Helferrings 1</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="245"/>
+      <location filename="../../archCableBox.py" line="261"/>
       <source>The height below lid of helper ring 1</source>
       <translation>Die Höhe unter dem Deckel des Helferrings 1</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="251"/>
+      <location filename="../../archCableBox.py" line="267"/>
       <source>The diameter of helper ring 2</source>
       <translation>Der Durchmesser des Helferrings 2</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="257"/>
+      <location filename="../../archCableBox.py" line="273"/>
       <source>The height below lid of helper ring 2</source>
       <translation>Die Höhe unter dem Deckel des Helferrings 2</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="263"/>
+      <location filename="../../archCableBox.py" line="279"/>
       <source>Enables auto creation of DIN TH35 rails inside box depending on box shape and dimensions</source>
       <translation>Ermöglicht die automatische Erstellung von DIN-TH35-Schienen im Inneren des Kastens, abhängig von der Form und den Abmessungen des Kastens</translation>
     </message>
@@ -418,25 +428,25 @@
   <context>
     <name>Cables</name>
     <message>
-      <location filename="../../archCableConnector.py" line="395"/>
+      <location filename="../../archCableConnector.py" line="396"/>
       <source>edit Cable Connector</source>
       <translation>Leitungsverbindung bearbeiten</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="406"/>
+      <location filename="../../archCableConnector.py" line="407"/>
       <location filename="../../archCableConduit.py" line="473"/>
-      <location filename="../../archCableBaseElement.py" line="767"/>
+      <location filename="../../archCableBaseElement.py" line="778"/>
       <location filename="../../cableSupport.py" line="44"/>
       <location filename="../../cableSupport.py" line="63"/>
       <location filename="../../archCableLightPoint.py" line="141"/>
-      <location filename="../../archCable.py" line="1009"/>
-      <location filename="../../archCableBox.py" line="624"/>
+      <location filename="../../archCable.py" line="1015"/>
+      <location filename="../../archCableBox.py" line="655"/>
       <location filename="../../archElectricalDevice.py" line="219"/>
       <source>No active document. Aborting</source>
       <translation>Kein aktives Dokument. Abbruch</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="412"/>
+      <location filename="../../archCableConnector.py" line="413"/>
       <source>CableConnector</source>
       <translation>Leitungsverbinder</translation>
     </message>
@@ -459,7 +469,7 @@
       <translation>Kein Basisobjekt für Leitungsführung. Vorgang wird abgebrochen</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="772"/>
+      <location filename="../../archCableBaseElement.py" line="783"/>
       <source>CableBaseElement</source>
       <translation>KabelBasisElement</translation>
     </message>
@@ -567,7 +577,7 @@
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="278"/>
-      <location filename="../../archCable.py" line="1019"/>
+      <location filename="../../archCable.py" line="1025"/>
       <source>Cable</source>
       <translation>Leitung</translation>
     </message>
@@ -652,12 +662,17 @@
       <translation>Basisleitungsverlauf konnte nicht erstellt werden</translation>
     </message>
     <message>
-      <location filename="../../archCable.py" line="583"/>
+      <location filename="../../archCable.py" line="498"/>
+      <source>unable to build main shape</source>
+      <translation>Hauptform kann nicht erstellt werden</translation>
+    </message>
+    <message>
+      <location filename="../../archCable.py" line="589"/>
       <source>unable to build subshape</source>
       <translation>Teilform kann nicht erstellt werden</translation>
     </message>
     <message>
-      <location filename="../../archCable.py" line="1015"/>
+      <location filename="../../archCable.py" line="1021"/>
       <source>No base object for cable. Aborting</source>
       <translation>Kein Basisobjekt für Leitung. Vorgang wird abgebrochen</translation>
     </message>
@@ -827,12 +842,12 @@
       <translation>ist befestigt und kann nicht bewegt werden</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="614"/>
+      <location filename="../../archCableBox.py" line="645"/>
       <source>edit Cable Box</source>
       <translation>Installationsdose bearbeiten</translation>
     </message>
     <message>
-      <location filename="../../archCableBox.py" line="628"/>
+      <location filename="../../archCableBox.py" line="659"/>
       <source>CableBox</source>
       <translation>Installationsdose</translation>
     </message>
@@ -1242,6 +1257,11 @@ und unterstützten Objekten anzuzeigen.</translation>
       <location filename="../ui/box.ui" line="418"/>
       <source>The distance between holes on a single wall</source>
       <translation>Der Abstand zwischen den Löchern an einer einzelnen Wand</translation>
+    </message>
+    <message>
+      <location filename="../ui/box.ui" line="456"/>
+      <source>Shape Reference Plane</source>
+      <translation>Referenzfläche der Form</translation>
     </message>
   </context>
   <context>

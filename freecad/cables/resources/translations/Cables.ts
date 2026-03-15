@@ -120,67 +120,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="68"/>
+        <location filename="../../wireFlex.py" line="69"/>
         <source>First Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="71"/>
+        <location filename="../../wireFlex.py" line="72"/>
         <source>Last Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="76"/>
+        <location filename="../../wireFlex.py" line="77"/>
         <source>List of middle vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="82"/>
+        <location filename="../../wireFlex.py" line="83"/>
         <source>Point indexes for list of middle vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="87"/>
+        <location filename="../../wireFlex.py" line="88"/>
         <source>Type of wire shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="94"/>
+        <location filename="../../wireFlex.py" line="95"/>
         <source>Length of boundary segment at the start of wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="100"/>
+        <location filename="../../wireFlex.py" line="101"/>
         <source>Length of boundary segment at the end of wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="105"/>
+        <location filename="../../wireFlex.py" line="106"/>
         <source>Parameterization factor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="111"/>
+        <location filename="../../wireFlex.py" line="112"/>
         <source>Tangency coefficient for inner tangents. Values in range [0,1]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="118"/>
+        <location filename="../../wireFlex.py" line="119"/>
         <source>Enables/disables start and end tangents on boundary BSpline vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="124"/>
+        <location filename="../../wireFlex.py" line="125"/>
         <source>Enables/disables tangents on inner BSpline knots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="339"/>
+        <location filename="../../wireFlex.py" line="370"/>
         <source>Set attached point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="345"/>
+        <location filename="../../wireFlex.py" line="376"/>
         <source>Set boundary segment point color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -435,7 +435,7 @@
     <message>
         <location filename="../../archCableConnector.py" line="407"/>
         <location filename="../../archCableConduit.py" line="473"/>
-        <location filename="../../archCableBaseElement.py" line="778"/>
+        <location filename="../../archCableBaseElement.py" line="784"/>
         <location filename="../../cableSupport.py" line="44"/>
         <location filename="../../cableSupport.py" line="63"/>
         <location filename="../../archCableLightPoint.py" line="141"/>
@@ -468,17 +468,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="783"/>
+        <location filename="../../archCableBaseElement.py" line="789"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="278"/>
+        <location filename="../../wireFlex.py" line="309"/>
         <source>Error wiring edges for BSpline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="504"/>
+        <location filename="../../wireFlex.py" line="535"/>
         <source>wrong object selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -779,7 +779,7 @@
     </message>
     <message>
         <location filename="../../wireutils.py" line="400"/>
-        <location filename="../../wireutils.py" line="667"/>
+        <location filename="../../wireutils.py" line="669"/>
         <source>Wrong edge type selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -789,53 +789,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="450"/>
+        <location filename="../../wireutils.py" line="452"/>
         <source>Selection is not a mid Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="454"/>
-        <location filename="../../wireutils.py" line="582"/>
+        <location filename="../../wireutils.py" line="456"/>
+        <location filename="../../wireutils.py" line="584"/>
         <source>Selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="496"/>
+        <location filename="../../wireutils.py" line="498"/>
         <source>Wrong selection. Please select two vertexes. First vertex has to belong to WireFlex, second to an external object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="511"/>
+        <location filename="../../wireutils.py" line="513"/>
         <source>First selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="544"/>
+        <location filename="../../wireutils.py" line="546"/>
         <source>Point attachment not assigned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="675"/>
+        <location filename="../../wireutils.py" line="677"/>
         <source>First selection is not an edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="693"/>
+        <location filename="../../wireutils.py" line="695"/>
         <source>Second selection is not a proper vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="698"/>
+        <location filename="../../wireutils.py" line="700"/>
         <source>Selected vertex does not belong to selected edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="705"/>
+        <location filename="../../wireutils.py" line="707"/>
         <source>Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="706"/>
+        <location filename="../../wireutils.py" line="708"/>
         <source>is attached and can&apos;t be moved</source>
         <translation type="unfinished"></translation>
     </message>

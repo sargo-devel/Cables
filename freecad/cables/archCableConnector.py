@@ -166,7 +166,17 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
     def onDocumentRestored(self, obj):
         eltype = "CableConnector"
         archCableBaseElement.BaseElement.onDocumentRestored(self, obj, eltype)
+
+        #fix for objects created with version 0.3.0 or earlier
+        holesize = None
+        if isinstance(obj.HoleSize, float):
+            holesize = obj.HoleSize
+            obj.removeProperty("HoleSize")
+
         self.setProperties(obj)
+
+        if holesize is not None:
+            obj.HoleSize.Value = holesize
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")

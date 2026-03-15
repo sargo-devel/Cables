@@ -122,3 +122,6 @@ If you appreciate my work and would like me to spend more time creating new tool
 
 ## License
 LGPLv3 (see [LICENSE](LICENSE))
+
+## License for models created in presets library
+CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/presets/lib/README.md) for details)

@@ -15,8 +15,8 @@ The Cables Workbench has the following goals:
 3. Enable quick and easy connection of single wires if that detail level is needed (e.g. connecting wires to connectors in electrical boxes or swichboards).
 4. To be compatible with [BIM Workbench](https://wiki.freecad.org/BIM_Workbench) (objects should have the same base attributes and properties as other BIM objects: materials, IFC type and IFC attributes etc. See [BIM Workbench commpatibility table](https://wiki.freecad.org/Cables_Compatibility_with_BIM_Workbench) for details).
 
-The main idea of modelling cables (which are flexible in nature) as a static 3D elements is based on Wire Flex objects.
-These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) objects with additional features like the possibility of attaching any Wire Flex vertices to external objects. This allows to automatically change the cable shape and length while changing the placement of external elements like boxes, switches, light points, walls, ceilings etc.
+The main idea of modelling cables (which are flexible in nature) as a static 3D elements is based on [WireFlex](https://wiki.freecad.org/Cables_WireFlex) objects.
+These objects are modified  [Draft Wire](https://wiki.freecad.org/Draft_Wire) objects with additional features like the possibility of attaching any WireFlex vertices to external objects. This allows to automatically change the cable shape and length while changing the placement of external elements like boxes, switches, light points, walls, ceilings etc.
 
 All solid elements (cables, boxes, connectors etc.) in this workbench are [Arch Component](https://wiki.freecad.org/Arch_Component) elements. The cable element is based on [Arch Pipe](https://wiki.freecad.org/Arch_Pipe) class.
 
@@ -35,7 +35,7 @@ This workbench is currently at the alpha stage. You can expect some bugs which c
 Some properties of models can change in the future and break models created with current version.
 
 ### Compatibility
-Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0. No compatibility checks with previous versions were made.
+Cables Workbench was created for [FreeCAD](https://freecad.org) version 1.0.0 and later. No compatibility checks with previous versions were made.
 
 ### Contributions
 Any code contributions are welcome. Please add all of your pull requests to the dev branch.
@@ -46,7 +46,7 @@ Any code contributions are welcome. Please add all of your pull requests to the 
 * Author: [@SargoDevel](https://github.com/sargo-devel)
 
 ### Translations
-It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations/README.md) for details.
+It is possible to translate Cables Workbench. See [here](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/translations#readme) for details.
 
 Available translations:
 
@@ -72,7 +72,8 @@ If you appreciate my work and would like me to spend more time creating new tool
 LGPLv3 (see [LICENSE](LICENSE))
 
 ## License for models created in presets library
-CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/presets/lib/README.md) for details)
+CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/presets/lib#readme)
+for details)
 
 ## Release notes
 * v0.3.5  16 Mar 2026

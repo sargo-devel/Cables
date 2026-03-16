@@ -65,7 +65,22 @@ Available translations:
 
 Big thanks to the translators for their work!
 
-### Release notes
+## Donate
+If you appreciate my work and would like me to spend more time creating new tools, you can help me increasing my powers by contributing via [github](https://github.com/sponsors/sargo-devel) or [ko-fi](https://ko-fi.com/sargodevel).
+
+## License
+LGPLv3 (see [LICENSE](LICENSE))
+
+## License for models created in presets library
+CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/presets/lib/README.md) for details)
+
+## Release notes
+* v0.3.5  16 Mar 2026
+  * Fixed deletion of WireFlex vertex with attachment
+  * Fixed inconsistency WireFlex vertex attachment after attached objects deletion
+  * Added 2 elements (Clamp_Saddle) to connector presets lib
+  * Updated translations
+  * Minor bugfixes
 * v0.3.4  19 Jan 2026
   * Fixed a potential issue with new attributes in old objects after update 0.3.3
 * v0.3.3  17 Jan 2026
@@ -116,12 +131,3 @@ Big thanks to the translators for their work!
   * Fixed cable rotation problem
 * v0.1.0  21 Jan 2025
   * Initial version
-
-## Donate
-If you appreciate my work and would like me to spend more time creating new tools, you can help me increasing my powers by contributing via [github](https://github.com/sponsors/sargo-devel) or [ko-fi](https://ko-fi.com/sargodevel).
-
-## License
-LGPLv3 (see [LICENSE](LICENSE))
-
-## License for models created in presets library
-CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/tree/master/freecad/cables/resources/presets/lib/README.md) for details)

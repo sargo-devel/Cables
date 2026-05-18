@@ -171,12 +171,23 @@ class LayerExtended(layer.Layer):
             if value is not None and hasattr(obj, p):
                 setattr(obj, p, value)
 
+    def get_current_member_layer(self, obj, member):
+        ver = FreeCAD.Version()
+        fc_ver = f"{ver[0]}.{ver[1]}"
+        if fc_ver == "1.0":
+            # FreeCAD v1.0.x
+            member_layer = obj.ViewObject.Proxy._get_layer(member)
+        else:
+            # FreeCAD newer then v1.0.x
+            member_layer = layer.get_layer(member)
+        return member_layer
+
     def recognized_by_type(self, obj, member):
         """ It returns True if a member object's Proxy class
         matches obj.AutoMemberType. Otherwise it returns False.
         False is returned also if the member belongs to any other Layer.
         """
-        current_member_layer = obj.ViewObject.Proxy._get_layer(member)
+        current_member_layer = self.get_current_member_layer(obj, member)
         if current_member_layer is None:
             try:
                 member_type = type(member.Proxy).__name__
@@ -193,7 +204,7 @@ class LayerExtended(layer.Layer):
         Properties to check: LineWidth, LineColor, PointSize, PointColor.
         Additionally member's Proxy class has to be: Wire or Point
         """
-        current_member_layer = obj.ViewObject.Proxy._get_layer(member)
+        current_member_layer = self.get_current_member_layer(obj, member)
         member_match = False
         if current_member_layer is None:
             props = ["LineWidth", "LineColor", "PointSize", "PointColor"]

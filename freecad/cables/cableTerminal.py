@@ -36,7 +36,7 @@ TermLineColor = (170, 0, 0)
 
 
 class CableTerminal:
-    """The ExtSuppLines object
+    """The CableTerminal object
     """
     def __init__(self, obj):
         obj.Proxy = self
@@ -166,7 +166,6 @@ class CableTerminal:
                 obj.ParentElement = p
         return
 
-
     def updateConnectedWires(self, obj):
         conn_list = []
         for p in obj.InList:
@@ -209,7 +208,7 @@ class CableTerminal:
 
 
 class ViewProviderCableTerminal:
-    """A View Provider for the ExtSuppLines object
+    """A View Provider for the CableTerminal object
     """
     def __init__(self, vobj):
         self.Object = vobj.Object

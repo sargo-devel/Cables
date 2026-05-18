@@ -31,7 +31,7 @@ from freecad.cables import iconPath
 from freecad.cables import QT_TRANSLATE_NOOP
 
 
-CLASS_EXTSUPPLINES_ICON = os.path.join(iconPath, "classExtSuppLines.svg")
+CLASS_EXTSNAPLINES_ICON = os.path.join(iconPath, "classExtSnapLines.svg")
 SuppPointColor = (255, 85, 0)
 SuppLineColor = (255, 170, 127)
 
@@ -86,12 +86,12 @@ def makeSupportLine(p1=None, p2=None, name=None):
     return line
 
 
-class ExtSuppLines:
-    """The ExtSuppLines object
+class ExtSnapLines:
+    """The ExtSnapLines object
     """
     def __init__(self, obj):
         obj.Proxy = self
-        self.Type = "SuppLines"
+        self.Type = "SnapLines"
         self.setProperties(obj)
         obj.addExtension('Part::AttachExtensionPython')
 
@@ -102,7 +102,7 @@ class ExtSuppLines:
                             "SnapLines",
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The shape containing " +
-                                "support lines"))
+                                "snap lines"))
         if "ParentElement" not in pl:
             obj.addProperty("App::PropertyLink", "ParentElement",
                             "SnapLines",
@@ -143,8 +143,11 @@ class ExtSuppLines:
         return
 
 
-class ViewProviderExtSuppLines:
-    """A View Provider for the ExtSuppLines object
+ExtSuppLines = ExtSnapLines
+
+
+class ViewProviderExtSnapLines:
+    """A View Provider for the ExtSnapLines object
     """
     def __init__(self, vobj):
         vobj.Proxy = self
@@ -154,7 +157,7 @@ class ViewProviderExtSuppLines:
         vobj.LineColor = SuppLineColor
 
     def getIcon(self):
-        return CLASS_EXTSUPPLINES_ICON
+        return CLASS_EXTSNAPLINES_ICON
 
     def attach(self, obj):
         return
@@ -170,3 +173,6 @@ class ViewProviderExtSuppLines:
 
     def onChanged(self, vobj, prop):
         pass
+
+
+ViewProviderExtSuppLines = ViewProviderExtSnapLines

@@ -140,7 +140,7 @@ class BaseElement(ArchComponent.Component):
         BaseElement.setProperties(self, obj, eltype)
         self.ExtShape = None
         self.Terminals = self.findTerminals(obj)
-        self.SuppLines = self.findSuppLines(obj)
+        self.SnapLines = self.findSnapLines(obj)
         obj.ClaimChildren = True
 
     def setProperties(self, obj, eltype):
@@ -159,13 +159,17 @@ class BaseElement(ArchComponent.Component):
                                 "App::Property", "The number of Terminals " +
                                 "in this object"))
             obj.setPropertyStatus("NumberOfTerminals", "ReadOnly")
-        if "NumberOfSuppLines" not in pl:
-            obj.addProperty("App::PropertyInteger", "NumberOfSuppLines",
+        if "NumberOfSnapLines" not in pl:
+            obj.addProperty("App::PropertyInteger", "NumberOfSnapLines",
                             eltype,
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "The number of Support " +
+                                "App::Property", "The number of Snap " +
                                 "Lines in this object"))
-            obj.setPropertyStatus("NumberOfSuppLines", "ReadOnly")
+            obj.setPropertyStatus("NumberOfSnapLines", "ReadOnly")
+        if "NumberOfSuppLines" in pl:
+            # update objects created in ver.0.3.5 or earlier
+            obj.NumberOfSnapLines = obj.NumberOfSuppLines
+            obj.removeProperty("NumberOfSuppLines")
         if "ExtShapeSolids" not in pl:
             obj.addProperty("App::PropertyInteger", "ExtShapeSolids",
                             "Ext",
@@ -185,7 +189,7 @@ class BaseElement(ArchComponent.Component):
                             eltype,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "If it is true it will " +
-                                "claim the linked Terminals and SuppLines " +
+                                "claim the linked Terminals and SnapLines " +
                                 "as children in the Tree View."))
         self.Type = "Component"
 
@@ -200,7 +204,7 @@ class BaseElement(ArchComponent.Component):
             obj.ClaimChildren = True
         self.ExtShape = None
         self.Terminals = self.findTerminals(obj)
-        self.SuppLines = self.findSuppLines(obj)
+        self.SnapLines = self.findSnapLines(obj)
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
@@ -208,25 +212,25 @@ class BaseElement(ArchComponent.Component):
         ArchComponent.Component.onChanged(self, obj, prop)
         if prop == "Label" and not undoredo:
             self.Terminals = self.findTerminals(obj)
-            self.SuppLines = self.findSuppLines(obj)
+            self.SnapLines = self.findSnapLines(obj)
             if self.Terminals:
                 for nr, t in enumerate(self.Terminals):
                     label = f"{obj.Label}_Term{nr+1:03}"
                     if not label == t.Label:
                         t.Label = label
-            if self.SuppLines:
-                for nr, s in enumerate(self.SuppLines):
-                    label = f"{obj.Label}_SuppLines{nr+1:03}"
+            if self.SnapLines:
+                for nr, s in enumerate(self.SnapLines):
+                    label = f"{obj.Label}_SnapLines{nr+1:03}"
                     if not label == s.Label:
                         s.Label = label
         if prop == "NumberOfTerminals" and not undoredo:
             self.Terminals = self.findTerminals(obj)
             if len(self.Terminals) != obj.NumberOfTerminals:
                 self.updateNumberOfTerminals(obj)
-        if prop == "NumberOfSuppLines" and not undoredo:
-            self.SuppLines = self.findSuppLines(obj)
-            if len(self.SuppLines) != obj.NumberOfSuppLines:
-                self.updateNumberOfSuppLines(obj)
+        if prop == "NumberOfSnapLines" and not undoredo:
+            self.SnapLines = self.findSnapLines(obj)
+            if len(self.SnapLines) != obj.NumberOfSnapLines:
+                self.updateNumberOfSnapLines(obj)
         if prop == "Preset" and not undoredo:
             # refresh presets names:
             presetnames, presets = self.getPresets(obj)
@@ -235,9 +239,9 @@ class BaseElement(ArchComponent.Component):
             self.updatePropertiesFromPreset(obj, presets)
         if prop == "Base" and not undoredo:
             self.updatePropertyStatusForBase(
-                obj, ["NumberOfTerminals", "NumberOfSuppLines"], "ReadOnly")
+                obj, ["NumberOfTerminals", "NumberOfSnapLines"], "ReadOnly")
             self.updatePropertyStatusForBase(
-                obj, ["NumberOfTerminals", "NumberOfSuppLines"], "Hidden")
+                obj, ["NumberOfTerminals", "NumberOfSnapLines"], "Hidden")
             if obj.Base is not None:
                 self.updatePropertyStatusForBase(obj, ["Preset"], "Hidden", 0)
                 self.Terminals = self.findTerminals(obj)
@@ -250,9 +254,9 @@ class BaseElement(ArchComponent.Component):
         terminals = self.findTerminals(obj)
         if len(terminals) != len(self.Terminals):
             obj.NumberOfTerminals = len(terminals)
-        supplines = self.findSuppLines(obj)
-        if len(supplines) != len(self.SuppLines):
-            obj.NumberOfSuppLines = len(supplines)
+        snaplines = self.findSnapLines(obj)
+        if len(snaplines) != len(self.SnapLines):
+            obj.NumberOfSnapLines = len(snaplines)
 
         if hasattr(obj, "Base") and obj.Base is None and \
            "Hidden" in obj.getPropertyStatus("Preset"):
@@ -282,8 +286,8 @@ class BaseElement(ArchComponent.Component):
                 obj.Material = obj.Material
         if self.Terminals:
             self.adjustTerminals(obj)
-        if self.SuppLines:
-            self.adjustSuppLines(obj)
+        if self.SnapLines:
+            self.adjustSnapLines(obj)
 
     def getPresets(self, obj, presetfiles=presetfiles):
         presets = cableProfile.readCablePresets(presetfiles)
@@ -373,7 +377,7 @@ class BaseElement(ArchComponent.Component):
         return sh, sh_colors
 
     def readExtData(self, obj, filename, libdirs=libdirs):
-        """Function reads data: shape offset, terminals, support lines
+        """Function reads data: shape offset, terminals, snap lines
         from csv file.
         Returns dict
         """
@@ -391,7 +395,7 @@ class BaseElement(ArchComponent.Component):
         rawdata = cableProfile.readCablePresets([fullname])
         terminals = []
         extshape = []
-        supplines = []
+        snaplines = []
         for d in rawdata:
             if d[2] == "ExtShape":
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
@@ -403,13 +407,13 @@ class BaseElement(ArchComponent.Component):
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
                 terminals.append((pl, d[10], d[11], d[12], d[1]))
-            elif d[2] == "SupportLines":
+            elif d[2] in ["SnapLines", "SupportLines"]:
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
-                supplines.append((pl,))
+                snaplines.append((pl,))
         data = {"ExtShape": extshape, "Terminal": terminals,
-                "SupportLines": supplines}
+                "SnapLines": snaplines}
         return data
 
     def makeTerminalChildObjects(self, obj):
@@ -454,61 +458,61 @@ class BaseElement(ArchComponent.Component):
         # Default terminal update. Can be overwritten by child class
         return
 
-    def makeSupportLinesChildObjects(self, obj):
-        supplines = self.findSuppLines(obj)
-        nr = obj.NumberOfSuppLines
-        if supplines:
-            for supp in supplines:
-                FreeCAD.ActiveDocument.removeObject(supp.Name)
-        supplines = []
+    def makeSnapLinesChildObjects(self, obj):
+        snaplines = self.findSnapLines(obj)
+        nr = obj.NumberOfSnapLines
+        if snaplines:
+            for snap in snaplines:
+                FreeCAD.ActiveDocument.removeObject(snap.Name)
+        snaplines = []
         for i in range(nr):
             child_obj = FreeCAD.ActiveDocument.addObject(
-                "Part::FeaturePython", "CableSuppLines")
-            cableSupport.ExtSuppLines(child_obj)
+                "Part::FeaturePython", "CableSnapLines")
+            cableSupport.ExtSnapLines(child_obj)
             if FreeCAD.GuiUp:
-                cableSupport.ViewProviderExtSuppLines(child_obj.ViewObject)
-            child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
+                cableSupport.ViewProviderExtSnapLines(child_obj.ViewObject)
+            child_obj.Label = f"{obj.Label}_SnapLines{i+1:03}"
             child_obj.ParentElement = obj
             child_obj.Lines = Part.Shape()
             child_obj.AttachmentSupport = [(obj, ('',))]
-            supplines.append(child_obj)
-        self.SuppLines = supplines
-        self.adjustSuppLines(obj)
+            snaplines.append(child_obj)
+        self.SnapLines = snaplines
+        self.adjustSnapLines(obj)
 
-    def updateNumberOfSuppLines(self, obj):
-        self.SuppLines = self.findSuppLines(obj)
-        if hasattr(obj, "NumberOfSuppLines") \
-           and len(self.SuppLines) != obj.NumberOfSuppLines:
-            supplines = self.SuppLines
-            nr = obj.NumberOfSuppLines
-            if len(supplines) > nr:
-                for s in supplines[nr:]:
+    def updateNumberOfSnapLines(self, obj):
+        self.SnapLines = self.findSnapLines(obj)
+        if hasattr(obj, "NumberOfSnapLines") \
+           and len(self.SnapLines) != obj.NumberOfSnapLines:
+            snaplines = self.SnapLines
+            nr = obj.NumberOfSnapLines
+            if len(snaplines) > nr:
+                for s in snaplines[nr:]:
                     FreeCAD.ActiveDocument.removeObject(s.Name)
-            elif len(supplines) < nr:
-                for i in range(len(supplines), nr):
+            elif len(snaplines) < nr:
+                for i in range(len(snaplines), nr):
                     child_obj = FreeCAD.ActiveDocument.addObject(
-                        "Part::FeaturePython", "CableSuppLines")
-                    cableSupport.ExtSuppLines(child_obj)
+                        "Part::FeaturePython", "CableSnapLines")
+                    cableSupport.ExtSnapLines(child_obj)
                     if FreeCAD.GuiUp:
-                        cableSupport.ViewProviderExtSuppLines(
+                        cableSupport.ViewProviderExtSnapLines(
                             child_obj.ViewObject)
-                    child_obj.Label = f"{obj.Label}_SuppLines{i+1:03}"
+                    child_obj.Label = f"{obj.Label}_SnapLines{i+1:03}"
                     child_obj.ParentElement = obj
                     child_obj.Lines = Part.Shape()
                     child_obj.AttachmentSupport = [(obj, ('',))]
-            self.SuppLines = self.findSuppLines(obj)
-            self.adjustSuppLines(obj)
+            self.SnapLines = self.findSnapLines(obj)
+            self.adjustSnapLines(obj)
 
-    def adjustSuppLines(self, obj):
-        self.SuppLines = self.findSuppLines(obj)
-        for supp in self.SuppLines:
-            supp_lines = self.makeSupportLines(obj)
-            if not self.sameShapes(supp_lines, supp.Lines) \
-               or len(supp_lines.Edges) > 4:
-                supp.Lines = supp_lines
+    def adjustSnapLines(self, obj):
+        self.SnapLines = self.findSnapLines(obj)
+        for snap in self.SnapLines:
+            snap_lines = self.makeSnapLines(obj)
+            if not self.sameShapes(snap_lines, snap.Lines) \
+               or len(snap_lines.Edges) > 4:
+                snap.Lines = snap_lines
 
-    def makeSupportLines(self, obj):
-        # default support lines cross. Can be overwritten by child class
+    def makeSnapLines(self, obj):
+        # default snap lines cross. Can be overwritten by child class
         x0 = 0
         y0 = 0
         z0 = 0
@@ -547,11 +551,11 @@ class BaseElement(ArchComponent.Component):
                     tlist.append(p)
         return tlist
 
-    def findSuppLines(self, obj):
+    def findSnapLines(self, obj):
         tlist = []
         for p in obj.InList:
             if hasattr(p, "Proxy") and \
-               type(p.Proxy).__name__ == "ExtSuppLines":
+               type(p.Proxy).__name__ == "ExtSnapLines":
                 if p not in tlist:
                     tlist.append(p)
         return tlist
@@ -598,11 +602,11 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
         c = ArchComponent.ViewProviderComponent.claimChildren(self)
         if self.Object.ClaimChildren:
             terminals = self.Object.Proxy.findTerminals(self.Object)
-            supplines = self.Object.Proxy.findSuppLines(self.Object)
+            snaplines = self.Object.Proxy.findSnapLines(self.Object)
             if terminals:
                 c.extend(terminals)
-            if supplines:
-                c.extend(supplines)
+            if snaplines:
+                c.extend(snaplines)
         return c
 
     def updateData(self, obj, prop):

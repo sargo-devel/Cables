@@ -76,8 +76,8 @@ class ArchCableLightPoint(archCableBaseElement.BaseElement):
             obj.removeProperty("Terminals")
         if "NumberOfTerminals" in pl:
             obj.removeProperty("NumberOfTerminals")
-        if "NumberOfSuppLines" in pl:
-            obj.setPropertyStatus("NumberOfSuppLines", "Hidden")
+        if "NumberOfSnapLines" in pl:
+            obj.setPropertyStatus("NumberOfSnapLines", "Hidden")
         if "Preset" in pl:
             obj.setPropertyStatus("Preset", "Hidden")
         self.Type = "Component"
@@ -102,10 +102,10 @@ class ArchCableLightPoint(archCableBaseElement.BaseElement):
             obj.Shape = sh
             # obj.Placement = pl
 
-    def makeSupportLines(self, obj):
+    def makeSnapLines(self, obj):
         z = 2
-        s1 = archCableBaseElement.BaseElement.makeSupportLines(self, obj)
-        s2 = archCableBaseElement.BaseElement.makeSupportLines(self, obj)
+        s1 = archCableBaseElement.BaseElement.makeSnapLines(self, obj)
+        s2 = archCableBaseElement.BaseElement.makeSnapLines(self, obj)
         s1.Placement.Base.z = z
         s2.Placement.Base.z = -obj.Height.Value-z
         s = Part.Shape(s1.Edges + s2.Edges)
@@ -156,9 +156,9 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
         obj.Height = height if height else 5
     if placement:
         obj.Placement = placement
-    if hasattr(obj, "NumberOfSuppLines"):
-        obj.NumberOfSuppLines = 1
-    obj.Proxy.SuppLines = obj.Proxy.findSuppLines(obj)
-    if not obj.Proxy.SuppLines:
-        obj.Proxy.makeSupportLinesChildObjects(obj)
+    if hasattr(obj, "NumberOfSnapLines"):
+        obj.NumberOfSnapLines = 1
+    obj.Proxy.SnapLines = obj.Proxy.findSnapLines(obj)
+    if not obj.Proxy.SnapLines:
+        obj.Proxy.makeSnapLinesChildObjects(obj)
     return obj

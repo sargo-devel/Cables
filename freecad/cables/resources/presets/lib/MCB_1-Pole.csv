@@ -8,13 +8,14 @@
 
 # ExtShape =  Details of a Device shape
 # Terminal =  Details of a single terminal
-# SupportLines = Details of a single Support Lines shape
+# SnapLines = Details of a single SnapLines shape (old name: SupportLines is also supported
+#             for backward compatibility with ver.0.3.5 and older)
 
 # Additional element types must be implemented in archElectricalDevice.py first
 
 # Proposed naming convention for DeviceClass:
-# for ExtShape Element Type: repeated class from devicepresets.csv
-# for Terminal and SupportLines Types: Terminal or SupportLines accordingly
+# for ExtShape ElementType: repeated class from devicepresets.csv
+# for Terminal and SnapLines ElementType: Terminal or SnapLines accordingly
 
 ###########################################
 
@@ -27,5 +28,5 @@
 LIN,Terminal,Terminal,0.0,-37.0,20.0,180.0,0.0,0.0,1,10.0,1.0
 LOUT,Terminal,Terminal,0.0, 37.0,20.0,  0.0,0.0,0.0,1,10.0,1.0
 
-# SupportLines ElementType
-# Name,SupportLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)
+# SnapLines ElementType (old name: SupportLines is also supported)
+# Name,SnapLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)

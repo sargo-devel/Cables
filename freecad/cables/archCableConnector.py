@@ -185,11 +185,11 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             if hasattr(obj, "ExtShapeSolids") and obj.ExtShapeSolids > 0:
                 hide_list = ["Height", "HoleSize", "NumberOfHoles",
                              "Thickness"]
-                unhide_list = ["NumberOfTerminals", "NumberOfSuppLines",
-                               "SuppLines", "Terminals"]
+                unhide_list = ["NumberOfTerminals", "NumberOfSnapLines",
+                               "SnapLines", "Terminals"]
             else:
-                hide_list = ["NumberOfTerminals", "NumberOfSuppLines",
-                             "SuppLines"]
+                hide_list = ["NumberOfTerminals", "NumberOfSnapLines",
+                             "SnapLines"]
                 unhide_list = ["Height", "HoleSize", "NumberOfHoles",
                                "Thickness", "Terminals"]
             for element in hide_list:
@@ -291,13 +291,13 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             obj.ExtShapeSolids = 0
             obj.ExtColor = []
             nr_of_term = 1
-            nr_of_supp = 0
+            nr_of_snap = 0
             if obj.NumberOfTerminals != nr_of_term:
                 obj.NumberOfTerminals = nr_of_term
                 self.makeTerminalChildObjects(obj)
-            if obj.NumberOfSuppLines != nr_of_supp:
-                obj.NumberOfSuppLines = nr_of_supp
-                self.makeSupportLinesChildObjects(obj)
+            if obj.NumberOfSnapLines != nr_of_snap:
+                obj.NumberOfSnapLines = nr_of_snap
+                self.makeSnapLinesChildObjects(obj)
             return
         preset = None
         for p in presets:
@@ -308,11 +308,11 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         if preset is not None:
             try:
                 self.Terminals = self.findTerminals(obj)
-                self.SuppLines = self.findSuppLines(obj)
+                self.SnapLines = self.findSnapLines(obj)
                 if preset[2] == "ParametricTerminal":
                     obj.NumberOfHoles = int(preset[4])
                     nr_of_term = int(preset[5])
-                    nr_of_supp = 0
+                    nr_of_snap = 0
                     obj.Height.Value = preset[6]
                     obj.HoleSize.Value = preset[7]
                     obj.Thickness.Value = preset[8]
@@ -322,26 +322,26 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                     if obj.NumberOfTerminals != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
                         self.makeTerminalChildObjects(obj)
-                    if obj.NumberOfSuppLines != nr_of_supp:
-                        obj.NumberOfSuppLines = nr_of_supp
-                        self.makeSupportLinesChildObjects(obj)
+                    if obj.NumberOfSnapLines != nr_of_snap:
+                        obj.NumberOfSnapLines = nr_of_snap
+                        self.makeSnapLinesChildObjects(obj)
                     for t in self.Terminals:
                         t.Proxy.setPropertiesReadOnly(t)
                 if preset[2] == "Fixed":
                     obj.NumberOfHoles = 0
                     ext_shape, ext_color = self.readExtShape(obj, preset[4])
                     nr_of_term = int(preset[5])
-                    nr_of_supp = int(preset[6])
+                    nr_of_snap = int(preset[6])
                     ext_data = self.readExtData(
                         obj, f"{preset[3]}_{preset[1]}.csv")
                     if obj.NumberOfTerminals != nr_of_term or \
                        len(self.Terminals) != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
                         self.makeTerminalChildObjects(obj)
-                    if obj.NumberOfSuppLines != nr_of_supp or \
-                       len(self.SuppLines) != nr_of_supp:
-                        obj.NumberOfSuppLines = nr_of_supp
-                        self.makeSupportLinesChildObjects(obj)
+                    if obj.NumberOfSnapLines != nr_of_snap or \
+                       len(self.SnapLines) != nr_of_snap:
+                        obj.NumberOfSnapLines = nr_of_snap
+                        self.makeSnapLinesChildObjects(obj)
                     if ext_data:
                         sh_offset = ext_data["ExtShape"][0][0]
                         ext_shape.Placement = sh_offset
@@ -352,11 +352,11 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
                             t.PinName = ext_data["Terminal"][i][4]
-                        # update SupportLines
-                        if self.SuppLines and ext_data["SupportLines"]:
-                            for i, s in enumerate(self.SuppLines):
+                        # update SnapLines
+                        if self.SnapLines and ext_data["SnapLines"]:
+                            for i, s in enumerate(self.SnapLines):
                                 s.AttachmentOffset = ext_data[
-                                    "SupportLines"][i][0]
+                                    "SnapLines"][i][0]
                     self.ExtShape = ext_shape
                     obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color
@@ -367,7 +367,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             except IndexError:
                 FreeCAD.Console.PrintError(
                     f"Preset loading error for preset name '{name}'. Wrong " +
-                    "number of Terminals or SupportLines\n")
+                    "number of Terminals or SnapLines\n")
         else:
             FreeCAD.Console.PrintError(
                 f"Preset loading error for preset name '{name}'. Preset " +
@@ -382,7 +382,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
         return sh_col
 
     def readExtData(self, obj, filename, libdirs=libdirs):
-        """Function reads data: shape offset, terminals, support lines
+        """Function reads data: shape offset, terminals, snap lines
         from csv file.
         Returns dict
         """

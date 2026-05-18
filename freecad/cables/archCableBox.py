@@ -281,8 +281,8 @@ class ArchCableBox(archCableBaseElement.BaseElement):
             obj.removeProperty("Terminals")
         if "NumberOfTerminals" in pl:
             obj.removeProperty("NumberOfTerminals")
-        if "NumberOfSuppLines" in pl:
-            obj.setPropertyStatus("NumberOfSuppLines", "Hidden")
+        if "NumberOfSnapLines" in pl:
+            obj.setPropertyStatus("NumberOfSnapLines", "Hidden")
         self.Type = "Component"
 
     def onDocumentRestored(self, obj):
@@ -340,10 +340,10 @@ class ArchCableBox(archCableBaseElement.BaseElement):
             ref_offset = FreeCAD.Vector(0, 0, 0)
             ref_rotation = FreeCAD.Rotation(*ref_plane_rot[idx])
             ref_pl = FreeCAD.Placement(ref_offset, ref_rotation)
-            if hasattr(obj.Proxy, "SuppLines") and obj.Proxy.SuppLines:
-                supp = obj.Proxy.SuppLines[0]
-                if supp.AttachmentOffset != ref_pl:
-                    supp.AttachmentOffset = ref_pl
+            if hasattr(obj.Proxy, "SnapLines") and obj.Proxy.SnapLines:
+                snap = obj.Proxy.SnapLines[0]
+                if snap.AttachmentOffset != ref_pl:
+                    snap.AttachmentOffset = ref_pl
             for shape in shapes:
                 new_pl = ref_pl.multiply(shape.Placement)
                 if shape.Placement != new_pl:
@@ -362,8 +362,8 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                                                          presetfiles)
         return pr
 
-    def makeSupportLines(self, obj):
-        # support crosses
+    def makeSnapLines(self, obj):
+        # snap crosses
         t = obj.Thickness.Value
         d = obj.Depth.Value + 2*t
         w = obj.Width.Value + 2*t
@@ -683,9 +683,9 @@ def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,
     obj.HelperRingsHidden = True
     if placement:
         obj.Placement = placement
-    if hasattr(obj, "NumberOfSuppLines"):
-        obj.NumberOfSuppLines = 1
-    obj.Proxy.SuppLines = obj.Proxy.findSuppLines(obj)
-    if not obj.Proxy.SuppLines:
-        obj.Proxy.makeSupportLinesChildObjects(obj)
+    if hasattr(obj, "NumberOfSnapLines"):
+        obj.NumberOfSnapLines = 1
+    obj.Proxy.SnapLines = obj.Proxy.findSnapLines(obj)
+    if not obj.Proxy.SnapLines:
+        obj.Proxy.makeSnapLinesChildObjects(obj)
     return obj

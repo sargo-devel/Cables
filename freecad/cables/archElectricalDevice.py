@@ -117,7 +117,7 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
         return pr
 
     def updatePropertiesFromPreset(self, obj, presets):
-        paramlist = ["NumberOfTerminals", "NumberOfSuppLines"]
+        paramlist = ["NumberOfTerminals", "NumberOfSnapLines"]
         for param in paramlist:
             if not hasattr(obj, param):
                 return
@@ -131,13 +131,13 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
             obj.ExtShapeSolids = 0
             obj.ExtColor = []
             nr_of_term = 0
-            nr_of_supp = 0
+            nr_of_snap = 0
             if obj.NumberOfTerminals != nr_of_term:
                 obj.NumberOfTerminals = nr_of_term
                 self.makeTerminalChildObjects(obj)
-            if obj.NumberOfSuppLines != nr_of_supp:
-                obj.NumberOfSuppLines = nr_of_supp
-                self.makeSupportLinesChildObjects(obj)
+            if obj.NumberOfSnapLines != nr_of_snap:
+                obj.NumberOfSnapLines = nr_of_snap
+                self.makeSnapLinesChildObjects(obj)
             return
         preset = None
         for p in presets:
@@ -150,19 +150,19 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
                 if preset[2] == "Fixed":
                     ext_shape, ext_color = self.readExtShape(obj, preset[4])
                     terminals = self.findTerminals(obj)
-                    supplines = self.findSuppLines(obj)
+                    snaplines = self.findSnapLines(obj)
                     nr_of_term = int(preset[5])
-                    nr_of_supp = int(preset[6])
+                    nr_of_snap = int(preset[6])
                     ext_data = self.readExtData(
                         obj, f"{preset[3]}_{preset[1]}.csv")
                     if obj.NumberOfTerminals != nr_of_term or \
                        len(terminals) != nr_of_term:
                         obj.NumberOfTerminals = nr_of_term
                         self.makeTerminalChildObjects(obj)
-                    if obj.NumberOfSuppLines != nr_of_supp or \
-                       len(supplines) != nr_of_supp:
-                        obj.NumberOfSuppLines = nr_of_supp
-                        self.makeSupportLinesChildObjects(obj)
+                    if obj.NumberOfSnapLines != nr_of_snap or \
+                       len(snaplines) != nr_of_snap:
+                        obj.NumberOfSnapLines = nr_of_snap
+                        self.makeSnapLinesChildObjects(obj)
                     if ext_data:
                         sh_offset = ext_data["ExtShape"][0][0]
                         ext_shape.Placement = sh_offset
@@ -174,9 +174,9 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
                             t.Length = ext_data["Terminal"][i][2]
                             t.Spacing = ext_data["Terminal"][i][3]
                             t.PinName = ext_data["Terminal"][i][4]
-                        # update SupportLines
-                        for i, s in enumerate(self.SuppLines):
-                            s.AttachmentOffset = ext_data["SupportLines"][i][0]
+                        # update SnapLines
+                        for i, s in enumerate(self.SnapLines):
+                            s.AttachmentOffset = ext_data["SnapLines"][i][0]
                     self.ExtShape = ext_shape
                     obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color
@@ -187,7 +187,7 @@ class ArchElectricalDevice(archCableBaseElement.BaseElement):
             except IndexError:
                 FreeCAD.Console.PrintError(
                     f"Preset loading error for preset name '{name}'. Wrong " +
-                    "number of Terminals or SupportLines\n")
+                    "number of Terminals or SnapLines\n")
         else:
             FreeCAD.Console.PrintError(
                 f"Preset loading error for preset name '{name}'. Preset " +

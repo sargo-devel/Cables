@@ -87,8 +87,8 @@ c1_base_points = [Vector (0.0, 0.0, 0.0), Vector (0.0, -15.353569087401638, 4.73
 c1_base = freecad.cables.wireFlex.make_wireflex_from_vectors(c1_base_points)
 doc.recompute()
 
-supplines1 = doc.getObjectsByLabel('BoxSW1_SuppLines001')[0]
-freecad.cables.wireutils.assignPointAttachment([(c1_base, 'Vertex1'), (supplines1, 'Vertex16')])
+snaplines1 = doc.getObjectsByLabel('BoxSW1_SnapLines001')[0]
+freecad.cables.wireutils.assignPointAttachment([(c1_base, 'Vertex1'), (snaplines1, 'Vertex16')])
 slines = support_lines
 c1_base.Vrtxs_mid = [(slines[0], ('Vertex1',)), (slines[1], ('Vertex1',))]
 c1_base.Vrtxs_mid_idx = [4, 5]
@@ -100,11 +100,11 @@ c2_base_points = [Vector (0.0, 0.0, 0.0), Vector (21.333333333333258, 0.0, 70.00
 c2_base = freecad.cables.wireFlex.make_wireflex_from_vectors(c2_base_points)
 doc.recompute()
 
-supplines3 = doc.getObjectsByLabel('CableLightPoint_SuppLines001')[0]
-freecad.cables.wireutils.assignPointAttachment([(c2_base, 'Vertex1'), (supplines1, 'Vertex1')])
-c2_base.Vrtxs_mid = [(slines[0], ('Vertex2',)), (slines[1], ('Vertex2',)), (slines[5], ('Vertex2',)), (supplines3, ('Vertex1',))]
+snaplines3 = doc.getObjectsByLabel('CableLightPoint_SnapLines001')[0]
+freecad.cables.wireutils.assignPointAttachment([(c2_base, 'Vertex1'), (snaplines1, 'Vertex1')])
+c2_base.Vrtxs_mid = [(slines[0], ('Vertex2',)), (slines[1], ('Vertex2',)), (slines[5], ('Vertex2',)), (snaplines3, ('Vertex1',))]
 c2_base.Vrtxs_mid_idx = [2, 3, 5, 6]
-c2_base.Vrtx_end = (supplines3, ['Vertex6'])
+c2_base.Vrtx_end = (snaplines3, ['Vertex6'])
 doc.recompute()
 
 
@@ -112,11 +112,11 @@ c3_base_points = [Vector (0.0, 0.0, 0.0), Vector (0.0, 15.769507206992557, 6.465
 c3_base = freecad.cables.wireFlex.make_wireflex_from_vectors(c3_base_points)
 doc.recompute()
 
-supplines2 = doc.getObjectsByLabel('BoxSW2_SuppLines001')[0]
-freecad.cables.wireutils.assignPointAttachment([(c3_base, 'Vertex1'), (supplines1, 'Vertex6')])
+snaplines2 = doc.getObjectsByLabel('BoxSW2_SnapLines001')[0]
+freecad.cables.wireutils.assignPointAttachment([(c3_base, 'Vertex1'), (snaplines1, 'Vertex6')])
 c3_base.Vrtxs_mid = [(slines[0], ('Vertex3',)), (slines[1], ('Vertex3',)), (slines[3], ('Vertex2',)),  (spoint, ('Vertex1',)), (slines[2], ('Vertex2',))]
 c3_base.Vrtxs_mid_idx = [4, 5, 6, 7, 8]
-c3_base.Vrtx_end = (supplines2, ['Vertex1'])
+c3_base.Vrtx_end = (snaplines2, ['Vertex1'])
 doc.recompute()
 
 c1_base.FilletRadius = 10.0

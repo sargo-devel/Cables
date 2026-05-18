@@ -73,7 +73,8 @@ class CablesWorkbench (Gui.Workbench):
         self.list_support = ["Cables_SupportPoint",
                              "Cables_SupportLine",
                              "Cables_AttachInPlace",
-                             "Cables_DeactivateAttachment"]
+                             "Cables_DeactivateAttachment",
+                             "Cables_LayersExtended"]
         self.list_draft = ["Draft_ToggleGrid",
                            # "Draft_SelectPlane"]
                            ]

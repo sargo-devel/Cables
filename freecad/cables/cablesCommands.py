@@ -64,6 +64,7 @@ CMD_DEACTIVATEATTACHMENT_ICON = os.path.join(iconPath,
 CMD_ATTWIRETOTERMINAL_ICON = os.path.join(iconPath, "cmdAttWireToTerminal.svg")
 CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath,
                                             "cmdDetWireFromTerminal.svg")
+CMD_LAYERS_ICON = os.path.join(iconPath, "cmdNewLayersExtended.svg")
 
 keyShorts = {'WireFlex': 'W, F',
              'AddVertex': 'W, A',
@@ -439,6 +440,28 @@ class newMaterialCommand:
                     "cables")}
 
 
+class newLayersExtendedCommand:
+    def Activated(self):
+        c = "freecad.cables.layers"
+        doc = FreeCAD.ActiveDocument
+        doc.openTransaction(translate("Cables", "Cable Layers Extended"))
+        FreeCADGui.addModule(f"{c}")
+        FreeCADGui.doCommand(f"{c}.make_layers()")
+        FreeCADGui.doCommand("FreeCAD.ActiveDocument.recompute()")
+        doc.commitTransaction()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_LAYERS_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_LayersExtended",
+                                              "Layers Extended"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_Layers", "It adds a new set of predefined " +
+                    "extended layers for cables")}
+
+
 class newCableLightPoint:
     def Activated(self):
         sel_obj = Gui.Selection.getCompleteSelection()
@@ -713,3 +736,4 @@ Gui.addCommand('Cables_AttachInPlace', attachInPlace())
 Gui.addCommand('Cables_DeactivateAttachment', deactivateAttachment())
 Gui.addCommand('Cables_AttachWireToTerminal', attachWireToTerminal())
 Gui.addCommand('Cables_DetachWireFromTerminal', detachWireFromTerminal())
+Gui.addCommand('Cables_LayersExtended', newLayersExtendedCommand())

@@ -120,9 +120,8 @@ class LayerExtended(layer.Layer):
             if prop == "AutoMemberType":
                 preset = layer_presets.get(obj.AutoMemberType)
                 if preset not in [None, "None"]:
+                    self.set_members(obj, [])
                     self.set_parameters(obj, preset.get("obj"))
-                new_members = self.get_new_members(obj)
-                self.set_members(obj, new_members)
             return
         vobj = getattr(obj, "ViewObject", None)
         old_grp = getattr(self, "oldGroup", [])

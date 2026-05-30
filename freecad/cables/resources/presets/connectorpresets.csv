@@ -29,7 +29,7 @@
 4mm2_x3,ParametricTerminal,TerminalStrip,3,1,5.0,4.0,1.0
 
 # Fixed PresetType
-# Name,Fixed,ConnectorClass,StepFileName,NrOfTerminals,NrOfSuppLines
+# Name,Fixed,ConnectorClass,StepFileName,NrOfTerminals,NrOfSnapLines
 DE-9_F,Fixed,D-Sub,D-Sub_DE-9_F.step,9,1
 DE-9_M,Fixed,D-Sub,D-Sub_DE-9_M.step,9,1
 KK-254F_x3,Fixed,Molex,Molex_KK-254F_x3.step,3,1

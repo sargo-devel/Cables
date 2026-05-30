@@ -458,8 +458,8 @@ class newLayersExtendedCommand:
                 'MenuText': QT_TRANSLATE_NOOP("Cables_LayersExtended",
                                               "Layers Extended"),
                 'ToolTip': QT_TRANSLATE_NOOP(
-                    "Cables_Layers", "It adds a new set of predefined " +
-                    "extended layers for cables")}
+                    "Cables_LayersExtended", "It adds a new set of " +
+                    "predefined extended layers for cables")}
 
 
 class newCableLightPoint:

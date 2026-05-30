@@ -54,6 +54,21 @@
       <translation>Таўшчыня ізаляцыі, калі профіль не ўжываецца</translation>
     </message>
     <message>
+      <location filename="../../layers.py" line="112"/>
+      <source>Type of object which will be automatically assigned to this layer on layer recompute</source>
+      <translation>Тып аб'екта, які будзе аўтаматычна прысвоены гэтаму пласту пры паўторным вылічэнні пласта</translation>
+    </message>
+    <message>
+      <location filename="../../layers.py" line="248"/>
+      <source>The point color of the objects contained within this layer</source>
+      <translation>Колер кропкі аб'ектаў, якія змяшчаюцца на пласце</translation>
+    </message>
+    <message>
+      <location filename="../../layers.py" line="255"/>
+      <source>The point size of the objects contained within this layer</source>
+      <translation>Памер кропкі аб'ектаў, якія змяшчаюцца на пласце</translation>
+    </message>
+    <message>
       <location filename="../../archCableBaseElement.py" line="153"/>
       <source>The predefined set of parameters for this object</source>
       <translation>Наканаваны набор налад для дадзенага аб'екта</translation>
@@ -65,23 +80,23 @@
     </message>
     <message>
       <location filename="../../archCableBaseElement.py" line="167"/>
-      <source>The number of Support Lines in this object</source>
-      <translation>Колькасць апорных ліній у дадзеным аб'екце</translation>
+      <source>The number of Snap Lines in this object</source>
+      <translation>Колькасць ліній прывязкі ў дадзеным аб'екце</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="174"/>
+      <location filename="../../archCableBaseElement.py" line="178"/>
       <source>The number of solids in an external shape loaded from file</source>
       <translation>Колькасць суцэльных цел у вонкавай фігуры, якая загружаная з файла</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="181"/>
+      <location filename="../../archCableBaseElement.py" line="185"/>
       <source>The colors of external shape loaded from file</source>
       <translation>Колеры вонкавай фігуры, якая загружаная з файла</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="189"/>
-      <source>If it is true it will claim the linked Terminals and SuppLines as children in the Tree View.</source>
-      <translation>Калі птушка, ён будзе ўжываць звязаныя тэрміналы і дадаваць іх у якасці даччыных элементаў у выглядзе дрэва.</translation>
+      <location filename="../../archCableBaseElement.py" line="193"/>
+      <source>If it is true it will claim the linked Terminals and SnapLines as children in the Tree View.</source>
+      <translation>Калі птушка, то звязаныя тэрміналы і лініі прывязкі будуць пазначаныя як даччыныя элементы ў выглядзе дрэва.</translation>
     </message>
     <message>
       <location filename="../../cableTerminal.py" line="54"/>
@@ -121,75 +136,75 @@
 Назва вузла павінна быць аднолькавым для ўсіх клем, якія злучаныя адзін з адным кабелямі</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="68"/>
+      <location filename="../../wireFlex.py" line="69"/>
       <source>First Vertex</source>
       <translation>Першая вяршыня</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="71"/>
+      <location filename="../../wireFlex.py" line="72"/>
       <source>Last Vertex</source>
       <translation>Апошняя вяршыня</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="76"/>
+      <location filename="../../wireFlex.py" line="77"/>
       <source>List of middle vertexes</source>
       <translation>Спіс сярэдніх вяршынь</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="82"/>
+      <location filename="../../wireFlex.py" line="83"/>
       <source>Point indexes for list of middle vertexes</source>
       <translation>Кропкавыя індэксы для спісу сярэдніх вяршынь</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="87"/>
+      <location filename="../../wireFlex.py" line="88"/>
       <source>Type of wire shape</source>
       <translation>Тып формы проваду</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="94"/>
+      <location filename="../../wireFlex.py" line="95"/>
       <source>Length of boundary segment at the start of wire</source>
       <translation>Даўжыня межавага адрэзка ў пачатку провада</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="100"/>
+      <location filename="../../wireFlex.py" line="101"/>
       <source>Length of boundary segment at the end of wire</source>
       <translation>Даўжыня межавага адрэзка ў канцы провада</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="105"/>
+      <location filename="../../wireFlex.py" line="106"/>
       <source>Parameterization factor</source>
       <translation>Каэфіцыент параметрызацыі</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="111"/>
+      <location filename="../../wireFlex.py" line="112"/>
       <source>Tangency coefficient for inner tangents. Values in range [0,1]</source>
       <translation>Каэфіцыент дотыку для ўнутраных датычных.
 Значэнні ў дыяпазоне [0, 1]</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="118"/>
+      <location filename="../../wireFlex.py" line="119"/>
       <source>Enables/disables start and end tangents on boundary BSpline vertexes</source>
-      <translation>Уключае/адключае пачатковую і канчатковую датычныя на межавых вяршынях B-сплайна</translation>
+      <translation>Уключае/адключае пачатковую і канцавую датычныя на межавых вяршынях B-сплайна</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="124"/>
+      <location filename="../../wireFlex.py" line="125"/>
       <source>Enables/disables tangents on inner BSpline knots</source>
       <translation>Уключае/адключае датычныя да ўнутраных вузлоў B-сплайна</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="339"/>
+      <location filename="../../wireFlex.py" line="370"/>
       <source>Set attached point color</source>
       <translation>Задаць колер прымацаванай кропкі</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="345"/>
+      <location filename="../../wireFlex.py" line="376"/>
       <source>Set boundary segment point color</source>
       <translation>Задаць колер пункту межавага адрэзка</translation>
     </message>
     <message>
       <location filename="../../cableSupport.py" line="105"/>
-      <source>The shape containing support lines</source>
-      <translation>Фігура, якая змяшчае апорныя лініі</translation>
+      <source>The shape containing snap lines</source>
+      <translation>Фігура, якая змяшчае лініі прывязкі</translation>
     </message>
     <message>
       <location filename="../../compoundPath.py" line="54"/>
@@ -433,14 +448,14 @@
   <context>
     <name>Cables</name>
     <message>
-      <location filename="../../archCableConnector.py" line="396"/>
+      <location filename="../../archCableConnector.py" line="406"/>
       <source>edit Cable Connector</source>
       <translation>Змяніць кабельны злучнік</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="407"/>
+      <location filename="../../archCableConnector.py" line="417"/>
       <location filename="../../archCableConduit.py" line="473"/>
-      <location filename="../../archCableBaseElement.py" line="778"/>
+      <location filename="../../archCableBaseElement.py" line="788"/>
       <location filename="../../cableSupport.py" line="44"/>
       <location filename="../../cableSupport.py" line="63"/>
       <location filename="../../archCableLightPoint.py" line="141"/>
@@ -452,7 +467,7 @@
 Перарываецца</translation>
     </message>
     <message>
-      <location filename="../../archCableConnector.py" line="413"/>
+      <location filename="../../archCableConnector.py" line="423"/>
       <source>CableConnector</source>
       <translation>Злучнік кабелю</translation>
     </message>
@@ -475,17 +490,17 @@
 Перарываецца</translation>
     </message>
     <message>
-      <location filename="../../archCableBaseElement.py" line="783"/>
+      <location filename="../../archCableBaseElement.py" line="793"/>
       <source>CableBaseElement</source>
       <translation>Элемент асноўнага кабелю</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="278"/>
+      <location filename="../../wireFlex.py" line="309"/>
       <source>Error wiring edges for BSpline</source>
       <translation>Памылка злучэння рабра для B-сплайна</translation>
     </message>
     <message>
-      <location filename="../../wireFlex.py" line="504"/>
+      <location filename="../../wireFlex.py" line="535"/>
       <source>wrong object selected</source>
       <translation>абраны няправільны аб'ект</translation>
     </message>
@@ -547,103 +562,108 @@
       <translation>Зрабіць рабро кааксіяльным</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="97"/>
+      <location filename="../../cablesCommands.py" line="98"/>
       <source>WireFlex</source>
       <translation>Гнуткі провад</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="106"/>
+      <location filename="../../cablesCommands.py" line="107"/>
       <source>Default wireFlex object created.</source>
       <translation>Створаны першапачатковы аб'ект гнуткага проваду.</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="133"/>
+      <location filename="../../cablesCommands.py" line="134"/>
       <source>Add Vertex</source>
       <translation>Дадаць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="162"/>
+      <location filename="../../cablesCommands.py" line="163"/>
       <source>Delete Vertex</source>
       <translation>Выдаліць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="192"/>
+      <location filename="../../cablesCommands.py" line="193"/>
       <source>Attach Vertex</source>
       <translation>Прымацаваць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="222"/>
+      <location filename="../../cablesCommands.py" line="223"/>
       <source>Remove Vertex Attachment</source>
       <translation>Выдаліць прымацаванне да вяршыні</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="251"/>
+      <location filename="../../cablesCommands.py" line="252"/>
       <source>CompoundPath</source>
       <translation>Злучны шлях</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="278"/>
+      <location filename="../../cablesCommands.py" line="279"/>
       <location filename="../../archCable.py" line="1025"/>
       <source>Cable</source>
       <translation>Кабель</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="306"/>
+      <location filename="../../cablesCommands.py" line="307"/>
       <source>CableConduit</source>
       <translation>Кабельны канал</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="334"/>
+      <location filename="../../cablesCommands.py" line="335"/>
       <source>Cable Box</source>
       <translation>Кабельная скрынка</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="370"/>
+      <location filename="../../cablesCommands.py" line="371"/>
       <source>Cable Connector</source>
       <translation>Кабельны злучнік</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="424"/>
+      <location filename="../../cablesCommands.py" line="425"/>
       <source>Cable Materials</source>
       <translation>Матэрыялы кабелю</translation>
     </message>
     <message>
       <location filename="../../cablesCommands.py" line="447"/>
+      <source>Cable Layers Extended</source>
+      <translation>Пашыраныя пласты кабелю</translation>
+    </message>
+    <message>
+      <location filename="../../cablesCommands.py" line="470"/>
       <source>Cable Light Point</source>
       <translation>Кропка кабелю асвятлення</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="478"/>
+      <location filename="../../cablesCommands.py" line="501"/>
       <source>Electrical Device</source>
       <translation>Электрычная прылада</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="516"/>
+      <location filename="../../cablesCommands.py" line="539"/>
       <source>Support Point</source>
       <translation>Кропка апоры</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="546"/>
+      <location filename="../../cablesCommands.py" line="569"/>
       <source>Support Line</source>
       <translation>Лінія апоры</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="582"/>
+      <location filename="../../cablesCommands.py" line="605"/>
       <source>Attach In Place</source>
       <translation>Прымацаваць на месца</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="610"/>
+      <location filename="../../cablesCommands.py" line="633"/>
       <source>Deactivate Attachment</source>
       <translation>Дэактываваць мацаванне</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="647"/>
+      <location filename="../../cablesCommands.py" line="670"/>
       <source>Attach Wire To Terminal</source>
       <translation>Прымацаваць провад да клемы</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="675"/>
+      <location filename="../../cablesCommands.py" line="698"/>
       <source>Detach Wire From Terminal</source>
       <translation>Адмацаваць провад ад клемы</translation>
     </message>
@@ -790,7 +810,7 @@
     </message>
     <message>
       <location filename="../../wireutils.py" line="400"/>
-      <location filename="../../wireutils.py" line="667"/>
+      <location filename="../../wireutils.py" line="669"/>
       <source>Wrong edge type selected</source>
       <translation>Абраны няправільны тып рабра</translation>
     </message>
@@ -800,55 +820,55 @@
       <translation>Абраны элемент не рабро</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="450"/>
+      <location filename="../../wireutils.py" line="452"/>
       <source>Selection is not a mid Vertex</source>
       <translation>Выбар не з'яўляецца сярэдняй вяршыняй</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="454"/>
-      <location filename="../../wireutils.py" line="582"/>
+      <location filename="../../wireutils.py" line="456"/>
+      <location filename="../../wireutils.py" line="584"/>
       <source>Selection is not a Vertex</source>
       <translation>Выбар не з'яўляецца вяршыняй</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="496"/>
+      <location filename="../../wireutils.py" line="498"/>
       <source>Wrong selection. Please select two vertexes. First vertex has to belong to WireFlex, second to an external object</source>
       <translation>Няправільны выбар.
 Абярыце дзве вяршыні.
 Першая вяршыня павінна належаць гнуткаму проваду, другая - вонкавым аб'екту</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="511"/>
+      <location filename="../../wireutils.py" line="513"/>
       <source>First selection is not a Vertex</source>
       <translation>Першы выбар не з'яўляецца вяршыняй</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="544"/>
+      <location filename="../../wireutils.py" line="546"/>
       <source>Point attachment not assigned</source>
       <translation>Кропка прымацавання не прызначаная</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="675"/>
+      <location filename="../../wireutils.py" line="677"/>
       <source>First selection is not an edge</source>
       <translation>Першы выбар не з'яўляецца рабром</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="693"/>
+      <location filename="../../wireutils.py" line="695"/>
       <source>Second selection is not a proper vertex</source>
       <translation>Другі выбар не з'яўляецца дапушчальнай вяршыняй</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="698"/>
+      <location filename="../../wireutils.py" line="700"/>
       <source>Selected vertex does not belong to selected edge</source>
       <translation>Абраная вяршыня не належыць абраным рэбрам</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="705"/>
+      <location filename="../../wireutils.py" line="707"/>
       <source>Vertex</source>
       <translation>Вяршыня</translation>
     </message>
     <message>
-      <location filename="../../wireutils.py" line="706"/>
+      <location filename="../../wireutils.py" line="708"/>
       <source>is attached and can&apos;t be moved</source>
       <translation>прымацаваны і не можа быць перамешчаны</translation>
     </message>
@@ -876,12 +896,12 @@
   <context>
     <name>Cables_AddVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="146"/>
+      <location filename="../../cablesCommands.py" line="147"/>
       <source>Add Vertex</source>
       <translation>Дадаць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="153"/>
+      <location filename="../../cablesCommands.py" line="154"/>
       <source>It adds a new vertex to selected edge of Wire Flex</source>
       <translation>Дадае новую вяршыню да абранага рабра гнуткага проваду</translation>
     </message>
@@ -889,12 +909,12 @@
   <context>
     <name>Cables_AttachInPlace</name>
     <message>
-      <location filename="../../cablesCommands.py" line="595"/>
+      <location filename="../../cablesCommands.py" line="618"/>
       <source>Attach In Place</source>
       <translation>Прымацаваць на месца</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="604"/>
+      <location filename="../../cablesCommands.py" line="627"/>
       <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
       <translation>Дазваляе прымацоўваць аб'екты без змены іх глабальнага размяшчэння.
 Спачатку абярыце аб'екты для прымацавання, а потым, у канцы, аб'ект, які будзе служыць для іх апорай для прымацавання</translation>
@@ -903,12 +923,12 @@
   <context>
     <name>Cables_AttachVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="205"/>
+      <location filename="../../cablesCommands.py" line="206"/>
       <source>Attach Vertex</source>
       <translation>Прымацаваць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="213"/>
+      <location filename="../../cablesCommands.py" line="214"/>
       <source>It attaches a Wire Flex vertex to external vertex or object. Select Wire Flex vertex first then ext. vertex (or entire object)</source>
       <translation>Прымацоўвае вяршыню гнуткага проваду да вонкавай вяршыні ці аб'екту.
 Спачатку абярыце вяршыню гнуткага проваду, потым вонкавую вяршыню (ці ўвесь аб'ект)</translation>
@@ -917,18 +937,18 @@
   <context>
     <name>Cables_AttachWireToTerminal</name>
     <message>
-      <location filename="../../cablesCommands.py" line="660"/>
+      <location filename="../../cablesCommands.py" line="683"/>
       <source>Attach Wire To Terminal</source>
       <translation>Прымацаваць провад да клемы</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="669"/>
+      <location filename="../../cablesCommands.py" line="692"/>
       <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
       <translation>Дазваляе прымацаваць канец проваду да клемы.
 Спачатку абярыце вяршыню ці рабро аб'екта гнуткага проваду ў трохмерным прадстаўленні, потым абярыце клему ці яе вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="696"/>
+      <location filename="../../cablesCommands.py" line="719"/>
       <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
       <translation>Выдаляе мацаванне канца проваду з клемы.
 Спачатку абярыце гнуткі провад, потым клему</translation>
@@ -937,12 +957,12 @@
   <context>
     <name>Cables_Cable</name>
     <message>
-      <location filename="../../cablesCommands.py" line="291"/>
+      <location filename="../../cablesCommands.py" line="292"/>
       <source>Cable</source>
       <translation>Кабель</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="300"/>
+      <location filename="../../cablesCommands.py" line="301"/>
       <source>It adds a new cable object from WireFlex and a profile. Select WireFlex object first (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
       <translation>Дадае новы аб'ект кабеля з гнуткага проваду і профіль.
 Спачатку абярыце аб'ект гнуткага проваду (альбо паслядоўнасць правадоў, кабеляў ці кабеляпровадаў), а потым, пры неабходнасці, профіль у канцы</translation>
@@ -951,12 +971,12 @@
   <context>
     <name>Cables_CableBox</name>
     <message>
-      <location filename="../../cablesCommands.py" line="358"/>
+      <location filename="../../cablesCommands.py" line="359"/>
       <source>Cable Box</source>
       <translation>Кабельная скрынка</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="365"/>
+      <location filename="../../cablesCommands.py" line="366"/>
       <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
       <translation>Дадае новы аб'ект кабельнай скрынкі.
 Спачатку абярыце любую кропку ў трохмерным прадстаўленні, потым дадайце скрынку</translation>
@@ -965,12 +985,12 @@
   <context>
     <name>Cables_CableConduit</name>
     <message>
-      <location filename="../../cablesCommands.py" line="319"/>
+      <location filename="../../cablesCommands.py" line="320"/>
       <source>CableConduit</source>
       <translation>Кабельны канал</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="329"/>
+      <location filename="../../cablesCommands.py" line="330"/>
       <source>It adds a new cable conduit object from single WireFlex or sequence of wires (and optionally profile). Select single WireFlex object (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
       <translation>Дадае новы аб'ект кабеляпровада з адзінкавага гнуткага провада ці паслядоўнасці правадоў (і, пры неабходнасці, профілю).
 Спачатку абярыце аб'ект адзінкавага гнуткага проваду (альбо паслядоўнасць правадоў, кабеляў ці кабеляпровадаў), потым, пры неабходнасці, профіль у канцы</translation>
@@ -979,12 +999,12 @@
   <context>
     <name>Cables_CableConnector</name>
     <message>
-      <location filename="../../cablesCommands.py" line="394"/>
+      <location filename="../../cablesCommands.py" line="395"/>
       <source>Cable Connector</source>
       <translation>Кабельны злучнік</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="402"/>
+      <location filename="../../cablesCommands.py" line="403"/>
       <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
       <translation>Дадае новы аб'ект кабельнага злучніка.
 Спачатку абярыце любую кропку ў трохмерным прадстаўленні, потым дадайце злучнік</translation>
@@ -993,12 +1013,12 @@
   <context>
     <name>Cables_CableLightPoint</name>
     <message>
-      <location filename="../../cablesCommands.py" line="465"/>
+      <location filename="../../cablesCommands.py" line="488"/>
       <source>Cable Light Point</source>
       <translation>Кропка кабелю асвятлення</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="473"/>
+      <location filename="../../cablesCommands.py" line="496"/>
       <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
       <translation>Дадае новую кропку асвятлення для кабелю.
 Спачатку абярыце любую кропку ў трохмерным прадстаўленні, потым дадайце кропку асвятлення</translation>
@@ -1007,12 +1027,12 @@
   <context>
     <name>Cables_CompoundPath</name>
     <message>
-      <location filename="../../cablesCommands.py" line="264"/>
+      <location filename="../../cablesCommands.py" line="265"/>
       <source>CompoundPath</source>
       <translation>Злучны шлях</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="272"/>
+      <location filename="../../cablesCommands.py" line="273"/>
       <source>It creates a new compound path based on selected objects. At least two objects have to be selected first</source>
       <translation>Стварае новы складовы шлях на аснове абраных аб'ектаў.
 Спачатку неабходна выбраць два аб'екта ці болей</translation>
@@ -1021,12 +1041,12 @@
   <context>
     <name>Cables_DeactivateAttachment</name>
     <message>
-      <location filename="../../cablesCommands.py" line="623"/>
+      <location filename="../../cablesCommands.py" line="646"/>
       <source>Deactivate Attachment</source>
       <translation>Дэактываваць мацаванне</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="630"/>
+      <location filename="../../cablesCommands.py" line="653"/>
       <source>It daeactivates attachment of selected objects</source>
       <translation>Адключае прымацаванне абраных аб'ектаў</translation>
     </message>
@@ -1034,12 +1054,12 @@
   <context>
     <name>Cables_DelVertex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="175"/>
+      <location filename="../../cablesCommands.py" line="176"/>
       <source>Delete Vertex</source>
       <translation>Выдаліць вяршыню</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="182"/>
+      <location filename="../../cablesCommands.py" line="183"/>
       <source>It deletes selected vertex from Wire Flex</source>
       <translation>Ён выдаляе выбраную вяршыню з гнуткага проваду</translation>
     </message>
@@ -1047,7 +1067,7 @@
   <context>
     <name>Cables_DetachWireFromTerminal</name>
     <message>
-      <location filename="../../cablesCommands.py" line="688"/>
+      <location filename="../../cablesCommands.py" line="711"/>
       <source>Detach Wire From Terminal</source>
       <translation>Адмацаваць провад ад клемы</translation>
     </message>
@@ -1072,26 +1092,42 @@ and on supported objects.</source>
   <context>
     <name>Cables_ElectricalDevice</name>
     <message>
-      <location filename="../../cablesCommands.py" line="503"/>
+      <location filename="../../cablesCommands.py" line="526"/>
       <source>Electrical Device</source>
       <translation>Электрычная прылада</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="511"/>
+      <location filename="../../cablesCommands.py" line="534"/>
       <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
       <translation>Дадае новую электрычную прыладу.
 Спачатку абярыце любую кропку ў трохмерным прадстаўленні, потым дадайце прыладу</translation>
     </message>
   </context>
   <context>
+    <name>Cables_LayersExtended</name>
+    <message>
+      <location filename="../../cablesCommands.py" line="465"/>
+      <source>It adds a new set of predefined extended layers for cables</source>
+      <translation>Дадае новы набор наканаваных пашыраных пластоў для кабеляў</translation>
+    </message>
+  </context>
+  <context>
+    <name>Cables_LayersExtended</name>
+    <message>
+      <location filename="../../cablesCommands.py" line="459"/>
+      <source>Layers Extended</source>
+      <translation>Пашыраныя пласты</translation>
+    </message>
+  </context>
+  <context>
     <name>Cables_Material</name>
     <message>
-      <location filename="../../cablesCommands.py" line="436"/>
+      <location filename="../../cablesCommands.py" line="437"/>
       <source>Cable Materials</source>
       <translation>Матэрыялы кабелю</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="442"/>
+      <location filename="../../cablesCommands.py" line="443"/>
       <source>It adds new multimaterials for cables</source>
       <translation>Дадае новыя шматматэрыялы для кабеляў</translation>
     </message>
@@ -1099,12 +1135,12 @@ and on supported objects.</source>
   <context>
     <name>Cables_Profile</name>
     <message>
-      <location filename="../../cablesCommands.py" line="415"/>
+      <location filename="../../cablesCommands.py" line="416"/>
       <source>Cable Profile</source>
       <translation>Профіль кабелю</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="420"/>
+      <location filename="../../cablesCommands.py" line="421"/>
       <source>It adds a new cable profile</source>
       <translation>Дадае новы профіль кабелю</translation>
     </message>
@@ -1112,12 +1148,12 @@ and on supported objects.</source>
   <context>
     <name>Cables_RemoveVertexAttachment</name>
     <message>
-      <location filename="../../cablesCommands.py" line="235"/>
+      <location filename="../../cablesCommands.py" line="236"/>
       <source>Remove Vertex Attachment</source>
       <translation>Выдаліць прымацаванне да вяршыні</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="243"/>
+      <location filename="../../cablesCommands.py" line="244"/>
       <source>It removes an attachment of external vertex or object from selected Wire Flex vertex</source>
       <translation>Выдаляе прымацаванне вонкавай вяршыні ці аб'екта да абранай вяршыні гнуткага кабелю</translation>
     </message>
@@ -1125,12 +1161,12 @@ and on supported objects.</source>
   <context>
     <name>Cables_SupportLine</name>
     <message>
-      <location filename="../../cablesCommands.py" line="568"/>
+      <location filename="../../cablesCommands.py" line="591"/>
       <source>Support Line</source>
       <translation>Лінія апоры</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="576"/>
+      <location filename="../../cablesCommands.py" line="599"/>
       <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
       <translation>Дадае новую лінію апоры, да якой можна прымацаваць кабель ці іншы элемент.
 Спачатку абярыце хоць бы адну кропку</translation>
@@ -1139,12 +1175,12 @@ and on supported objects.</source>
   <context>
     <name>Cables_SupportPoint</name>
     <message>
-      <location filename="../../cablesCommands.py" line="534"/>
+      <location filename="../../cablesCommands.py" line="557"/>
       <source>Support Point</source>
       <translation>Кропка апоры</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="541"/>
+      <location filename="../../cablesCommands.py" line="564"/>
       <source>It adds a new support point to which a cable or other element can be attached</source>
       <translation>Дадае новую кропку апоры, да якой можна прымацаваць кабель ці іншы элемент</translation>
     </message>
@@ -1152,12 +1188,12 @@ and on supported objects.</source>
   <context>
     <name>Cables_WireFlex</name>
     <message>
-      <location filename="../../cablesCommands.py" line="116"/>
+      <location filename="../../cablesCommands.py" line="117"/>
       <source>WireFlex</source>
       <translation>Гнуткі провад</translation>
     </message>
     <message>
-      <location filename="../../cablesCommands.py" line="125"/>
+      <location filename="../../cablesCommands.py" line="126"/>
       <source>It creates a new line based on selected vertexes/objects. At least two vertexes/objects have to be selected first. If only one object is selected, a copy of it will be created.</source>
       <translation>Стварае новы радок на аснове абраных вяршыняў/аб'ектаў.
 Спачатку неабходна выбраць дзве ці болей вяршынь/аб'ектаў.
@@ -1499,9 +1535,9 @@ and on supported objects.</source>
     <name>Workbench</name>
     <message>
       <location filename="../../init_gui.py" line="36"/>
-      <location filename="../../init_gui.py" line="82"/>
-      <location filename="../../init_gui.py" line="90"/>
-      <location filename="../../init_gui.py" line="112"/>
+      <location filename="../../init_gui.py" line="83"/>
+      <location filename="../../init_gui.py" line="91"/>
+      <location filename="../../init_gui.py" line="113"/>
       <source>Cables</source>
       <translation>Кабелі</translation>
     </message>
@@ -1511,21 +1547,21 @@ and on supported objects.</source>
       <translation>Стварыць кабельныя злучэнні</translation>
     </message>
     <message>
-      <location filename="../../init_gui.py" line="80"/>
-      <location filename="../../init_gui.py" line="88"/>
-      <location filename="../../init_gui.py" line="110"/>
+      <location filename="../../init_gui.py" line="81"/>
+      <location filename="../../init_gui.py" line="89"/>
+      <location filename="../../init_gui.py" line="111"/>
       <source>Cable Wires</source>
       <translation>Провады кабелю</translation>
     </message>
     <message>
-      <location filename="../../init_gui.py" line="84"/>
-      <location filename="../../init_gui.py" line="92"/>
-      <location filename="../../init_gui.py" line="114"/>
+      <location filename="../../init_gui.py" line="85"/>
+      <location filename="../../init_gui.py" line="93"/>
+      <location filename="../../init_gui.py" line="115"/>
       <source>Cable Support</source>
       <translation>Апора кабелю</translation>
     </message>
     <message>
-      <location filename="../../init_gui.py" line="86"/>
+      <location filename="../../init_gui.py" line="87"/>
       <source>Draft Tools</source>
       <translation>Інструменты чарнавіка</translation>
     </message>

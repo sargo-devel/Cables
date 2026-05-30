@@ -1079,7 +1079,7 @@ and on supported objects.</source>
     </message>
 </context>
 <context>
-    <name>Cables_Layers</name>
+    <name>Cables_LayersExtended</name>
     <message>
         <location filename="../../cablesCommands.py" line="465"/>
         <source>It adds a new set of predefined extended layers for cables</source>

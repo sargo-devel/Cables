@@ -76,6 +76,9 @@ CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/t
 for details)
 
 ## Release notes
+* v0.3.6  30 May 2026
+  * Added extended layers command
+  * renamed SuppLines to SnapLines (the change preserves backward compatibility)
 * v0.3.5  16 Mar 2026
   * Fixed deletion of WireFlex vertex with attachment
   * Fixed inconsistency WireFlex vertex attachment after attached objects deletion

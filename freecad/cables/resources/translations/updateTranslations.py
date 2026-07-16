@@ -61,6 +61,7 @@ from __future__ import print_function
 
 import sys
 import os
+import subprocess
 import tempfile
 import shutil
 import zipfile
@@ -285,7 +286,7 @@ def doLanguage(tempfolder, translationsfolder, lncode):
         print(f"  {lncode} has only {100.0*(total-empty)/total:.1f}% of translation. Dropping...")
         return
     shutil.copyfile(tsfilepath, newtspath)
-    os.system(f"{PYLRELEASE} " + newtspath)
+    subprocess.check_call([PYLRELEASE, newtspath])
     if not os.path.exists(newqmpath):
         print("ERROR: unable to create", newqmpath, ", aborting")
         sys.exit()
@@ -343,13 +344,13 @@ if __name__ == "__main__":
         # os.system("lconvert -i "+os.path.join(transpath,"uifiles.ts")+" "+os.path.join(transpath,"pyfiles.ts")+" -o "+os.path.join(transpath,MODULENAME+".ts"))
         # os.system("rm "+os.path.join(transpath,"uifiles.ts"))
         # os.system("rm "+os.path.join(transpath,"pyfiles.ts"))
-        cmd = (
-            PYLUPDATE
-            + ' `find ./ -name "*.py"` `find ./ -name "*.ui"` -ts '
-            + os.path.join(transpath, MODULENAME + ".ts")
-        )
-        os.system(cmd)
-        print("Updated", os.path.join(transpath, MODULENAME + ".ts"))
+        tspath = os.path.join(transpath, MODULENAME + ".ts")
+        sources = []
+        for root, dirs, files in os.walk(basepath):
+            sources.extend(os.path.join(root, file) for file in files
+                           if file.endswith('.ui') or file.endswith('.py'))
+        subprocess.check_call([PYLUPDATE] + sources + ['-ts', tspath])
+        print("Updated", tspath)
 
     elif arg == "build":
         print(

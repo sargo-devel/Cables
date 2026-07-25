@@ -76,6 +76,7 @@ class CablesWorkbench (Gui.Workbench):
                              "Cables_DeactivateAttachment",
                              "Cables_LayersExtended"]
         self.list_draft = ["Draft_ToggleGrid",
+                           "Draft_Move"
                            # "Draft_SelectPlane"]
                            ]
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench", "Cable Wires"),

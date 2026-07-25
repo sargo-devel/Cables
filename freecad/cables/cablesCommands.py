@@ -104,7 +104,7 @@ class newWireFlexCommand:
             vlist = "[FreeCAD.Vector(0,0,0), FreeCAD.Vector(50,0,0)]"
             FreeCADGui.doCommand(f"{c}.make_wireflex_from_vectors({vlist})")
             FreeCAD.Console.PrintWarning(
-                translate("Cables", "Default wireFlex object created."))
+                translate("Cables", "Default wireFlex object created.") + "\n")
         FreeCADGui.doCommand("doc.recompute()")
         doc.commitTransaction()
 

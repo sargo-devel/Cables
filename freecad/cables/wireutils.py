@@ -168,7 +168,7 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
             f" {subshape_class}\n")
         return None
     if not slist:
-        FreeCAD.Console.PrintError(translate(
+        FreeCAD.Console.PrintWarning(translate(
             "Cables", "Nothing selected!") + "\n")
         return None
     if obj_proxy_class:

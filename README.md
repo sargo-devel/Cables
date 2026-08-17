@@ -25,6 +25,11 @@ This workbench has a documentation which is a part of FreeCAD Wiki: [Cables Work
 
 You can also install the workbench and see [examples](https://github.com/sargo-devel/Cables/tree/master/examples) to have a closer look into details. These files contain Info text with some additional hints.
 
+## Video tutorials
+There is a series of video tutorials made by author: [SargoDevel Cables Workbench for FreeCAD](https://www.youtube.com/@SargoDevelCables). New episodes will be added as time permits.
+
+These tutorials present the author's perspective on the workflow and how to use the tools.
+
 ## Installation
 This workbench can be installed via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-addons) (for details see [Addon Manager Wiki](https://wiki.freecad.org/Std_AddonMgr)).
 
@@ -76,6 +81,9 @@ CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/t
 for details)
 
 ## Release notes
+* v0.3.7  17 August 2026
+  * Added Draft Move tool to toolbar
+  * Minor bugfixes
 * v0.3.6  30 May 2026
   * Added extended layers command
   * renamed SuppLines to SnapLines (the change preserves backward compatibility)

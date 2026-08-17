@@ -1081,16 +1081,13 @@ and on supported objects.</source>
 <context>
     <name>Cables_LayersExtended</name>
     <message>
-        <location filename="../../cablesCommands.py" line="465"/>
-        <source>It adds a new set of predefined extended layers for cables</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Cables_LayersExtended</name>
-    <message>
         <location filename="../../cablesCommands.py" line="459"/>
         <source>Layers Extended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cablesCommands.py" line="465"/>
+        <source>It adds a new set of predefined extended layers for cables</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1507,9 +1504,9 @@ and on supported objects.</source>
     <name>Workbench</name>
     <message>
         <location filename="../../init_gui.py" line="36"/>
-        <location filename="../../init_gui.py" line="83"/>
-        <location filename="../../init_gui.py" line="91"/>
-        <location filename="../../init_gui.py" line="113"/>
+        <location filename="../../init_gui.py" line="84"/>
+        <location filename="../../init_gui.py" line="92"/>
+        <location filename="../../init_gui.py" line="114"/>
         <source>Cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1519,21 +1516,21 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="81"/>
-        <location filename="../../init_gui.py" line="89"/>
-        <location filename="../../init_gui.py" line="111"/>
+        <location filename="../../init_gui.py" line="82"/>
+        <location filename="../../init_gui.py" line="90"/>
+        <location filename="../../init_gui.py" line="112"/>
         <source>Cable Wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="85"/>
-        <location filename="../../init_gui.py" line="93"/>
-        <location filename="../../init_gui.py" line="115"/>
+        <location filename="../../init_gui.py" line="86"/>
+        <location filename="../../init_gui.py" line="94"/>
+        <location filename="../../init_gui.py" line="116"/>
         <source>Cable Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="87"/>
+        <location filename="../../init_gui.py" line="88"/>
         <source>Draft Tools</source>
         <translation type="unfinished"></translation>
     </message>

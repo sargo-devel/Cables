@@ -539,6 +539,7 @@ class ArchCable(ArchPipe._ArchPipe):
                 w.AttachmentSupport = [(profile, 'Vertex'+str(i+1))]
                 w.MapMode = 'Translate'
                 w.Vrtx_start = (profile, 'Vertex'+str(i+1))
+                w.ExcludePenultimatePoints = True
                 wires.append(w)
         obj.SubWires = wires
         return wires

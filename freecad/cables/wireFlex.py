@@ -130,6 +130,14 @@ class WireFlex(Draft.Wire):
                                 "App::Property", "Shows BSpline curve " +
                                 "continuity"))
             obj.setPropertyStatus("Continuity", "ReadOnly")
+        if "ExcludePenultimatePoints" not in pl:
+            obj.addProperty("App::PropertyBool", "ExcludePenultimatePoints",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Exclude the penultimate " +
+                                "points at both ends from use as BSpline " +
+                                "knots. They will be used exclusively to " +
+                                "determine the tangents at the ends"))
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -161,12 +169,12 @@ class WireFlex(Draft.Wire):
                 hide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                              'Parameterization', 'BoundaryTangents',
                              'InnerTangents', 'TangencyCoefficient',
-                             'Continuity']
+                             'Continuity', 'ExcludePenultimatePoints']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
                 hide_list = ['FilletRadius', 'Parameterization',
                              'BoundaryTangents', 'InnerTangents',
-                             'TangencyCoefficient']
+                             'TangencyCoefficient', 'ExcludePenultimatePoints']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                                'Continuity']
             if obj.PathType == 'BSpline_K':
@@ -174,7 +182,7 @@ class WireFlex(Draft.Wire):
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                                'Parameterization', 'BoundaryTangents',
                                'InnerTangents', 'TangencyCoefficient',
-                               'Continuity']
+                               'Continuity', 'ExcludePenultimatePoints']
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
@@ -297,22 +305,52 @@ class WireFlex(Draft.Wire):
         points = obj.Points
         points, idxs, idxe = self.appendStartEndSegment(obj, points)
         edges = []
-        if obj.BoundarySegmentStart > 0:
-            edges.append(Part.LineSegment(points[0], points[1]).toShape())
-        if obj.BoundarySegmentEnd > 0:
-            edges.append(Part.LineSegment(points[-2], points[-1]).toShape())
         if bstype == 'K':
-            vinit = (points[1] - points[0]).normalize()
-            vfinal = (points[-1] - points[-2]).normalize()
+            if not obj.ExcludePenultimatePoints:
+                if idxs is not None and idxs > 1:
+                    idxs = 1
+                if idxe is not None and idxe < -1:
+                    idxe = -1
+            if obj.BoundarySegmentStart > 0:
+                edges.append(Part.LineSegment(
+                    points[0], points[idxs or 1]).toShape())
+            if obj.BoundarySegmentEnd > 0:
+                edges.append(Part.LineSegment(
+                    points[(idxe or -1)-1], points[-1]).toShape())
+            vinit = (points[idxs or 1] - points[0]).normalize()
+            vfinal = (points[-1] - points[(idxe or -1)-1]).normalize()
+
+            if obj.ExcludePenultimatePoints:
+                if idxs == 1 and len(points) > 4:
+                    points.pop(2)
+                if idxe == -1 and len(points) > 4:
+                    points.pop(-3)
             spline = wireutils.getBSpline_K(
                 points[idxs:idxe], vinit, vfinal, obj.BoundaryTangents,
                 obj.InnerTangents, obj.TangencyCoefficient,
                 obj.Parameterization)
+
+        else:
+            # valid for bstype == 'P' or bstype == 'Opt'
+            if obj.BoundarySegmentStart > 0:
+                edges.append(Part.LineSegment(
+                    points[0], points[1]).toShape())
+            if obj.BoundarySegmentEnd > 0:
+                edges.append(Part.LineSegment(
+                    points[-2], points[-1]).toShape())
+            s = 1 if idxs is not None else None
+            e = -1 if idxe is not None else None
+
         if bstype == 'P':
-            # spline = wireutils.getBSpline_P(points[idxs:idxe], interpolate=True)
-            spline = wireutils.getBSpline_P(points[idxs:idxe])
+            spline = wireutils.getBSpline_P(points[s:e])
+
+        if bstype == 'Opt':
+            # reserved for future type
+            pass
+
         obj.Continuity = spline.Continuity
-        edges.insert(idxs or 0, spline.toShape())
+        ins = 1 if idxs is not None else 0
+        edges.insert(ins, spline.toShape())
         try:
             shape = Part.Wire(edges)
         except Part.OCCError:
@@ -327,23 +365,25 @@ class WireFlex(Draft.Wire):
         re = obj.BoundarySegmentEnd.Value
         idx_s = idx_e = None
         if rs > 0:
-            idx_s = 1
             v0 = points[0]
             v1 = points[1]
             new_point = v0 + (v1-v0).normalize()*rs
             if (v1-v0).Length > (new_point-v0).Length:
                 points.insert(1, new_point)
+                idx_s = 1
             else:
                 points.insert(2, new_point)
+                idx_s = 2
         if re > 0:
-            idx_e = -1
             v0 = points[-2]
             v1 = points[-1]
             new_point = v1 - (v1-v0).normalize()*re
             if (v1-v0).Length > (new_point-v1).Length:
                 points.insert(len(points)-1, new_point)
+                idx_e = -1
             else:
                 points.insert(len(points)-2, new_point)
+                idx_e = -2
         return points, idx_s, idx_e
 
 

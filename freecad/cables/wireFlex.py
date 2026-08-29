@@ -123,6 +123,13 @@ class WireFlex(Draft.Wire):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Enables/disables tangents " +
                                 "on inner BSpline knots"))
+        if "Continuity" not in pl:
+            obj.addProperty("App::PropertyString", "Continuity",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Shows BSpline curve " +
+                                "continuity"))
+            obj.setPropertyStatus("Continuity", "ReadOnly")
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -153,18 +160,21 @@ class WireFlex(Draft.Wire):
             if obj.PathType == 'Wire':
                 hide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                              'Parameterization', 'BoundaryTangents',
-                             'InnerTangents', 'TangencyCoefficient']
+                             'InnerTangents', 'TangencyCoefficient',
+                             'Continuity']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
                 hide_list = ['FilletRadius', 'Parameterization',
                              'BoundaryTangents', 'InnerTangents',
                              'TangencyCoefficient']
-                unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd']
+                unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
+                               'Continuity']
             if obj.PathType == 'BSpline_K':
                 hide_list = ['FilletRadius']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                                'Parameterization', 'BoundaryTangents',
-                               'InnerTangents', 'TangencyCoefficient']
+                               'InnerTangents', 'TangencyCoefficient',
+                               'Continuity']
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
@@ -301,6 +311,7 @@ class WireFlex(Draft.Wire):
         if bstype == 'P':
             # spline = wireutils.getBSpline_P(points[idxs:idxe], interpolate=True)
             spline = wireutils.getBSpline_P(points[idxs:idxe])
+        obj.Continuity = spline.Continuity
         edges.insert(idxs or 0, spline.toShape())
         try:
             shape = Part.Wire(edges)

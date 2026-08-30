@@ -1427,3 +1427,94 @@ def getWireHalf(wire, vector):
         return 2
     else:
         return 1
+
+
+def makeAdjustedBspline(pts, parameterization):
+    """Creates an adjusted bspline from list of points.
+    It ensures the C2 inner continuity and G2 continuity with segments defined
+    by the first two and last two points in the pts list.
+    The curve passes the pts points with defined tolerance (except for
+    the penultimate points, which define the tangents at the ends).
+
+    Parameters
+    ----------
+    pts : Vector list
+        List of points used to generate the curve
+    parameterization : float
+        Parameterization factor
+
+    Returns
+    -------
+    spline : BSplineCurve object
+    """
+    artificial_point_s = pts[1] + (pts[2]-pts[1])/3
+    artificial_point_e = pts[-2] + (pts[-3]-pts[-2])/3
+    art = (artificial_point_s, artificial_point_e)
+    newpts = pts.copy()
+    newpts[1] = art[0]
+    newpts[-2] = art[1]
+
+    vinit = (pts[1] - pts[0]).normalize()
+    vfinal = (pts[-1] - pts[-2]).normalize()
+
+    max_iter = 2
+    # adjust boundary poles (3 in row in equal distance to get G2 continuity
+    # on both ends)
+    for i in range(max_iter):
+        spline = getBSpline_K(
+            newpts, vinit, vfinal, False, False, 0.5, parameterization)
+
+        pole_s3 = pts[1]
+        pole_s2 = pts[0] + (pts[1] - pts[0])/2
+        spline.setPole(2, pole_s2)
+        spline.setPole(3, pole_s3)
+
+        nbp = spline.NbPoles
+        pole_e3 = pts[-2]
+        pole_e2 = pts[-2] + (pts[-1] - pts[-2])/2
+        spline.setPole(nbp-2, pole_e3)
+        spline.setPole(nbp-1, pole_e2)
+
+        # prepare next iteration
+        if i+1 < max_iter:
+            newpts[1] = spline.value(spline.parameter(art[0]))
+            newpts[-2] = spline.value(spline.parameter(art[1]))
+
+    max_iter = 3
+    # adjust inner poles
+    for i in range(max_iter):
+        for idx in range(4, spline.NbPoles-2):
+            adjustBsplinePoint(spline, pts[idx-2], idx)
+
+    return spline
+
+
+def adjustBsplinePoint(bs, point, pole_nr, tolerance=0.1):
+    """Adjusts single pole of a bspline so that the curve passes through
+    the specified point within the specified tolerance.
+
+    Parameters
+    ----------
+    bs : BSplineCurve object
+        The curve object which is modified
+    point : Vector
+        The point through which the curve is to pass
+    pole_nr : int
+        The pole number to be modified
+    tol : float
+        The approximation tolerance in mm
+
+    Returns
+    -------
+    Nothing. The input bspline object is modified
+    """
+    diff_tol = tolerance
+    max_iter = 10
+    for i in range(max_iter):
+        dest_point = bs.value(bs.parameter(point))
+        diff = point - dest_point
+        if diff.Length < diff_tol:
+            break
+        pole = bs.getPole(pole_nr)
+        bs.setPole(pole_nr, pole+diff)
+    # print(f"Pole {pole_nr} set: diff={diff.Length}, iter={i+1}")

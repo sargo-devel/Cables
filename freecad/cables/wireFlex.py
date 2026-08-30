@@ -175,6 +175,13 @@ class WireFlex(Draft.Wire):
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
         if "Length" in pl and obj.getGroupOfProperty("Length") == "Draft":
             obj.setGroupOfProperty("Length", "WireFlexShape")
+        if "AutoAdjusted" not in pl:
+            obj.addProperty("App::PropertyBool", "AutoAdjusted",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Automatically adjusted " +
+                                "shape that uses the penultimate points " +
+                                "to determine the tangents at the ends"))
 
         pl = obj.PropertiesList
         proplist = ["Start", "End", "MakeFace", "ChamferSize", "Closed",
@@ -207,12 +214,14 @@ class WireFlex(Draft.Wire):
                              'Parameterization', 'BoundaryTangents',
                              'InnerTangents', 'TangencyCoefficient',
                              'Continuity', 'ExcludePenultimatePoints',
-                             'MinimumRadius', 'MinimumRadiusPosition']
+                             'MinimumRadius', 'MinimumRadiusPosition',
+                             'AutoAdjusted']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
                 hide_list = ['FilletRadius', 'Parameterization',
                              'BoundaryTangents', 'InnerTangents',
-                             'TangencyCoefficient', 'ExcludePenultimatePoints']
+                             'TangencyCoefficient', 'ExcludePenultimatePoints',
+                             'AutoAdjusted']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                                'MinimumRadius', 'MinimumRadiusPosition',
                                'Continuity']
@@ -222,11 +231,17 @@ class WireFlex(Draft.Wire):
                                'Parameterization', 'BoundaryTangents',
                                'InnerTangents', 'TangencyCoefficient',
                                'MinimumRadius', 'MinimumRadiusPosition',
-                               'Continuity', 'ExcludePenultimatePoints']
+                               'Continuity', 'ExcludePenultimatePoints',
+                               'AutoAdjusted']
+
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
                 obj.setPropertyStatus(element, "-Hidden")
+            if obj.PathType == 'BSpline_K':
+                self.switchAutoAdjustedVisibility(obj)
+        if prop == "AutoAdjusted":
+            self.switchAutoAdjustedVisibility(obj)
         if prop == "BiArcsApprox":
             prop_visibility = "-Hidden" if obj.BiArcsApprox else "Hidden"
             obj.setPropertyStatus("BiArcsApprox", prop_visibility)
@@ -249,6 +264,18 @@ class WireFlex(Draft.Wire):
                 obj.TangencyCoefficient = 1.0
         if prop == "Vrtxs_mid" and hasattr(obj, "Vrtxs_mid_idx"):
             self.check_vrtxs_mid_idx(obj)
+
+    def switchAutoAdjustedVisibility(self, obj):
+        prop_list = ['BoundaryTangents', 'InnerTangents',
+                     'TangencyCoefficient', 'ExcludePenultimatePoints']
+        if obj.AutoAdjusted:
+            if obj.Parameterization != 0.5:
+                obj.Parameterization = 0.5
+            for element in prop_list:
+                obj.setPropertyStatus(element, "Hidden")
+        else:
+            for element in prop_list:
+                obj.setPropertyStatus(element, "-Hidden")
 
     def get_vlist(self, obj):
         """It gets vector list of all attached wire points
@@ -351,7 +378,7 @@ class WireFlex(Draft.Wire):
         points, idxs, idxe = self.appendStartEndSegment(obj, points)
         edges = []
         if bstype == 'K':
-            if not obj.ExcludePenultimatePoints:
+            if not obj.ExcludePenultimatePoints or obj.AutoAdjusted:
                 if idxs is not None and idxs > 1:
                     idxs = 1
                 if idxe is not None and idxe < -1:
@@ -365,15 +392,19 @@ class WireFlex(Draft.Wire):
             vinit = (points[idxs or 1] - points[0]).normalize()
             vfinal = (points[-1] - points[(idxe or -1)-1]).normalize()
 
-            if obj.ExcludePenultimatePoints:
+            if obj.ExcludePenultimatePoints and not obj.AutoAdjusted:
                 if idxs == 1 and len(points) > 4:
                     points.pop(2)
                 if idxe == -1 and len(points) > 4:
                     points.pop(-3)
-            spline = wireutils.getBSpline_K(
-                points[idxs:idxe], vinit, vfinal, obj.BoundaryTangents,
-                obj.InnerTangents, obj.TangencyCoefficient,
-                obj.Parameterization)
+            if obj.AutoAdjusted:
+                spline = wireutils.makeAdjustedBspline(
+                    points[idxs:idxe], obj.Parameterization)
+            else:
+                spline = wireutils.getBSpline_K(
+                    points[idxs:idxe], vinit, vfinal, obj.BoundaryTangents,
+                    obj.InnerTangents, obj.TangencyCoefficient,
+                    obj.Parameterization)
 
         else:
             # valid for bstype == 'P' or bstype == 'Opt'

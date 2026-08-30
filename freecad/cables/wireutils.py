@@ -1054,6 +1054,34 @@ def getBezCurve(wire, deg):
     return wire
 
 
+def getBiArcsApprox(wire, tolerance=0.5):
+    """
+    It returns wire created from input wire approximated by BiArcs.
+    It aproximates only BSpline edges, the rest remains untouched.
+
+    Parameters
+    ----------
+    wire : Wire object
+    tolerance : float
+        tolerance of approximation
+
+    Returns
+    -------
+    wire : wire object
+    """
+    bspline_t = 'Part::GeomBSplineCurve'
+    edges = []
+    for e in wire.Edges:
+        if e.Curve.TypeId == bspline_t:
+            arcs = e.Curve.toBiArcs(tolerance)
+            arc_edges = [a.toShape() for a in arcs]
+            edges.extend(arc_edges)
+        else:
+            edges.append(e)
+    w_arcs = Part.Wire(edges)
+    return w_arcs
+
+
 def getBSpline_P(vector_list, periodic=False, degree=3, interpolate=False):
     """
     It returns BSpline Curve created from input vector list.

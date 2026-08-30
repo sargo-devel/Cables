@@ -58,6 +58,7 @@ class WireFlex(Draft.Wire):
         obj.BoundarySegmentEnd = 10.0
         obj.Parameterization = 1.0
         obj.TangencyCoefficient = 0.5
+        obj.BiArcsApproxTolerance = 0.5
         obj.BoundaryTangents = True
         obj.InnerTangents = True
         obj.PathType = 'Wire'
@@ -157,6 +158,18 @@ class WireFlex(Draft.Wire):
                                 "Position' is enabled in the View tab " +
                                 "of Property View"))
             obj.setPropertyStatus("MinimumRadiusPosition", "ReadOnly")
+        if "BiArcsApprox" not in pl:
+            obj.addProperty("App::PropertyBool", "BiArcsApprox",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Enables BiArcs approximation of BSpline with a tolerance given in BiArcsApproxTolerance property"))
+            obj.setPropertyStatus("BiArcsApprox", "Hidden")
+        if "BiArcsApproxTolerance" not in pl:
+            obj.addProperty("App::PropertyLength", "BiArcsApproxTolerance",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Tolerance of BiArcs approximation of BSpline if BiArcsApprox property is enabled"))
+            obj.setPropertyStatus("BiArcsApproxTolerance", "Hidden")
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -174,6 +187,11 @@ class WireFlex(Draft.Wire):
     def onDocumentRestored(self, obj):
         super().onDocumentRestored(obj)
         self.setProperties(obj)
+        # update BiArcsApproxTolerance in objects
+        # created in Cables ver <=3.7
+        if hasattr(obj, "BiArcsApproxTolerance") and \
+           obj.BiArcsApproxTolerance.Value == 0:
+            obj.BiArcsApproxTolerance = 0.5
 
     def onBeforeChange(self, obj, prop):
         if prop == "Vrtxs_mid":
@@ -209,6 +227,9 @@ class WireFlex(Draft.Wire):
                 obj.setPropertyStatus(element, "Hidden")
             for element in unhide_list:
                 obj.setPropertyStatus(element, "-Hidden")
+        if prop == "BiArcsApprox":
+            prop_visibility = "-Hidden" if obj.BiArcsApprox else "Hidden"
+            obj.setPropertyStatus("BiArcsApprox", prop_visibility)
         if prop in ['Points', 'BoundarySegmentStart', 'BoundarySegmentEnd']:
             start_len = (obj.Points[1]-obj.Points[0]).Length
             end_len = (obj.Points[-1]-obj.Points[-2]).Length
@@ -377,6 +398,9 @@ class WireFlex(Draft.Wire):
         edges.insert(ins, spline.toShape())
         try:
             shape = Part.Wire(edges)
+            if obj.BiArcsApprox:
+                shape = wireutils.getBiArcsApprox(shape,
+                                                  obj.BiArcsApproxTolerance)
         except Part.OCCError:
             FreeCAD.Console.PrintError(obj.Label, translate(
                 "Cables", "Error wiring edges for BSpline") + f"_{bstype}\n")

@@ -138,6 +138,25 @@ class WireFlex(Draft.Wire):
                                 "points at both ends from use as BSpline " +
                                 "knots. They will be used exclusively to " +
                                 "determine the tangents at the ends"))
+        if "MinimumRadius" not in pl:
+            obj.addProperty("App::PropertyLength", "MinimumRadius",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Minimum detected bending " +
+                                "radius"))
+            obj.setPropertyStatus("MinimumRadius", "ReadOnly")
+        if "MinimumRadiusPosition" not in pl:
+            obj.addProperty("App::PropertyLength", "MinimumRadiusPosition",
+                            "WireFlexShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The distance along the " +
+                                "curve from the start of the wire to the " +
+                                "point where the minimum radius is " +
+                                "detected.\nThe exact point on the wire " +
+                                "may be visible if the 'Show Min Radius " +
+                                "Position' is enabled in the View tab " +
+                                "of Property View"))
+            obj.setPropertyStatus("MinimumRadiusPosition", "ReadOnly")
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
             obj.setGroupOfProperty("FilletRadius", "WireFlexShape")
@@ -169,19 +188,22 @@ class WireFlex(Draft.Wire):
                 hide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                              'Parameterization', 'BoundaryTangents',
                              'InnerTangents', 'TangencyCoefficient',
-                             'Continuity', 'ExcludePenultimatePoints']
+                             'Continuity', 'ExcludePenultimatePoints',
+                             'MinimumRadius', 'MinimumRadiusPosition']
                 unhide_list = ['FilletRadius']
             if obj.PathType == 'BSpline_P':
                 hide_list = ['FilletRadius', 'Parameterization',
                              'BoundaryTangents', 'InnerTangents',
                              'TangencyCoefficient', 'ExcludePenultimatePoints']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
+                               'MinimumRadius', 'MinimumRadiusPosition',
                                'Continuity']
             if obj.PathType == 'BSpline_K':
                 hide_list = ['FilletRadius']
                 unhide_list = ['BoundarySegmentStart', 'BoundarySegmentEnd',
                                'Parameterization', 'BoundaryTangents',
                                'InnerTangents', 'TangencyCoefficient',
+                               'MinimumRadius', 'MinimumRadiusPosition',
                                'Continuity', 'ExcludePenultimatePoints']
             for element in hide_list:
                 obj.setPropertyStatus(element, "Hidden")
@@ -299,6 +321,8 @@ class WireFlex(Draft.Wire):
 
         if hasattr(obj, "Length"):
             obj.Length = obj.Shape.Length
+
+        self.detectMinRadius(obj)
         # FreeCAD.Console.PrintMessage(f"Execute ended({obj.Label})" + "\n")
 
     def execute_bspline(self, obj, bstype):
@@ -386,6 +410,30 @@ class WireFlex(Draft.Wire):
                 idx_e = -2
         return points, idx_s, idx_e
 
+    def detectMinRadius(self, obj):
+        if hasattr(obj, "MinimumRadius"):
+            bspline_t = 'Part::GeomBSplineCurve'
+            for i, e in enumerate(obj.Shape.Edges):
+                if e.Curve.TypeId == bspline_t:
+                    curv, u = wireutils.getMaximumCurvature(e.Curve)
+                    umin = e.FirstParameter
+                    #TODO: decide what radius value is the best for curv == 0
+                    #obj.MinimumRadius = 1.0/curv if curv > 0 else float('inf')
+                    obj.MinimumRadius = 1.0/curv if curv > 0 else obj.Length
+                    if curv == 0:
+                        obj.setPropertyStatus("MinimumRadius", "Hidden")
+                    else:
+                        obj.setPropertyStatus("MinimumRadius", "-Hidden")
+                    if hasattr(obj, "MinimumRadiusPosition"):
+                        offset = obj.Shape.Edges[0].Length if i == 1 else 0
+                        seg = e.Curve.clone()
+                        if u > umin:
+                            seg.segment(umin, u)
+                            seg_length = seg.length()
+                        else:
+                            seg_length = 0
+                        obj.MinimumRadiusPosition = offset + seg_length
+
 
 class ViewProviderWireFlex(Draft.ViewProviderWire):
     """A base View Provider for the WireFlex object.
@@ -398,6 +446,7 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
         vobj.LineWidth = 2
         vobj.PointColorIfAttached = (0, 170, 255)
         vobj.PointColorIfBoundary = (130, 200, 0)
+        vobj.PointColorMinRadius = (255, 128, 128)
         self.createSpecialPoints(vobj)
 
     def getIcon(self):
@@ -425,6 +474,17 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
                              QT_TRANSLATE_NOOP(
                                 "App::Property", "Set boundary segment " +
                                 "point color"))
+        if "PointColorMinRadius" not in pl:
+            vobj.addProperty("App::PropertyColor", "PointColorMinRadius",
+                             "Object Style",
+                             QT_TRANSLATE_NOOP(
+                                "App::Property", "Set minimum radius " +
+                                "point color"))
+        if "ShowMinRadiusPosition" not in pl:
+            vobj.addProperty("App::PropertyBool", "ShowMinRadiusPosition",
+                             "WireFlex",
+                             QT_TRANSLATE_NOOP(
+                                "App::Property", "Show the point on the curve where the minimum radius is detected"))
 
     def createPointMarkers(self, vobj):
         # create markers data
@@ -464,6 +524,12 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
                 wireutils.getBoundarySegCoordList(vobj.Object)
             self.pts_boundary.getByName("color").rgb = \
                 vobj.PointColorIfBoundary[:-1]
+        if not hasattr(self, 'pts_minradius'):
+            self.pts_minradius = self.createPointMarkers(vobj)
+            self.pts_minradius.getByName("coord").point.values = \
+                wireutils.getMinRadiusCoordList(vobj.Object)
+            self.pts_minradius.getByName("color").rgb = \
+                vobj.PointColorMinRadius[:-1]
         self.onChanged(vobj, "Visibility")
 
     def displaySpecialPoints(self, vobj):
@@ -474,6 +540,9 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             if hasattr(self, 'pts_boundary'):
                 if vobj.RootNode.findChild(self.pts_boundary) == -1:
                     vobj.RootNode.addChild(self.pts_boundary)
+            if hasattr(self, 'pts_minradius') and vobj.ShowMinRadiusPosition:
+                if vobj.RootNode.findChild(self.pts_minradius) == -1:
+                    vobj.RootNode.addChild(self.pts_minradius)
         else:
             if hasattr(self, 'pts_attached'):
                 if vobj.RootNode.findChild(self.pts_attached) != -1:
@@ -481,12 +550,17 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             if hasattr(self, 'pts_boundary'):
                 if vobj.RootNode.findChild(self.pts_boundary) != -1:
                     vobj.RootNode.removeChild(self.pts_boundary)
+            if hasattr(self, 'pts_minradius'):
+                if vobj.RootNode.findChild(self.pts_minradius) != -1:
+                    vobj.RootNode.removeChild(self.pts_minradius)
 
     def setSpecialPointsSize(self, vobj, size):
         if hasattr(self, 'pts_attached'):
             self.pts_attached.getByName("style").pointSize = size
         if hasattr(self, 'pts_boundary'):
             self.pts_boundary.getByName("style").pointSize = size
+        if hasattr(self, 'pts_minradius'):
+            self.pts_minradius.getByName("style").pointSize = size
 
     def attach(self, vobj):
         # Function called on document restored
@@ -503,6 +577,12 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             if vobj.PointColorIfAttached == vobj.PointColorIfBoundary == black:
                 vobj.PointColorIfAttached = (0, 170, 255)
                 vobj.PointColorIfBoundary = (130, 200, 0)
+        # update min radius point color in objects created in Cables ver <=3.7
+        # this will be removed in the future
+        if hasattr(vobj, "PointColorMinRadius"):
+            black = (0.0, 0.0, 0.0, 0.0)
+            if vobj.PointColorMinRadius == black:
+                vobj.PointColorMinRadius = (255, 128, 128)
 
     def updateData(self, obj, prop):
         super().updateData(obj, prop)
@@ -516,11 +596,23 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             if hasattr(self, "pts_boundary"):
                 self.pts_boundary.getByName("coord").point.values = \
                     wireutils.getBoundarySegCoordList(obj)
+        if prop == 'MinimumRadiusPosition':
+            if hasattr(self, "pts_minradius"):
+                self.pts_minradius.getByName("coord").point.values = \
+                    wireutils.getMinRadiusCoordList(obj)
 
     def onChanged(self, vobj, prop):
         super().onChanged(vobj, prop)
         if prop == 'Visibility':
             self.displaySpecialPoints(vobj)
+        if prop == 'ShowMinRadiusPosition':
+            if hasattr(self, 'pts_minradius'):
+                if vobj.ShowMinRadiusPosition and vobj.Visibility:
+                    if vobj.RootNode.findChild(self.pts_minradius) == -1:
+                        vobj.RootNode.addChild(self.pts_minradius)
+                else:
+                    if vobj.RootNode.findChild(self.pts_minradius) != -1:
+                        vobj.RootNode.removeChild(self.pts_minradius)
         if prop == 'PointColorIfAttached':
             if hasattr(self, 'pts_attached'):
                 self.pts_attached.getByName("color").rgb = \
@@ -529,6 +621,10 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             if hasattr(self, 'pts_boundary'):
                 self.pts_boundary.getByName("color").rgb = \
                     vobj.PointColorIfBoundary[:-1]
+        if prop == 'PointColorMinRadius':
+            if hasattr(self, 'pts_minradius'):
+                self.pts_minradius.getByName("color").rgb = \
+                    vobj.PointColorMinRadius[:-1]
         if prop == 'PointSize':
             self.setSpecialPointsSize(vobj, vobj.PointSize + 2)
 

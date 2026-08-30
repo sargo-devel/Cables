@@ -785,6 +785,40 @@ def getBoundarySegCoordList(obj):
     return tuple(coords)
 
 
+def getMinRadiusCoordList(obj):
+    """
+    Returns coordinates list of points where minimum radius of WireFlex
+    with bspline has been detected
+
+    Parameters
+    ----------
+    obj : obj
+        WireFlex object
+
+    Returns
+    -------
+    tuple
+    Tuple of coordinate tuples: ((x1,y1,z1), (x2,y2,z2), ...)
+    """
+    bspline_t = 'Part::GeomBSplineCurve'
+    coords = []
+    for i, e in enumerate(obj.Shape.Edges):
+        if e.Curve.TypeId == bspline_t:
+            # the process of obtaining u is reversed to this
+            # in WireFlex.detectMinRadius()
+            umin = e.FirstParameter
+            offset = obj.Shape.Edges[0].Length if i == 1 else 0
+            if hasattr(obj, "MinimumRadiusPosition"):
+                u = e.Curve.parameterAtDistance(
+                    obj.MinimumRadiusPosition.Value - offset)
+            else:
+                u = umin
+            v = e.valueAt(u)
+            vect = obj.Placement.inverse().multVec(v)
+            coords.append((vect.x, vect.y, vect.z))
+    return tuple(coords)
+
+
 def makeConnectionWith2Fillets(edge1, edge2, ctype="Arc", radius=None, deg=3,
                                ratio=1.6):
     """
@@ -1172,6 +1206,45 @@ def getMinimumRadius(wire):
     else:
         min_radius, idx = 1e10, 0   # straight line, radius=infinity
     return min_radius, idx
+
+
+def getMaximumCurvature(curve):
+    """
+    It calculates maximum curvature inside a given curve
+
+    Parameters
+    ----------
+    curve : Curve object
+
+    Returns
+    -------
+    (float, float)
+        The tuple: The maximum curvature of curve, the u parameter with
+                   this curvature
+
+    The minimum radius can be calculated from max curvature:
+    min_radius = 1.0 / max_curvature if max_curvature > 0 else float('inf')
+
+    The location vector can be calculated from u parameter:
+    curve.value(u_param)
+    """
+    u_min = curve.FirstParameter
+    u_max = curve.LastParameter
+    nr_of_samples = max(100, curve.NbKnots * curve.Degree * 10)
+    curvatures_lst = []
+    u_lst = []
+    for i in range(nr_of_samples):
+        # Linearly step through the U parameter range
+        u = u_min + (u_max - u_min) * (i / (nr_of_samples - 1))
+        try:
+            u_curv = curve.curvature(u)
+        except Exception:
+            u_curv = 0.0
+        curvatures_lst.append(u_curv)
+        u_lst.append(u)
+    max_curvature = max(curvatures_lst)
+    u_param = u_lst[curvatures_lst.index(max_curvature)]
+    return max_curvature, u_param
 
 
 def getMaximumRadius(wire):

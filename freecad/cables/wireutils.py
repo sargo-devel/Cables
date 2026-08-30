@@ -1035,7 +1035,7 @@ def getBezCurve(wire, deg):
 
     Returns
     -------
-    curve : Curve objecy (Bezier Curve)
+    curve : Curve object (Bezier Curve)
     """
     deg = 1 if deg < 1 else deg
     deg = 3 if deg > 3 else deg
@@ -1099,7 +1099,7 @@ def getBSpline_P(vector_list, periodic=False, degree=3, interpolate=False):
 
     Returns
     -------
-    curve : Curve objecy (BSpline Curve)
+    curve : Curve object (BSpline Curve)
     """
     spline = Part.BSplineCurve()
     spline.buildFromPoles(vector_list, periodic, degree, interpolate)
@@ -1107,7 +1107,7 @@ def getBSpline_P(vector_list, periodic=False, degree=3, interpolate=False):
 
 
 def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True,
-                 innerTangents=True, tanCoeff=0.5, param=1.0):
+                 innerTangents=True, tanCoeff=0.5, param=1.0, tanProp=False):
     """
     It returns BSpline Curve created from input vector list.
     Input vectors are assigned as knots.
@@ -1125,13 +1125,16 @@ def getBSpline_K(vector_list, vstart, vend, boundaryTangents=True,
         range [0,1] tangency symmetry coefficient (0.5 = symmetric)
     param : float
         it applies parameterization
+    tanProp : bool
+        if True, the factor tanCoeff is modified proportionally to division
+        of distances between subsequent points
 
     Returns
     -------
-    curve : Curve objecy (BSpline Curve)
+    curve : Curve object (BSpline Curve)
     """
     spline = Part.BSplineCurve()
-    vlist = getInnerTangents(vector_list, tanCoeff)
+    vlist, _ = getInnerTangents(vector_list, tanCoeff, tanProp)
     vlist = [vstart, *vlist, vend]
     flags = [False]*len(vector_list)
     knotSeq = parameterization(vector_list, param, False)
@@ -1161,21 +1164,48 @@ def parameterization(pts, a, closed):
     return params
 
 
-def getInnerTangents(points, fac=0.5):
+def getInnerTangents(points, factor=0.5, prop=False):
     """Computes a list of tangents vectors from a set of points.
-    fac (0-1) : tangent factor
-    returns list of vectors
+
+    Parameters
+    ----------
+    factor (0-1) : float
+        Tangency factor
+    prop         : bool
+        If True, the factor is modified proportionally to division
+        of distances between subsequent points
+
+    Returns
+    -------
+    (list, list)
+        Returns 2 lists:  list of tangency vectors,
+        list of tangency coefficients
     """
     tlist = []
+    faclist = []
     for i in range(1, len(points)-1):
         v1 = points[i] - points[i-1]
         v2 = points[i+1] - points[i]
+        if prop:
+            modif = v2.Length/v1.Length
+            if modif > 1:
+                fac = 1 - 1/modif*factor
+            else:
+                fac = modif*factor
+        else:
+            print(f"git i={i}, factor={factor}")
+            if isinstance(factor, list):
+                fac = factor[i-1]
+            else:
+                fac = factor
+        print(f"tg_fac={fac}")
+        faclist.append(fac)
         v1.normalize()
         v2.normalize()
         vt = v1*(1-fac) + v2*fac
         vt.normalize()
         tlist.append(vt)
-    return tlist
+    return tlist, faclist
 
 
 def getMinimumRadius(wire):
@@ -1193,6 +1223,8 @@ def getMinimumRadius(wire):
         Edge is counted from 1
         The edge number indicates an edge with the minimum radius
         or if the radius is 0, an edge before the minimum radius
+
+    NOTE: The .toBiArcs method used here does not work well in each case
     """
     bspline_t = 'Part::GeomBSplineCurve'
     circle_t = 'Part::GeomCircle'

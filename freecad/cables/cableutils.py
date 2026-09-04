@@ -229,3 +229,44 @@ def isSubwireOfCable(wire):
         except AttributeError:
             pass
     return cable
+
+
+def logmsg(comment, level="M", module="", error=None, label=""):
+    """Simplifies and standardizes log messages
+
+    Parameters
+    ----------
+    comment : string
+        Text message
+    level : string
+        Message level. Available levels:
+            'E' (Error), 'W' (Warning), 'M' (Message),
+            'DE' (Developer Error), 'DW' (Developer Warning),
+            'N' (Notification)
+    module : string
+        Source module name.
+    error : Exception
+        The original error if available
+    label : string
+        The object Label if available
+    """
+    levels = {
+        'E': FreeCAD.Console.PrintError,
+        'W': FreeCAD.Console.PrintWarning,
+        'M': FreeCAD.Console.PrintMessage,
+        'DE': FreeCAD.Console.PrintDeveloperError,
+        'DW': FreeCAD.Console.PrintDeveloperWarning,
+        'N': FreeCAD.Console.PrintNotification}
+
+    err_msg = ""
+    if error is not None:
+        err_msg = f"[ {type(error).__name__}:{error} ] "
+    label_msg = ""
+    if label:
+        label_msg = f"(Label:{label}) "
+    message = err_msg + label_msg + comment + "\n"
+
+    if module:
+        levels[level](module, message)
+    else:
+        levels[level](message)

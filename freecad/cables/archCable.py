@@ -142,6 +142,12 @@ class ArchCable(ArchCableMainShape):
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Thickness of single " +
                                 "insulation if profile not used"))
+        if "SubWiresShapeHidden" not in pl:
+            obj.addProperty("App::PropertyBool", "SubWiresShapeHidden",
+                            "CableShape",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "Hides shape of all " +
+                                "subwires"))
         if "Profile" in pl and obj.getGroupOfProperty("Profile") == "Pipe":
             obj.setGroupOfProperty("Profile", "Cable")
             obj.setDocumentationOfProperty("Profile", QT_TRANSLATE_NOOP(
@@ -332,11 +338,14 @@ class ArchCable(ArchCableMainShape):
             main_shape = self.makeMainShape(obj)
             if not main_shape:
                 return
-            shapes = []
-            shapes.append(main_shape)
-            if obj.SubProfiles and obj.SubWires:
-                shapes += self.buildSubCables(obj)
-            sh = Part.makeCompound(shapes)
+            if obj.SubWiresShapeHidden:
+                sh = main_shape
+            else:
+                shapes = []
+                shapes.append(main_shape)
+                if obj.SubProfiles and obj.SubWires:
+                    shapes += self.buildSubCables(obj)
+                sh = Part.makeCompound(shapes)
             obj.Shape = sh
             self.readjustEndProfile(obj)
             self.rotateEndProfile(obj)

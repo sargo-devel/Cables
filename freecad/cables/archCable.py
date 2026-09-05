@@ -28,13 +28,14 @@ Some parts of code are taken from there
 import os
 import math
 import FreeCAD
-import ArchComponent
-import ArchPipe
 import Draft
 import DraftGeomUtils
 import Part
+from freecad.cables.archCableMainShape import ArchCableMainShape
+from freecad.cables.archCableMainShape import ViewProviderCableMainShape
 from freecad.cables import wireFlex
 from freecad.cables import wireutils
+from freecad.cables.cableutils import logmsg
 from freecad.cables import compoundPath
 from freecad.cables import iconPath
 from freecad.cables import translate
@@ -43,14 +44,15 @@ from freecad.cables import QT_TRANSLATE_NOOP
 
 CLASS_CABLE_ICON = os.path.join(iconPath, "classArchCable.svg")
 tol = 1e-6     # tolerance for isEqual() comparison
+ModuleName = __name__.split('.')[-1]
 
 
-class ArchCable(ArchPipe._ArchPipe):
+class ArchCable(ArchCableMainShape):
     """The ArchCable class
     """
     def __init__(self, obj):
         # super().__init__(obj)
-        ArchPipe._ArchPipe.__init__(self, obj)
+        ArchCableMainShape.__init__(self, obj)
         from ArchIFC import IfcTypes
         if "Cable Segment" in IfcTypes:
             obj.IfcType = "Cable Segment"
@@ -59,18 +61,22 @@ class ArchCable(ArchPipe._ArchPipe):
         else:
             # IFC2x3 does not know a Cable Segment
             obj.IfcType = "Building Element Proxy"
-        # self.setDefaultShapeParameters(obj)
+        self.setDefaultShapeParameters(obj)
 
     def setDefaultShapeParameters(self, obj):
+        ArchCableMainShape.setDefaultShapeParameters(self, obj)
         obj.StrippedWireLength = 8
+
+    def setDefaultSubwireParameters(self, obj):
         if hasattr(obj, "SubWires") and obj.SubWires:
             for w in obj.SubWires:
                 w.BoundarySegmentStart = 2.0
                 w.BoundarySegmentEnd = 10.0
         obj.SubWiresPathType = 'Wire'
+        obj.SubWiresFilletRadius = 1.0
 
     def setProperties(self, obj):
-        ArchPipe._ArchPipe.setProperties(self, obj)
+        ArchCableMainShape.setProperties(self, obj)
         pl = obj.PropertiesList
         if "SubProfiles" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubProfiles", "Cable",
@@ -171,14 +177,13 @@ class ArchCable(ArchPipe._ArchPipe):
         self.Type = "Pipe"
 
     def onDocumentRestored(self, obj):
-        ArchPipe._ArchPipe.onDocumentRestored(self, obj)
+        ArchCableMainShape.onDocumentRestored(self, obj)
         # self.setProperties(obj)
         # obj.Proxy = self
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(f"{obj.Label}", f"onChanged(start): {prop}\n")
-        ArchComponent.Component.onChanged(self, obj, prop)
-        ArchPipe._ArchPipe.onChanged(self, obj, prop)
+        ArchCableMainShape.onChanged(self, obj, prop)
         if prop == "ShowSubLines" and hasattr(obj, "SubProfiles") \
            and hasattr(obj, "SubWires"):
             if obj.SubProfiles:
@@ -300,7 +305,7 @@ class ArchCable(ArchPipe._ArchPipe):
 
         if not obj.SubProfiles:
             self.updateStartEndOffsets(obj)
-            ArchPipe._ArchPipe.execute(self, obj)
+            ArchCableMainShape.execute(self, obj)
             main_shape = obj.Shape
             if not obj.Shape.Wires:
                 return
@@ -348,6 +353,7 @@ class ArchCable(ArchPipe._ArchPipe):
             if additions or subtractions:
                 shadd = self.processSubShapes(obj, sh.Solids[0], pl)
                 obj.Shape = Part.makeCompound([*shadd.Solids, *sh.Solids[1:]])
+        obj.ShapeMemSize = self.calculateShapeMemSize(obj)
         # FreeCAD.Console.PrintMessage(f"{obj.Label}", "execute end\n")
 
     def getWire(self, obj):
@@ -373,11 +379,11 @@ class ArchCable(ArchPipe._ArchPipe):
             else:
                 return None
         else:
-            w = ArchPipe._ArchPipe.getWire(self, obj)
+            w = ArchCableMainShape.getWire(self, obj)
         return w
 
     def getProfile(self, obj):
-        p = ArchPipe._ArchPipe.getProfile(self, obj)
+        p = ArchCableMainShape.getProfile(self, obj)
         if 0 in self.wireNrWithTwoColors(obj) and len(p.Edges) == 1:
             # make split profile for two-color insulation
             p = self.splitProfile(p)
@@ -408,17 +414,17 @@ class ArchCable(ArchPipe._ArchPipe):
                         wire.Vertexes[-1].Point, tol):
                     last_vertex = wire.Vertexes[0]
                 else:
-                    FreeCAD.Console.PrintError(f"{obj.Label}", translate(
+                    logmsg(translate(
                         "Cables", "Base compound object not continuous or " +
-                        "wrong direction of first wire in compound")
-                        + "\n")
+                        "wrong direction of first wire in compound"),
+                        "E", ModuleName, None, obj.Label)
                     return False
             else:
                 last_vertex = wire.Vertexes[-1]
         if last_vertex.Point.isEqual(wire.Vertexes[0].Point, tol):
-            FreeCAD.Console.PrintError(f"{obj.Label}", translate(
-                "Cables", "Base compound has wrong direction of last wire")
-                + "\n")
+            logmsg(translate(
+                "Cables", "Base compound has wrong direction of last wire",
+                "E", ModuleName, None, obj.Label))
             return False
         return True
 
@@ -481,22 +487,6 @@ class ArchCable(ArchPipe._ArchPipe):
             else:
                 length = obj.Base.Length.Value
         return length
-
-    def makeMainShape(self, obj):
-        w = self.getWire(obj)
-        if not w:
-            FreeCAD.Console.PrintError(translate(
-                "Cables", "Unable to build the cable base path")+"\n")
-            return None
-        p = obj.SubProfiles[0].Shape.Wires[0]
-        try:
-            sh = w.makePipeShell([p], True, False, 2)
-        except Part.OCCError as err:
-            sh = None
-            FreeCAD.Console.PrintError(
-                f"{type(err)}:{err.args} makedMainShape(Name={obj.Name}); " +
-                translate("Cables", "unable to build main shape") + "\n")
-        return sh
 
     def makeSubProfiles(self, obj):
         profiles = []
@@ -584,10 +574,9 @@ class ArchCable(ArchPipe._ArchPipe):
                 # shape = shape.cut(shape_in)
             else:
                 shape = wire.makePipeShell([profile_out], True, False, 2)
-        except Part.OCCError:
-            FreeCAD.Console.PrintError(
-                f"buildSingleSubShape(Label={obj.Label}): Part.OCCError, " +
-                translate("Cables", "unable to build subshape") + "\n")
+        except Part.OCCError as err:
+            logmsg(translate("Cables", "unable to build subshape"),
+                   "E", ModuleName, err, obj.Label)
             wx = Part.Wire(wire.Edges[0])
             shape = wx.makePipeShell([profile_out], True, False, 2)
         return shape
@@ -691,6 +680,7 @@ class ArchCable(ArchPipe._ArchPipe):
                 subw.Points = pts
 
     def setSubLinesLabels(self, obj):
+        ArchCableMainShape.setSubLinesLabels(self, obj)
         prefix = obj.Label
         tieA = '_A_'
         tieB = '_B_'
@@ -701,20 +691,34 @@ class ArchCable(ArchPipe._ArchPipe):
         nr = int(len(obj.SubWires)/2)
         for i in range(nr):
             suffix = obj.ViewObject.Proxy.getSolidName(obj, i+1)
-            obj.SubWires[i].Label = prefix + tieA + suffix
-            obj.SubWires[i+nr].Label = prefix + tieB + suffix
+            subA_l = prefix + tieA + suffix
+            subB_l = prefix + tieB + suffix
+            if obj.SubWires[i].Label != subA_l:
+                obj.SubWires[i].Label = subA_l
+            if obj.SubWires[i+nr].Label != subB_l:
+                obj.SubWires[i+nr].Label = subB_l
         if len(obj.SubProfiles) == 2:
-            obj.SubProfiles[0].Label = prefix + tieA + prof
-            obj.SubProfiles[1].Label = prefix + tieB + prof
+            profA_l = prefix + tieA + prof
+            profB_l = prefix + tieB + prof
+            if obj.SubProfiles[0].Label != profA_l:
+                obj.SubProfiles[0].Label = profA_l
+            if obj.SubProfiles[1].Label != profB_l:
+                obj.SubProfiles[1].Label = profB_l
         if obj.Base:
-            obj.Base.Label = prefix + base
+            base_l = prefix + base
+            if obj.Base.Label != base_l:
+                obj.Base.Label = base_l
             if hasattr(obj.Base, 'Links') and len(obj.Base.Links) > 2:
                 if Draft.getType(obj.Base.Links[0]) == 'Wire' and \
                         not hasattr(obj.Base.Links[0], 'Links'):
-                    obj.Base.Links[0].Label = obj.Base.Label + suffixA
+                    linkA_l = obj.Base.Label + suffixA
+                    if obj.Base.Links[0].Label != linkA_l:
+                        obj.Base.Links[0].Label = linkA_l
                 if Draft.getType(obj.Base.Links[-1]) == 'Wire' and \
                         not hasattr(obj.Base.Links[-1], 'Links'):
-                    obj.Base.Links[-1].Label = obj.Base.Label + suffixB
+                    linkB_l = obj.Base.Label + suffixB
+                    if obj.Base.Links[-1].Label != linkB_l:
+                        obj.Base.Links[-1].Label = linkB_l
 
     def updatePropsWireTypesAndRadius(self, obj):
         # update BaseWirePathType property
@@ -783,18 +787,18 @@ class ArchCable(ArchPipe._ArchPipe):
         return w0 + wire_list
 
 
-class ViewProviderCable(ArchComponent.ViewProviderComponent):
+class ViewProviderCable(ViewProviderCableMainShape):
     """A View Provider for the ArchCable object
     """
 
     def __init__(self, vobj):
-        ArchComponent.ViewProviderComponent.__init__(self, vobj)
+        ViewProviderCableMainShape.__init__(self, vobj)
 
     def getIcon(self):
         return CLASS_CABLE_ICON
 
     def updateData(self, obj, prop):
-        ArchComponent.ViewProviderComponent.updateData(self, obj, prop)
+        ViewProviderCableMainShape.updateData(self, obj, prop)
         if prop == "Shape" and hasattr(obj.ViewObject, "UseMaterialColor"):
             if obj.ViewObject.UseMaterialColor:
                 self.colorize(obj)
@@ -806,10 +810,10 @@ class ViewProviderCable(ArchComponent.ViewProviderComponent):
                 self.colorize(vobj.Object)
         if prop == "UseMaterialColor" and vobj.UseMaterialColor:
             self.colorize(vobj.Object)
-        ArchComponent.ViewProviderComponent.onChanged(self, vobj, prop)
+        ViewProviderCableMainShape.onChanged(self, vobj, prop)
 
     def claimChildren(self):
-        children = ArchComponent.ViewProviderComponent.claimChildren(self)
+        children = ViewProviderCableMainShape.claimChildren(self)
         self.removeDuplicateSubElementsFromAdditions(self.Object)
         if hasattr(self, "Object"):
             if hasattr(self.Object, "SubProfiles"):
@@ -1012,14 +1016,12 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
     If selectlist is not None it takes precedence over baseobj and profileobj
     """
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError(translate(
-            "Cables", "No active document. Aborting") + "\n")
+        logmsg(translate("Cables", "No active document. Aborting"), "E")
         return
     if selectlist:
         baseobj, profileobj = getObjectsForCable(selectlist)
     if not baseobj:
-        FreeCAD.Console.PrintError(translate(
-            "Cables", "No base object for cable. Aborting") + "\n")
+        logmsg(translate("Cables", "No base object for cable. Aborting"), "E")
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "Cable")
     obj.Label = name if name else translate("Cables", "Cable")
@@ -1065,7 +1067,7 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
             int(len(obj.Profile.Shape.Wires)-1)/2)
         # Subwires
         obj.Proxy.makeSubWires(obj)
-        obj.Proxy.setDefaultShapeParameters(obj)
+        obj.Proxy.setDefaultSubwireParameters(obj)
         obj.ShowSubLines = True
         if obj.SubColors:
             obj.AutoLabelSubLines = True

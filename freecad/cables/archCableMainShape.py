@@ -169,13 +169,30 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                     obj.setPropertyStatus(element, "-Hidden")
 
     def execute(self, obj):
-        # copy of _ArchPipe.execute from FreeCAD ver.1.1.0
+        # copy of _ArchPipe.execute
+        # from FreeCAD main branch, commit 14ac516, 2026-08-12
         # with changed references to makePipeShell
         # and modified error messages
 
+        def _get_profile_center(prof):
+
+            if hasattr(prof, "CenterOfMass"):
+                return prof.CenterOfMass
+            return prof.BoundBox.Center
+
+        def _rotate_profile(prof, pt, vec):
+
+            if vec.getAngle(FreeCAD.Vector(0, 0, 1)) > 0.01:
+                up = FreeCAD.Vector(0, 0, 1)
+            else:
+                up = FreeCAD.Vector(0, 1, 0)
+            vec_x = up.cross(vec)
+            vec_y = vec.cross(vec_x)
+            rot = FreeCAD.Rotation(vec_x, vec_y, vec, "ZYX")
+            prof.rotate(pt, rot.Axis, math.degrees(rot.Angle))
+
         import math
         import Part
-        import DraftGeomUtils
 
         if self.clone(obj):
             return
@@ -207,11 +224,7 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                 "E", ModuleName, None, obj.Label)
             return
         # move and rotate the profile to the first point
-        if hasattr(p, "CenterOfMass"):
-            c = p.CenterOfMass
-        else:
-            c = p.BoundBox.Center
-        delta = w.Vertexes[0].Point - c
+        delta = w.Vertexes[0].Point - _get_profile_center(p)
         p.translate(delta)
         import Draft
 
@@ -219,18 +232,8 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             v1 = obj.Base.Placement.multVec(obj.Base.Points[1]) - w.Vertexes[0].Point
         else:
             v1 = w.Vertexes[1].Point - w.Vertexes[0].Point
-        # v2 = DraftGeomUtils.getNormal(p)
-        # rot = FreeCAD.Rotation(v2,v1)
-        # rotate keeping up vector
-        if v1.getAngle(FreeCAD.Vector(0, 0, 1)) > 0.01:
-            up = FreeCAD.Vector(0, 0, 1)
-        else:
-            up = FreeCAD.Vector(0, 1, 0)
-        v1y = up.cross(v1)
-        v1x = v1.cross(v1y)
-        rot = FreeCAD.Rotation(v1x, v1y, v1, "ZYX")
-        p.rotate(w.Vertexes[0].Point, rot.Axis, math.degrees(rot.Angle))
-        p.rotate(w.Vertexes[0].Point, v1, 90)
+        _rotate_profile(p, w.Vertexes[0].Point, v1)
+
         shapes = []
         try:
             if p.Faces:

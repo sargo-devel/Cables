@@ -29,6 +29,8 @@ import FreeCAD
 import ArchComponent
 import ArchPipe
 import Part
+from freecad.cables.archCableMainShape import ArchCableMainShape
+from freecad.cables.archCableMainShape import ViewProviderCableMainShape
 from freecad.cables import compoundPath
 from freecad.cables import iconPath
 from freecad.cables import translate
@@ -39,12 +41,12 @@ CLASS_CABLE_CONDUIT_ICON = os.path.join(iconPath, "classArchCableConduit.svg")
 tol = 1e-6     # tolerance for isEqual() comparison
 
 
-class ArchCableConduit(ArchPipe._ArchPipe):
+class ArchCableConduit(ArchCableMainShape):
     """The ArchCableConduit class
     """
     def __init__(self, obj):
         # super().__init__(obj)
-        ArchPipe._ArchPipe.__init__(self, obj)
+        ArchCableMainShape.__init__(self, obj)
         from ArchIFC import IfcTypes
         if "Cable Carrier Segment" in IfcTypes:
             obj.IfcType = "Cable Carrier Segment"
@@ -53,9 +55,10 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         else:
             # IFC2x3 does not know a Cable Carrier Segment
             obj.IfcType = "Building Element Proxy"
+        ArchCableMainShape.setDefaultShapeParameters(self, obj)
 
     def setProperties(self, obj):
-        ArchPipe._ArchPipe.setProperties(self, obj)
+        ArchCableMainShape.setProperties(self, obj)
         pl = obj.PropertiesList
         if "SubConduits" not in pl:
             obj.addProperty("App::PropertyLinkList", "SubConduits", "Conduit",
@@ -93,8 +96,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
         self.Type = "Pipe"
 
     def onChanged(self, obj, prop):
-        ArchComponent.Component.onChanged(self, obj, prop)
-        ArchPipe._ArchPipe.onChanged(self, obj, prop)
+        ArchCableMainShape.onChanged(self, obj, prop)
         if prop == "Gauge":
             if hasattr(obj, "Profile") and not obj.Profile:
                 self.setNewDimensions(obj)
@@ -119,7 +121,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             self.setCompoundLabel(obj)
 
     def execute(self, obj):
-        ArchPipe._ArchPipe.execute(self, obj)
+        ArchCableMainShape.execute(self, obj)
         if hasattr(obj, 'SubConduits') and len(obj.SubConduits) > 0 and \
                 obj.SubConduits[0].TypeId == 'Part::Compound':
             ownshape = obj.Shape.copy()
@@ -127,6 +129,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             subshape = obj.SubConduits[0].Shape.copy()
             sh = Part.makeCompound([ownshape, subshape])
             obj.Shape = sh
+        obj.ShapeMemSize = self.calculateShapeMemSize(obj)
 
     def mergeSubConduitShapes(self, obj):
         if hasattr(obj, 'MergeSubConduits') and obj.MergeSubConduits and \
@@ -193,7 +196,7 @@ class ArchCableConduit(ArchPipe._ArchPipe):
             else:
                 return None
         else:
-            w = ArchPipe._ArchPipe.getWire(self, obj)
+            w = ArchCableMainShape.getWire(self, obj)
         return w
 
     def isBasePathContinuous(self, obj):
@@ -314,18 +317,18 @@ class ArchCableConduit(ArchPipe._ArchPipe):
                 obj.Gauge = new_gauge
 
 
-class ViewProviderCableConduit(ArchComponent.ViewProviderComponent):
+class ViewProviderCableConduit(ViewProviderCableMainShape):
     """A View Provider for the ArchCableConduit object
     """
 
     def __init__(self, vobj):
-        ArchComponent.ViewProviderComponent.__init__(self, vobj)
+        ViewProviderCableMainShape.__init__(self, vobj)
 
     def getIcon(self):
         return CLASS_CABLE_CONDUIT_ICON
 
     def updateData(self, obj, prop):
-        ArchComponent.ViewProviderComponent.updateData(self, obj, prop)
+        ViewProviderCableMainShape.updateData(self, obj, prop)
         if prop == "SubConduits":
             if obj.MergeSubConduits:
                 for sub in obj.SubConduits:
@@ -334,10 +337,10 @@ class ViewProviderCableConduit(ArchComponent.ViewProviderComponent):
             self.colorize(obj)
 
     def onChanged(self, vobj, prop):
-        ArchComponent.ViewProviderComponent.onChanged(self, vobj, prop)
+        ViewProviderCableMainShape.onChanged(self, vobj, prop)
 
     def claimChildren(self):
-        c = ArchComponent.ViewProviderComponent.claimChildren(self)
+        c = ViewProviderCableMainShape.claimChildren(self)
         if hasattr(self.Object, "SubConduits"):
             c.extend(self.Object.SubConduits)
         return c

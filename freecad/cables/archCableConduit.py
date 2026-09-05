@@ -26,11 +26,10 @@
 import os
 import math
 import FreeCAD
-import ArchComponent
-import ArchPipe
 import Part
 from freecad.cables.archCableMainShape import ArchCableMainShape
 from freecad.cables.archCableMainShape import ViewProviderCableMainShape
+from freecad.cables.cableutils import logmsg
 from freecad.cables import compoundPath
 from freecad.cables import iconPath
 from freecad.cables import translate
@@ -39,6 +38,7 @@ from freecad.cables import QT_TRANSLATE_NOOP
 
 CLASS_CABLE_CONDUIT_ICON = os.path.join(iconPath, "classArchCableConduit.svg")
 tol = 1e-6     # tolerance for isEqual() comparison
+ModuleName = __name__.split('.')[-1]
 
 
 class ArchCableConduit(ArchCableMainShape):
@@ -224,9 +224,9 @@ class ArchCableConduit(ArchCableMainShape):
                             edge.Vertexes[-1].Point, tol):
                         last_edge = edge
                     else:
-                        FreeCAD.Console.PrintError(translate(
-                            "Cables", "Conduit: Base compound object not" +
-                            "continuous\n"))
+                        logmsg(translate(
+                            "Cables", "Base compound object not continuous"),
+                            "E", ModuleName, None, obj.Label)
                         Part.show(last_edge)
                         Part.show(edge)
                         return path_type
@@ -247,9 +247,9 @@ class ArchCableConduit(ArchCableMainShape):
                             wire.Vertexes[-1].Point, tol):
                         last_wire = wire
                     else:
-                        FreeCAD.Console.PrintError(translate(
-                            "Cables", "Conduit: Base compound object not" +
-                            "continuous\n"))
+                        logmsg(translate(
+                            "Cables", "Base compound object not continuous"),
+                            "E", ModuleName, None, obj.Label)
                         Part.show(last_wire)
                         Part.show(wire)
                         return path_type
@@ -472,8 +472,7 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
                      name=None):
     "Creates a cable bundle object from the given base object"
     if not FreeCAD.ActiveDocument:
-        FreeCAD.Console.PrintError(translate(
-            "Cables", "No active document. Aborting") + "\n")
+        logmsg(translate("Cables", "No active document. Aborting"), "E")
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableConduit")
@@ -484,8 +483,8 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
         baseobj, subobj_list, profileobj = \
             getObjectsForCableConduit(selectlist)
     else:
-        FreeCAD.Console.PrintError(translate(
-            "Cables", "No base objects for Cable Conduit. Aborting") + "\n")
+        logmsg(translate(
+            "Cables", "No base objects for Cable Conduit. Aborting"), "E")
         return
 
     if FreeCAD.GuiUp:

@@ -61,9 +61,14 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
     def setProperties(self, obj):
         ArchPipe._ArchPipe.setProperties(self, obj)
         pl = obj.PropertiesList
+        class_name = type(obj.Proxy).__name__
+        if class_name == "ArchCableConduit":
+            prop_group = "ConduitShapeTroubleshooting"
+        else:
+            prop_group = "CableShapeTroubleshooting"
         if "MainShapeStatus" not in pl:
             obj.addProperty("App::PropertyString", "MainShapeStatus",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Build status of cable " +
                                 "main shape\n(main shape = shape of " +
@@ -71,69 +76,69 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             obj.setPropertyStatus("MainShapeStatus", "ReadOnly")
         if "MainShapeIfError" not in pl:
             obj.addProperty("App::PropertyEnumeration", "MainShapeIfError",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Method for creating a " +
                                 "main shape when an error occurs"))
             obj.MainShapeIfError = ['Partial', 'BiArcs']
         if "MainShapeBuildMode" not in pl:
             obj.addProperty("App::PropertyEnumeration", "MainShapeBuildMode",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Build mode of main shape"))
             obj.MainShapeBuildMode = ['Standard', 'AuxiliarySpine', 'BiNormal',
                                       'BiArcsApprox']
         if "Frenet" not in pl:
             obj.addProperty("App::PropertyBool", "Frenet",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Frenet mode"))
         if "NumberOfAuxPoints" not in pl:
             obj.addProperty("App::PropertyInteger", "NumberOfAuxPoints",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Number of points for the " +
                                 "construction of a new auxiliary spine"))
         if "AuxSpine" not in pl:
             obj.addProperty("App::PropertyLink", "AuxSpine",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Auxiliary spine"))
         if "BiArcsApproxTolerance" not in pl:
             obj.addProperty("App::PropertyLength", "BiArcsApproxTolerance",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Tolerance of BiArcs " +
                                 "approximation of main shape if enabled"))
         if "BiNormalVector" not in pl:
             obj.addProperty("App::PropertyVector", "BiNormalVector",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Binormal vector for " +
                                 "BiNormal mode"))
         if "SurfaceMaxSegments" not in pl:
             obj.addProperty("App::PropertyInteger", "SurfaceMaxSegments",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Maximum allowed number " +
                                 "of segments that can be used to construct " +
                                 "a pipe surface along its guide path"))
         if "SurfaceMaxDegree" not in pl:
             obj.addProperty("App::PropertyInteger", "SurfaceMaxDegree",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Maximum degree of the " +
                                 "polynomial describing the curvature of " +
                                 "the pipe's surface."))
         if "ShapeMemSize" not in pl:
             obj.addProperty("App::PropertyInteger", "ShapeMemSize",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Amount of memory used to " +
                                 "store the shape, in KiB"))
         if "TransitionMode" not in pl:
             obj.addProperty("App::PropertyEnumeration", "TransitionMode",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Handling shape corners: " +
                                 "transformed, right corners, round corners"))
@@ -141,7 +146,7 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                 "Transformed", "RightCorners", "RoundCorners"]
         if "AutoTroubleshooting" not in pl:
             obj.addProperty("App::PropertyBool", "AutoTroubleshooting",
-                            "CableShapeTroubleshooting",
+                            prop_group,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "Automatic detection and " +
                                 "resolution of shape-related issues"))

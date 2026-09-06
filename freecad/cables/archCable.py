@@ -1056,9 +1056,9 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         if gauge:
             obj.ConductorGauge = gauge
         else:
-            obj.ConductorGauge = 2.0
+            obj.ConductorGauge = 2.5
         obj.StrippedWireLength = 8
-        obj.InsulationThickness.Value = 0.7
+        obj.InsulationThickness.Value = 0.8
         obj.Width = obj.Diameter
         obj.Height = obj.Diameter
         obj.SubColors = createSubColorsList(0)

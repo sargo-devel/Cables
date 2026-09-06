@@ -83,7 +83,36 @@ def makeSupportLine(p1=None, p2=None, name=None):
     line.ViewObject.PointColor = SuppPointColor
     line.ViewObject.LineColor = SuppLineColor
     Draft.autogroup(line)
+    SupportLine(line)
     return line
+
+
+class SupportLine(Draft.Wire):
+    """The SupportLine class
+    """
+    def __init__(self, obj):
+        obj.Proxy = self
+        self.Type = "Wire"
+
+    def onChanged(self, obj, prop):
+        Draft.Wire.onChanged(self, obj, prop)
+        if prop == "Points":
+            self.adjustPointsSymmetry(obj)
+        if prop == "Length":
+            self.adjustPointsSymmetry(obj, obj.Length)
+        return
+
+    def adjustPointsSymmetry(self, obj, length=None):
+        v_start = obj.Points[0]
+        v_end = FreeCAD.Vector(0, 0, 0)
+        v_norm = (v_end - v_start).normalize()
+        if length is not None:
+            length = length/2
+        else:
+            length = (v_end - v_start).Length
+        v2 = v_norm*length
+        v1 = -v_norm*length
+        obj.Points = [v1, v2]
 
 
 class ExtSnapLines:

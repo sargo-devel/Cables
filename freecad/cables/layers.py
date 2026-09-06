@@ -86,7 +86,7 @@ layer_terminals = {
 layer_presets = {
     "None": None,
     "WireFlex": layer_wireflex,
-    "SupportLines": layer_supportlines,
+    "SupportLine": layer_supportlines,
     "ExtSnapLines": layer_snaplines,
     "CableTerminal": layer_terminals
 }

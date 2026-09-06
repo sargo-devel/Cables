@@ -435,7 +435,9 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             else:
                 aux_obj = wireFlex.make_wireflex_from_vectors(aux_pts)
                 obj.AuxSpine = aux_obj
-                if obj.AutoLabelSubLines:
+                if hasattr(obj, "AutoLabelSubLines") and obj.AutoLabelSubLines:
+                    self.setSubLinesLabels(obj)
+                if hasattr(obj, "AutoLabelBase") and obj.AutoLabelBase:
                     self.setSubLinesLabels(obj)
                 cableutils.attach_in_place([obj.AuxSpine, obj.Base])
                 aux_wire = Part.makePolygon(aux_pts)

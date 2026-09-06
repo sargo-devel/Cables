@@ -111,6 +111,7 @@ class ArchCableConduit(ArchCableMainShape):
                 obj.InsulationThickness = obj.WallThickness
         if prop == "AutoLabelBase" and obj.AutoLabelBase:
             self.setBaseLabel(obj)
+            self.setSubLinesLabels(obj)
         if prop == "ShowSubConduits":
             if hasattr(obj, "SubConduits") and obj.SubConduits:
                 self.setSubConduitsVisibility(obj, prop)
@@ -118,6 +119,7 @@ class ArchCableConduit(ArchCableMainShape):
             self.mergeSubConduitShapes(obj)
         if prop == "Label" and obj.AutoLabelBase:
             self.setBaseLabel(obj)
+            self.setSubLinesLabels(obj)
             self.setCompoundLabel(obj)
 
     def execute(self, obj):

@@ -162,13 +162,17 @@ class WireFlex(Draft.Wire):
             obj.addProperty("App::PropertyBool", "BiArcsApprox",
                             "WireFlexShape",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Enables BiArcs approximation of BSpline with a tolerance given in BiArcsApproxTolerance property"))
+                                "App::Property", "Enables BiArcs " +
+                                "approximation of BSpline with a tolerance " +
+                                "given in BiArcsApproxTolerance property"))
             obj.setPropertyStatus("BiArcsApprox", "Hidden")
         if "BiArcsApproxTolerance" not in pl:
             obj.addProperty("App::PropertyLength", "BiArcsApproxTolerance",
                             "WireFlexShape",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Tolerance of BiArcs approximation of BSpline if BiArcsApprox property is enabled"))
+                                "App::Property", "Tolerance of BiArcs " +
+                                "approximation of BSpline if BiArcsApprox " +
+                                "property is enabled"))
             obj.setPropertyStatus("BiArcsApproxTolerance", "Hidden")
         if "FilletRadius" in pl and \
                 obj.getGroupOfProperty("FilletRadius") == "Draft":
@@ -539,7 +543,8 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
             vobj.addProperty("App::PropertyBool", "ShowMinRadiusPosition",
                              "WireFlex",
                              QT_TRANSLATE_NOOP(
-                                "App::Property", "Show the point on the curve where the minimum radius is detected"))
+                                "App::Property", "Show the point on the " +
+                                "curve where the minimum radius is detected"))
 
     def createPointMarkers(self, vobj):
         # create markers data

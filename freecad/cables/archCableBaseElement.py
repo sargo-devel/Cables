@@ -269,7 +269,7 @@ class BaseElement(ArchComponent.Component):
             # Shape taken from BaseElement
             ArchComponent.Component.execute(self, obj)
         elif hasattr(obj, "ExtShapeSolids") and obj.ExtShapeSolids > 0:
-            if self.ExtShape is not None:
+            if hasattr(self, "ExtShape") and self.ExtShape is not None:
                 # Shape type: Fixed, new shape
                 shapes.extend(self.ExtShape.Solids)
                 self.ExtShape = None

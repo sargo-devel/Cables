@@ -82,13 +82,27 @@ layer_terminals = {
     }
 }
 
+layer_compoundpaths = {
+    "obj": {
+        "Label": "Compound Paths"
+    },
+    "vobj": {
+        "LineColor": (0, 85, 0),
+        "LineWidth": 2.0,
+        "OverrideLineColorChildren": True,
+        "PointColor": (0, 200, 0),
+        "PointSize": 4.0
+    }
+}
+
 # Layer presets dict for AutoMemberType
 layer_presets = {
     "None": None,
     "WireFlex": layer_wireflex,
     "SupportLine": layer_supportlines,
     "ExtSnapLines": layer_snaplines,
-    "CableTerminal": layer_terminals
+    "CableTerminal": layer_terminals,
+    "CompoundPath": layer_compoundpaths
 }
 
 

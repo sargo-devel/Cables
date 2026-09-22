@@ -613,9 +613,10 @@ def getPresets(presetfiles=profilefiles):
 
 
 # function copied from archProfile.py and adopted
-def readCablePresets(pfiles=profilefiles):
+def readCablePresets(pfiles=profilefiles, allstr=False):
     # When special type is detected on position row[1], the row[3] and higher
-    # are treated as strings
+    # are treated as strings.
+    # When allstr=True, all values are treated as strings.
     special_types = ["Fixed"]
     Presets = []
     bid = 1     # Unique index
@@ -633,7 +634,10 @@ def readCablePresets(pfiles=profilefiles):
                                 if row[1] in special_types:
                                     r = r + [str(row[i])]
                                 else:
-                                    r = r + [float(row[i])]
+                                    if allstr:
+                                        r = r + [str(row[i])]
+                                    else:
+                                        r = r + [float(row[i])]
                             if r not in Presets:
                                 Presets.append(r)
                             bid = bid + 1
@@ -643,5 +647,5 @@ def readCablePresets(pfiles=profilefiles):
                                 + " " + str(row) + f", [{csvfile.name}]\n")
             except IOError:
                 FreeCAD.Console.PrintError(translate(
-                    "Cables", "Could not open"), profilefile, "\n")
+                    "Cables", "Could not open") + " " + profilefile + "\n")
     return Presets

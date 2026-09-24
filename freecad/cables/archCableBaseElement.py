@@ -328,12 +328,20 @@ class BaseElement(ArchComponent.Component):
         shapes = []
         colors = []
         for pair in data:
-            shape = pair[0].Shape.copy()
+            obj = pair[0]
+            shape = obj.Shape.copy()
+            # Adjusting the shape's position
+            # based on its global position in the STEP tree.
+            # Assumption: STEP tree does not contain links.
+            pl_global = obj.getGlobalPlacement()
+            pl_local_inversed = obj.Placement.inverse()
+            shape.transformShape(pl_local_inversed.toMatrix())
+            shape.transformShape(pl_global.toMatrix())
             if len(pair[1]) == 1:
                 color = len(shape.Faces)*pair[1]
             else:
                 color = pair[1]
-            shapes.extend(shape.Solids)
+            shapes.append(shape)
             colors.extend(color)
         return Part.makeCompound(shapes), colors
 

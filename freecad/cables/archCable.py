@@ -893,8 +893,8 @@ class ViewProviderCable(ViewProviderCableMainShape):
                 sapp_mats = []
                 for color in colors[:2]:
                     sapp_mat = FreeCAD.Material()
-                    sapp_mat.DiffuseColor = color[:3] + (0.0, )
-                    sapp_mat.Transparency = color[3]
+                    sapp_mat.DiffuseColor = color[:3] + (1.0, )
+                    sapp_mat.Transparency = 1.0 - color[3]
                     sapp_mats.append(sapp_mat)
                 for f_idx in range(len(solids[i].Faces)):
                     sapp_mat = sapp_mats[f_idx % 2]
@@ -906,8 +906,8 @@ class ViewProviderCable(ViewProviderCableMainShape):
                     sapp_mat = base_sapp_mat
                 else:
                     sapp_mat = FreeCAD.Material()
-                    sapp_mat.DiffuseColor = color[:3] + (0.0, )
-                    sapp_mat.Transparency = color[3]
+                    sapp_mat.DiffuseColor = color[:3] + (1.0, )
+                    sapp_mat.Transparency = 1.0 - color[3]
                 sapp.extend((sapp_mat, ) * len(solids[i].Faces))
 
         if clone is not None:
@@ -966,7 +966,7 @@ class ViewProviderCable(ViewProviderCableMainShape):
                                 color = tuple([float(f) for f in col_str_lst])
                         if color and ('Transparency' in mat.Material):
                             t = float(mat.Material['Transparency'])/100.0
-                            color = color[:3] + (t, )
+                            color = color[:3] + (1.0 - t, )
                     colors.append(color)
         return colors[:2]
 

@@ -53,6 +53,7 @@ class TaskPanelBaseElement:
         self.form = FreeCADGui.PySideUic.loadUi(ui)
         self.obj = obj
         self.presetnames, _ = obj.Proxy.getPresets(obj)
+        obj.Preset = self.presetnames
         self.invalidpreset = False
         self.invalidpresetname = None
         self.oldSchema = FreeCAD.Units.getSchema()
@@ -81,8 +82,12 @@ class TaskPanelBaseElement:
         try:
             prop = getattr(self.obj, pname)
             if ptype == "App::PropertyEnumeration":
-                if self.obj.getEnumerationsOfProperty(pname)[pvalue] != prop:
-                    setattr(self.obj, pname, pvalue)
+                enum_lst = self.obj.getEnumerationsOfProperty(pname)
+                if pvalue < len(enum_lst):
+                    if enum_lst[pvalue] != prop:
+                        setattr(self.obj, pname, pvalue)
+                else:
+                    setattr(self.obj, pname, 0)
             elif ptype == "App::PropertyFloat" and pvalue != "custom":
                 if type(pvalue).__name__ == "Quantity":
                     setattr(self.obj, pname, pvalue.Value)
@@ -687,9 +692,9 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
                         color = tuple([float(f) for f in col_str_lst])
                     if color and ('Transparency' in m.Material):
                         t = float(m.Material['Transparency'])/100.0
-                        color = color[:3] + (t, )
-                new_m.DiffuseColor = color[:3] + (0.0, )
-                new_m.Transparency = color[3]
+                        color = color[:3] + (1.0 - t, )
+                new_m.DiffuseColor = color[:3] + (1.0, )
+                new_m.Transparency = 1.0 - color[3]
                 new_mlist.append(new_m)
             return new_mlist
 
@@ -733,9 +738,17 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
             # obsolete: obj.ViewObject.DiffuseColor = obj.ExtColor
             colors_set = set(obj.ExtColor)
             materials = []
+            ver = FreeCAD.Version()
+            fc_ver = f"{ver[0]}.{ver[1]}"
             for c in colors_set:
                 m = FreeCAD.Material()
                 m.DiffuseColor = c
+                if fc_ver == "1.0":
+                    # FreeCAD v1.0.x
+                    m.Transparency = c[3]
+                else:
+                    # FreeCAD newer then v1.0.x
+                    m.Transparency = 1.0 - c[3]
                 materials.append(m)
             sapp = []
             palette = [m.DiffuseColor for m in materials]

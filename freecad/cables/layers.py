@@ -95,6 +95,19 @@ layer_compoundpaths = {
     }
 }
 
+layer_profiles = {
+    "obj": {
+        "Label": "Cable Profiles"
+    },
+    "vobj": {
+        "LineColor": (255, 255, 255),
+        "LineWidth": 2.0,
+        "OverrideLineColorChildren": True,
+        "PointColor": (255, 255, 255),
+        "PointSize": 4.0
+    }
+}
+
 # Layer presets dict for AutoMemberType
 layer_presets = {
     "None": None,
@@ -102,7 +115,8 @@ layer_presets = {
     "SupportLine": layer_supportlines,
     "ExtSnapLines": layer_snaplines,
     "CableTerminal": layer_terminals,
-    "CompoundPath": layer_compoundpaths
+    "CompoundPath": layer_compoundpaths,
+    "CableProfile": layer_profiles
 }
 
 
@@ -168,7 +182,8 @@ class LayerExtended(layer.Layer):
             return new_members
         for member in FreeCAD.ActiveDocument.Objects:
             if self.recognized_by_type(obj, member) or \
-               self.recognized_by_view_properties(obj, member):
+               self.recognized_by_view_properties(obj, member) or \
+               self.recognized_by_dependencies(obj, member):
                 new_members.append(member)
         return new_members
 
@@ -239,6 +254,36 @@ class LayerExtended(layer.Layer):
             except AttributeError:
                 member_match = False
         return member_match
+
+    def recognized_by_dependencies(self, obj, member):
+        """ It returns True if a member dependencies are fulfilled.
+        Otherwise it returns False.
+        False is returned also if the member belongs to any other Layer.
+        """
+        current_member_layer = self.get_current_member_layer(obj, member)
+        if current_member_layer is None and \
+           obj.AutoMemberType == "CableProfile":
+            # Search for cable profile by checking property
+            if hasattr(member, "CableProfile") and member.CableProfile:
+                return True
+            # Search for cable profile by checking InList dependencies
+            try:
+                for dep in member.InList:
+                    if type(dep.Proxy).__name__ == "Clone":
+                        for dep1 in dep.InList:
+                            if type(dep1.Proxy).__name__ == "ArchCable":
+                                return True
+            except AttributeError:
+                pass
+            # Search for cable profile clone
+            try:
+                if type(member.Proxy).__name__ == "Clone":
+                    for dep in member.InList:
+                        if type(dep.Proxy).__name__ == "ArchCable":
+                            return True
+            except AttributeError:
+                pass
+        return False
 
 
 class ViewProviderLayerExtended(view_layer.ViewProviderLayer):

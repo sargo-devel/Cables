@@ -34,6 +34,7 @@ import Show
 import ProfileLib.RegularPolygon
 from PySide import QtGui
 from freecad.cables import uiPath, presetsPath
+from freecad.cables import QT_TRANSLATE_NOOP
 
 
 translate = FreeCAD.Qt.translate
@@ -211,7 +212,8 @@ class TaskPanelProfile:
         if pvalue != "custom":
             self.table["WireGauge"] = round(float(pvalue), 4)
         else:
-            self.table["WireGauge"] = self.form.customWireGauge.property("rawValue")
+            self.table["WireGauge"] = self.form.customWireGauge.property(
+                "rawValue")
 
     def getDataToBuildProfile(self):
         profile = [1, self.table["Name"],
@@ -354,6 +356,13 @@ def makeCableProfile(profile=[1, 'YDYp', 'F', '750V', 1.2, 0.8, 0.1],
         p = makeCableProfileF(label, profile[4:], nr_of_wires, wire_gauge_mm2)
     if profile[2] == 'R':
         p = makeCableProfileR(label, profile[4:], nr_of_wires, wire_gauge_mm2)
+    p.addProperty("App::PropertyBool", "CableProfile", "Base",
+                  QT_TRANSLATE_NOOP(
+                    "App::Property", "Confirms that the object " +
+                    "can be used as a cable profile. Used by " +
+                    "Layers Extended."))
+    p.setPropertyStatus("CableProfile", "Hidden")
+    p.CableProfile = True
     return p
 
 

@@ -98,13 +98,13 @@ def attach_wire_to_terminal(sel_list, side):
     if side == "start":
         # selected point is in a first half of wire
         update_wire_points(wire, "s")
-        wire_v1 = "Vertex2"
-        wire_v2 = "Vertex1"
+        wire_v1 = 1
+        wire_v2 = 0
     else:
         # select wire end
         update_wire_points(wire, 'e')
-        wire_v1 = "Vertex" + str(len(wire.Shape.Vertexes)-1)
-        wire_v2 = "Vertex" + str(len(wire.Shape.Vertexes))
+        wire_v1 = len(wire.Points)-2
+        wire_v2 = len(wire.Points)-1
 
     terminal.Proxy.updateConnectedWires(terminal)
     if tvrtx:
@@ -135,8 +135,8 @@ def attach_wire_to_terminal(sel_list, side):
             term_v1 = None
             term_v2 = None
     if term_v1 and term_v2:
-        wireutils.assignPointAttachment([(wire, wire_v1), (terminal, term_v1)])
-        wireutils.assignPointAttachment([(wire, wire_v2), (terminal, term_v2)])
+        wireutils.assignPointAttachment([(terminal, term_v1)], wire_v1, wire)
+        wireutils.assignPointAttachment([(terminal, term_v2)], wire_v2, wire)
         terminal.touch()
 
 
@@ -201,11 +201,19 @@ def update_wire_points(wire, tip):
     of the wire if number of points is < 4.
     """
     def _add_point(wire, tip):
-        if tip == 's':
-            wireutils.addPointToWire([(wire, 'Edge1')])
-        if tip == 'e':
-            nr = len(wire.Shape.Edges)
-            wireutils.addPointToWire([(wire, 'Edge'+str(nr))])
+        if wire.PathType == "Wire":
+            if tip == 's':
+                wireutils.addPointToWire([(wire, 'Edge1')])
+            if tip == 'e':
+                nr = len(wire.Shape.Edges)
+                wireutils.addPointToWire([(wire, 'Edge'+str(nr))])
+        else:
+            bspline_t = 'Part::GeomBSplineCurve'
+            edge = "Edge1"
+            for idx, e in enumerate(wire.Shape.Edges):
+                if e.Curve.TypeId == bspline_t:
+                    edge = f"Edge{idx+1}"
+            wireutils.addPointToWire([(wire, edge)])
         FreeCAD.ActiveDocument.recompute()
 
     if len(wire.Points) < 4:

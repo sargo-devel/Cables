@@ -411,7 +411,12 @@ def addPointToWire(plist=None, point=None):
         return None
     vlist = obj.Proxy.get_vlist(obj)
     pts = obj.Points
-    pts.insert(idx, obj.Placement.inverse().multVec(newVector))
+    new_point = obj.Placement.inverse().multVec(newVector)
+    if new_point in pts:
+        idx = pts.index(new_point)
+        idx = 1 if idx == 0 else idx
+        new_point = pts[idx-1]+(pts[idx] - pts[idx-1])/2
+    pts.insert(idx, new_point)
     vlist.insert(idx, None)
     obj.Points = pts
     obj.Proxy.update_vrtxs_mid(obj, vlist)
@@ -479,7 +484,7 @@ def assignPointAttachment(plist=None, point_idx=None, obj=None):
         Optional point idx to attach (counted from 0)
     obj: object
         Optional direct object instead of plist, then second object is taken
-        internally from GuiSelection
+        from plist[0]
     """
     if not plist:
         if obj and (point_idx is not None):
@@ -1193,12 +1198,10 @@ def getInnerTangents(points, factor=0.5, prop=False):
             else:
                 fac = modif*factor
         else:
-            print(f"git i={i}, factor={factor}")
             if isinstance(factor, list):
                 fac = factor[i-1]
             else:
                 fac = factor
-        print(f"tg_fac={fac}")
         faclist.append(fac)
         v1.normalize()
         v2.normalize()

@@ -65,7 +65,7 @@ class ArchCable(ArchCableMainShape):
 
     def setDefaultShapeParameters(self, obj):
         ArchCableMainShape.setDefaultShapeParameters(self, obj)
-        obj.StrippedWireLength = 8
+        obj.StrippedWireLength = 8.0
 
     def setDefaultSubwireParameters(self, obj):
         if hasattr(obj, "SubWires") and obj.SubWires:
@@ -1049,7 +1049,7 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         else:
             obj.BaseWirePathType = 'Customized'
     if hasattr(obj.Base, "FilletRadius"):
-        obj.BaseWireFilletRadius = obj.Base.FilletRadius
+        obj.BaseWireFilletRadius = 1.0
     if profileobj:
         obj.Profile = profileobj
     else:

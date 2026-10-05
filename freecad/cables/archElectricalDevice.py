@@ -28,6 +28,7 @@ import FreeCAD
 if FreeCAD.GuiUp:
     import FreeCADGui
 from freecad.cables import archCableBaseElement
+from freecad.cables import wireutils
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
 from freecad.cables import uiPath
@@ -221,6 +222,13 @@ def makeElectricalDevice(baseobj=None, preset=None, placement=None, name=None):
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "ElectricalDevice")
     obj.Label = name if name else translate("Cables", "ElectricalDevice")
+    
+    if FreeCAD.GuiUp:
+        active_part = FreeCADGui.ActiveDocument.ActiveView.getActiveObject(
+            "part")
+        if active_part is not None:
+            active_part.addObject(obj)
+
     ArchElectricalDevice(obj)
     if FreeCAD.GuiUp:
         ViewProviderElectricalDevice(obj.ViewObject)
@@ -233,5 +241,10 @@ def makeElectricalDevice(baseobj=None, preset=None, placement=None, name=None):
     else:
         obj.Proxy.setPreset(obj, default_preset)
     if placement:
+        # modify placement if obj is inside Std_Part
+        parent = wireutils.getStdPartParent(obj)
+        if parent is not None:
+            glob_pl = parent.getGlobalPlacement()
+            placement = glob_pl.inverse().multiply(placement)
         obj.Placement = placement
     return obj

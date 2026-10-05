@@ -27,6 +27,7 @@ import os
 import FreeCAD
 import Part
 from freecad.cables import archCableBaseElement
+from freecad.cables import wireutils
 from freecad.cables import iconPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
@@ -143,6 +144,13 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableLightPoint")
     obj.Label = name if name else translate("Cables", "CableLightPoint")
+
+    if FreeCAD.GuiUp:
+        active_part = FreeCAD.Gui.ActiveDocument.ActiveView.getActiveObject(
+            "part")
+        if active_part is not None:
+            active_part.addObject(obj)
+
     ArchCableLightPoint(obj)
     if FreeCAD.GuiUp:
         ViewProviderCableLightPoint(obj.ViewObject)
@@ -155,6 +163,11 @@ def makeCableLightPoint(baseobj=None, diameter=0, thickness=0, height=0,
         obj.Thickness = thickness if thickness else 2
         obj.Height = height if height else 5
     if placement:
+        # modify placement if obj is inside Std_Part
+        parent = wireutils.getStdPartParent(obj)
+        if parent is not None:
+            glob_pl = parent.getGlobalPlacement()
+            placement = glob_pl.inverse().multiply(placement)
         obj.Placement = placement
     if hasattr(obj, "NumberOfSnapLines"):
         obj.NumberOfSnapLines = 1

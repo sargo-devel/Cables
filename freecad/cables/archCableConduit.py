@@ -30,6 +30,7 @@ import Part
 from freecad.cables.archCableMainShape import ArchCableMainShape
 from freecad.cables.archCableMainShape import ViewProviderCableMainShape
 from freecad.cables.cableutils import logmsg
+from freecad.cables import wireutils
 from freecad.cables import compoundPath
 from freecad.cables import iconPath
 from freecad.cables import translate
@@ -479,6 +480,7 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableConduit")
     obj.Label = name if name else translate("Cables", "Cable Conduit")
+
     ArchCableConduit(obj)
 
     if selectlist:
@@ -488,6 +490,11 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
         logmsg(translate(
             "Cables", "No base objects for Cable Conduit. Aborting"), "E")
         return
+
+    # Set parent container if baseobj has StdPart parent container
+    parent = wireutils.getStdPartParent(baseobj)
+    if parent is not None:
+        parent.addObject(obj)
 
     if FreeCAD.GuiUp:
         ViewProviderCableConduit(obj.ViewObject)
@@ -509,6 +516,9 @@ def makeCableConduit(selectlist=None, gauge=0, length=0, placement=None,
     obj.MergeSubConduits = False
     if profileobj:
         obj.Profile = profileobj
+        # Set parent container for profile if parent container exists
+        if parent is not None:
+            parent.addObject(obj.Profile)
     else:
         obj.Width.Value = 10.0
         obj.Height.Value = 10.0

@@ -501,6 +501,10 @@ class ArchCable(ArchCableMainShape):
         profiles = []
         if obj.Profile:
             cl = Draft.make_clone(obj.Profile)
+            # Set parent container if obj has StdPart parent container
+            parent = wireutils.getStdPartParent(obj)
+            if parent is not None:
+                parent.addObject(cl)
             cl.AttachmentSupport = [(obj.Base, 'Vertex1'), (obj.Base, 'Edge1')]
             cl.MapMode = 'NormalToEdge'
             cl.MapReversed = False
@@ -510,6 +514,10 @@ class ArchCable(ArchCableMainShape):
             cl.AttachmentOffset = pl
             profiles.append(cl)
             cl = Draft.make_clone(obj.Profile)
+            # Set parent container if obj has StdPart parent container
+            parent = wireutils.getStdPartParent(obj)
+            if parent is not None:
+                parent.addObject(cl)
             v_last = len(obj.Base.Shape.Vertexes)
             e_last = len(obj.Base.Shape.Edges)
             cl.AttachmentSupport = [(obj.Base, 'Vertex'+str(v_last)),
@@ -1036,6 +1044,11 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
     obj.Label = name if name else translate("Cables", "Cable")
     ArchCable(obj)
 
+    # Set parent container if baseobj has StdPart parent container
+    parent = wireutils.getStdPartParent(baseobj)
+    if parent is not None:
+        parent.addObject(obj)
+
     if FreeCAD.GuiUp:
         ViewProviderCable(obj.ViewObject)
         baseobj.ViewObject.hide()
@@ -1080,6 +1093,9 @@ def makeCable(selectlist=None, baseobj=None, profileobj=None, gauge=0,
         obj.ShowSubLines = True
         if obj.SubColors:
             obj.AutoLabelSubLines = True
+        # Set parent container for subwires if parent container exists
+        if parent is not None:
+            parent.addObjects(obj.SubWires)
         # FreeCAD.ActiveDocument.recompute()
     return obj
 

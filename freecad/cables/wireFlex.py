@@ -749,6 +749,10 @@ def make_wireflex(plist=None):
             vpoints.append(wireutils.getVector(plink))
     base_wire = Draft.make_wire(vpoints, placement=pl, closed=False,
                                 face=False, support=None)
+    if FreeCAD.GuiUp:
+        active_part = Gui.ActiveDocument.ActiveView.getActiveObject("part")
+        if active_part is not None:
+            active_part.addObject(base_wire)
     if plist[0][1] and plist[0][0].TypeId != 'App::Link':
         base_wire.AttachmentSupport = [plist[0]]
         base_wire.MapMode = 'Translate'
@@ -790,6 +794,10 @@ def make_wireflex_from_vectors(vectorlist):
     vpoints = vectorlist
     base_wire = Draft.make_wire(vpoints, placement=pl, closed=False,
                                 face=False, support=None)
+    if FreeCAD.GuiUp:
+        active_part = Gui.ActiveDocument.ActiveView.getActiveObject("part")
+        if active_part is not None:
+            active_part.addObject(base_wire)
     WireFlex(base_wire)
     ViewProviderWireFlex(base_wire.ViewObject)
     base_wire.PathType = "Wire"

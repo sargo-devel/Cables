@@ -32,6 +32,7 @@ if FreeCAD.GuiUp:
     import FreeCADGui
 import Part
 from freecad.cables import archCableBaseElement
+from freecad.cables import wireutils
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
 from freecad.cables import uiPath
@@ -656,6 +657,13 @@ def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,
         return
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "CableBox")
     obj.Label = name if name else translate("Cables", "CableBox")
+
+    if FreeCAD.GuiUp:
+        active_part = FreeCADGui.ActiveDocument.ActiveView.getActiveObject(
+            "part")
+        if active_part is not None:
+            active_part.addObject(obj)
+
     ArchCableBox(obj)
     obj.ProfileType = profiletype if profiletype else 'Circle'
     if FreeCAD.GuiUp:
@@ -681,7 +689,12 @@ def makeCableBox(baseobj=None, diameter=0, width=0, depth=0, height=0,
     obj.BoxBodyHidden = False
     obj.DinRails = True
     obj.HelperRingsHidden = True
-    if placement:
+    if placement is not None:
+        # modify placement if obj is inside Std_Part
+        parent = wireutils.getStdPartParent(obj)
+        if parent is not None:
+            glob_pl = parent.getGlobalPlacement()
+            placement = glob_pl.inverse().multiply(placement)
         obj.Placement = placement
     if hasattr(obj, "NumberOfSnapLines"):
         obj.NumberOfSnapLines = 1

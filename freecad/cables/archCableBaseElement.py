@@ -32,6 +32,7 @@ import Import
 from freecad.cables import cableTerminal
 from freecad.cables import cableSupport
 from freecad.cables import cableProfile
+from freecad.cables import wireutils
 from freecad.cables import libPath
 from freecad.cables import presetsPath
 from freecad.cables import translate
@@ -438,6 +439,10 @@ class BaseElement(ArchComponent.Component):
         terminals = []
         for i in range(nr):
             child_obj = cableTerminal.makeCableTerminal()
+            # Set parent container if obj has StdPart parent container
+            parent = wireutils.getStdPartParent(obj)
+            if parent is not None:
+                parent.addObject(child_obj)
             child_obj.Label = f"{obj.Label}_Term{i+1:03}"
             child_obj.ParentElement = obj
             child_obj.AttachmentSupport = [(obj, ('',))]
@@ -481,6 +486,10 @@ class BaseElement(ArchComponent.Component):
         for i in range(nr):
             child_obj = FreeCAD.ActiveDocument.addObject(
                 "Part::FeaturePython", "CableSnapLines")
+            # Set parent container if obj has StdPart parent container
+            parent = wireutils.getStdPartParent(obj)
+            if parent is not None:
+                parent.addObject(child_obj)
             cableSupport.ExtSnapLines(child_obj)
             if FreeCAD.GuiUp:
                 cableSupport.ViewProviderExtSnapLines(child_obj.ViewObject)
@@ -505,7 +514,11 @@ class BaseElement(ArchComponent.Component):
                 for i in range(len(snaplines), nr):
                     child_obj = FreeCAD.ActiveDocument.addObject(
                         "Part::FeaturePython", "CableSnapLines")
-                    cableSupport.ExtSnapLines(child_obj)
+                    # Set parent container if obj has StdPart parent container
+                    parent = wireutils.getStdPartParent(obj)
+                    if parent is not None:
+                        parent.addObject(child_obj)
+                        cableSupport.ExtSnapLines(child_obj)
                     if FreeCAD.GuiUp:
                         cableSupport.ViewProviderExtSnapLines(
                             child_obj.ViewObject)

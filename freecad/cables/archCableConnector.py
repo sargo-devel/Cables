@@ -31,6 +31,7 @@ if FreeCAD.GuiUp:
 import Part
 from freecad.cables import archCableBaseElement
 from freecad.cables import cableProfile
+from freecad.cables import wireutils
 from freecad.cables import iconPath
 from freecad.cables import presetsPath
 from freecad.cables import uiPath
@@ -420,6 +421,13 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "CableConnector")
     obj.Label = name if name else translate("Cables", "CableConnector")
+
+    if FreeCAD.GuiUp:
+        active_part = FreeCADGui.ActiveDocument.ActiveView.getActiveObject(
+            "part")
+        if active_part is not None:
+            active_part.addObject(obj)
+
     ArchCableConnector(obj)
     if FreeCAD.GuiUp:
         ViewProviderCableConnector(obj.ViewObject)
@@ -436,6 +444,11 @@ def makeCableConnector(baseobj=None, nrofholes=0, holesize=0, thickness=0,
         obj.Proxy.setPreset(obj, preset)
     else:
         obj.Proxy.setPreset(obj, default_preset)
-    if placement:
+    if placement is not None:
+        # modify placement if obj is inside Std_Part
+        parent = wireutils.getStdPartParent(obj)
+        if parent is not None:
+            glob_pl = parent.getGlobalPlacement()
+            placement = glob_pl.inverse().multiply(placement)
         obj.Placement = placement
     return obj

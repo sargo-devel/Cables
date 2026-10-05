@@ -158,9 +158,9 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
     List of type [(obj, subelement_name), ...]
     """
     if single or not preserve_sel_ord:
-        slist = FreeCAD.Gui.Selection.getSelectionEx('', 0, single)
+        slist = FreeCAD.Gui.Selection.getSelectionEx('', 1, single)
     else:
-        slist = FreeCAD.Gui.Selection.getCompleteSelection(0)
+        slist = FreeCAD.Gui.Selection.getCompleteSelection(1)
     retlist = None
     if not slist and single:
         FreeCAD.Console.PrintError(translate(
@@ -171,6 +171,21 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
         FreeCAD.Console.PrintWarning(translate(
             "Cables", "Nothing selected!") + "\n")
         return None
+
+    # Check if selected objects have the same parent (e.g. Std_Part)
+    raw_lst = FreeCAD.Gui.Selection.getCompleteSelection(0)
+    same_parent = True
+    names = [name.SubElementNames[0] for name in raw_lst]
+    if any("." in name for name in names):
+        parent_names = set(sel.Object.Name for sel in raw_lst)
+        if len(parent_names) > 1:
+            same_parent = False
+    if not same_parent:
+        FreeCAD.Console.PrintError(translate(
+            "Cables", "Selected objects don't belong to the same parent " +
+            "container!") + "\n")
+        return None
+
     if obj_proxy_class:
         obj = slist[0].Object
         if not isinstance(obj.Proxy, obj_proxy_class):
@@ -400,8 +415,16 @@ def addPointToWire(plist=None, point=None):
                 "Cables", "Wrong edge type selected") + "\n")
             return None    # wrong edge
         v2 = edge.Vertexes[1].Point
-        midparam = edge.Curve.parameter(v2)/2
-        newVector = point or edge.Curve.value(midparam)
+        if point is not None:
+            newVector = point
+            # modify newVector if obj is inside Std_Part
+            parent = getStdPartParent(obj)
+            if parent is not None:
+                glob_pl = parent.getGlobalPlacement()
+                newVector = glob_pl.inverse().multVec(newVector)
+        else:
+            midparam = edge.Curve.parameter(v2)/2
+            newVector = edge.Curve.value(midparam)
     except (ValueError, IndexError, AttributeError, TypeError):
         FreeCAD.Console.PrintError(translate(
             "Cables", "Selection is not an edge") + "\n")
@@ -443,8 +466,8 @@ def delPointFromWire(plist=None, point_idx=None):
         return None
     try:
         # first remove any attachments from selected point
-        removePointAttachment(plist)
         obj = plist[0][0]
+        removePointAttachment(plist, point_idx, obj)
         if point_idx is not None:
             nr = point_idx + 1
         else:
@@ -1521,3 +1544,23 @@ def adjustBsplinePoint(bs, point, pole_nr, tolerance=0.1):
         pole = bs.getPole(pole_nr)
         bs.setPole(pole_nr, pole+diff)
     # print(f"Pole {pole_nr} set: diff={diff.Length}, iter={i+1}")
+
+
+def getStdPartParent(obj):
+    """ Returns Std::Part parent if obj has it, otherwise returns None
+    """
+    if not hasattr(obj, "Parents"):
+        return None
+    parent = None
+    for par in obj.Parents:
+        try:
+            parent_hierarchy = f"{par[0].Name}.{par[1]}"
+            parent_name = parent_hierarchy.split(".")[-3]
+            parent = FreeCAD.ActiveDocument.getObject(parent_name)
+            if hasattr(parent, "TypeId") and parent.TypeId == "App::Part":
+                break
+            else:
+                parent = None
+        except IndexError:
+            continue
+    return parent

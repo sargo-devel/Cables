@@ -518,7 +518,7 @@ class BaseElement(ArchComponent.Component):
                     parent = wireutils.getStdPartParent(obj)
                     if parent is not None:
                         parent.addObject(child_obj)
-                        cableSupport.ExtSnapLines(child_obj)
+                    cableSupport.ExtSnapLines(child_obj)
                     if FreeCAD.GuiUp:
                         cableSupport.ViewProviderExtSnapLines(
                             child_obj.ViewObject)

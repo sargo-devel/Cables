@@ -53,8 +53,9 @@ class TaskPanelBaseElement:
     def __init__(self, obj, ui):
         self.form = FreeCADGui.PySideUic.loadUi(ui)
         self.obj = obj
+        lib_cache.reset()
         self.presetnames, _ = obj.Proxy.getPresets(obj)
-        obj.Preset = self.presetnames
+        self.obj.Proxy.updatePresetEnumeration(obj, self.presetnames)
         self.invalidpreset = False
         self.invalidpresetname = None
         self.oldSchema = FreeCAD.Units.getSchema()
@@ -65,6 +66,7 @@ class TaskPanelBaseElement:
 
     def accept(self):
         # execute this code after child class accept method
+        self.obj.Proxy.updatePresetEnumeration(self.obj, [self.obj.Preset])
         FreeCAD.ActiveDocument.commitTransaction()
         FreeCADGui.Control.closeDialog()
         FreeCAD.Units.setSchema(self.oldSchema)
@@ -156,8 +158,17 @@ class BaseElement(ArchComponent.Component):
                             eltype,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The predefined set of " +
-                                "parameters for this object"))
+                                "parameters for this object. It can be " +
+                                "changed by double-clicking the object " +
+                                "in the Tree View"))
             obj.Preset, _ = self.getPresets(obj)
+        if "PresetInLibrary" not in pl:
+            obj.addProperty("App::PropertyBool", "PresetInLibrary",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "It indicates if preset " +
+                                "exists in local or built-in library"))
+            obj.setPropertyStatus("PresetInLibrary", "ReadOnly")
         if "NumberOfTerminals" not in pl:
             obj.addProperty("App::PropertyInteger", "NumberOfTerminals",
                             eltype,
@@ -211,6 +222,8 @@ class BaseElement(ArchComponent.Component):
         self.ExtShape = None
         self.Terminals = self.findTerminals(obj)
         self.SnapLines = self.findSnapLines(obj)
+        # update library presence of preset
+        self.setPropertyPresetInLibrary(obj)
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
@@ -238,11 +251,10 @@ class BaseElement(ArchComponent.Component):
             if len(self.SnapLines) != obj.NumberOfSnapLines:
                 self.updateNumberOfSnapLines(obj)
         if prop == "Preset" and not undoredo:
-            # refresh presets names:
             presetnames, presets = self.getPresets(obj)
-            if presetnames != obj.getEnumerationsOfProperty("Preset"):
-                obj.Preset = presetnames
-            self.updatePropertiesFromPreset(obj, presets)
+            if obj.Preset in presetnames:
+                self.updatePropertiesFromPreset(obj, presets)
+            self.setPropertyPresetInLibrary(obj)
         if prop == "Base" and not undoredo:
             self.updatePropertyStatusForBase(
                 obj, ["NumberOfTerminals", "NumberOfSnapLines"], "ReadOnly")
@@ -294,20 +306,33 @@ class BaseElement(ArchComponent.Component):
             self.adjustTerminals(obj)
         if self.SnapLines:
             self.adjustSnapLines(obj)
+        self.setPropertyPresetInLibrary(obj)
 
     def getPresets(self, obj, presetfiles=presetfiles):
-        presets = cableProfile.readCablePresets(presetfiles)
-        presetnames = []
-        for p in presets:
-            presetnames.append(f"{p[3]}_{p[1]}")
-        presetnames.sort()
-        presetnames = ["Customized"] + presetnames
+        pkey = type(obj.Proxy).__name__
+        updated = lib_cache.updated(pkey)
+        if updated:
+            presetnames = lib_cache.presetnames(pkey)
+            presets = lib_cache.presets(pkey)
+        else:
+            presets = cableProfile.readCablePresets(presetfiles)
+            presetnames = []
+            for p in presets:
+                presetnames.append(f"{p[3]}_{p[1]}")
+            presetnames.sort()
+            presetnames = ["Customized"] + presetnames
+            lib_cache.setPresetnames(pkey, presetnames)
+            lib_cache.setPresets(pkey, presets)
+            lib_cache.setUpdated(pkey, True)
         return presetnames, presets
 
     def setPreset(self, obj, preset, pnames=[], pvalues=[]):
         try:
             if preset != obj.Preset:
-                obj.Preset = preset
+                presetnames, presets = self.getPresets(obj)
+                if preset in presetnames:
+                    obj.Preset = [preset]
+                    obj.Preset = preset
         except ValueError:
             FreeCAD.Console.PrintError(obj.Label,
                                        f"Preset {preset} does not exist!\n")
@@ -321,6 +346,21 @@ class BaseElement(ArchComponent.Component):
             except (AttributeError, ValueError):
                 FreeCAD.Console.PrintError(
                     obj, f"Can't set {p[0]} with value: {p[1]}")
+
+    def updatePresetEnumeration(self, obj, new_presetnames):
+        curr_presetnames = obj.getEnumerationsOfProperty("Preset")
+        if new_presetnames != curr_presetnames:
+            obj.Preset = new_presetnames
+
+    def setPropertyPresetInLibrary(self, obj):
+        if hasattr(obj, "PresetInLibrary"):
+            presetnames, _ = self.getPresets(obj)
+            if obj.Preset in presetnames:
+                if not obj.PresetInLibrary:
+                    obj.PresetInLibrary = True
+            else:
+                if obj.PresetInLibrary:
+                    obj.PresetInLibrary = False
 
     def updatePropertiesFromPreset(self, obj, presets):
         return
@@ -827,3 +867,47 @@ def makeBaseElement(name=None):
     BaseElement(obj)
     if FreeCAD.GuiUp:
         ViewProviderBaseElement(obj.ViewObject)
+
+
+class PresetsFromLibrary:
+    """It keeps a copy of presets from library
+    """
+    def __init__(self):
+        self._presetnames = {}
+        self._presets = {}
+        self._updated = {}
+
+    def presetnames(self, pkey):
+        presetnames = self._presetnames.get(pkey)
+        if presetnames is None:
+            return []
+        return presetnames
+
+    def presets(self, pkey):
+        presets = self._presets.get(pkey)
+        if presets is None:
+            return []
+        return presets
+
+    def updated(self, pkey):
+        updated = self._updated.get(pkey)
+        if updated is None:
+            return False
+        else:
+            return updated
+
+    def setPresets(self, pkey, data):
+        self._presets[pkey] = data
+
+    def setPresetnames(self, pkey, data):
+        self._presetnames[pkey] = data
+
+    def setUpdated(self, pkey, bool_value):
+        self._updated[pkey] = bool_value
+
+    def reset(self):
+        for key in self._updated.keys():
+            self._updated[key] = False
+
+
+lib_cache = PresetsFromLibrary()

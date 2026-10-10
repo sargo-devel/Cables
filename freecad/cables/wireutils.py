@@ -176,9 +176,17 @@ def processGuiSelection(single=False, subshape_class=Part.Vertex,
     raw_lst = FreeCAD.Gui.Selection.getCompleteSelection(0)
     same_parent = True
     names = [name.SubElementNames[0] for name in raw_lst]
+    names = [name.split(";")[0] for name in names]
     if any("." in name for name in names):
-        parent_names = set(sel.Object.Name for sel in raw_lst)
-        if len(parent_names) > 1:
+        top_parents = set(name.Object.Label for name in raw_lst)
+        try:
+            parent_names = [name.split(".")[:-2] for name in names]
+            parent_names = set(".".join(p) for p in parent_names)
+            if len(parent_names) > 1:
+                same_parent = False
+            if len(top_parents) > 1:
+                same_parent = False
+        except IndexError:
             same_parent = False
     if not same_parent:
         FreeCAD.Console.PrintError(translate(

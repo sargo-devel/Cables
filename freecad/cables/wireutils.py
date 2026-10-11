@@ -1093,7 +1093,7 @@ def getBezCurve(wire, deg):
 def getBiArcsApprox(wire, tolerance=0.5):
     """
     It returns wire created from input wire approximated by BiArcs.
-    It aproximates only BSpline edges, the rest remains untouched.
+    It approximates only BSpline edges, the rest remains untouched.
 
     Parameters
     ----------

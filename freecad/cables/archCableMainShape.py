@@ -395,7 +395,7 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
         return sh
 
     def makePipeShell(self, obj, w, p, mode, isSolid=True):
-        """Modificaton of build in makePipeShell function
+        """Modification of build in makePipeShell function
         obj - object (all setting are taken from obj parameters)
         w - spine of type wire
         p - profile of type wire

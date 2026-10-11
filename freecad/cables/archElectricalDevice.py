@@ -222,7 +222,7 @@ def makeElectricalDevice(baseobj=None, preset=None, placement=None, name=None):
     obj = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                            "ElectricalDevice")
     obj.Label = name if name else translate("Cables", "ElectricalDevice")
-    
+
     if FreeCAD.GuiUp:
         active_part = FreeCADGui.ActiveDocument.ActiveView.getActiveObject(
             "part")

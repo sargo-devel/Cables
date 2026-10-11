@@ -255,7 +255,7 @@ def getCurveParameter(curve, point):
     """
     par = curve.parameter(point)
     v = curve.value(par)
-    tol_b = 1e-1    # increased tolerance for BSplines
+    tol_b = 0.3     # increased tolerance for BSplines
     if curve.TypeId == 'Part::GeomBSplineCurve':
         if v.isEqual(point, tol_b):
             return par

@@ -1481,15 +1481,20 @@ def makeAdjustedBspline(pts, parameterization):
     -------
     spline : BSplineCurve object
     """
-    artificial_point_s = pts[1] + (pts[2]-pts[1])/3
-    artificial_point_e = pts[-2] + (pts[-3]-pts[-2])/3
-    art = (artificial_point_s, artificial_point_e)
-    newpts = pts.copy()
-    newpts[1] = art[0]
-    newpts[-2] = art[1]
+    if len(pts) > 2:
+        artificial_point_s = pts[1] + (pts[2]-pts[1])/3
+        artificial_point_e = pts[-2] + (pts[-3]-pts[-2])/3
+        art = (artificial_point_s, artificial_point_e)
+        newpts = pts.copy()
+        newpts[1] = art[0]
+        newpts[-2] = art[1]
 
     vinit = (pts[1] - pts[0]).normalize()
     vfinal = (pts[-1] - pts[-2]).normalize()
+
+    if len(pts) < 3:
+        spline = getBSpline_K(pts, vinit, vfinal)
+        return spline
 
     max_iter = 2
     # adjust boundary poles (3 in row in equal distance to get G2 continuity

@@ -128,8 +128,8 @@ class WireFlex(Draft.Wire):
             obj.addProperty("App::PropertyString", "Continuity",
                             "WireFlexShape",
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Shows BSpline curve " +
-                                "continuity"))
+                                "App::Property", "Shows the continuity of " +
+                                "the B-spline curve"))
             obj.setPropertyStatus("Continuity", "ReadOnly")
         if "ExcludePenultimatePoints" not in pl:
             obj.addProperty("App::PropertyBool", "ExcludePenultimatePoints",
@@ -153,10 +153,12 @@ class WireFlex(Draft.Wire):
                                 "App::Property", "The distance along the " +
                                 "curve from the start of the wire to the " +
                                 "point where the minimum radius is " +
-                                "detected.\nThe exact point on the wire " +
-                                "may be visible if the 'Show Min Radius " +
-                                "Position' is enabled in the View tab " +
-                                "of Property View"))
+                                "detected.") + "\n" +
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The exact point on the " +
+                                "wire may be visible if the 'Show Min " +
+                                "Radius Position' is enabled in the View " +
+                                "tab of the Property View"))
             obj.setPropertyStatus("MinimumRadiusPosition", "ReadOnly")
         if "BiArcsApprox" not in pl:
             obj.addProperty("App::PropertyBool", "BiArcsApprox",

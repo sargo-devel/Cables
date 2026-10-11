@@ -70,9 +70,11 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             obj.addProperty("App::PropertyString", "MainShapeStatus",
                             prop_group,
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Build status of cable " +
-                                "main shape\n(main shape = shape of " +
-                                "insulation jacket)"))
+                                "App::Property", "Build status of the "
+                                "cable's main shape") + "\n" +
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "(main shape = shape of " +
+                                "the insulation jacket)"))
             obj.setPropertyStatus("MainShapeStatus", "ReadOnly")
         if "MainShapeIfError" not in pl:
             obj.addProperty("App::PropertyEnumeration", "MainShapeIfError",
@@ -85,7 +87,8 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             obj.addProperty("App::PropertyEnumeration", "MainShapeBuildMode",
                             prop_group,
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Build mode of main shape"))
+                                "App::Property", "Build mode of the main " +
+                                "shape"))
             obj.MainShapeBuildMode = ['Standard', 'AuxiliarySpine', 'BiNormal',
                                       'BiArcsApprox']
         if "Frenet" not in pl:
@@ -108,8 +111,8 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             obj.addProperty("App::PropertyLength", "BiArcsApproxTolerance",
                             prop_group,
                             QT_TRANSLATE_NOOP(
-                                "App::Property", "Tolerance of BiArcs " +
-                                "approximation of main shape if enabled"))
+                                "App::Property", "Tolerance for the BiArcs " +
+                                "approximation of the main shape, if enabled"))
         if "BiNormalVector" not in pl:
             obj.addProperty("App::PropertyVector", "BiNormalVector",
                             prop_group,

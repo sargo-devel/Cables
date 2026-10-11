@@ -712,8 +712,8 @@ class detachWireFromTerminal:
                 "Accel": keyShorts['DetachWireFromTerminal'],
                 'ToolTip': QT_TRANSLATE_NOOP(
                     "Cables_DetachWireFromTerminal", "It removes wire end " +
-                    "attachment from the terminal. Select WireFlex then " +
-                    "Terminal")}
+                    "attachment from the terminal. Select the WireFlex then " +
+                    "the Terminal")}
 
 
 Gui.addCommand('Cables_WireFlex', newWireFlexCommand())

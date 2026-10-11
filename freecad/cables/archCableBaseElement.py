@@ -168,7 +168,7 @@ class BaseElement(ArchComponent.Component):
                             eltype,
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "It indicates if preset " +
-                                "exists in local or built-in library"))
+                                "exists in the local or built-in library"))
             obj.setPropertyStatus("PresetInLibrary", "ReadOnly")
         if "NumberOfTerminals" not in pl:
             obj.addProperty("App::PropertyInteger", "NumberOfTerminals",

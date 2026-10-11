@@ -161,7 +161,8 @@ class BaseElement(ArchComponent.Component):
                                 "parameters for this object. It can be " +
                                 "changed by double-clicking the object " +
                                 "in the Tree View"))
-            obj.Preset, _ = self.getPresets(obj)
+            presets, _ = self.getPresets(obj)
+            self.updatePresetEnumeration(obj, presets)
         if "PresetInLibrary" not in pl:
             obj.addProperty("App::PropertyBool", "PresetInLibrary",
                             eltype,
@@ -331,7 +332,7 @@ class BaseElement(ArchComponent.Component):
             if preset != obj.Preset:
                 presetnames, presets = self.getPresets(obj)
                 if preset in presetnames:
-                    obj.Preset = [preset]
+                    self.updatePresetEnumeration(obj, [preset])
                     obj.Preset = preset
         except ValueError:
             FreeCAD.Console.PrintError(obj.Label,
@@ -348,12 +349,17 @@ class BaseElement(ArchComponent.Component):
                     obj, f"Can't set {p[0]} with value: {p[1]}")
 
     def updatePresetEnumeration(self, obj, new_presetnames):
+        if "Customized" not in new_presetnames:
+            new_presetnames = ["Customized"] + new_presetnames
         curr_presetnames = obj.getEnumerationsOfProperty("Preset")
         if new_presetnames != curr_presetnames:
             obj.Preset = new_presetnames
 
     def setPropertyPresetInLibrary(self, obj):
         if hasattr(obj, "PresetInLibrary"):
+            if obj.Preset == "Customized":
+                obj.PresetInLibrary = False
+                return
             presetnames, _ = self.getPresets(obj)
             if obj.Preset in presetnames:
                 if not obj.PresetInLibrary:

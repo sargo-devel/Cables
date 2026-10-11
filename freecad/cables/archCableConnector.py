@@ -199,6 +199,11 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
             for element in unhide_list:
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "-Hidden")
+            prop_list = ["Height", "HoleSize", "NumberOfHoles", "Thickness"]
+            roPrefix = "-" if obj.Preset == "Customized" else ""
+            for element in prop_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, f"{roPrefix}ReadOnly")
         if prop == "Base":
             self.updatePropertyStatusForBase(
                 obj, ["Height", "HoleSize", "NumberOfHoles", "Thickness"],

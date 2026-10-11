@@ -308,6 +308,14 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                 if hasattr(obj, element):
                     obj.setPropertyStatus(element, "-Hidden")
             self.setHelperRingsDefaults(obj)
+        if prop == "Preset":
+            prop_list = ["Depth", "Diameter", "FilletRadius", "Height",
+                         "HoleDiameter", "HolesDistance", "ProfileType",
+                         "Thickness", "Width"]
+            roPrefix = "-" if obj.Preset == "Customized" else ""
+            for element in prop_list:
+                if hasattr(obj, element):
+                    obj.setPropertyStatus(element, f"{roPrefix}ReadOnly")
 
     def execute(self, obj):
         # FreeCAD.Console.PrintMessage(obj.Label, "execute start\n")

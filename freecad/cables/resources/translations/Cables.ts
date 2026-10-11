@@ -4,97 +4,102 @@
 <context>
     <name>App::Property</name>
     <message>
-        <location filename="../../archCableConnector.py" line="147"/>
+        <location filename="../../archCableConnector.py" line="148"/>
         <source>The cross-sectional area of single hole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="152"/>
+        <location filename="../../archCableConnector.py" line="153"/>
         <source>The wall thickness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="157"/>
+        <location filename="../../archCableConnector.py" line="158"/>
         <source>The height of this connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="163"/>
+        <location filename="../../archCableConnector.py" line="164"/>
         <source>The number of holes for cables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="64"/>
+        <location filename="../../archCableConduit.py" line="68"/>
         <source>List of conduits belonging to the bundle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="70"/>
+        <location filename="../../archCableConduit.py" line="74"/>
         <source>Merge all subconduits into one shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="75"/>
+        <location filename="../../archCableConduit.py" line="79"/>
         <source>Automatically change label of base object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="80"/>
+        <location filename="../../archCableConduit.py" line="84"/>
         <source>Shows/hides all sub conduits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="85"/>
+        <location filename="../../archCableConduit.py" line="89"/>
         <source>Outer gauge [mm^2] of the conduit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="91"/>
+        <location filename="../../archCableConduit.py" line="95"/>
         <source>Thickness of insulation if profile not used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../layers.py" line="112"/>
+        <location filename="../../layers.py" line="140"/>
         <source>Type of object which will be automatically assigned to this layer on layer recompute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../layers.py" line="248"/>
+        <location filename="../../layers.py" line="307"/>
         <source>The point color of the objects contained within this layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../layers.py" line="255"/>
+        <location filename="../../layers.py" line="314"/>
         <source>The point size of the objects contained within this layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="153"/>
-        <source>The predefined set of parameters for this object</source>
+        <location filename="../../archCableBaseElement.py" line="163"/>
+        <source>The predefined set of parameters for this object. It can be changed by double-clicking the object in the Tree View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="160"/>
-        <source>The number of Terminals in this object</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archCableBaseElement.py" line="167"/>
-        <source>The number of Snap Lines in this object</source>
+        <location filename="../../archCableBaseElement.py" line="171"/>
+        <source>It indicates if preset exists in the local or built-in library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../archCableBaseElement.py" line="178"/>
-        <source>The number of solids in an external shape loaded from file</source>
+        <source>The number of Terminals in this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../archCableBaseElement.py" line="185"/>
+        <source>The number of Snap Lines in this object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBaseElement.py" line="196"/>
+        <source>The number of solids in an external shape loaded from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBaseElement.py" line="203"/>
         <source>The colors of external shape loaded from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="193"/>
+        <location filename="../../archCableBaseElement.py" line="211"/>
         <source>If it is true it will claim the linked Terminals and SnapLines as children in the Tree View.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,7 +120,7 @@
     </message>
     <message>
         <location filename="../../cableTerminal.py" line="70"/>
-        <location filename="../../cableSupport.py" line="110"/>
+        <location filename="../../cableSupport.py" line="139"/>
         <source>The parent element object</source>
         <translation type="unfinished"></translation>
     </message>
@@ -135,72 +140,122 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="69"/>
+        <location filename="../../wireFlex.py" line="70"/>
         <source>First Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="72"/>
+        <location filename="../../wireFlex.py" line="73"/>
         <source>Last Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="77"/>
+        <location filename="../../wireFlex.py" line="78"/>
         <source>List of middle vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="83"/>
+        <location filename="../../wireFlex.py" line="84"/>
         <source>Point indexes for list of middle vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="88"/>
+        <location filename="../../wireFlex.py" line="89"/>
         <source>Type of wire shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="95"/>
+        <location filename="../../wireFlex.py" line="96"/>
         <source>Length of boundary segment at the start of wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="101"/>
+        <location filename="../../wireFlex.py" line="102"/>
         <source>Length of boundary segment at the end of wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="106"/>
+        <location filename="../../wireFlex.py" line="107"/>
         <source>Parameterization factor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="112"/>
+        <location filename="../../wireFlex.py" line="113"/>
         <source>Tangency coefficient for inner tangents. Values in range [0,1]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="119"/>
+        <location filename="../../wireFlex.py" line="120"/>
         <source>Enables/disables start and end tangents on boundary BSpline vertexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="125"/>
+        <location filename="../../wireFlex.py" line="126"/>
         <source>Enables/disables tangents on inner BSpline knots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="370"/>
+        <location filename="../../wireFlex.py" line="132"/>
+        <source>Shows the continuity of the B-spline curve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="141"/>
+        <source>Exclude the penultimate points at both ends from use as BSpline knots. They will be used exclusively to determine the tangents at the ends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="147"/>
+        <source>Minimum detected bending radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="156"/>
+        <source>The distance along the curve from the start of the wire to the point where the minimum radius is detected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="161"/>
+        <source>The exact point on the wire may be visible if the &apos;Show Min Radius Position&apos; is enabled in the View tab of the Property View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="169"/>
+        <source>Enables BiArcs approximation of BSpline with a tolerance given in BiArcsApproxTolerance property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="177"/>
+        <source>Tolerance of BiArcs approximation of BSpline if BiArcsApprox property is enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="190"/>
+        <source>Automatically adjusted shape that uses the penultimate points to determine the tangents at the ends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="531"/>
         <source>Set attached point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="376"/>
+        <location filename="../../wireFlex.py" line="537"/>
         <source>Set boundary segment point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableSupport.py" line="105"/>
+        <location filename="../../wireFlex.py" line="543"/>
+        <source>Set minimum radius point color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireFlex.py" line="549"/>
+        <source>Show the point on the curve where the minimum radius is detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableSupport.py" line="134"/>
         <source>The shape containing snap lines</source>
         <translation type="unfinished"></translation>
     </message>
@@ -265,177 +320,257 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableLightPoint.py" line="63"/>
+        <location filename="../../archCableMainShape.py" line="74"/>
+        <source>Build status of the cable&apos;s main shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="77"/>
+        <source>(main shape = shape of the insulation jacket)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="84"/>
+        <source>Method for creating a main shape when an error occurs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="91"/>
+        <source>Build mode of the main shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="98"/>
+        <source>Frenet mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="104"/>
+        <source>Number of points for the construction of a new auxiliary spine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="109"/>
+        <source>Auxiliary spine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="115"/>
+        <source>Tolerance for the BiArcs approximation of the main shape, if enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="121"/>
+        <source>Binormal vector for BiNormal mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="128"/>
+        <source>Maximum allowed number of segments that can be used to construct a pipe surface along its guide path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="135"/>
+        <source>Maximum degree of the polynomial describing the curvature of the pipe&apos;s surface.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="141"/>
+        <source>Amount of memory used to store the shape, in KiB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="147"/>
+        <source>Handling shape corners: transformed, right corners, round corners</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="155"/>
+        <source>Automatic detection and resolution of shape-related issues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableLightPoint.py" line="64"/>
         <source>The diameter of the light point fitting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableLightPoint.py" line="69"/>
+        <location filename="../../archCableLightPoint.py" line="70"/>
         <source>The wall thickness of the light point fitting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableLightPoint.py" line="74"/>
+        <location filename="../../archCableLightPoint.py" line="75"/>
         <source>The height of the light point fitting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="79"/>
+        <location filename="../../archCable.py" line="85"/>
         <source>List of Sub Profiles on both ends of the cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="84"/>
+        <location filename="../../archCable.py" line="90"/>
         <source>List of Sub Wires on both ends of the cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="90"/>
+        <location filename="../../archCable.py" line="96"/>
         <source>List of Sub Cable Colors on both ends of the cable. Example: [&apos;J:0&apos;, &apos;L1:1&apos;, &apos;N:2&apos;, &apos;PE:3&apos;, &apos;CU:-1&apos;]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="95"/>
+        <location filename="../../archCable.py" line="101"/>
         <source>Shows/hides all sub lines: base wire, sub profiles, sub wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="101"/>
+        <location filename="../../archCable.py" line="107"/>
         <source>Offset from the bare subwire end to its insulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="107"/>
+        <location filename="../../archCable.py" line="113"/>
         <source>Automatically change labels of all sub lines: base wire, sub profiles, sub wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="114"/>
+        <location filename="../../archCable.py" line="120"/>
         <source>Changes fillet radius of base object which finally changes fillet radius of a cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="120"/>
+        <location filename="../../archCable.py" line="126"/>
         <source>Changes fillet radius of all sub wires objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="126"/>
+        <location filename="../../archCable.py" line="132"/>
         <source>Changes rotation of a cable by changing cable profile attachment offset angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="132"/>
+        <location filename="../../archCable.py" line="138"/>
         <source>Gauge [mm^2] of conductor wire if profile not used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="138"/>
+        <location filename="../../archCable.py" line="144"/>
         <source>Thickness of single insulation if profile not used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="143"/>
+        <location filename="../../archCable.py" line="150"/>
+        <source>Hides shape of all subwires</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCable.py" line="155"/>
         <source>An optional closed profile to base this cable on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="147"/>
+        <location filename="../../archCable.py" line="159"/>
         <source>The length of this cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="152"/>
+        <location filename="../../archCable.py" line="164"/>
         <source>Type of base wire shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="160"/>
+        <location filename="../../archCable.py" line="172"/>
         <source>Type of all sub wires shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="190"/>
+        <location filename="../../cableProfile.py" line="363"/>
+        <source>Confirms that the object can be used as a cable profile. Used by Layers Extended.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBox.py" line="191"/>
         <source>The profile type of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="197"/>
+        <location filename="../../archCableBox.py" line="198"/>
         <source>The reference plane for the shape of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="203"/>
+        <location filename="../../archCableBox.py" line="204"/>
         <source>The inner diameter of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="208"/>
+        <location filename="../../archCableBox.py" line="209"/>
         <source>The wall thickness of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="213"/>
+        <location filename="../../archCableBox.py" line="214"/>
         <source>The inner height of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="218"/>
+        <location filename="../../archCableBox.py" line="219"/>
         <source>The inner width of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="223"/>
+        <location filename="../../archCableBox.py" line="224"/>
         <source>The inner depth of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="228"/>
+        <location filename="../../archCableBox.py" line="229"/>
         <source>The inner fillet radius of side walls of this box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="233"/>
+        <location filename="../../archCableBox.py" line="234"/>
         <source>The distance between holes on a single wall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="238"/>
+        <location filename="../../archCableBox.py" line="239"/>
         <source>The diameter of a single hole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="243"/>
+        <location filename="../../archCableBox.py" line="244"/>
         <source>Hide the box body to have better access to helpers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="249"/>
+        <location filename="../../archCableBox.py" line="250"/>
         <source>Hide the helper rings if they are not needed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="255"/>
+        <location filename="../../archCableBox.py" line="256"/>
         <source>The diameter of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="261"/>
+        <location filename="../../archCableBox.py" line="262"/>
         <source>The height below lid of helper ring 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="267"/>
+        <location filename="../../archCableBox.py" line="268"/>
         <source>The diameter of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="273"/>
+        <location filename="../../archCableBox.py" line="274"/>
         <source>The height below lid of helper ring 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="279"/>
+        <location filename="../../archCableBox.py" line="280"/>
         <source>Enables auto creation of DIN TH35 rails inside box depending on box shape and dimensions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -443,57 +578,56 @@
 <context>
     <name>Cables</name>
     <message>
-        <location filename="../../archCableConnector.py" line="406"/>
+        <location filename="../../archCableConnector.py" line="412"/>
         <source>edit Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="417"/>
-        <location filename="../../archCableConduit.py" line="473"/>
-        <location filename="../../archCableBaseElement.py" line="788"/>
+        <location filename="../../archCableConnector.py" line="423"/>
+        <location filename="../../archCableConduit.py" line="478"/>
+        <location filename="../../archCableBaseElement.py" line="868"/>
         <location filename="../../cableSupport.py" line="44"/>
         <location filename="../../cableSupport.py" line="63"/>
-        <location filename="../../archCableLightPoint.py" line="141"/>
-        <location filename="../../archCable.py" line="1015"/>
-        <location filename="../../archCableBox.py" line="655"/>
-        <location filename="../../archElectricalDevice.py" line="219"/>
+        <location filename="../../archCableLightPoint.py" line="142"/>
+        <location filename="../../archCable.py" line="1036"/>
+        <location filename="../../archCableBox.py" line="664"/>
+        <location filename="../../archElectricalDevice.py" line="220"/>
         <source>No active document. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="423"/>
+        <location filename="../../archCableConnector.py" line="430"/>
         <source>CableConnector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="226"/>
-        <location filename="../../archCableConduit.py" line="249"/>
-        <source>Conduit: Base compound object notcontinuous
-</source>
+        <location filename="../../archCableConduit.py" line="231"/>
+        <location filename="../../archCableConduit.py" line="254"/>
+        <source>Base compound object not continuous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="478"/>
+        <location filename="../../archCableConduit.py" line="484"/>
         <source>Cable Conduit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConduit.py" line="485"/>
+        <location filename="../../archCableConduit.py" line="491"/>
         <source>No base objects for Cable Conduit. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="793"/>
+        <location filename="../../archCableBaseElement.py" line="873"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="309"/>
+        <location filename="../../wireFlex.py" line="443"/>
         <source>Error wiring edges for BSpline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="535"/>
+        <location filename="../../wireFlex.py" line="744"/>
         <source>wrong object selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -555,6 +689,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../archCableMainShape.py" line="212"/>
+        <location filename="../../archCableMainShape.py" line="288"/>
+        <source>Unable to build the cable base path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="231"/>
+        <source>Unable to build the cable profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="265"/>
+        <source>Unable to build the main shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="310"/>
+        <source>Unable to build main shape in mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="318"/>
+        <source>Building shape in error mode failed (shape is None)!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="386"/>
+        <source>The length of the BiArcs approximated main shape differs by more than 1% from the target. Check properties from &apos;Cable Shape Troubleshooting&apos; group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="390"/>
+        <source>A shape approximation was built from BiArcs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableMainShape.py" line="395"/>
+        <source>BiArcs main shape approximation failed in mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../cablesCommands.py" line="98"/>
         <source>WireFlex</source>
         <translation type="unfinished"></translation>
@@ -591,7 +766,7 @@
     </message>
     <message>
         <location filename="../../cablesCommands.py" line="279"/>
-        <location filename="../../archCable.py" line="1025"/>
+        <location filename="../../archCable.py" line="1045"/>
         <source>Cable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -661,73 +836,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableLightPoint.py" line="146"/>
+        <location filename="../../archCableLightPoint.py" line="148"/>
         <source>CableLightPoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="414"/>
+        <location filename="../../archCable.py" line="428"/>
         <source>Base compound object not continuous or wrong direction of first wire in compound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="421"/>
-        <source>Base compound has wrong direction of last wire</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archCable.py" line="489"/>
-        <source>Unable to build the cable base path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archCable.py" line="498"/>
-        <source>unable to build main shape</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../archCable.py" line="589"/>
+        <location filename="../../archCable.py" line="595"/>
         <source>unable to build subshape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCable.py" line="1021"/>
+        <location filename="../../archCable.py" line="1041"/>
         <source>No base object for cable. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="109"/>
+        <location filename="../../cableProfile.py" line="110"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="350"/>
+        <location filename="../../cableProfile.py" line="352"/>
         <source>Cable needs to have number of wires &gt; 0 and nonzero wire gauge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="368"/>
+        <location filename="../../cableProfile.py" line="377"/>
         <source>Flat cable needs to have at least 2 wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="456"/>
+        <location filename="../../cableProfile.py" line="465"/>
         <source>Round cable needs to have at least 1 wire</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="593"/>
-        <location filename="../../cableProfile.py" line="608"/>
+        <location filename="../../cableProfile.py" line="602"/>
+        <location filename="../../cableProfile.py" line="617"/>
         <source>Skipping bad profile or preset:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="643"/>
+        <location filename="../../cableProfile.py" line="656"/>
         <source>Skipping bad line:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cableProfile.py" line="646"/>
+        <location filename="../../cableProfile.py" line="659"/>
         <source>Could not open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -762,120 +922,125 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="179"/>
+        <location filename="../../wireutils.py" line="194"/>
+        <source>Selected objects don&apos;t belong to the same parent container!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../wireutils.py" line="202"/>
         <source>Wrong selection. Please select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="284"/>
+        <location filename="../../wireutils.py" line="307"/>
         <source>Selection is not an edge or obj has no Points property</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="291"/>
+        <location filename="../../wireutils.py" line="314"/>
         <source>The new point is not lying on edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="309"/>
+        <location filename="../../wireutils.py" line="332"/>
         <source>Selected edge is not supported:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="351"/>
+        <location filename="../../wireutils.py" line="374"/>
         <source>Wrong selection or obj has no Points property</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="355"/>
+        <location filename="../../wireutils.py" line="378"/>
         <source>The given vector does not belong to obj</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="371"/>
+        <location filename="../../wireutils.py" line="394"/>
         <source>Proper point not found
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="400"/>
-        <location filename="../../wireutils.py" line="669"/>
+        <location filename="../../wireutils.py" line="423"/>
+        <location filename="../../wireutils.py" line="705"/>
         <source>Wrong edge type selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="407"/>
+        <location filename="../../wireutils.py" line="438"/>
         <source>Selection is not an edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="452"/>
+        <location filename="../../wireutils.py" line="488"/>
         <source>Selection is not a mid Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="456"/>
-        <location filename="../../wireutils.py" line="584"/>
+        <location filename="../../wireutils.py" line="492"/>
+        <location filename="../../wireutils.py" line="620"/>
         <source>Selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="498"/>
+        <location filename="../../wireutils.py" line="534"/>
         <source>Wrong selection. Please select two vertexes. First vertex has to belong to WireFlex, second to an external object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="513"/>
+        <location filename="../../wireutils.py" line="549"/>
         <source>First selection is not a Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="546"/>
+        <location filename="../../wireutils.py" line="582"/>
         <source>Point attachment not assigned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="677"/>
+        <location filename="../../wireutils.py" line="713"/>
         <source>First selection is not an edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="695"/>
+        <location filename="../../wireutils.py" line="731"/>
         <source>Second selection is not a proper vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="700"/>
+        <location filename="../../wireutils.py" line="736"/>
         <source>Selected vertex does not belong to selected edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="707"/>
+        <location filename="../../wireutils.py" line="743"/>
         <source>Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireutils.py" line="708"/>
+        <location filename="../../wireutils.py" line="744"/>
         <source>is attached and can&apos;t be moved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="645"/>
+        <location filename="../../archCableBox.py" line="654"/>
         <source>edit Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="659"/>
+        <location filename="../../archCableBox.py" line="669"/>
         <source>CableBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archElectricalDevice.py" line="211"/>
+        <location filename="../../archElectricalDevice.py" line="212"/>
         <source>edit Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archElectricalDevice.py" line="224"/>
+        <location filename="../../archElectricalDevice.py" line="226"/>
         <source>ElectricalDevice</source>
         <translation type="unfinished"></translation>
     </message>
@@ -929,11 +1094,6 @@
     <message>
         <location filename="../../cablesCommands.py" line="692"/>
         <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../cablesCommands.py" line="719"/>
-        <source>It removes wire end attachment from the terminal. Select WireFlex then Terminal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1046,6 +1206,11 @@
     <message>
         <location filename="../../cablesCommands.py" line="711"/>
         <source>Detach Wire From Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cablesCommands.py" line="719"/>
+        <source>It removes wire end attachment from the terminal. Select the WireFlex then the Terminal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

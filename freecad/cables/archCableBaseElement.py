@@ -846,10 +846,10 @@ class ViewProviderBaseElement(ArchComponent.ViewProviderComponent):
         # this is a base for child class setEdit method
         if mode != 0:
             return None
-        panel = task_panel(vobj.Object)
-        FreeCADGui.Selection.clearSelection()
         FreeCAD.ActiveDocument.openTransaction(
             translate("Cables", undo_text))
+        panel = task_panel(vobj.Object)
+        FreeCADGui.Selection.clearSelection()
         FreeCADGui.doCommand(
             f"obj = FreeCAD.activeDocument().getObject('{vobj.Object.Name}')")
         FreeCADGui.Control.showDialog(panel)

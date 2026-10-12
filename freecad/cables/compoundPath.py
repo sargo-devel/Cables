@@ -32,6 +32,8 @@ from freecad.cables import iconPath
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
+if FreeCAD.GuiUp:
+    import FreeCADGui as Gui
 
 CLASS_COMPOUNDPATH_ICON = os.path.join(iconPath, "classCompoundPath.svg")
 tol = 1e-6     # tolerance for isEqual() comparison
@@ -598,6 +600,10 @@ def make_compoundpath(plist=None):
         return None
     path = FreeCAD.ActiveDocument.addObject("Part::FeaturePython",
                                             "CompoundPath")
+    if FreeCAD.GuiUp:
+        active_part = Gui.ActiveDocument.ActiveView.getActiveObject("part")
+        if active_part is not None:
+            active_part.addObject(path)
     CompoundPath(path)
     ViewProviderCompoundPath(path.ViewObject)
     path.Links = plist

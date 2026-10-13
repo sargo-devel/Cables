@@ -25,8 +25,8 @@ Dummy,ExtShape,Device,0.0,0.0,0.0,0.0,0.0,0.0
 
 # Terminal ElementType
 # Name,Terminal,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X),NrOfConnections,Length,Spacing
-Term001,Terminal,Terminal, -2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
-Term002,Terminal,Terminal,  2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
+Pin001,Terminal,Terminal, -2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
+Pin002,Terminal,Terminal,  2.54,0.0,15.0,0.0,0.0,90.0,1,10.0,1.0
 
 # SnapLines ElementType (old name: SupportLines is also supported)
 # Name,SnapLines,Class,Offset X,Offset Y,Offset Z,Rotation Yaw(Z),Rotation Pitch(Y), Rotation Roll(X)

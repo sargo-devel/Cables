@@ -69,7 +69,8 @@ class CablesWorkbench (Gui.Workbench):
                             "Cables_CableConnector",
                             "Cables_CableLightPoint",
                             "Cables_ElectricalDevice",
-                            "Cables_Material"]
+                            "Cables_Material",
+                            "Cables_PartsLibrary"]
         self.list_support = ["Cables_SupportPoint",
                              "Cables_SupportLine",
                              "Cables_AttachInPlace",

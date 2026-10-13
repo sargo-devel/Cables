@@ -36,6 +36,7 @@ from freecad.cables import archCableBox
 from freecad.cables import archElectricalDevice
 from freecad.cables import cableutils
 from freecad.cables import cableReports
+from freecad.cables import partsLibrary
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -67,6 +68,7 @@ CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath,
                                             "cmdDetWireFromTerminal.svg")
 CMD_LAYERS_ICON = os.path.join(iconPath, "cmdNewLayersExtended.svg")
 CMD_REPORTS_ICON = os.path.join(iconPath, "cmdCreateReports.svg")
+CMD_LIBRARY_ICON = os.path.join(iconPath, "cmdPartsLibraryActions.svg")
 
 keyShorts = {'WireFlex': 'W, F',
              'AddVertex': 'W, A',
@@ -741,6 +743,32 @@ class createReports:
                     "electrical components used in the project")}
 
 
+class partsLibraryActions:
+    def Activated(self):
+        if getattr(self, "qgui", None):
+            if self.qgui.form.isVisible():
+                self.qgui.form.raise_()
+            else:
+                del self.qgui
+                self.data, self.qgui = partsLibrary.run()
+        else:
+            self.data, self.qgui = partsLibrary.run()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_LIBRARY_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_PartsLibrary",
+                                              "Parts Library"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_PartsLibrary", "It adds or removes items from " +
+                    "the local library. Select all needed components first " +
+                    "(solid shape, terminals, snap lines), then run the " +
+                    "command. To delete any item, run the command with " +
+                    "nothing selected")}
+
+
 Gui.addCommand('Cables_WireFlex', newWireFlexCommand())
 Gui.addCommand('Cables_AddVertex', addVertexCommand())
 Gui.addCommand('Cables_DelVertex', delVertexCommand())
@@ -763,3 +791,4 @@ Gui.addCommand('Cables_AttachWireToTerminal', attachWireToTerminal())
 Gui.addCommand('Cables_DetachWireFromTerminal', detachWireFromTerminal())
 Gui.addCommand('Cables_LayersExtended', newLayersExtendedCommand())
 Gui.addCommand('Cables_CreateReports', createReports())
+Gui.addCommand('Cables_PartsLibrary', partsLibraryActions())

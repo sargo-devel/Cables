@@ -20,7 +20,7 @@
 
 ###########################################
 
-# Fixed Preset Type
+# Fixed PresetType
 # Name,Fixed,DeviceClass,StepFileName,NrOfTerminals,NrOfSuppLines
 Dummy,Fixed,Device,Dummy_Dummy.step,2,2
 1-Pole,Fixed,MCB,MCB_1-Pole.step,2,0

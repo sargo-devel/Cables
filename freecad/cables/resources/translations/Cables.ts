@@ -260,62 +260,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="54"/>
+        <location filename="../../compoundPath.py" line="56"/>
         <source>List of objects added to the compound path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="59"/>
+        <location filename="../../compoundPath.py" line="61"/>
         <source>Type of compound shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="66"/>
+        <location filename="../../compoundPath.py" line="68"/>
         <source>Minimum radius to use to fillet the corners</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="72"/>
+        <location filename="../../compoundPath.py" line="74"/>
         <source>Smallest detected radius across all edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="80"/>
+        <location filename="../../compoundPath.py" line="82"/>
         <source>Edge containing smallest radius or preceding smallest radius if radius is 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="86"/>
+        <location filename="../../compoundPath.py" line="88"/>
         <source>The length of this path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="92"/>
+        <location filename="../../compoundPath.py" line="94"/>
         <source>The points of the path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="98"/>
+        <location filename="../../compoundPath.py" line="100"/>
         <source>Length of connection offset distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="104"/>
+        <location filename="../../compoundPath.py" line="106"/>
         <source>Angle of connection offset distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="110"/>
+        <location filename="../../compoundPath.py" line="112"/>
         <source>Type of added/modified connection curves between edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="118"/>
+        <location filename="../../compoundPath.py" line="120"/>
         <source>The proportions of segments in the added base curve. Should be between 1 and 2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="124"/>
+        <location filename="../../compoundPath.py" line="126"/>
         <source>The degree of the Bezier function. Best is 3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -642,13 +642,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="238"/>
-        <location filename="../../compoundPath.py" line="244"/>
+        <location filename="../../compoundPath.py" line="240"/>
+        <location filename="../../compoundPath.py" line="246"/>
         <source>link object has no Points property</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../compoundPath.py" line="321"/>
+        <location filename="../../compoundPath.py" line="323"/>
         <source>Unable to build compound path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -730,108 +730,109 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="98"/>
+        <location filename="../../cablesCommands.py" line="100"/>
         <source>WireFlex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="107"/>
+        <location filename="../../cablesCommands.py" line="109"/>
         <source>Default wireFlex object created.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="134"/>
+        <location filename="../../cablesCommands.py" line="136"/>
         <source>Add Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="163"/>
+        <location filename="../../cablesCommands.py" line="165"/>
         <source>Delete Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="193"/>
+        <location filename="../../cablesCommands.py" line="195"/>
         <source>Attach Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="223"/>
+        <location filename="../../cablesCommands.py" line="225"/>
         <source>Remove Vertex Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="252"/>
+        <location filename="../../cablesCommands.py" line="254"/>
         <source>CompoundPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="279"/>
+        <location filename="../../cablesCommands.py" line="281"/>
         <location filename="../../archCable.py" line="1045"/>
+        <location filename="../../cableReports.py" line="580"/>
         <source>Cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="307"/>
+        <location filename="../../cablesCommands.py" line="309"/>
         <source>CableConduit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="335"/>
+        <location filename="../../cablesCommands.py" line="337"/>
         <source>Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="371"/>
+        <location filename="../../cablesCommands.py" line="373"/>
         <source>Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="425"/>
+        <location filename="../../cablesCommands.py" line="427"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="447"/>
+        <location filename="../../cablesCommands.py" line="449"/>
         <source>Cable Layers Extended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="470"/>
+        <location filename="../../cablesCommands.py" line="472"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="501"/>
+        <location filename="../../cablesCommands.py" line="503"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="539"/>
+        <location filename="../../cablesCommands.py" line="541"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="569"/>
+        <location filename="../../cablesCommands.py" line="571"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="605"/>
+        <location filename="../../cablesCommands.py" line="607"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="633"/>
+        <location filename="../../cablesCommands.py" line="635"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="670"/>
+        <location filename="../../cablesCommands.py" line="672"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="698"/>
+        <location filename="../../cablesCommands.py" line="700"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -889,6 +890,157 @@
     <message>
         <location filename="../../cableProfile.py" line="659"/>
         <source>Could not open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="51"/>
+        <source>Report on placements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="53"/>
+        <location filename="../../cableReports.py" line="66"/>
+        <location filename="../../cableReports.py" line="84"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="55"/>
+        <source>Attachment Support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="56"/>
+        <source>Map Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="57"/>
+        <source>Attachment Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="58"/>
+        <source>Placement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="64"/>
+        <source>Report on elements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="68"/>
+        <location filename="../../cableReports.py" line="82"/>
+        <location filename="../../cableReports.py" line="94"/>
+        <source>Cable profile/Element preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="69"/>
+        <location filename="../../cableReports.py" line="83"/>
+        <location filename="../../cableReports.py" line="95"/>
+        <source>Length/Quantity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="71"/>
+        <source>e.g. Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="73"/>
+        <source>e.g. Product name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="79"/>
+        <source>Report on quantities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="91"/>
+        <source>Simple BOM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="173"/>
+        <source>Select folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="394"/>
+        <source>diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="429"/>
+        <source>round</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="430"/>
+        <source>square</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="433"/>
+        <source>rectangular</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="464"/>
+        <source>single wire</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="480"/>
+        <source>Customized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="482"/>
+        <source>Light point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="485"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="581"/>
+        <source>Cable conduit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="582"/>
+        <source>Cable box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="583"/>
+        <source>Connector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="585"/>
+        <source>Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="599"/>
+        <source>for PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="610"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableReports.py" line="823"/>
+        <source>Error creating PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1048,12 +1200,12 @@
 <context>
     <name>Cables_AddVertex</name>
     <message>
-        <location filename="../../cablesCommands.py" line="147"/>
+        <location filename="../../cablesCommands.py" line="149"/>
         <source>Add Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="154"/>
+        <location filename="../../cablesCommands.py" line="156"/>
         <source>It adds a new vertex to selected edge of Wire Flex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1061,12 +1213,12 @@
 <context>
     <name>Cables_AttachInPlace</name>
     <message>
-        <location filename="../../cablesCommands.py" line="618"/>
+        <location filename="../../cablesCommands.py" line="620"/>
         <source>Attach In Place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="627"/>
+        <location filename="../../cablesCommands.py" line="629"/>
         <source>It makes attachment without changing global placement of an object. Select objects to attach then at the end the object which will be the attachment support for them</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1074,12 +1226,12 @@
 <context>
     <name>Cables_AttachVertex</name>
     <message>
-        <location filename="../../cablesCommands.py" line="206"/>
+        <location filename="../../cablesCommands.py" line="208"/>
         <source>Attach Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="214"/>
+        <location filename="../../cablesCommands.py" line="216"/>
         <source>It attaches a Wire Flex vertex to external vertex or object. Select Wire Flex vertex first then ext. vertex (or entire object)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1087,12 +1239,12 @@
 <context>
     <name>Cables_AttachWireToTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="683"/>
+        <location filename="../../cablesCommands.py" line="685"/>
         <source>Attach Wire To Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="692"/>
+        <location filename="../../cablesCommands.py" line="694"/>
         <source>It makes attachment of wire end to the terminal. Select vertex or edge of WireFlex object in 3D view then select the Terminal or its vertex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1100,12 +1252,12 @@
 <context>
     <name>Cables_Cable</name>
     <message>
-        <location filename="../../cablesCommands.py" line="292"/>
+        <location filename="../../cablesCommands.py" line="294"/>
         <source>Cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="301"/>
+        <location filename="../../cablesCommands.py" line="303"/>
         <source>It adds a new cable object from WireFlex and a profile. Select WireFlex object first (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1113,12 +1265,12 @@
 <context>
     <name>Cables_CableBox</name>
     <message>
-        <location filename="../../cablesCommands.py" line="359"/>
+        <location filename="../../cablesCommands.py" line="361"/>
         <source>Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="366"/>
+        <location filename="../../cablesCommands.py" line="368"/>
         <source>It adds a new cable box object. Select any point in 3D view first, then add the box</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1126,12 +1278,12 @@
 <context>
     <name>Cables_CableConduit</name>
     <message>
-        <location filename="../../cablesCommands.py" line="320"/>
+        <location filename="../../cablesCommands.py" line="322"/>
         <source>CableConduit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="330"/>
+        <location filename="../../cablesCommands.py" line="332"/>
         <source>It adds a new cable conduit object from single WireFlex or sequence of wires (and optionally profile). Select single WireFlex object (or sequence of wires, cables or conduits) then optionally a profile at the end</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1139,12 +1291,12 @@
 <context>
     <name>Cables_CableConnector</name>
     <message>
-        <location filename="../../cablesCommands.py" line="395"/>
+        <location filename="../../cablesCommands.py" line="397"/>
         <source>Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="403"/>
+        <location filename="../../cablesCommands.py" line="405"/>
         <source>It adds a new cable connector object. Select any point in 3D view first, then add the connector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1152,12 +1304,12 @@
 <context>
     <name>Cables_CableLightPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="488"/>
+        <location filename="../../cablesCommands.py" line="490"/>
         <source>Cable Light Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="496"/>
+        <location filename="../../cablesCommands.py" line="498"/>
         <source>It adds a new light point for cable. Select any point in 3D view first, then add the light point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1165,25 +1317,38 @@
 <context>
     <name>Cables_CompoundPath</name>
     <message>
-        <location filename="../../cablesCommands.py" line="265"/>
+        <location filename="../../cablesCommands.py" line="267"/>
         <source>CompoundPath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="273"/>
+        <location filename="../../cablesCommands.py" line="275"/>
         <source>It creates a new compound path based on selected objects. At least two objects have to be selected first</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Cables_CreateReports</name>
+    <message>
+        <location filename="../../cablesCommands.py" line="738"/>
+        <source>Create Reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cablesCommands.py" line="744"/>
+        <source>Creates reports on the electrical components used in the project</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Cables_DeactivateAttachment</name>
     <message>
-        <location filename="../../cablesCommands.py" line="646"/>
+        <location filename="../../cablesCommands.py" line="648"/>
         <source>Deactivate Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="653"/>
+        <location filename="../../cablesCommands.py" line="655"/>
         <source>It daeactivates attachment of selected objects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1191,12 +1356,12 @@
 <context>
     <name>Cables_DelVertex</name>
     <message>
-        <location filename="../../cablesCommands.py" line="176"/>
+        <location filename="../../cablesCommands.py" line="178"/>
         <source>Delete Vertex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="183"/>
+        <location filename="../../cablesCommands.py" line="185"/>
         <source>It deletes selected vertex from Wire Flex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1204,12 +1369,12 @@
 <context>
     <name>Cables_DetachWireFromTerminal</name>
     <message>
-        <location filename="../../cablesCommands.py" line="711"/>
+        <location filename="../../cablesCommands.py" line="713"/>
         <source>Detach Wire From Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="719"/>
+        <location filename="../../cablesCommands.py" line="721"/>
         <source>It removes wire end attachment from the terminal. Select the WireFlex then the Terminal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1233,12 +1398,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_ElectricalDevice</name>
     <message>
-        <location filename="../../cablesCommands.py" line="526"/>
+        <location filename="../../cablesCommands.py" line="528"/>
         <source>Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="534"/>
+        <location filename="../../cablesCommands.py" line="536"/>
         <source>It adds a new electrical device. Select any point in 3D view first, then add the device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1246,12 +1411,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_LayersExtended</name>
     <message>
-        <location filename="../../cablesCommands.py" line="459"/>
+        <location filename="../../cablesCommands.py" line="461"/>
         <source>Layers Extended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="465"/>
+        <location filename="../../cablesCommands.py" line="467"/>
         <source>It adds a new set of predefined extended layers for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1259,12 +1424,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Material</name>
     <message>
-        <location filename="../../cablesCommands.py" line="437"/>
+        <location filename="../../cablesCommands.py" line="439"/>
         <source>Cable Materials</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="443"/>
+        <location filename="../../cablesCommands.py" line="445"/>
         <source>It adds new multimaterials for cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1272,12 +1437,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_Profile</name>
     <message>
-        <location filename="../../cablesCommands.py" line="416"/>
+        <location filename="../../cablesCommands.py" line="418"/>
         <source>Cable Profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="421"/>
+        <location filename="../../cablesCommands.py" line="423"/>
         <source>It adds a new cable profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1285,12 +1450,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_RemoveVertexAttachment</name>
     <message>
-        <location filename="../../cablesCommands.py" line="236"/>
+        <location filename="../../cablesCommands.py" line="238"/>
         <source>Remove Vertex Attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="244"/>
+        <location filename="../../cablesCommands.py" line="246"/>
         <source>It removes an attachment of external vertex or object from selected Wire Flex vertex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1298,12 +1463,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportLine</name>
     <message>
-        <location filename="../../cablesCommands.py" line="591"/>
+        <location filename="../../cablesCommands.py" line="593"/>
         <source>Support Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="599"/>
+        <location filename="../../cablesCommands.py" line="601"/>
         <source>It adds a new support line to which a cable or other element can be attached. Select at least one point first</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1311,12 +1476,12 @@ and on supported objects.</source>
 <context>
     <name>Cables_SupportPoint</name>
     <message>
-        <location filename="../../cablesCommands.py" line="557"/>
+        <location filename="../../cablesCommands.py" line="559"/>
         <source>Support Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="564"/>
+        <location filename="../../cablesCommands.py" line="566"/>
         <source>It adds a new support point to which a cable or other element can be attached</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1324,13 +1489,96 @@ and on supported objects.</source>
 <context>
     <name>Cables_WireFlex</name>
     <message>
-        <location filename="../../cablesCommands.py" line="117"/>
+        <location filename="../../cablesCommands.py" line="119"/>
         <source>WireFlex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesCommands.py" line="126"/>
+        <location filename="../../cablesCommands.py" line="128"/>
         <source>It creates a new line based on selected vertexes/objects. At least two vertexes/objects have to be selected first. If only one object is selected, a copy of it will be created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Reports</name>
+    <message>
+        <location filename="../ui/reports.ui" line="14"/>
+        <source>Cable Reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="26"/>
+        <source>Report creation panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="38"/>
+        <source>Report selection </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="44"/>
+        <source>Report 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="57"/>
+        <source>Report 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="67"/>
+        <source>Report 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="95"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="101"/>
+        <source>Create a flat list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="110"/>
+        <source>Create a PDF version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="133"/>
+        <source>Output folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="180"/>
+        <source>Collapse all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="187"/>
+        <source>Expand all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="210"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="227"/>
+        <source>Create report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="249"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/reports.ui" line="271"/>
+        <source>Please wait. This might take a while...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1669,9 +1917,9 @@ and on supported objects.</source>
     <name>Workbench</name>
     <message>
         <location filename="../../init_gui.py" line="36"/>
-        <location filename="../../init_gui.py" line="84"/>
-        <location filename="../../init_gui.py" line="92"/>
-        <location filename="../../init_gui.py" line="114"/>
+        <location filename="../../init_gui.py" line="85"/>
+        <location filename="../../init_gui.py" line="93"/>
+        <location filename="../../init_gui.py" line="115"/>
         <source>Cables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1681,21 +1929,21 @@ and on supported objects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="82"/>
-        <location filename="../../init_gui.py" line="90"/>
-        <location filename="../../init_gui.py" line="112"/>
+        <location filename="../../init_gui.py" line="83"/>
+        <location filename="../../init_gui.py" line="91"/>
+        <location filename="../../init_gui.py" line="113"/>
         <source>Cable Wires</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="86"/>
-        <location filename="../../init_gui.py" line="94"/>
-        <location filename="../../init_gui.py" line="116"/>
+        <location filename="../../init_gui.py" line="87"/>
+        <location filename="../../init_gui.py" line="95"/>
+        <location filename="../../init_gui.py" line="117"/>
         <source>Cable Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../init_gui.py" line="88"/>
+        <location filename="../../init_gui.py" line="89"/>
         <source>Draft Tools</source>
         <translation type="unfinished"></translation>
     </message>

@@ -74,7 +74,8 @@ class CablesWorkbench (Gui.Workbench):
                              "Cables_SupportLine",
                              "Cables_AttachInPlace",
                              "Cables_DeactivateAttachment",
-                             "Cables_LayersExtended"]
+                             "Cables_LayersExtended",
+                             "Cables_CreateReports"]
         self.list_draft = ["Draft_ToggleGrid",
                            "Draft_Move"
                            # "Draft_SelectPlane"]

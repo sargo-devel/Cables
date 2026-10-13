@@ -35,6 +35,7 @@ from freecad.cables import archCableConnector
 from freecad.cables import archCableBox
 from freecad.cables import archElectricalDevice
 from freecad.cables import cableutils
+from freecad.cables import cableReports
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 
@@ -65,6 +66,7 @@ CMD_ATTWIRETOTERMINAL_ICON = os.path.join(iconPath, "cmdAttWireToTerminal.svg")
 CMD_DETWIREFROMTERMINAL_ICON = os.path.join(iconPath,
                                             "cmdDetWireFromTerminal.svg")
 CMD_LAYERS_ICON = os.path.join(iconPath, "cmdNewLayersExtended.svg")
+CMD_REPORTS_ICON = os.path.join(iconPath, "cmdCreateReports.svg")
 
 keyShorts = {'WireFlex': 'W, F',
              'AddVertex': 'W, A',
@@ -716,6 +718,29 @@ class detachWireFromTerminal:
                     "the Terminal")}
 
 
+class createReports:
+    def Activated(self):
+        if getattr(self, "qgui", None):
+            if self.qgui.form.isVisible():
+                self.qgui.form.raise_()
+            else:
+                del self.qgui
+                self.qgui = cableReports.ReportsDialog()
+        else:
+            self.qgui = cableReports.ReportsDialog()
+
+    def IsActive(self):
+        return Gui.ActiveDocument is not None
+
+    def GetResources(self):
+        return {'Pixmap': CMD_REPORTS_ICON,
+                'MenuText': QT_TRANSLATE_NOOP("Cables_CreateReports",
+                                              "Create Reports"),
+                'ToolTip': QT_TRANSLATE_NOOP(
+                    "Cables_CreateReports", "Creates reports on the " +
+                    "electrical components used in the project")}
+
+
 Gui.addCommand('Cables_WireFlex', newWireFlexCommand())
 Gui.addCommand('Cables_AddVertex', addVertexCommand())
 Gui.addCommand('Cables_DelVertex', delVertexCommand())
@@ -737,3 +762,4 @@ Gui.addCommand('Cables_DeactivateAttachment', deactivateAttachment())
 Gui.addCommand('Cables_AttachWireToTerminal', attachWireToTerminal())
 Gui.addCommand('Cables_DetachWireFromTerminal', detachWireFromTerminal())
 Gui.addCommand('Cables_LayersExtended', newLayersExtendedCommand())
+Gui.addCommand('Cables_CreateReports', createReports())

@@ -371,7 +371,7 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                                                          presetfiles)
         return pr
 
-    def makeSnapLines(self, obj):
+    def makeSnapLines(self, obj, shape3d=False):
         # snap crosses
         t = obj.Thickness.Value
         d = obj.Depth.Value + 2*t
@@ -402,12 +402,16 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                       (x0, y0-y, z0),
                       (x0, y0+y, z0),
                       (x0, y0, z0+z),
-                      (x0, y0, z0-z)]
+                      (x0, y0, z0-z),
+                      (x0+x, y0, z0),
+                      (x0-x, y0, z0)]
             cross4 = [(-x0, y0, z0),
                       (-x0, y0+y, z0),
                       (-x0, y0-y, z0),
                       (-x0, y0, z0+z),
-                      (-x0, y0, z0-z)]
+                      (-x0, y0, z0-z),
+                      (-x0-x, y0, z0),
+                      (-x0+x, y0, z0)]
             crosses2.append(cross2)
             crosses4.append(cross4)
         y0 = y0base
@@ -417,12 +421,16 @@ class ArchCableBox(archCableBaseElement.BaseElement):
                       (x0+x, y0, z0),
                       (x0-x, y0, z0),
                       (x0, y0, z0+z),
-                      (x0, y0, z0-z)]
+                      (x0, y0, z0-z),
+                      (x0, y0+y, z0),
+                      (x0, y0-y, z0)]
             cross3 = [(x0, -y0, z0),
                       (x0-x, -y0, z0),
                       (x0+x, -y0, z0),
                       (x0, -y0, z0+z),
-                      (x0, -y0, z0-z)]
+                      (x0, -y0, z0-z),
+                      (x0, -y0-y, z0),
+                      (x0, -y0+y, z0)]
             crosses1.append(cross1)
             crosses3.append(cross3)
         crosses2.reverse()
@@ -437,6 +445,13 @@ class ArchCableBox(archCableBaseElement.BaseElement):
             lines.append(Part.LineSegment(v[0], v[2]))
             lines.append(Part.LineSegment(v[0], v[4]))
             lines.append(Part.LineSegment(v[0], v[1]))
+        if shape3d:
+            for cross in crosses:
+                v = []
+                for c in cross:
+                    v.append(FreeCAD.Vector(*c))
+                lines.append(Part.LineSegment(v[0], v[5]))
+                lines.append(Part.LineSegment(v[0], v[6]))
         s = Part.Shape(lines)
         return s
 

@@ -103,10 +103,10 @@ class ArchCableLightPoint(archCableBaseElement.BaseElement):
             obj.Shape = sh
             # obj.Placement = pl
 
-    def makeSnapLines(self, obj):
+    def makeSnapLines(self, obj, shape3d=False):
         z = 2
-        s1 = archCableBaseElement.BaseElement.makeSnapLines(self, obj)
-        s2 = archCableBaseElement.BaseElement.makeSnapLines(self, obj)
+        s1 = archCableBaseElement.BaseElement.makeSnapLines(self, obj, shape3d)
+        s2 = archCableBaseElement.BaseElement.makeSnapLines(self, obj, shape3d)
         s1.Placement.Base.z = z
         s2.Placement.Base.z = -obj.Height.Value-z
         s = Part.Shape(s1.Edges + s2.Edges)

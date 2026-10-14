@@ -138,6 +138,12 @@ class ExtSnapLines:
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "The parent element object"))
             obj.setPropertyStatus("ParentElement", ["ReadOnly", "Hidden"])
+        if "Shape3d" not in pl:
+            obj.addProperty("App::PropertyBool", "Shape3d",
+                            "SnapLines",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "It adds two additional " +
+                                "segments lying on the local Z axis"))
 
         # Remove old unused Properties
         obj.removeProperty("ParentName")
@@ -147,6 +153,10 @@ class ExtSnapLines:
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
+        if prop == "Shape3d":
+            if obj.ParentElement is not None:
+                if getattr(obj.ParentElement.Proxy, "restored", False):
+                    obj.ParentElement.recompute()
         return
 
     def execute(self, obj):

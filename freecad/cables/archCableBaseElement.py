@@ -150,6 +150,7 @@ class BaseElement(ArchComponent.Component):
         self.Terminals = self.findTerminals(obj)
         self.SnapLines = self.findSnapLines(obj)
         obj.ClaimChildren = True
+        self.restored = True
 
     def setProperties(self, obj, eltype):
         pl = obj.PropertiesList
@@ -225,6 +226,7 @@ class BaseElement(ArchComponent.Component):
         self.SnapLines = self.findSnapLines(obj)
         # update library presence of preset
         self.setPropertyPresetInLibrary(obj)
+        self.restored = True
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged start: {prop}\n")
@@ -578,22 +580,28 @@ class BaseElement(ArchComponent.Component):
     def adjustSnapLines(self, obj):
         self.SnapLines = self.findSnapLines(obj)
         for snap in self.SnapLines:
-            snap_lines = self.makeSnapLines(obj)
+            shape3d = snap.Shape3d if hasattr(snap, "Shape3d") else False
+            snap_lines = self.makeSnapLines(obj, shape3d)
             if not self.sameShapes(snap_lines, snap.Lines) \
                or len(snap_lines.Edges) > 4:
                 snap.Lines = snap_lines
 
-    def makeSnapLines(self, obj):
+    def makeSnapLines(self, obj, shape3d=False):
         # default snap lines cross. Can be overwritten by child class
         x0 = 0
         y0 = 0
         z0 = 0
-        x = y = 5.0
+        x = y = z = 5.0
         cross = [(x0, y0, z0),
                  (x0+x, y0, z0),
                  (x0-x, y0, z0),
                  (x0, y0+y, z0),
                  (x0, y0-y, z0)]
+        if shape3d:
+            cross.extend([
+                (x0, y0, z0+z),
+                (x0, y0, z0-z)
+                ])
         v = []
         for c in cross:
             v.append(FreeCAD.Vector(*c))
@@ -602,6 +610,9 @@ class BaseElement(ArchComponent.Component):
         lines.append(Part.LineSegment(v[0], v[2]))
         lines.append(Part.LineSegment(v[0], v[4]))
         lines.append(Part.LineSegment(v[0], v[1]))
+        if shape3d:
+            lines.append(Part.LineSegment(v[0], v[5]))
+            lines.append(Part.LineSegment(v[0], v[6]))
         s = Part.Shape(lines)
         return s
 

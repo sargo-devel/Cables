@@ -638,6 +638,9 @@ class PartData:
             if element_type == "Terminal":
                 if data.get("Terminal") is None:
                     data["Terminal"] = []
+                if not el_name:
+                    el_idx = f"{len(data['Terminal'])+1:03n}"
+                    el_name = "Pin" + el_idx
                 yaw, pitch, roll = obj.Placement.Rotation.getYawPitchRoll()
                 base_vec = obj.Placement.Base
                 data["Terminal"].append([
@@ -657,11 +660,13 @@ class PartData:
             if element_type == "SnapLines":
                 if data.get("SnapLines") is None:
                     data["SnapLines"] = []
-                el_idx = f"{len(data['SnapLines'])+1:03n}"
+                if not el_name:
+                    el_idx = f"{len(data['SnapLines'])+1:03n}"
+                    el_name = "Snap" + el_idx
                 yaw, pitch, roll = obj.Placement.Rotation.getYawPitchRoll()
                 base_vec = obj.Placement.Base
                 data["SnapLines"].append([
-                    el_name + el_idx,       # Name
+                    el_name,                # Name
                     "SnapLines",            # ExtShape
                     el_class,               # Class
                     round(base_vec.x, 6),   # Offset X
@@ -789,7 +794,7 @@ class PartData:
             el_name = obj.PinName
         if element_type == "SnapLines":
             el_class = "SnapLines"
-            el_name = "SnapLines"
+            el_name = obj.SnapName
         return el_class, el_name
 
     def find_stepfile_in_library(self):

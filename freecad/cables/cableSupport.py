@@ -144,6 +144,12 @@ class ExtSnapLines:
                             QT_TRANSLATE_NOOP(
                                 "App::Property", "It adds two additional " +
                                 "segments lying on the local Z axis"))
+        if "SnapName" not in pl:
+            obj.addProperty("App::PropertyString", "SnapName",
+                            "SnapLines",
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "The functional name of " +
+                                "the Snap Lines object"))
 
         # Remove old unused Properties
         obj.removeProperty("ParentName")
@@ -157,6 +163,11 @@ class ExtSnapLines:
             if obj.ParentElement is not None:
                 if getattr(obj.ParentElement.Proxy, "restored", False):
                     obj.ParentElement.recompute()
+        if prop == "SnapName":
+            if obj.ParentElement is not None:
+                if hasattr(obj.ParentElement, "Proxy"):
+                    obj.ParentElement.Proxy.onChanged(
+                        obj.ParentElement, "Label")
         return
 
     def execute(self, obj):

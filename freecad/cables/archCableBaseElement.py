@@ -210,6 +210,20 @@ class BaseElement(ArchComponent.Component):
                                 "App::Property", "If it is true it will " +
                                 "claim the linked Terminals and SnapLines " +
                                 "as children in the Tree View."))
+        if "UsePinNameInLabels" not in pl:
+            obj.addProperty("App::PropertyBool", "UsePinNameInLabels",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "For all dependent " +
+                                "Terminals, include their Pin Name property " +
+                                "in their labels"))
+        if "UseSnapNameInLabels" not in pl:
+            obj.addProperty("App::PropertyBool", "UseSnapNameInLabels",
+                            eltype,
+                            QT_TRANSLATE_NOOP(
+                                "App::Property", "For all dependent " +
+                                "Snap Lines, include their Snap Name " +
+                                "property in their labels"))
         self.Type = "Component"
 
     def onDocumentRestored(self, obj, eltype="CableBaseElement"):
@@ -233,18 +247,12 @@ class BaseElement(ArchComponent.Component):
         undoredo = FreeCAD.ActiveDocument.Transacting
         ArchComponent.Component.onChanged(self, obj, prop)
         if prop == "Label" and not undoredo:
-            self.Terminals = self.findTerminals(obj)
-            self.SnapLines = self.findSnapLines(obj)
-            if self.Terminals:
-                for nr, t in enumerate(self.Terminals):
-                    label = f"{obj.Label}_Term{nr+1:03}"
-                    if not label == t.Label:
-                        t.Label = label
-            if self.SnapLines:
-                for nr, s in enumerate(self.SnapLines):
-                    label = f"{obj.Label}_SnapLines{nr+1:03}"
-                    if not label == s.Label:
-                        s.Label = label
+            self.changeTerminalLabels(obj)
+            self.changeSnapLinesLabels(obj)
+        if prop == "UsePinNameInLabels":
+            self.changeTerminalLabels(obj)
+        if prop == "UseSnapNameInLabels":
+            self.changeSnapLinesLabels(obj)
         if prop == "NumberOfTerminals" and not undoredo:
             self.Terminals = self.findTerminals(obj)
             if len(self.Terminals) != obj.NumberOfTerminals:
@@ -473,7 +481,8 @@ class BaseElement(ArchComponent.Component):
                 offset = FreeCAD.Vector(d[4], d[5], d[6])
                 rotation = FreeCAD.Rotation(d[7], d[8], d[9])
                 pl = FreeCAD.Placement(offset, rotation)
-                snaplines.append((pl,))
+                snap_name = d[1]
+                snaplines.append((pl, snap_name))
         data = {"ExtShape": extshape, "Terminal": terminals,
                 "SnapLines": snaplines}
         return data
@@ -519,6 +528,17 @@ class BaseElement(ArchComponent.Component):
 
     def adjustTerminals(self, obj):
         self.updateTerminalsParameters(obj)
+
+    def changeTerminalLabels(self, obj):
+        self.Terminals = self.findTerminals(obj)
+        if self.Terminals and hasattr(obj, "UsePinNameInLabels"):
+            for nr, t in enumerate(self.Terminals):
+                if obj.UsePinNameInLabels:
+                    label = f"{obj.Label}_{t.PinName}"
+                else:
+                    label = f"{obj.Label}_Term{nr+1:03}"
+                if not label == t.Label:
+                    t.Label = label
 
     def updateTerminalsParameters(self, obj):
         # Default terminal update. Can be overwritten by child class
@@ -585,6 +605,17 @@ class BaseElement(ArchComponent.Component):
             if not self.sameShapes(snap_lines, snap.Lines) \
                or len(snap_lines.Edges) > 4:
                 snap.Lines = snap_lines
+
+    def changeSnapLinesLabels(self, obj):
+        self.SnapLines = self.findSnapLines(obj)
+        if self.SnapLines and hasattr(obj, "UseSnapNameInLabels"):
+            for nr, s in enumerate(self.SnapLines):
+                if obj.UseSnapNameInLabels:
+                    label = f"{obj.Label}_{s.SnapName}"
+                else:
+                    label = f"{obj.Label}_SnapLines{nr+1:03}"
+                if not label == s.Label:
+                    s.Label = label
 
     def makeSnapLines(self, obj, shape3d=False):
         # default snap lines cross. Can be overwritten by child class

@@ -99,6 +99,11 @@ class CableTerminal:
 
     def onChanged(self, obj, prop):
         # FreeCAD.Console.PrintMessage(obj.Label, f"onChanged: {prop}\n")
+        if prop == "PinName":
+            if obj.ParentElement is not None:
+                if hasattr(obj.ParentElement, "Proxy"):
+                    obj.ParentElement.Proxy.onChanged(
+                        obj.ParentElement, "Label")
         return
 
     def execute(self, obj):

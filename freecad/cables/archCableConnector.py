@@ -363,6 +363,7 @@ class ArchCableConnector(archCableBaseElement.BaseElement):
                             for i, s in enumerate(self.SnapLines):
                                 s.AttachmentOffset = ext_data[
                                     "SnapLines"][i][0]
+                                s.SnapName = ext_data["SnapLines"][i][1]
                     self.ExtShape = ext_shape
                     obj.ExtShapeSolids = len(ext_shape.Solids)
                     obj.ExtColor = ext_color

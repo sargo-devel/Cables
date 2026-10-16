@@ -81,6 +81,8 @@ class ArchCableLightPoint(archCableBaseElement.BaseElement):
             obj.setPropertyStatus("NumberOfSnapLines", "Hidden")
         if "Preset" in pl:
             obj.setPropertyStatus("Preset", "Hidden")
+        if "UsePinNameInLabels" in pl:
+            obj.setPropertyStatus("UsePinNameInLabels", "Hidden")
         self.Type = "Component"
 
     def onDocumentRestored(self, obj):

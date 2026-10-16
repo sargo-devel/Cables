@@ -284,6 +284,8 @@ class ArchCableBox(archCableBaseElement.BaseElement):
             obj.removeProperty("NumberOfTerminals")
         if "NumberOfSnapLines" in pl:
             obj.setPropertyStatus("NumberOfSnapLines", "Hidden")
+        if "UsePinNameInLabels" in pl:
+            obj.setPropertyStatus("UsePinNameInLabels", "Hidden")
         self.Type = "Component"
 
     def onDocumentRestored(self, obj):

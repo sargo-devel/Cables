@@ -28,6 +28,7 @@ needed by WireFlex class.
 import os
 import FreeCAD
 from FreeCAD import Gui
+from draftutils import utils
 from draftguitools import gui_edit
 from draftguitools import gui_edit_draft_objects
 from freecad.cables import wireutils
@@ -66,6 +67,30 @@ class CablesEdit(gui_edit.Edit):
                     "objects.")
                 }
 
+    def getObjsFromSelection(self):
+        """ Copied from base class, draftguitools.Edit.
+
+        Identical, other than changing a Cable into its base Wire
+        """
+        selection = Gui.Selection.getSelection()
+        self.edited_objects = []
+        if len(selection) > self.max_objects:
+            _err = translate("draft", "Too many objects selected, maximum number set to:")
+            FreeCAD.Console.PrintMessage(_err + " " + str(self.max_objects) + "\n")
+            return None
+
+        for obj in selection:
+            # Cables have their type set to Pipe, rather than Cable, the
+            # addition of the 'Base' attribute indicates it's a Cable.
+            if utils.get_type(obj) == 'Pipe' and hasattr(obj, "Base"):
+                # If it's a Cable, act on the base Wire object
+                obj = obj.Base
+            if self.has_obj_gui_tools(obj):
+                self.edited_objects.append(obj)
+            else:
+                _wrn = translate("draft", ": this object is not editable")
+                FreeCAD.Console.PrintWarning(obj.Name + _wrn + "\n")
+        return self.edited_objects
 
 class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
     def __init__(self):

@@ -52,7 +52,7 @@ layer_supportlines = {
         "LineWidth": 2.0,
         "OverrideLineColorChildren": True,
         "PointColor": (255, 85, 0),
-        "PointSize": 8.0
+        "PointSize": 6.0
     }
 }
 

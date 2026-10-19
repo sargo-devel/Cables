@@ -48,7 +48,7 @@ def makeSupportPoint(placement=None, name=None):
     else:
         point = Draft.make_point(0.0, 0.0, 0.0)
     point.Label = name if name else translate("Cables", "SupportPoint")
-    point.ViewObject.PointSize = 8
+    point.ViewObject.PointSize = 6
     point.ViewObject.PointColor = SuppPointColor
     Draft.autogroup(point)
     point.addExtension('Part::AttachExtensionPython')
@@ -79,7 +79,7 @@ def makeSupportLine(p1=None, p2=None, name=None):
                            face=False, support=None)
     line.Label = name if name else translate("Cables", "SupportLine")
     line.Subdivisions = 1
-    line.ViewObject.PointSize = 8
+    line.ViewObject.PointSize = 6
     line.ViewObject.PointColor = SuppPointColor
     line.ViewObject.LineColor = SuppLineColor
     Draft.autogroup(line)

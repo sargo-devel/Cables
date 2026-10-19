@@ -69,38 +69,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="163"/>
+        <location filename="../../archCableBaseElement.py" line="164"/>
         <source>The predefined set of parameters for this object. It can be changed by double-clicking the object in the Tree View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="171"/>
+        <location filename="../../archCableBaseElement.py" line="172"/>
         <source>It indicates if preset exists in the local or built-in library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="178"/>
+        <location filename="../../archCableBaseElement.py" line="179"/>
         <source>The number of Terminals in this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="185"/>
+        <location filename="../../archCableBaseElement.py" line="186"/>
         <source>The number of Snap Lines in this object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="196"/>
+        <location filename="../../archCableBaseElement.py" line="197"/>
         <source>The number of solids in an external shape loaded from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="203"/>
+        <location filename="../../archCableBaseElement.py" line="204"/>
         <source>The colors of external shape loaded from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="211"/>
+        <location filename="../../archCableBaseElement.py" line="212"/>
         <source>If it is true it will claim the linked Terminals and SnapLines as children in the Tree View.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBaseElement.py" line="219"/>
+        <source>For all dependent Terminals, include their Pin Name property in their labels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../archCableBaseElement.py" line="226"/>
+        <source>For all dependent Snap Lines, include their Snap Name property in their labels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -235,28 +245,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="531"/>
+        <location filename="../../wireFlex.py" line="533"/>
         <source>Set attached point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="537"/>
+        <location filename="../../wireFlex.py" line="539"/>
         <source>Set boundary segment point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="543"/>
+        <location filename="../../wireFlex.py" line="545"/>
         <source>Set minimum radius point color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="549"/>
+        <location filename="../../wireFlex.py" line="551"/>
         <source>Show the point on the curve where the minimum radius is detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../cableSupport.py" line="134"/>
         <source>The shape containing snap lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableSupport.py" line="146"/>
+        <source>It adds two additional segments lying on the local Z axis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cableSupport.py" line="152"/>
+        <source>The functional name of the Snap Lines object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -578,25 +598,25 @@
 <context>
     <name>Cables</name>
     <message>
-        <location filename="../../archCableConnector.py" line="412"/>
+        <location filename="../../archCableConnector.py" line="413"/>
         <source>edit Cable Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="423"/>
+        <location filename="../../archCableConnector.py" line="424"/>
         <location filename="../../archCableConduit.py" line="478"/>
-        <location filename="../../archCableBaseElement.py" line="868"/>
+        <location filename="../../archCableBaseElement.py" line="910"/>
         <location filename="../../cableSupport.py" line="44"/>
         <location filename="../../cableSupport.py" line="63"/>
-        <location filename="../../archCableLightPoint.py" line="142"/>
+        <location filename="../../archCableLightPoint.py" line="144"/>
         <location filename="../../archCable.py" line="1036"/>
-        <location filename="../../archCableBox.py" line="664"/>
-        <location filename="../../archElectricalDevice.py" line="220"/>
+        <location filename="../../archCableBox.py" line="681"/>
+        <location filename="../../archElectricalDevice.py" line="221"/>
         <source>No active document. Aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableConnector.py" line="430"/>
+        <location filename="../../archCableConnector.py" line="431"/>
         <source>CableConnector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,7 +637,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBaseElement.py" line="873"/>
+        <location filename="../../archCableBaseElement.py" line="915"/>
         <source>CableBaseElement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -627,7 +647,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../wireFlex.py" line="744"/>
+        <location filename="../../wireFlex.py" line="768"/>
         <source>wrong object selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -842,7 +862,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableLightPoint.py" line="148"/>
+        <location filename="../../archCableLightPoint.py" line="150"/>
         <source>CableLightPoint</source>
         <translation type="unfinished"></translation>
     </message>
@@ -937,40 +957,40 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="910"/>
+        <location filename="../../partsLibrary.py" line="915"/>
         <source>Error while reading from the library file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="927"/>
+        <location filename="../../partsLibrary.py" line="932"/>
         <source>Error while writing to the library file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="942"/>
-        <location filename="../../partsLibrary.py" line="967"/>
+        <location filename="../../partsLibrary.py" line="947"/>
+        <location filename="../../partsLibrary.py" line="972"/>
         <source>Error while creating a path to the library file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="1007"/>
-        <location filename="../../partsLibrary.py" line="1081"/>
+        <location filename="../../partsLibrary.py" line="1012"/>
+        <location filename="../../partsLibrary.py" line="1086"/>
         <source>Error while writing new element to local library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="1203"/>
+        <location filename="../../partsLibrary.py" line="1208"/>
         <source>Error while copying STEP file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="1349"/>
+        <location filename="../../partsLibrary.py" line="1354"/>
         <source>Library file modified:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../partsLibrary.py" line="1367"/>
-        <location filename="../../partsLibrary.py" line="1374"/>
+        <location filename="../../partsLibrary.py" line="1372"/>
+        <location filename="../../partsLibrary.py" line="1379"/>
         <source>Library file deleted:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1300,22 +1320,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="654"/>
+        <location filename="../../archCableBox.py" line="671"/>
         <source>edit Cable Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archCableBox.py" line="669"/>
+        <location filename="../../archCableBox.py" line="686"/>
         <source>CableBox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archElectricalDevice.py" line="212"/>
+        <location filename="../../archElectricalDevice.py" line="213"/>
         <source>edit Electrical Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../archElectricalDevice.py" line="226"/>
+        <location filename="../../archElectricalDevice.py" line="227"/>
         <source>ElectricalDevice</source>
         <translation type="unfinished"></translation>
     </message>

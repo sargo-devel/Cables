@@ -501,6 +501,8 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
     """
     def __init__(self, vobj):
         super().__init__(vobj)
+        ver = FreeCAD.Version()
+        self.fc_ver = float(f"{ver[0]}.{ver[1]}")
         vobj.PointColor = (0, 102, 0)
         vobj.PointSize = 8
         vobj.LineColor = (176, 176, 176)
@@ -550,6 +552,8 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
 
     def createPointMarkers(self, vobj):
         # create markers data
+        pick = coin.SoPickStyle()
+        pick.style.setValue(coin.SoPickStyle.UNPICKABLE)
         coord = coin.SoCoordinate3()
         color = coin.SoBaseColor()
         style = coin.SoDrawStyle()
@@ -563,6 +567,7 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
         style.pointSize = vobj.PointSize + 2
         # add data to separator
         sep = coin.SoSeparator()
+        sep.addChild(pick)
         sep.addChild(coord)
         sep.addChild(color)
         sep.addChild(style)
@@ -576,35 +581,52 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
     def createSpecialPoints(self, vobj):
         if not hasattr(self, 'pts_attached'):
             self.pts_attached = self.createPointMarkers(vobj)
+            self.pts_attached.setName("PtsAttached")
             self.pts_attached.getByName("coord").point.values = \
                 wireutils.getAttachedPointsCoordList(vobj.Object)
             self.pts_attached.getByName("color").rgb = \
                 vobj.PointColorIfAttached[:-1]
         if not hasattr(self, 'pts_boundary'):
             self.pts_boundary = self.createPointMarkers(vobj)
+            self.pts_boundary.setName("PtsBoundary")
             self.pts_boundary.getByName("coord").point.values = \
                 wireutils.getBoundarySegCoordList(vobj.Object)
             self.pts_boundary.getByName("color").rgb = \
                 vobj.PointColorIfBoundary[:-1]
         if not hasattr(self, 'pts_minradius'):
             self.pts_minradius = self.createPointMarkers(vobj)
+            self.pts_minradius.setName("PtsMinradius")
             self.pts_minradius.getByName("coord").point.values = \
                 wireutils.getMinRadiusCoordList(vobj.Object)
             self.pts_minradius.getByName("color").rgb = \
                 vobj.PointColorMinRadius[:-1]
         self.onChanged(vobj, "Visibility")
 
+    def injectChildNode(self, vobj, node):
+        if self.fc_ver > 1.1:
+            idx = None
+            for i in range(vobj.RootNode.getNumChildren()):
+                child = vobj.RootNode.getChild(i)
+                if "Transform" in child.getTypeId().getName().getString():
+                    idx = i
+                    break
+            if idx is not None:
+                vobj.RootNode.insertChild(node, idx+1)
+                return
+        # for FC v.1.1 and lower or if SoFCTransform node not found
+        vobj.RootNode.addChild(node)
+
     def displaySpecialPoints(self, vobj):
         if vobj.Visibility:
             if hasattr(self, 'pts_attached'):
                 if vobj.RootNode.findChild(self.pts_attached) == -1:
-                    vobj.RootNode.addChild(self.pts_attached)
+                    self.injectChildNode(vobj, self.pts_attached)
             if hasattr(self, 'pts_boundary'):
                 if vobj.RootNode.findChild(self.pts_boundary) == -1:
-                    vobj.RootNode.addChild(self.pts_boundary)
+                    self.injectChildNode(vobj, self.pts_boundary)
             if hasattr(self, 'pts_minradius') and vobj.ShowMinRadiusPosition:
                 if vobj.RootNode.findChild(self.pts_minradius) == -1:
-                    vobj.RootNode.addChild(self.pts_minradius)
+                    self.injectChildNode(vobj, self.pts_minradius)
         else:
             if hasattr(self, 'pts_attached'):
                 if vobj.RootNode.findChild(self.pts_attached) != -1:
@@ -628,6 +650,8 @@ class ViewProviderWireFlex(Draft.ViewProviderWire):
         # Function called on document restored
         # FreeCAD.Console.PrintMessage("Wireflex ViewProvider attach\n")
         super().attach(vobj)
+        ver = FreeCAD.Version()
+        self.fc_ver = float(f"{ver[0]}.{ver[1]}")
         self._set_properties(vobj)
         self.createSpecialPoints(vobj)
 

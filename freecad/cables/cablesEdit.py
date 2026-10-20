@@ -84,6 +84,22 @@ class CablesEdit(gui_edit.Edit):
                 if obj.Name == name or (hasattr(obj, "Base") and obj.Base.Name == name):
                     return obj
 
+    def globalize_vector(self, obj, point):
+        """Takes into account obj might be relative to a Base object"""
+        if hasattr(obj, "getGlobalPlacementOf"):
+            obj_or_base = obj.Base or obj
+            return obj.getGlobalPlacementOf(obj_or_base, obj, obj_or_base.Name).multVec(point)
+        else:
+            return point
+
+    def localize_vector(self, obj, point):
+        """Takes into account obj might be relative to a Base object"""
+        if hasattr(obj, "getGlobalPlacementOf"):
+            obj_or_base = obj.Base or obj
+            return obj.getGlobalPlacementOf(obj_or_base, obj, obj_or_base.Name).inverse().multVec(point)
+        else:
+            return point
+
     def getObjsFromSelection(self):
         edit_objects = super().getObjsFromSelection()
         # Since both Cables and Pipes have a type of "Pipe", the above call will

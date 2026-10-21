@@ -81,14 +81,16 @@ class CablesEdit(gui_edit.Edit):
             if not info:
                 return
             for obj in self.edited_objects:
-                if obj.Name == name or (hasattr(obj, "Base") and obj.Base.Name == name):
+                if (obj.Name == name
+                   or (hasattr(obj, "Base") and obj.Base.Name == name)):
                     return obj
 
     def globalize_vector(self, obj, point):
         """Takes into account obj might be relative to a Base object"""
         if hasattr(obj, "getGlobalPlacementOf"):
             obj_or_base = obj.Base or obj
-            return obj.getGlobalPlacementOf(obj_or_base, obj, obj_or_base.Name).multVec(point)
+            return obj.getGlobalPlacementOf(
+                obj_or_base, obj, obj_or_base.Name).multVec(point)
         else:
             return point
 
@@ -96,24 +98,27 @@ class CablesEdit(gui_edit.Edit):
         """Takes into account obj might be relative to a Base object"""
         if hasattr(obj, "getGlobalPlacementOf"):
             obj_or_base = obj.Base or obj
-            return obj.getGlobalPlacementOf(obj_or_base, obj, obj_or_base.Name).inverse().multVec(point)
+            return obj.getGlobalPlacementOf(
+                obj_or_base, obj, obj_or_base.Name).inverse().multVec(point)
         else:
             return point
 
     def getObjsFromSelection(self):
         edit_objects = super().getObjsFromSelection()
-        # Since both Cables and Pipes have a type of "Pipe", the above call will
-        # return both types of objects.  We need to filter out the non-Cable
-        # Pipes here. Valid types are: ArchCable, ArchCableConduit which are
-        # based on ArchCableMainShape
+        # Since both Cables and Pipes have a type of "Pipe", the above call
+        # will return both types of objects.  We need to filter out
+        # the non-Cable Pipes here. Valid types are: ArchCable,
+        # ArchCableConduit which are based on ArchCableMainShape
         self.edited_objects = []
         for obj in edit_objects:
-            if utils.get_type(obj) == "Pipe" and not isinstance(obj.Proxy, ArchCableMainShape):
+            if (utils.get_type(obj) == "Pipe"
+               and not isinstance(obj.Proxy, ArchCableMainShape)):
                 _wrn = translate("draft", ": this object is not editable")
                 FreeCAD.Console.PrintWarning(obj.Name + _wrn + "\n")
             else:
                 self.edited_objects.append(obj)
         return self.edited_objects
+
 
 class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
     def __init__(self):
@@ -229,10 +234,11 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         is_attached = node_idx+1 in att_list
         return is_attached
 
+
 class CableFlexGuiTools(DraftWireFlexGuiTools):
     """This wraps the external methods of GuiTools so that they call the super
-    class methods with obj → obj.Base.  Effectively, they act on the ArchWire that
-    is the base of the Cable. 
+    class methods with obj → obj.Base.  Effectively, they act on the ArchWire
+    that is the base of the Cable.
     The editing style of the Cable is set to be transparent and non-selectable,
     so the Wire inside it can be seen and selected.
     """
@@ -241,21 +247,28 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
         return super().get_edit_points(obj.Base)
 
     def update_object_from_edit_points(self, obj, node_idx, v, alt_edit_mode=0):
-        super().update_object_from_edit_points(obj.Base, node_idx, v, alt_edit_mode)
+        super().update_object_from_edit_points(
+            obj.Base, node_idx, v, alt_edit_mode)
         # Draft edit tool will recompute obj, but not obj.Base
         obj.Base.recompute()
 
     def get_edit_point_context_menu(self, edit_command, obj, node_idx):
-        return super().get_edit_point_context_menu(edit_command, obj.Base, node_idx)
+        return super().get_edit_point_context_menu(
+            edit_command, obj.Base, node_idx)
 
     def get_edit_obj_context_menu(self, edit_command, obj, position):
-        return super().get_edit_obj_context_menu(edit_command, obj.Base, position)
+        return super().get_edit_obj_context_menu(
+            edit_command, obj.Base, position)
 
     def get_object_style(self, obj):
-        return (obj.ViewObject.Transparency, obj.ViewObject.DrawStyle, obj.ViewObject.Selectable)
+        return (obj.ViewObject.Transparency,
+                obj.ViewObject.DrawStyle,
+                obj.ViewObject.Selectable)
 
     def restore_object_style(self, obj, modes):
-        obj.ViewObject.Transparency, obj.ViewObject.DrawStyle, obj.ViewObject.Selectable = modes
+        (obj.ViewObject.Transparency,
+         obj.ViewObject.DrawStyle,
+         obj.ViewObject.Selectable) = modes
 
     def set_object_editing_style(self, obj):
         obj.ViewObject.Transparency = 80
@@ -267,5 +280,6 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
 
     def update_preview_object(self, edit_command, obj, node_idx, v):
         super().update_preview_object(edit_command, obj.Base, node_idx, v)
+
 
 Gui.addCommand('Cables_Edit', CablesEdit())

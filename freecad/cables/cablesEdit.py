@@ -34,7 +34,7 @@ from draftguitools import gui_edit_draft_objects
 from freecad.cables import wireutils
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
-from freecad.cables.archCable import ArchCable
+from freecad.cables.archCableMainShape import ArchCableMainShape
 
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "resources/icons")
@@ -104,10 +104,11 @@ class CablesEdit(gui_edit.Edit):
         edit_objects = super().getObjsFromSelection()
         # Since both Cables and Pipes have a type of "Pipe", the above call will
         # return both types of objects.  We need to filter out the non-Cable
-        # Pipes here.
+        # Pipes here. Valid types are: ArchCable, ArchCableConduit which are
+        # based on ArchCableMainShape
         self.edited_objects = []
         for obj in edit_objects:
-            if utils.get_type(obj) == "Pipe" and not isinstance(obj.Proxy, ArchCable):
+            if utils.get_type(obj) == "Pipe" and not isinstance(obj.Proxy, ArchCableMainShape):
                 _wrn = translate("draft", ": this object is not editable")
                 FreeCAD.Console.PrintWarning(obj.Name + _wrn + "\n")
             else:

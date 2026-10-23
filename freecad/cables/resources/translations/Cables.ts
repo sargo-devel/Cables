@@ -673,38 +673,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="78"/>
-        <location filename="../../cablesEdit.py" line="85"/>
+        <location filename="../../cablesEdit.py" line="134"/>
+        <location filename="../../cablesEdit.py" line="141"/>
         <source>Delete point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="93"/>
+        <location filename="../../cablesEdit.py" line="149"/>
         <source>Add point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="109"/>
+        <location filename="../../cablesEdit.py" line="165"/>
         <source>Attach point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="114"/>
+        <location filename="../../cablesEdit.py" line="170"/>
         <source>Remove point attachment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="119"/>
+        <location filename="../../cablesEdit.py" line="175"/>
         <source>Make edge horizontal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="124"/>
+        <location filename="../../cablesEdit.py" line="180"/>
         <source>Make edge vertical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="129"/>
+        <location filename="../../cablesEdit.py" line="185"/>
         <source>Make edge coaxial</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1525,12 +1525,12 @@
 <context>
     <name>Cables_Edit</name>
     <message>
-        <location filename="../../cablesEdit.py" line="61"/>
+        <location filename="../../cablesEdit.py" line="64"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cablesEdit.py" line="70"/>
+        <location filename="../../cablesEdit.py" line="72"/>
         <source>Edits the active object.
 Press E or ALT + Left Click or ALT + Left DubleClick
 to display context menu on supported nodes

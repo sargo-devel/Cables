@@ -124,6 +124,9 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
     def __init__(self):
         super().__init__()
         # FreeCAD.Console.PrintMessage("This is DraftWireFlexGuiTools\n")
+        # self.parentobj is used to recompute parent obj if needed.
+        # It has to be set by a subclass
+        self.parentobj = None
 
     def get_edit_point_context_menu(self, edit_command, obj, node_idx):
         if self.is_node_attached(obj, node_idx):
@@ -188,43 +191,43 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         # FreeCAD.Console.PrintMessage(f"info={info}\n")
         # FreeCAD.Console.PrintMessage(f"newPoint={newPoint}\n")
         wireutils.addPointToWire([(obj, info["Component"])], point=newPoint)
-        obj.recompute(True)
+        self.recompute(obj)
 
     def delete_point(self, obj, node_idx):
         wireutils.delPointFromWire([(obj, None)], point_idx=node_idx)
-        obj.recompute(True)
+        self.recompute(obj)
 
     def attach_point(self, obj, node_idx):
         wireutils.assignPointAttachment(plist=None, point_idx=node_idx,
                                         obj=obj)
-        obj.recompute(True)
+        self.recompute(obj)
 
     def detach_point(self, obj, node_idx):
         wireutils.removePointAttachment(plist=None, point_idx=node_idx,
                                         obj=obj)
-        obj.recompute(True)
+        self.recompute(obj)
 
     def reverse_wire(self, obj):
         wireutils.reverseWire(obj)
-        obj.recompute(True)
+        self.recompute(obj)
 
     def horizontal_wire_edge(self, edit_command, obj, pos):
         info, newPoint = edit_command.get_specific_object_info(obj, pos)
         wireutils.modifyWireEdge([(obj, info["Component"])], point=newPoint,
                                  cmd='horizontal')
-        obj.recompute(True)
+        self.recompute(obj)
 
     def vertical_wire_edge(self, edit_command, obj, pos):
         info, newPoint = edit_command.get_specific_object_info(obj, pos)
         wireutils.modifyWireEdge([(obj, info["Component"])], point=newPoint,
                                  cmd='vertical')
-        obj.recompute(True)
+        self.recompute(obj)
 
     def coaxial_wire_edge(self, edit_command, obj, pos):
         info, newPoint = edit_command.get_specific_object_info(obj, pos)
         wireutils.modifyWireEdge([(obj, info["Component"])], point=newPoint,
                                  cmd='coaxial')
-        obj.recompute(True)
+        self.recompute(obj)
 
     def is_node_attached(self, obj, node_idx):
         att_list = []
@@ -233,6 +236,12 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         att_list.append(len(obj.Points)) if obj.Vrtx_end else None
         is_attached = node_idx+1 in att_list
         return is_attached
+
+    def recompute(self, obj):
+        if self.parentobj is not None and hasattr(self.parentobj, "recompute"):
+            self.parentobj.recompute(True)
+        else:
+            obj.recompute(True)
 
 
 class CableFlexGuiTools(DraftWireFlexGuiTools):
@@ -244,6 +253,9 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
     """
 
     def get_edit_points(self, obj):
+        # self.parentobj is used by super class to recompute obj if needed
+        if self.parentobj is None:
+            self.parentobj = obj
         return super().get_edit_points(obj.Base)
 
     def update_object_from_edit_points(self, obj, node_idx, v, alt_edit_mode=0):

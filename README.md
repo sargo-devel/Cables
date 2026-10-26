@@ -63,6 +63,8 @@ Available translations:
   * translators: @FBXL5, [@maxwxyz](https://github.com/maxwxyz), [@ryanthara](https://github.com/ryanthara)
 * Polish
   * translators: @kaktus, @mgr_wojtal, @Piter
+* Portuguese (Brazilian)
+  * translators: @argolo.mb
 * Spanish
   * translators: [@hasecilu](https://github.com/hasecilu)
 * Swedish
@@ -81,6 +83,21 @@ CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/t
 for details)
 
 ## Release notes
+* v0.4.0  26 October 2026
+  * New command introduced: CreateReports
+  * New command introduced: PartsLibrary
+  * Added several new properties to WireFlex: BSpline-K Auto Ajdusted, Exclude Penultimate Points, Continuity, Minimum Radius, Minimum Radius Position
+  * Added new "Cable Shape Troubleshooting" section of properties to Cable object with new properties: Auto Troubleshooting, Aux Spine, Main Shape Build Mode, Main Shape Status and many others
+  * added SubWiresShapeHidden property to Cable object
+  * Improved shape and transparency handling in Cable Connector and Electrical Device imported from STEP
+  * Added new items to Layers Extended
+  * Improved support for Std Part
+  * Added new properties to SnapLines: Snap Name, Shape3d
+  * Cable Connector, Electrical Device, Cable Box: added Use Pin Name In Labels, Use Snap Name In Labels properties
+  * Improved compatibility with FreeCAD 26.3, including, for example, proper display of WireFlex points
+  * Added the ability to edit the Cable object directly in the Cables Edit command (thanks to [@xyzzy42](https://github.com/xyzzy42))
+  * Added translation: Portuguese (Brazilian)
+  * Many minor bugfixes
 * v0.3.7  17 August 2026
   * Added Draft Move tool to toolbar
   * Minor bugfixes

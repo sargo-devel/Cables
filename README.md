@@ -83,6 +83,8 @@ CC BY 4.0 (see [presets library license](https://github.com/sargo-devel/Cables/t
 for details)
 
 ## Release notes
+* v0.4.1  27 October 2026
+  * partsLibrary: fixed saved STEP placement
 * v0.4.0  26 October 2026
   * New command introduced: CreateReports
   * New command introduced: PartsLibrary

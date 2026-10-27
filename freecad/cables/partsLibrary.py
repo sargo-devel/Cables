@@ -1183,7 +1183,7 @@ class LibraryPart:
         extsh_file = self.data.get("ExtShapeFile")
         source_file = Path(extsh_file[0]) if extsh_file is not None else None
         if source_file is None:
-            options = {'exportHidden': True, 'keepPlacement': False,
+            options = {'exportHidden': True, 'keepPlacement': True,
                        'legacy': False}
             if isProxyBase(obj, "BaseElement"):
                 # special export for existing Connector or Device objects

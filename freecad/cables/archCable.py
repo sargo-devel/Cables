@@ -888,10 +888,10 @@ class ViewProviderCable(ViewProviderCableMainShape):
                 obj.ViewObject.ShapeAppearance = \
                     (base.ViewObject.ShapeAppearance[0], )
             return
-        if arch_mat.Proxy.Type not in ("MultiMaterial",):
+        if arch_mat.Proxy.Type not in ("MultiMaterial", "Material"):
             logmsg(
-                translate("Cables", "Cable's material, {0}, is not a MultiMaterial").
-                    format(arch_mat.Label),
+                translate("Cables", ("Cable's material, {0}, is neither "
+                    "Material nor MultiMaterial")).format(arch_mat.Label),
                 "E", ModuleName, None, obj.Label)
             return
 
@@ -949,6 +949,7 @@ class ViewProviderCable(ViewProviderCableMainShape):
 
     def getSolidMaterial(self, obj, arch_mat, mat_name):
         """Return the 0, 1, or 2 material(s) matching mat_name from the MultiMaterial arch_mat
+           Or just the single material if arch_mat is an ArchMaterial
            If obj has a non-zero transparency, use that instead of the material transparency. """
 
         obj_trans = obj.ViewObject.Transparency
@@ -956,6 +957,10 @@ class ViewProviderCable(ViewProviderCableMainShape):
             # Convert ArchMaterial to a FreeCAD.Material
             t = obj_trans if obj_trans > 0 else mat.Transparency
             return FreeCAD.Material(DiffuseColor=mat.Color, Transparency=t/100.0)
+
+        if arch_mat.Proxy.Type == "Material":
+            # There's no name to look up because it's just a single color
+            return [_toMaterial(arch_mat)]
 
         indices = [i for i, name in enumerate(arch_mat.Names) if name == mat_name]
         return [_toMaterial(arch_mat.Materials[i]) for i in indices[:2]]

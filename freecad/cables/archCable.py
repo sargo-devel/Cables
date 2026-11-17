@@ -941,11 +941,14 @@ class ViewProviderCable(ViewProviderCableMainShape):
         return name
 
     def getSolidMaterial(self, obj, arch_mat, mat_name):
-        """Return the 0, 1, or 2 material(s) matching mat_name from the MultiMaterial arch_mat"""
+        """Return the 0, 1, or 2 material(s) matching mat_name from the MultiMaterial arch_mat
+           If obj has a non-zero transparency, use that instead of the material transparency. """
 
+        obj_trans = obj.ViewObject.Transparency
         def _toMaterial(mat):
             # Convert ArchMaterial to a FreeCAD.Material
-            return FreeCAD.Material(DiffuseColor=mat.Color, Transparency=mat.Transparency/100.0)
+            t = obj_trans if obj_trans > 0 else mat.Transparency
+            return FreeCAD.Material(DiffuseColor=mat.Color, Transparency=t/100.0)
 
         indices = [i for i, name in enumerate(arch_mat.Names) if name == mat_name]
         return [_toMaterial(arch_mat.Materials[i]) for i in indices]

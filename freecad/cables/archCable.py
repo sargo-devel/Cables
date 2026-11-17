@@ -877,49 +877,43 @@ class ViewProviderCable(ViewProviderCableMainShape):
         if not obj.Shape.Solids:
             return
 
-        # setting different part colors
-        if hasattr(obj, "CloneOf") and obj.CloneOf:
-            obj, clone = obj.CloneOf, obj
-            base_sapp_mat = clone.ViewObject.ShapeAppearance[0]
-            arch_mat = getattr(clone, "Material", None)
-        else:
-            clone = None
-            base_sapp_mat = obj.ViewObject.ShapeAppearance[0]
-            arch_mat = getattr(obj, "Material", None)
+        # Object to get appearance from
+        base = getattr(obj, "CloneOf", obj) or obj
+        arch_mat = getattr(base, "Material", None)
+        if arch_mat is None:
+            # No Material, use the primary color for all faces.
+            if len(base.ViewObject.ShapeAppearance) > 1 or not \
+                _shapeAppearanceMaterialIsSame(obj.ViewObject.ShapeAppearance[0],
+                                               base.ViewObject.ShapeAppearance[0]):
+                obj.ViewObject.ShapeAppearance = \
+                    (base.ViewObject.ShapeAppearance[0], )
+            return
+        if arch_mat.Proxy.Type not in ("MultiMaterial",):
+            logmsg(
+                translate("Cables", "Cable's material, {0}, is not a MultiMaterial").
+                    format(arch_mat.Label),
+                "E", ModuleName, None, obj.Label)
+            return
 
-        solids = obj.Shape.copy().Solids
         sapp = []
-        base_sapp_mat = obj.ViewObject.ShapeAppearance[0]
-        arch_mat = getattr(obj, "Material", None)
-        # sub_qty = int((len(obj.Profile.Shape.Wires)-1)/2)
-        for i in range(len(solids)):
-            color = None
-            mat_name = self.getSolidName(obj, i)
-            # FreeCAD.Console.PrintMessage(f"mat_name: {mat_name}\n")
+        base_sapp_mat = base.ViewObject.ShapeAppearance[0]
+        for i, solid in enumerate(obj.Shape.Solids):
+            mat_name = self.getSolidName(base, i)
             colors = self.getSolidMaterial(obj, arch_mat, mat_name)
-            if len(colors) > 1:
-                sapp_mats = []
-                for color in colors[:2]:
-                    sapp_mat = FreeCAD.Material()
-                    sapp_mat.DiffuseColor = color[:3] + (1.0, )
-                    sapp_mat.Transparency = 1.0 - color[3]
-                    sapp_mats.append(sapp_mat)
-                for f_idx in range(len(solids[i].Faces)):
-                    sapp_mat = sapp_mats[f_idx % 2]
-                    sapp.append(sapp_mat)
-                sapp[-1] = sapp_mats[0]
-            else:
-                color = colors[0] if colors else None
-                if color is None:
-                    sapp_mat = base_sapp_mat
-                else:
-                    sapp_mat = FreeCAD.Material()
-                    sapp_mat.DiffuseColor = color[:3] + (1.0, )
-                    sapp_mat.Transparency = 1.0 - color[3]
-                sapp.extend((sapp_mat, ) * len(solids[i].Faces))
 
-        if clone is not None:
-            obj = clone
+            if not colors:
+                # If no colors in material, use existing base color for
+                # everything
+                materials = [base_sapp_mat]
+            else:
+                materials = [FreeCAD.Material(DiffuseColor=color[:3] + (1.0,), Transparency=1.0 - color[3]) for color in colors]
+
+            # Cycle through material(s). IDK how the faces can be assumed to be in the "right" order every time?
+            n = len(materials)
+            sapp.extend(materials[m % n] for m in range(len(solid.Faces)))
+            # For some reason the last face always gets the 1st material
+            sapp[-1] = materials[0]
+
         if not _shapeAppearanceIsSame(obj.ViewObject.ShapeAppearance, sapp):
             obj.ViewObject.ShapeAppearance = sapp
 

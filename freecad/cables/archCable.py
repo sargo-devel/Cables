@@ -899,14 +899,11 @@ class ViewProviderCable(ViewProviderCableMainShape):
         base_sapp_mat = base.ViewObject.ShapeAppearance[0]
         for i, solid in enumerate(obj.Shape.Solids):
             mat_name = self.getSolidName(base, i)
-            colors = self.getSolidMaterial(obj, arch_mat, mat_name)
-
-            if not colors:
+            materials = self.getSolidMaterial(obj, arch_mat, mat_name)
+            if not materials:
                 # If no colors in material, use existing base color for
                 # everything
                 materials = [base_sapp_mat]
-            else:
-                materials = [FreeCAD.Material(DiffuseColor=color[:3] + (1.0,), Transparency=1.0 - color[3]) for color in colors]
 
             # Cycle through material(s). IDK how the faces can be assumed to be in the "right" order every time?
             n = len(materials)
@@ -951,26 +948,14 @@ class ViewProviderCable(ViewProviderCableMainShape):
         return name
 
     def getSolidMaterial(self, obj, arch_mat, mat_name):
-        colors = []
-        if arch_mat is not None and hasattr(arch_mat, "Materials"):
-            if mat_name in arch_mat.Names:
-                idx = 0
-                for i in range(arch_mat.Names.count(mat_name)):
-                    mat_idx = arch_mat.Names.index(mat_name, idx)
-                    idx = mat_idx + 1
-                    mat = arch_mat.Materials[mat_idx]
-                    color = None
-                    if mat:
-                        if 'DiffuseColor' in mat.Material:
-                            diff_col = mat.Material['DiffuseColor']
-                            if "(" in diff_col:
-                                col_str_lst = diff_col.strip("()").split(",")
-                                color = tuple([float(f) for f in col_str_lst])
-                        if color and ('Transparency' in mat.Material):
-                            t = float(mat.Material['Transparency'])/100.0
-                            color = color[:3] + (1.0 - t, )
-                    colors.append(color)
-        return colors[:2]
+        """Return the 0, 1, or 2 material(s) matching mat_name from the MultiMaterial arch_mat"""
+
+        def _toMaterial(mat):
+            # Convert ArchMaterial to a FreeCAD.Material
+            return FreeCAD.Material(DiffuseColor=mat.Color, Transparency=mat.Transparency/100.0)
+
+        indices = [i for i, name in enumerate(arch_mat.Names) if name == mat_name]
+        return [_toMaterial(arch_mat.Materials[i]) for i in indices[:2]]
 
 
 def getObjectsForCable(selectlist):

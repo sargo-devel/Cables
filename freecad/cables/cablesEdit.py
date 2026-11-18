@@ -32,6 +32,7 @@ from draftutils import utils
 from draftguitools import gui_edit
 from draftguitools import gui_edit_draft_objects
 from freecad.cables import wireutils
+from freecad.cables import cableutils
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 from freecad.cables.archCableMainShape import ArchCableMainShape
@@ -124,9 +125,6 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
     def __init__(self):
         super().__init__()
         # FreeCAD.Console.PrintMessage("This is DraftWireFlexGuiTools\n")
-        # self.parentobj is used to recompute parent obj if needed.
-        # It has to be set by a subclass
-        self.parentobj = None
 
     def get_edit_point_context_menu(self, edit_command, obj, node_idx):
         if self.is_node_attached(obj, node_idx):
@@ -238,10 +236,7 @@ class DraftWireFlexGuiTools(gui_edit_draft_objects.DraftWireGuiTools):
         return is_attached
 
     def recompute(self, obj):
-        if self.parentobj is not None and hasattr(self.parentobj, "recompute"):
-            self.parentobj.recompute(True)
-        else:
-            obj.recompute(True)
+        obj.recompute(True)
 
 
 class CableFlexGuiTools(DraftWireFlexGuiTools):
@@ -253,9 +248,6 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
     """
 
     def get_edit_points(self, obj):
-        # self.parentobj is used by super class to recompute obj if needed
-        if self.parentobj is None:
-            self.parentobj = obj
         return super().get_edit_points(obj.Base)
 
     def update_object_from_edit_points(self, obj, node_idx, v, alt_edit_mode=0):
@@ -292,6 +284,18 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
 
     def update_preview_object(self, edit_command, obj, node_idx, v):
         super().update_preview_object(edit_command, obj.Base, node_idx, v)
+
+    def recompute(self, baseobj):
+        """This method is called from within super class and adds Cable or
+        CableConduit objects for recompute.
+        """
+        parent_cables = cableutils.getParentCables(baseobj)
+        if not parent_cables:
+            super().recompute(baseobj)
+            return
+        for cable in parent_cables:
+            if hasattr(cable, "recompute"):
+                cable.recompute(True)
 
 
 Gui.addCommand('Cables_Edit', CablesEdit())

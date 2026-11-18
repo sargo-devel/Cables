@@ -239,6 +239,22 @@ def isSubwireOfCable(wire):
     return cable
 
 
+def getParentCables(wire):
+    """It checks if wire is a base wire of cables or cable conduits.
+    If yes it returns list of its parent Cable and CableConduit objects,
+    otherwise it returns empty list.
+    """
+    parents = []
+    for obj in wire.InList:
+        try:
+            if (hasattr(obj, "Proxy") and
+               type(obj.Proxy).__name__ in ["ArchCable", "ArchCableConduit"]):
+                parents.append(obj)
+        except AttributeError:
+            pass
+    return parents
+
+
 def logmsg(comment, level="M", module="", error=None, label=""):
     """Simplifies and standardizes log messages
 

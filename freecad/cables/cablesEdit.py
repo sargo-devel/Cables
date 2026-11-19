@@ -32,10 +32,11 @@ from draftutils import utils
 from draftguitools import gui_edit
 from draftguitools import gui_edit_draft_objects
 from freecad.cables import wireutils
-from freecad.cables import cableutils
 from freecad.cables import translate
 from freecad.cables import QT_TRANSLATE_NOOP
 from freecad.cables.archCableMainShape import ArchCableMainShape
+from freecad.cables.wireFlex import WireFlex
+
 
 _dir = os.path.dirname(__file__)
 iconPath = os.path.join(_dir, "resources/icons")
@@ -286,16 +287,20 @@ class CableFlexGuiTools(DraftWireFlexGuiTools):
         super().update_preview_object(edit_command, obj.Base, node_idx, v)
 
     def recompute(self, baseobj):
-        """This method is called from within super class and adds Cable or
-        CableConduit objects for recompute.
+        """This method is called from within super class.
+        It adds objects extruded from baseobj to be recomputed
+        (e.g. Cable or CableConduit or any other object, where
+        object.Base = baseobj).
         """
-        parent_cables = cableutils.getParentCables(baseobj)
-        if not parent_cables:
+        extruded_objects = []
+        if isinstance(getattr(baseobj, "Proxy", None), WireFlex):
+            extruded_objects = [obj for obj in baseobj.InList
+                                if getattr(obj, "Base", None) == baseobj]
+        if not extruded_objects:
             super().recompute(baseobj)
             return
-        for cable in parent_cables:
-            if hasattr(cable, "recompute"):
-                cable.recompute(True)
+        for ext_obj in extruded_objects:
+            ext_obj.recompute(True)
 
 
 Gui.addCommand('Cables_Edit', CablesEdit())

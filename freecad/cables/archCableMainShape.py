@@ -159,6 +159,12 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
         if obj.BiArcsApproxTolerance == 0:
             obj.AutoTroubleshooting = True
 
+    def onBeforeChange(self, obj, prop):
+        ArchPipe._ArchPipe.onBeforeChange(self, obj, prop)
+        if prop in ['OffsetStart', 'OffsetEnd']:
+            self.old_OffsetStart = obj.OffsetStart
+            self.old_OffsetEnd = obj.OffsetEnd
+
     def onChanged(self, obj, prop):
         ArchComponent.Component.onChanged(self, obj, prop)
         ArchPipe._ArchPipe.onChanged(self, obj, prop)
@@ -175,12 +181,20 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
             else:
                 for element in auto_hide_list:
                     obj.setPropertyStatus(element, "-Hidden")
+        if prop in ['OffsetStart', 'OffsetEnd']:
+            tol = 1e-2
+            if (obj.OffsetStart.Value + obj.OffsetEnd.Value >
+               obj.Base.Length.Value - tol):
+                if obj.OffsetStart != self.old_OffsetStart:
+                    obj.OffsetStart = self.old_OffsetStart
+                if obj.OffsetEnd != self.old_OffsetEnd:
+                    obj.OffsetEnd = self.old_OffsetEnd
 
     def execute(self, obj):
         # copy of _ArchPipe.execute
         # from FreeCAD main branch, commit 14ac516, 2026-08-12
         # with changed references to makePipeShell
-        # and modified error messages
+        # and modified: offset handling, error messages
 
         def _get_profile_center(prof):
 
@@ -212,18 +226,28 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                 "Cables", "Unable to build the cable base path"),
                 "E", ModuleName, None, obj.Label)
             return
-        if obj.OffsetStart.Value:
-            e = w.Edges[0]
-            v = e.Vertexes[-1].Point.sub(e.Vertexes[0].Point).normalize()
-            v.multiply(obj.OffsetStart.Value)
-            e = Part.LineSegment(e.Vertexes[0].Point.add(v), e.Vertexes[-1].Point).toShape()
-            w = Part.Wire([e] + w.Edges[1:])
-        if obj.OffsetEnd.Value:
-            e = w.Edges[-1]
-            v = e.Vertexes[0].Point.sub(e.Vertexes[-1].Point).normalize()
-            v.multiply(obj.OffsetEnd.Value)
-            e = Part.LineSegment(e.Vertexes[-1].Point.add(v), e.Vertexes[0].Point).toShape()
-            w = Part.Wire(w.Edges[:-1] + [e])
+        # if obj.OffsetStart.Value:
+        #     e = w.Edges[0]
+        #     v = e.Vertexes[-1].Point.sub(e.Vertexes[0].Point).normalize()
+        #     v.multiply(obj.OffsetStart.Value)
+        #     e = Part.LineSegment(e.Vertexes[0].Point.add(v), e.Vertexes[-1].Point).toShape()
+        #     w = Part.Wire([e] + w.Edges[1:])
+        # if obj.OffsetEnd.Value:
+        #     e = w.Edges[-1]
+        #     v = e.Vertexes[0].Point.sub(e.Vertexes[-1].Point).normalize()
+        #     v.multiply(obj.OffsetEnd.Value)
+        #     e = Part.LineSegment(e.Vertexes[-1].Point.add(v), e.Vertexes[0].Point).toShape()
+        #     w = Part.Wire(w.Edges[:-1] + [e])
+        if obj.OffsetStart.Value > 0 or obj.OffsetEnd.Value > 0:
+            mid_len = abs(
+                w.Length - obj.OffsetStart.Value - obj.OffsetEnd.Value)
+            lengths = [obj.OffsetStart.Value, mid_len, obj.OffsetEnd.Value]
+            split_wires = wireutils.splitWireByLengths(w, lengths)
+            if split_wires is not None:
+                if obj.OffsetStart.Value > 0:
+                    w = split_wires[1]
+                else:
+                    w = split_wires[0]
         p = self.getProfile(obj)
         if not p:
             #FreeCAD.Console.PrintError(translate("Arch", "Unable to build the profile") + "\n")
@@ -239,7 +263,8 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
         if Draft.getType(obj.Base) == "BezCurve":
             v1 = obj.Base.Placement.multVec(obj.Base.Points[1]) - w.Vertexes[0].Point
         else:
-            v1 = w.Vertexes[1].Point - w.Vertexes[0].Point
+            # v1 = w.Vertexes[1].Point - w.Vertexes[0].Point
+            v1 = w.Edge1.tangentAt(w.Edge1.FirstParameter)
         _rotate_profile(p, w.Vertexes[0].Point, v1)
 
         shapes = []

@@ -1577,3 +1577,62 @@ def getStdPartParent(obj):
         except IndexError:
             continue
     return parent
+
+
+def splitWireByLengths(w, lengths, split_tol=tol):
+    """It splits the wire object into new wires.
+
+    Parameters
+    ----------
+    w : Wire object
+        The input object to split
+    lengts : list of float lengths
+        The list of lengths to split. The sum has to be equal the length
+        of the wire
+
+    Returns
+    -------
+    List of splitted wires or None in case of an error.
+    """
+    total = w.Length
+    if abs(sum(lengths) - total) > split_tol:
+        return None
+
+    # prepare list of cumulative edge lengts
+    edges = w.Edges
+    cum_edge_lengths = []
+    s = 0.0
+    for edge in edges:
+        s += edge.Length
+        cum_edge_lengths.append(s)
+
+    # prepare segment boundaries from lengths
+    cut_bounds = []
+    s = 0.0
+    lengths = [x for x in lengths if x != 0.0]
+    for length in lengths[:-1]:
+        s += length
+        cut_bounds.append(s)
+    cut_bounds.append(total)
+
+    segments = []
+    prev = 0.0
+    for cut_bound in cut_bounds:
+        seg_edges = []
+        for e, e_end in zip(edges, cum_edge_lengths):
+            e_start = e_end - e.Length
+            cut_s, cut_e = max(prev, e_start), min(cut_bound, e_end)
+            if cut_e - cut_s > split_tol:
+                if (cut_e - cut_s) < (e_end - e_start) - split_tol:
+                    pos1 = cut_s - e_start
+                    pos2 = cut_e - e_start
+                    u1 = e.FirstParameter if abs(pos1) < split_tol \
+                        else e.getParameterByLength(pos1)
+                    u2 = e.LastParameter if abs(pos2 - e.Length) < split_tol \
+                        else e.getParameterByLength(pos2)
+                    seg_edges.append(e.Curve.toShape(min(u1, u2), max(u1, u2)))
+                else:
+                    seg_edges.append(e)
+        segments.append(Part.Wire(seg_edges))
+        prev = cut_bound
+    return segments

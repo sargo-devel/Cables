@@ -257,6 +257,8 @@ class ArchCable(ArchCableMainShape):
                 obj.InsulationThickness.Value*2
         if prop == "StrippedWireLength":
             self.updateStartEndOffsets(obj)
+            if obj.StrippedWireLength not in [obj.OffsetStart, obj.OffsetEnd]:
+                obj.StrippedWireLength = max(obj.OffsetStart, obj.OffsetEnd)
         if prop == "Profile":
             if obj.Profile:
                 obj.setPropertyStatus("ConductorGauge", "Hidden")
@@ -440,32 +442,32 @@ class ArchCable(ArchCableMainShape):
     def buildStrips(self, obj):
         radius = math.sqrt(obj.ConductorGauge/math.pi)
         shapes = []
+        w = obj.Base.Shape.Wire1
+        mid_len = abs(w.Length - obj.OffsetStart.Value - obj.OffsetEnd.Value)
+        lengths = [obj.OffsetStart.Value, mid_len, obj.OffsetEnd.Value]
+        split_wires = wireutils.splitWireByLengths(w, lengths)
         for i in [-2, -1]:
             prof = obj.Shape.Wires[i]
             norm = DraftGeomUtils.get_shape_normal(prof)
             v1 = prof.CenterOfMass
             if i == -2:
-                v2 = obj.Base.Shape.Vertexes[0].Point
+                wire = split_wires[0]
             else:
-                v2 = obj.Base.Shape.Vertexes[i].Point
-            if not v1.isEqual(v2, tol):
-                edge = Part.LineSegment(v1, v2).toShape()
-                circle = Part.Circle(v1, norm, radius)
-                cprof = Part.Wire([Part.Edge(circle)])
-                wire = Part.Wire([edge])
-                shape = wire.makePipeShell([cprof], True, False, 2)
-                shapes.append(shape)
+                wire = split_wires[2]
+            circle = Part.Circle(v1, norm, radius)
+            cprof = Part.Wire([Part.Edge(circle)])
+            shape = wire.makePipeShell([cprof], True, False, 2)
+            shapes.append(shape)
         return shapes
 
     def updateStartEndOffsets(self, obj):
         if hasattr(obj.Base, "Shape") and len(obj.Base.Shape.Wires) > 0:
+            off_tol = 1e-2
             w = obj.Base.Shape.Wires[0]
-            max_start_offset = (
-                w.Vertexes[0].Point-w.Vertexes[1].Point).Length - 1.0
-            max_end_offset = (
-                w.Vertexes[-1].Point-w.Vertexes[-2].Point).Length - 1.0
-            offset_start = min(obj.StrippedWireLength, max_start_offset)
-            offset_end = min(obj.StrippedWireLength, max_end_offset)
+            max_start_offset = w.Length/2.0 - off_tol
+            max_end_offset = max_start_offset
+            offset_start = min(obj.StrippedWireLength.Value, max_start_offset)
+            offset_end = min(obj.StrippedWireLength.Value, max_end_offset)
             if obj.OffsetStart != offset_start:
                 obj.OffsetStart = offset_start
             if obj.OffsetEnd != offset_end:
@@ -599,23 +601,23 @@ class ArchCable(ArchCableMainShape):
         return shape
 
     def addOffsetToWire(self, obj, w):
-        e = w.Edges[-1]
-        v1 = e.Vertexes[0].Point
-        v2 = e.Vertexes[-1].Point
-        v = v1.sub(v2).normalize()
-        if e.Length > obj.StrippedWireLength.Value:
-            v.multiply(obj.StrippedWireLength.Value)
+        if (w.Length - obj.OffsetEnd.Value) <= 0:
+            logmsg(translate(
+                "Cables", "Can't strip the insulation from one of the " +
+                "wires. The tip is too short."),
+                "W", ModuleName, None, obj.Label)
+            return w
+        lengths = [w.Length - obj.OffsetEnd.Value, obj.OffsetEnd.Value]
+        split_wires = wireutils.splitWireByLengths(w, lengths)
+        if split_wires is not None:
+            w_offset = split_wires[0]
         else:
-            v.multiply(e.Length-0.1)
-        vx = v2.add(v)
-        if (vx-v1).Length+(vx-v2).Length > (v1-v2).Length+0.01 \
-           or vx == v1 or vx == v2:
-            # vx too short or in wrong direction
-            w = Part.Wire(w.Edges[:-1]) if len(w.Edges) > 2 else w
-        else:
-            e = Part.LineSegment(vx, v1).toShape()
-            w = Part.Wire(w.Edges[:-1]+[e])
-        return w
+            logmsg(translate(
+                "Cables", "An error occurred while stripping the insulation " +
+                "from one of the wires."),
+                "E", ModuleName, None, obj.Label)
+            w_offset = w
+        return w_offset
 
     def readjustEndProfile(self, obj):
         if not hasattr(obj, 'SubProfiles') or len(obj.SubProfiles) < 2:

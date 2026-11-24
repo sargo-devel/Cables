@@ -191,10 +191,11 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                     obj.OffsetEnd = self.old_OffsetEnd
 
     def execute(self, obj):
-        # copy of _ArchPipe.execute
+        # Copy of _ArchPipe.execute
         # from FreeCAD main branch, commit 14ac516, 2026-08-12
-        # with changed references to makePipeShell
-        # and modified: offset handling, error messages
+        # Changed: references to makePipeShell
+        # offset handling, error messages
+        # Fixed: shape selection after cut
 
         def _get_profile_center(prof):
 
@@ -278,6 +279,9 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                             #sh2 = w.makePipeShell([shw], True, False, 2)
                             sh2 = self.makeMainShape(obj, w, shw)
                             sh = sh.cut(sh2)
+                            # In some extreme cases sh is a compound
+                            # of 2 solids. Only the 1st is needed
+                            sh = sh.Solids[0]
                     shapes.append(sh)
             elif p.Wires:
                 for pw in p.Wires:

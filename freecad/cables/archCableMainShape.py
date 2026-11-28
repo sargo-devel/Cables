@@ -288,11 +288,11 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                     #sh = w.makePipeShell([pw], True, False, 2)
                     sh = self.makeMainShape(obj, w, pw)
                     shapes.append(sh)
-        except Exception:
+        except Exception as err:
             #FreeCAD.Console.PrintError(translate("Arch", "Unable to build the pipe") + "\n")
             logmsg(translate(
                 "Cables", "Unable to build the main shape"),
-                "E", ModuleName, None, obj.Label)
+                "E", ModuleName, err, obj.Label)
         else:
             if len(shapes) == 0:
                 return
@@ -313,10 +313,8 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
         if w is None:
             w = self.getWire(obj)
         if not w:
-            logmsg(translate(
-                "Cables", "Unable to build the cable base path"),
-                "E", ModuleName, None, obj.Label)
-            return None
+            raise ValueError(translate(
+                "Cables", "Unable to build the cable base path"))
         if p is None:
             p = obj.SubProfiles[0].Shape.Wires[0]
 
@@ -346,6 +344,12 @@ class ArchCableMainShape(ArchPipe._ArchPipe):
                     "Cables", "Building shape in error mode failed " +
                     "(shape is None)!"),
                     "E", ModuleName, None, obj.Label)
+                raise ValueError(translate(
+                    "Cables", "Try to modify the base wire. Hint to " +
+                    "troubleshoot the cable main shape creation: set Auto " +
+                    "Troubleshoot property to 'False', then Main Shape If " +
+                    "Error to 'Partial', recompute and observe the partial " +
+                    "shape creation."))
         return sh
 
     def tryPartialShape(self, obj, w, p):
